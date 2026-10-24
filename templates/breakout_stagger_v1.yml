@@ -1,0 +1,84 @@
+# Breakout Stagger Template V1
+# Based on doc/65.md specification
+#
+# Strategy: Breakout with staged entries
+# Entry: 3-layer LMT on breakout confirmation
+# Protection: Trailing stop (2.0*ATR) + time stop (20 minutes)
+# Reversal: Only on strong trend reversal (slope < 0, RSI < 45, strength > 0.8)
+
+name: breakout_stagger_v1
+
+defaults:
+  cadence_s: 5
+  ttl_ms: 2000
+  min_lot: 10
+  lot_round: 10
+  max_layers: 3
+  base_risk_usd: 3000       # Higher risk budget for breakout
+  atr_k: 1.2                # Tighter ATR sizing
+  time_limit_s: 1200        # 20 minute time stop
+  trail_atr_mult: 2.0       # Wider trailing stop for breakouts
+  reversal_atomic: true
+  quality_qscore_min: 75    # Higher quality threshold
+  quality_gap_max: 0.03     # Tighter gap control
+  rsi_reversal_max: 45      # RSI threshold for reversal
+
+rules:
+  # Quality gate
+  - id: quality_gate
+    when:
+      all:
+        - "f['qscore'] >= quality_qscore_min"
+        - "f['gap_ratio'] <= quality_gap_max"
+    then: continue
+
+  # Breakout entry - 3 layers staggered
+  - id: breakout_entry
+    when:
+      all:
+        - "signal['side'] != 0"
+        - "f.get('breakout_up', False) or f.get('breakout_down', False)"
+    compute:
+      lot_base: "floor(base_risk_usd / max(0.01, atr_k * f['atr_14']), lot_round)"
+      # 3 layers: 40%, 30%, 30% of base size
+      layer_1_qty: "int(lot_base * 0.4)"
+      layer_2_qty: "int(lot_base * 0.3)"
+      layer_3_qty: "int(lot_base * 0.3)"
+      total_qty: "layer_1_qty + layer_2_qty + layer_3_qty"
+    emit:
+      type: target
+      mode: net
+      qty: "clamp(int(total_qty * sign(signal['side'])), -5000, 5000)"
+      style:
+        kind: LMT
+        limit_px: "signal['ref_px']"
+      extras:
+        ref_px: "signal['ref_px']"
+        edge_bp: "abs(f.get('breakout_strength', 0)) * 15"
+
+  # Protection - trailing stop only (no fixed SL/TP for breakouts)
+  - id: breakout_protect
+    when:
+      any:
+        - "position['qty'] != 0"
+    emit:
+      type: protect
+      oco:
+        trail_atr_mult: "trail_atr_mult"
+        time_stop_s: "time_limit_s"
+
+  # Reversal - only on strong trend reversal
+  - id: trend_reversal
+    when:
+      all:
+        - "position['qty'] * signal['side'] < 0"
+        - "abs(signal['strength']) >= 0.8"
+        - "f.get('trend_slope', 0) < 0"
+        - "f.get('rsi', 50) < rsi_reversal_max"
+    emit:
+      type: reverse
+      atomic: "reversal_atomic"
+      max_slippage_bp: 15
+      style:
+        kind: LMT
+        limit_px: "signal['ref_px']"

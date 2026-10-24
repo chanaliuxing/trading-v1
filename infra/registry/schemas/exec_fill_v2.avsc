@@ -1,0 +1,47 @@
+{
+  "type": "record",
+  "name": "ExecFillV2",
+  "namespace": "trading.events",
+  "fields": [
+    {"name": "schema_v", "type": "int"},
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "MetadataFill",
+        "fields": [
+          {"name": "ts_us", "type": "long"},
+          {"name": "producer", "type": "string"}
+        ]
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "FillData",
+        "fields": [
+          {"name": "order_ref", "type": "string"},
+          {"name": "perm_id", "type": ["null", "long"], "default": null},
+          {"name": "symbol", "type": "string"},
+          {"name": "qty", "type": "double"},
+          {"name": "price", "type": "double"},
+          {
+            "name": "liquidity",
+            "type": [
+              "null",
+              {
+                "type": "enum",
+                "name": "Liquidity",
+                "symbols": ["ADD", "REMOVE", "UNKNOWN"]
+              }
+            ],
+            "default": "UNKNOWN"
+          },
+          {"name": "exchange", "type": ["null", "string"], "default": null},
+          {"name": "commission", "type": ["null", "double"], "default": null}
+        ]
+      }
+    }
+  ]
+}

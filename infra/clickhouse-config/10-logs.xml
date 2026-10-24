@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<clickhouse>
+    <!-- 控制 clickhouse-server 本身的日志级别；降低到 error，避免 text_log 也收集大量 warning -->
+    <logger>
+        <level>error</level>
+        <console>true</console>
+    </logger>
+
+    <!-- ❌ 直接禁用最话痨/体量最快的系统日志表 -->
+    <!-- processors_profile_log 是最快增长的日志之一 -->
+    <processors_profile_log remove="1"/>
+
+    <!-- trace_log 记录详细的执行跟踪，数据量极大 -->
+    <trace_log remove="1"/>
+
+    <!-- 可选：如果你发现 part_log 也增长很快，可以取消下面的注释禁用 -->
+    <!-- <part_log remove="1"/> -->
+
+    <!-- 可选：如果 text_log 仍然很大，可以取消下面的注释禁用 -->
+    <!-- <text_log remove="1"/> -->
+
+    <!-- 可选：如果不需要 OpenTelemetry，可以禁用 -->
+    <!-- <opentelemetry_span_log remove="1"/> -->
+
+    <!-- 其余日志使用默认配置（保留 query_log / query_thread_log / metric_log 等用于必要诊断） -->
+    <!-- 这些日志的 TTL 在 system_logs_ttl.xml 中配置 -->
+</clickhouse>

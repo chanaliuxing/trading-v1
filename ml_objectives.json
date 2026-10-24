@@ -1,0 +1,31 @@
+{
+  "plans": {
+    "intraday_v1": {
+      "label_program_id": "cc_return_30m",
+      "loss_program_id": "huber_reg_0.1",
+      "eval_metrics": ["oos_avg_sharpe", "pf", "max_dd", "oos_avg_ic", "ic_coverage"],
+      "bar_secs": 60,
+      "ic": { "mode": "cross_sectional", "min_cov": 0.3 },
+      "gates": { "oos_avg_sharpe_min": 1.2, "pf_min": 1.2, "trades_min": 80 },
+      "notes": "日内 30m 收益回归 + Huber"
+    },
+    "overnight_v1": {
+      "label_program_id": "co_return_1d",
+      "loss_program_id": "bce",
+      "eval_metrics": ["oos_avg_sharpe", "pf", "max_dd", "oos_avg_ic", "ic_coverage"],
+      "bar_secs": 86400,
+      "ic": { "mode": "timeseries", "min_cov": 0.7 },
+      "gates": { "oos_avg_sharpe_min": 1.0, "pf_min": 1.1, "trades_min": 60 },
+      "notes": "隔夜 CO 二分类 + BCE"
+    },
+    "intraday_focal_v2": {
+      "label_program_id": "intraday_binary_15m",
+      "loss_program_id": "focal_cls",
+      "eval_metrics": ["oos_avg_sharpe", "pf", "max_dd", "oos_avg_ic", "ic_coverage"],
+      "bar_secs": 60,
+      "ic": { "mode": "cross_sectional", "min_cov": 0.3 },
+      "gates": { "oos_avg_sharpe_min": 1.15, "pf_min": 1.15, "trades_min": 80 },
+      "notes": "日内 15m 上涨二分类 + Focal（应对不平衡）"
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "contract_version": "daily_candidate_factory_io.v1",
+  "input": {
+    "date": "YYYY-MM-DD",
+    "universe_or_strategy_scope": [
+      "string"
+    ],
+    "data_version": "ISO-8601 snapshot timestamp",
+    "scoring_config_path": "config/candidate_factory/scoring_function.json",
+    "blacklist_state_path": "runtime/state/candidate_factory_blacklist.json",
+    "stop_policy_path": "config/candidate_factory/candidate_factory_stop_policy.json",
+    "warmup_policy_path": "config/candidate_factory/candidate_factory_warmup_policy.json",
+    "observation_activation_policy_path": "config/candidate_factory/observation_activation_policy.json"
+  },
+  "output_dir": "runtime/state/candidate_factory",
+  "artifacts": {
+    "daily_top_candidates": {
+      "path": "runtime/state/candidate_factory/daily_top_candidates.json",
+      "required_fields": [
+        "trading_date",
+        "generated_at",
+        "top_n",
+        "system_health_summary",
+        "system_phase",
+        "can_use_early",
+        "system_reliable",
+        "reliability_reason",
+        "use_for_decision",
+        "use_reason",
+        "observation_top_candidate",
+        "observation_label",
+        "suggested_action",
+        "recent_observation_summary",
+        "release_warning",
+        "candidates"
+      ]
+    },
+    "daily_candidate_factory_status": {
+      "path": "runtime/state/candidate_factory/daily_candidate_factory_status.json",
+      "required_fields": [
+        "run_at",
+        "trading_date",
+        "steps",
+        "ok",
+        "summary",
+        "system_phase",
+        "can_use_early",
+        "observation_quality",
+        "observation_hit_rate",
+        "last_observation_result",
+        "observation_confidence",
+        "observation_reliable",
+        "evaluation_data_availability_rate",
+        "dominant_failure_type",
+        "last_5_failures",
+        "suggested_improvement_focus",
+        "system_reliable",
+        "reliability_reason"
+      ]
+    },
+    "ranking_stability_20d": {
+      "path": "runtime/state/candidate_factory/ranking_stability_20d.json",
+      "required_fields": [
+        "updated_at",
+        "window_days",
+        "records",
+        "window_summary",
+        "system_phase",
+        "can_use_early",
+        "observation_quality",
+        "system_reliable",
+        "reliability_reason",
+        "stop_policy_triggered"
+      ]
+    },
+    "warmup_progress": {
+      "path": "runtime/state/candidate_factory/warmup_progress.json",
+      "required_fields": [
+        "updated_at",
+        "trading_date",
+        "day_index",
+        "window_days",
+        "constraint_pass_rate",
+        "avg_corr",
+        "severe_alert_days",
+        "distance_to_active",
+        "projected_active_date",
+        "trend_constraint_pass_rate",
+        "trend_corr",
+        "early_activation_allowed"
+      ]
+    },
+    "observation_tracking": {
+      "path": "runtime/state/candidate_factory/observation_tracking.json",
+      "required_fields": [
+        "updated_at",
+        "records"
+      ]
+    },
+    "observation_stats": {
+      "path": "runtime/state/candidate_factory/observation_stats.json",
+      "required_fields": [
+        "updated_at",
+        "total_observations",
+        "good_count",
+        "bad_count",
+        "hit_rate",
+        "last_observation_result",
+        "observation_confidence",
+        "observation_reliable"
+      ]
+    },
+    "observation_failure_analysis": {
+      "path": "runtime/state/candidate_factory/observation_failure_analysis.json",
+      "required_fields": [
+        "updated_at",
+        "recent_failures",
+        "failure_summary",
+        "suggested_improvement_focus"
+      ]
+    },
+    "daily_candidate_factory_run_log": {
+      "path": "runtime/state/candidate_factory/daily_candidate_factory_run.log",
+      "required_fields": [
+        "line_oriented_text_log"
+      ]
+    },
+    "rejected_candidates": {
+      "path": "runtime/state/candidate_factory/rejected_candidates.json",
+      "required_fields": [
+        "trading_date",
+        "generated_at",
+        "rejected"
+      ]
+    }
+  }
+}

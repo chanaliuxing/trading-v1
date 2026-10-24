@@ -1,0 +1,202 @@
+{
+  "none": {
+    "description": "No feature engineering, use raw features only",
+    "steps": []
+  },
+
+  "baseline_v1": {
+    "description": "Original Phase 1 features (vwap dev, ret/atr, log volume, rolling momentum)",
+    "steps": [
+      {
+        "name": "feat_vwap_dev",
+        "op": "ratio_minus_1",
+        "num": "close",
+        "den": "vwap",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_ret1m_over_atr",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_14",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_log_volume",
+        "op": "log1p",
+        "col": "volume"
+      },
+      {
+        "name": "feat_ret_1m_roll_10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 3,
+        "per_symbol": true
+      }
+    ]
+  },
+
+  "microstructure_v1": {
+    "description": "Microstructure features (price impact, spread, illiquidity)",
+    "steps": [
+      {
+        "name": "feat_price_impact",
+        "op": "price_impact_hl",
+        "per_symbol": true
+      },
+      {
+        "name": "feat_effective_spread",
+        "op": "effective_spread",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_amihud_illiq",
+        "op": "amihud_illiquidity",
+        "eps": 1e-9
+      }
+    ]
+  },
+
+  "momentum_v1": {
+    "description": "Momentum-based features (rolling returns, z-scores)",
+    "steps": [
+      {
+        "name": "feat_ret_1m_roll_10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 3,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_ret_5m_roll_20",
+        "op": "rolling_sum",
+        "col": "ret_5",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_zscore_ret1m_50",
+        "op": "rolling_zscore",
+        "col": "ret_1",
+        "window_bars": 50,
+        "min_periods": 10,
+        "per_symbol": true
+      }
+    ]
+  },
+
+  "mean_revert_v1": {
+    "description": "Mean-reversion features (price deviations, normalized returns)",
+    "steps": [
+      {
+        "name": "feat_vwap_dev",
+        "op": "ratio_minus_1",
+        "num": "close",
+        "den": "vwap",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_ret1m_over_atr",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_14",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_zscore_close_20",
+        "op": "rolling_zscore",
+        "col": "close",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      }
+    ]
+  },
+
+  "volatility_v1": {
+    "description": "Volatility-based features (ATR ratios, volume ratios)",
+    "steps": [
+      {
+        "name": "feat_atr_ratio_5_14",
+        "op": "ratio",
+        "num": "atr_5",
+        "den": "atr_14",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_vol_ratio",
+        "op": "ratio",
+        "num": "volume",
+        "den": "vol_avg_20",
+        "eps": 1.0
+      },
+      {
+        "name": "feat_log_volume",
+        "op": "log1p",
+        "col": "volume"
+      },
+      {
+        "name": "feat_rolling_volatility_20",
+        "op": "rolling_std",
+        "col": "ret_1",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      }
+    ]
+  },
+
+  "comprehensive_v1": {
+    "description": "Comprehensive feature set combining all categories",
+    "steps": [
+      {
+        "name": "feat_vwap_dev",
+        "op": "ratio_minus_1",
+        "num": "close",
+        "den": "vwap",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_ret1m_over_atr",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_14",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_log_volume",
+        "op": "log1p",
+        "col": "volume"
+      },
+      {
+        "name": "feat_ret_1m_roll_10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 3,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_price_impact",
+        "op": "price_impact_hl",
+        "per_symbol": true
+      },
+      {
+        "name": "feat_effective_spread",
+        "op": "effective_spread",
+        "eps": 1e-6
+      },
+      {
+        "name": "feat_zscore_ret1m_50",
+        "op": "rolling_zscore",
+        "col": "ret_1",
+        "window_bars": 50,
+        "min_periods": 10,
+        "per_symbol": true
+      }
+    ]
+  }
+}

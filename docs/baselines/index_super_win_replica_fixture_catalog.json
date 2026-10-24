@@ -1,0 +1,351 @@
+{
+  "fixture_names": [
+    "gate_allowed_long",
+    "gate_blocked_required_data_missing",
+    "gate_blocked_restart_degrade",
+    "gate_blocked_market_data_unavailable",
+    "exit_tp1_partial_fill",
+    "exit_tp1_then_trailing_stop",
+    "exit_breakeven_stop",
+    "exit_force_eod_flatten",
+    "protection_restart_missing_stop_kill_switch",
+    "protection_audit_self_heal_after_threshold",
+    "protection_audit_recovered_stop_live",
+    "protection_audit_kill_switch_after_threshold"
+  ],
+  "fixtures": {
+    "exit_breakeven_stop": {
+      "category": "exit",
+      "events": [
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:STOP:TRG:fixture:1",
+            "qty": -8.0,
+            "reason": "breakeven_shield",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "breakeven_shield",
+          "stage": "protective_stop_submitted",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_breakeven_stop"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:STOP:TRG:fixture:1",
+            "qty": -8.0,
+            "reason": "order_update:submitted",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "order_update:submitted",
+          "stage": "protective_stop_live",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_breakeven_stop"
+        }
+      ]
+    },
+    "exit_force_eod_flatten": {
+      "category": "exit",
+      "events": [
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:FLATTEN:TRG:fixture",
+            "qty": -8.0,
+            "reason": "force_flatten_1559_EOD",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "force_flatten_1559_EOD",
+          "stage": "flatten_submitted",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_force_eod_flatten"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:FLATTEN:TRG:fixture",
+            "qty": -8.0,
+            "reason": "order_update:filled",
+            "runtime_lifecycle_after": "flat",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "order_update:filled",
+          "stage": "flatten_confirmed",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_force_eod_flatten"
+        }
+      ]
+    },
+    "exit_tp1_partial_fill": {
+      "category": "exit",
+      "events": [
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:TP1:TRG:fixture",
+            "qty": -4.0,
+            "reason": "tp1_hit",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "tp1_hit",
+          "stage": "tp1_partial_submitted",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_tp1_partial_fill"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:TP1:TRG:fixture",
+            "qty": -4.0,
+            "reason": "order_update:filled",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "order_update:filled",
+          "stage": "tp1_exit_confirmed",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_tp1_partial_fill"
+        }
+      ]
+    },
+    "exit_tp1_then_trailing_stop": {
+      "category": "exit",
+      "events": [
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:TP1:TRG:fixture",
+            "qty": -4.0,
+            "reason": "tp1_hit",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "tp1_hit",
+          "stage": "tp1_partial_submitted",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_tp1_then_trailing_stop"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:FLATTEN:TRG:fixture",
+            "qty": -4.0,
+            "reason": "tp1_then_trailing_stop",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "tp1_then_trailing_stop",
+          "stage": "flatten_submitted",
+          "symbol": "QQQ",
+          "trace_id": "fixture:exit_tp1_then_trailing_stop"
+        }
+      ]
+    },
+    "gate_allowed_long": {
+      "category": "gate",
+      "events": [
+        {
+          "payload": {
+            "qty": 8.0,
+            "reason": "entry_allowed",
+            "runtime_lifecycle_after": "flat",
+            "runtime_lifecycle_before": "flat",
+            "side": "LONG"
+          },
+          "reason": "entry_allowed",
+          "stage": "entry_gate_allowed",
+          "symbol": "QQQ",
+          "trace_id": "fixture:gate_allowed_long"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:ENTRY:TRG:fixture",
+            "qty": 8.0,
+            "reason": "entry_allowed",
+            "runtime_lifecycle_after": "intent_submitted",
+            "runtime_lifecycle_before": "flat",
+            "side": "LONG"
+          },
+          "reason": "entry_allowed",
+          "stage": "entry_intent_submitted",
+          "symbol": "QQQ",
+          "trace_id": "fixture:gate_allowed_long"
+        }
+      ]
+    },
+    "gate_blocked_market_data_unavailable": {
+      "category": "gate",
+      "events": [
+        {
+          "payload": {
+            "reason": "market_data_unavailable",
+            "runtime_lifecycle_after": "flat",
+            "runtime_lifecycle_before": "flat"
+          },
+          "reason": "market_data_unavailable",
+          "stage": "entry_gate_blocked",
+          "symbol": "QQQ",
+          "trace_id": "fixture:gate_blocked_market_data_unavailable"
+        }
+      ]
+    },
+    "gate_blocked_required_data_missing": {
+      "category": "gate",
+      "events": [
+        {
+          "payload": {
+            "reason": "required_data_missing",
+            "runtime_lifecycle_after": "flat",
+            "runtime_lifecycle_before": "flat"
+          },
+          "reason": "required_data_missing",
+          "stage": "entry_gate_blocked",
+          "symbol": "QQQ",
+          "trace_id": "fixture:gate_blocked_required_data_missing"
+        }
+      ]
+    },
+    "gate_blocked_restart_degrade": {
+      "category": "gate",
+      "events": [
+        {
+          "payload": {
+            "reason": "restart_degrade_active",
+            "runtime_lifecycle_after": "flat",
+            "runtime_lifecycle_before": "flat"
+          },
+          "reason": "restart_degrade_active",
+          "stage": "entry_gate_blocked",
+          "symbol": "QQQ",
+          "trace_id": "fixture:gate_blocked_restart_degrade"
+        }
+      ]
+    },
+    "protection_audit_kill_switch_after_threshold": {
+      "category": "protection",
+      "events": [
+        {
+          "payload": {
+            "reason": "broker_stop_missing",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live"
+          },
+          "reason": "broker_stop_missing",
+          "stage": "protection_audit_warning",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_kill_switch_after_threshold"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:FLATTEN:TRG:fixture",
+            "qty": -8.0,
+            "reason": "audit_stop_inactive_kill_switch",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "audit_stop_inactive_kill_switch",
+          "stage": "protection_audit_kill_switch_preview",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_kill_switch_after_threshold"
+        }
+      ]
+    },
+    "protection_audit_recovered_stop_live": {
+      "category": "protection",
+      "events": [
+        {
+          "payload": {
+            "reason": "broker_stop_visible_again",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live"
+          },
+          "reason": "broker_stop_visible_again",
+          "stage": "protection_audit_recovered",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_recovered_stop_live"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:STOP:TRG:fixture:1",
+            "qty": -8.0,
+            "reason": "stop_active",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "stop_active",
+          "stage": "protection_audit_stop_live",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_recovered_stop_live"
+        }
+      ]
+    },
+    "protection_audit_self_heal_after_threshold": {
+      "category": "protection",
+      "events": [
+        {
+          "payload": {
+            "reason": "broker_stop_missing",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live"
+          },
+          "reason": "broker_stop_missing",
+          "stage": "protection_audit_warning",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_self_heal_after_threshold"
+        },
+        {
+          "payload": {
+            "reason": "audit_stop_inactive",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live"
+          },
+          "reason": "audit_stop_inactive",
+          "stage": "protection_audit_self_heal",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_self_heal_after_threshold"
+        },
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:STOP:TRG:fixture:1",
+            "qty": -8.0,
+            "reason": "audit_stop_inactive",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "audit_stop_inactive",
+          "stage": "protection_audit_self_heal_preview",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_audit_self_heal_after_threshold"
+        }
+      ]
+    },
+    "protection_restart_missing_stop_kill_switch": {
+      "category": "protection",
+      "events": [
+        {
+          "payload": {
+            "order_ref": "iswv2:index_super_win_replica_001:TQQQ:FLATTEN:TRG:fixture",
+            "qty": -8.0,
+            "reason": "restart_unprotected_no_stop_px",
+            "runtime_lifecycle_after": "live",
+            "runtime_lifecycle_before": "live",
+            "side": "LONG"
+          },
+          "reason": "restart_unprotected_no_stop_px",
+          "stage": "restart_unprotected_kill_switch_preview",
+          "symbol": "QQQ",
+          "trace_id": "fixture:protection_restart_missing_stop_kill_switch"
+        }
+      ]
+    }
+  },
+  "generated_by": "build_replica_fixture_catalog.py"
+}

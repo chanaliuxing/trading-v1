@@ -1,0 +1,73 @@
+# Paper-only architecture smoke tests for option order routing and broker sync.
+# Keep disabled unless intentionally running against a paper account.
+
+- id: nvda_option_churn_smoke_001
+  enabled: false
+  shadow_mode: false
+  module: strategies.nvda_option_smoke_strategy
+  class: NVDAOptionChurnSmokeStrategy
+  capital_limit_usd: 2000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      underlying: NVDA
+      risk_symbol: OPT:NVDA:SMOKE
+      contracts: 1
+      paper_smoke_only: true
+      smoke_entry_cadence_minutes: 1
+      smoke_hold_seconds: 65
+      max_trades_per_day: 999
+      second_trade_only_if_first_bad_exit: false
+      reserve_trade_after_time: ""
+      ab_time_start: "09:35:00"
+      ab_time_end: "15:50:00"
+      no_new_entry_after: "15:50:00"
+      force_flatten_time: "15:55:00"
+      dte_min: 0
+      dte_max: 7
+      dte_preferred: 1
+      spread_max_pct: 0.35
+      entry_quote_lookback_min: 3
+      entry_quote_max_age_sec: 120
+      entry_quote_allow_ch_fallback: false
+      shared_cap_group_id: NVDA_OPTION_SMOKE
+      shared_cap_group_limit_usd: 2000
+      shared_cap_group_strategy_ids:
+        - nvda_option_churn_smoke_001
+
+- id: nvda_stock_signal_option_smoke_001
+  enabled: false
+  shadow_mode: false
+  module: strategies.nvda_option_smoke_strategy
+  class: NVDAStockSignalOptionSmokeStrategy
+  capital_limit_usd: 2000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      underlying: NVDA
+      risk_symbol: OPT:NVDA:SMOKE
+      contracts: 1
+      paper_smoke_only: true
+      stock_signal_move_bps: 5
+      stock_signal_require_vwap_side: true
+      smoke_hold_seconds: 120
+      max_trades_per_day: 999
+      second_trade_only_if_first_bad_exit: false
+      reserve_trade_after_time: ""
+      ab_time_start: "09:35:00"
+      ab_time_end: "15:50:00"
+      no_new_entry_after: "15:50:00"
+      force_flatten_time: "15:55:00"
+      dte_min: 0
+      dte_max: 7
+      dte_preferred: 1
+      spread_max_pct: 0.35
+      entry_quote_lookback_min: 3
+      entry_quote_max_age_sec: 120
+      entry_quote_allow_ch_fallback: false
+      shared_cap_group_id: NVDA_OPTION_SMOKE
+      shared_cap_group_limit_usd: 2000
+      shared_cap_group_strategy_ids:
+        - nvda_stock_signal_option_smoke_001

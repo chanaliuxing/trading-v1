@@ -1,0 +1,90 @@
+{
+  "blockers": [],
+  "day": "20260504",
+  "generated_at": "2026-05-03T18:58:34-04:00",
+  "market_calendar": {
+    "status": "trading_day",
+    "trading_day": true
+  },
+  "market_data": {
+    "qqq_age_sec": 335.348612,
+    "qqq_last_present": false,
+    "qqq_vwap_present": false,
+    "sqqq_age_sec": 331.348612,
+    "sqqq_last_present": false,
+    "tqqq_age_sec": 331.348612,
+    "tqqq_last_present": false
+  },
+  "phase": "preopen",
+  "qqq_diag": {
+    "age_sec": 34.603952,
+    "exists": true,
+    "file_age_sec": 34.60367250442505,
+    "last_event": "qqq_loop_heartbeat",
+    "last_ts": "2026-05-03T18:58:00.351415-04:00",
+    "path": "./runtime/state/qqq_intraday_diag_qqq_intraday_001.jsonl"
+  },
+  "qqq_observability": {
+    "age_sec": 34.606755,
+    "exists": true,
+    "file_age_sec": 34.604291915893555,
+    "missing_required": [
+      "QQQ:last",
+      "QQQ:vwap"
+    ],
+    "path": "./runtime/state/qqq_intraday_observability_qqq_intraday_001.json",
+    "ready": false,
+    "ts_now_et": "2026-05-03T18:58:00.348612-04:00"
+  },
+  "qqq_runtime_audit": {
+    "audit_dir": "./runtime/audit/2026-05-04",
+    "expected_strategy_ids": [
+      "qqq_intraday_001",
+      "qqq_intraday_option_v1_001"
+    ],
+    "last_ts": null,
+    "matched_strategy_ids": [],
+    "row_count": 0
+  },
+  "qqq_state": {
+    "age_sec": 183525.463785,
+    "exists": true,
+    "file_age_sec": 183525.46354150772,
+    "path": "./runtime/state/qqq_intraday_qqq_intraday_001.json",
+    "requires_heartbeat": false,
+    "updated_at": "2026-05-01T15:59:49.491582-04:00",
+    "updated_at_semantics": "event_driven_state_snapshot"
+  },
+  "recommendation": "PASS",
+  "remediation_actions": [],
+  "run_system": {
+    "lock_path": "./runtime/locks/run_system.lock",
+    "lock_pid": 757,
+    "lock_pid_alive": true,
+    "process_alive": true,
+    "process_pids": [
+      757
+    ]
+  },
+  "trace_coverage": {
+    "day": "20260504",
+    "expected_strategy_ids": [
+      "qqq_intraday_001",
+      "qqq_kernel_shadow_legacy_on_001",
+      "qqq_kernel_shadow_legacy_off_001"
+    ],
+    "file_count": 0,
+    "files": [],
+    "generated_at": "2026-05-03T18:58:34-04:00",
+    "legacy_writer_present": false,
+    "live_writer_present": false,
+    "matched_live_strategy_ids": [],
+    "missing_strategy_ids": [
+      "qqq_intraday_001",
+      "qqq_kernel_shadow_legacy_on_001",
+      "qqq_kernel_shadow_legacy_off_001"
+    ],
+    "recommendation": "HOLD",
+    "strategy_counts": {}
+  }
+}

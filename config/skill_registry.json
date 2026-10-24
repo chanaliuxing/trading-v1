@@ -1,0 +1,84 @@
+{
+  "skills": {
+    "dummy_math": {
+      "file_path": "libs/skills/dummy/dummy_math.py",
+      "test_path": "tests/unit/evolution/test_golden_runner.py",
+      "type": "PURE",
+      "description": "Dummy math skill for quick validation",
+      "allow_evolution": true,
+      "objective": "PERFORMANCE",
+      "metrics_impact": [],
+      "category": "unknown",
+      "approved_at": "2025-12-10T07:28:00.284369+00:00",
+      "version": 2,
+      "enabled": true,
+      "performance_baseline": {}
+    },
+    "risk_control_demo": {
+      "file_path": "libs/skills/generated/risk/risk_control_demo.py",
+      "test_path": "",
+      "type": "PURE",
+      "description": "Demo risk control skill with decision/risk hooks for runtime verification",
+      "allow_evolution": false,
+      "objective": "PERFORMANCE",
+      "metrics_impact": [
+        "sharpe",
+        "drawdown",
+        "max_loss"
+      ],
+      "category": "risk_control",
+      "approved_at": "2025-12-10T00:00:00Z",
+      "version": 1,
+      "enabled": true,
+      "performance_baseline": {}
+    },
+    "misc_20251210_201020_cd854a": {
+      "file_path": "libs/skills/generated/misc/misc_20251210_201020_cd854a.py",
+      "test_path": "tests/unit/skills/generated/test_misc_20251210_201020_cd854a.py",
+      "type": "PURE",
+      "description": "A dummy skill for testing.",
+      "allow_evolution": true,
+      "objective": "PERFORMANCE",
+      "metrics_impact": [],
+      "category": "misc",
+      "approved_at": "2025-12-10T20:12:18.713644+00:00",
+      "version": 1,
+      "enabled": true,
+      "performance_baseline": {}
+    },
+    "qqq_put_spread_rules": {
+      "file_path": "strategies/options/qqq_put_spread.py",
+      "test_path": "",
+      "type": "PURE",
+      "description": "Rule-based QQQ short put spread checklist (10 ET, up/down paths)",
+      "allow_evolution": false,
+      "objective": "PERFORMANCE",
+      "metrics_impact": [
+        "sharpe",
+        "drawdown"
+      ],
+      "category": "options",
+      "approved_at": "2025-12-10T00:00:00Z",
+      "version": 1,
+      "enabled": false,
+      "performance_baseline": {}
+    },
+    "option_ml_controls_read": {
+      "file_path": "libs/skills/options/option_ml_controls.py",
+      "test_path": "",
+      "type": "DB_READ",
+      "description": "Read latest controls from trading.option_ml_controls for intraday_options_long",
+      "allow_evolution": false,
+      "objective": "GOVERNANCE",
+      "metrics_impact": [
+        "drawdown",
+        "max_loss"
+      ],
+      "category": "options",
+      "approved_at": "2026-01-06T00:00:00Z",
+      "version": 1,
+      "enabled": true,
+      "performance_baseline": {}
+    }
+  }
+}

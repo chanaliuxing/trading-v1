@@ -1,0 +1,100 @@
+{
+  "approved_scope": [
+    "continue paper/shadow diagnostic collection",
+    "inspect paper broker submit/ack reliability",
+    "use offline reports for evidence review"
+  ],
+  "commands": [
+    {
+      "command": "TRADING_TEST_ALLOW_LIVE_IBKR=0 venv/bin/python tool/runtime/run_bounded_paper_shadow_runtime.py --mode SHADOW_ONLY --duration-sec 30 --tick-sec 2 --sample-count 10 --day 20260512 --output-root . --no-sleep",
+      "duration_sec": 30,
+      "mode": "SHADOW_ONLY",
+      "sample_count": 10
+    },
+    {
+      "command": "TRADING_TEST_ALLOW_LIVE_IBKR=0 venv/bin/python tool/runtime/run_bounded_paper_shadow_runtime.py --mode PAPER_ONLY --duration-sec 30 --tick-sec 2 --sample-count 10 --emit-paper-broker-events true --append --day 20260512 --output-root . --no-sleep",
+      "duration_sec": 30,
+      "mode": "PAPER_ONLY",
+      "sample_count": 10
+    }
+  ],
+  "decision": "MORE_SAMPLES_READY_FOR_NEXT_DIAGNOSTIC",
+  "generated_at": "2026-05-12T17:52:09-04:00",
+  "live_ibkr_connected": false,
+  "not_approved_scope": [
+    "full live trading",
+    "unattended production live",
+    "real broker order/cancel/modify",
+    "DLB/TTL/edge-cost tuning",
+    "strategy entry/exit logic changes",
+    "symbol-only attribution",
+    "order_ref prefix/substr owner attribution"
+  ],
+  "reports": {
+    "approved_to_fill": {
+      "classification": "NO_BOTTLENECK",
+      "drop_stage_counts": {
+        "attribution": 0,
+        "broker_ack": 0,
+        "broker_submit": 0,
+        "execution_gate": 0,
+        "fill": 0,
+        "post_approval": 0,
+        "reservation": 0
+      },
+      "sample_count": 20,
+      "stage_counts": {
+        "approved": 20,
+        "attributed": 10,
+        "broker_acknowledged": 10,
+        "broker_submitted": 10,
+        "filled": 10,
+        "intent_created": 20,
+        "pnl_replay_ready": 10,
+        "shadow_no_broker_submit": 10
+      }
+    },
+    "paper_shadow_soak_gate": {
+      "blockers": [],
+      "verdict": "PASS",
+      "warnings": []
+    },
+    "strategy_execution_reliability": {
+      "classification": "NO_BOTTLENECK",
+      "drop_stage_counts": {
+        "none": 20
+      },
+      "sample_count": 20,
+      "stage_counts": {
+        "approved": 20,
+        "attribution": 10,
+        "broker_ack": 10,
+        "execution_gate": 20,
+        "fill": 10,
+        "paper_broker_submit": 10,
+        "pnl_replay": 10,
+        "submit_intent": 20,
+        "uom_delegate": 20
+      },
+      "uom_route_status_counts": {
+        "delegated": 10,
+        "skipped": 10
+      }
+    },
+    "vegas_dlb_edge": {
+      "classification": "NO_BOTTLENECK",
+      "dlb_breach_count": 0,
+      "edge_insufficient_count": 0,
+      "sample_count": 280,
+      "stale_decision_count": 0
+    }
+  },
+  "safety_scan": {
+    "actual_runtime_event_found": false,
+    "notes": [
+      "Only report summary keys and historical scan-pattern text matched the safety scan.",
+      "No live IBKR connection marker or real order mutation marker appeared in runtime audit artifacts."
+    ]
+  },
+  "recommended_next_batch": "Paper Broker Submit/Ack Reliability"
+}

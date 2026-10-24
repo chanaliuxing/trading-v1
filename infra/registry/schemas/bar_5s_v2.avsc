@@ -1,0 +1,47 @@
+{
+  "type": "record",
+  "name": "Bar5sV2",
+  "namespace": "trading.events",
+  "fields": [
+    {"name": "schema_v", "type": "int"},
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "MetadataBar",
+        "fields": [
+          {"name": "ts_us", "type": "long"},
+          {"name": "producer", "type": "string"}
+        ]
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "BarData",
+        "fields": [
+          {"name": "symbol", "type": "string"},
+          {"name": "ts_start_us", "type": "long"},
+          {"name": "ts_end_us", "type": "long"},
+          {"name": "open", "type": "double"},
+          {"name": "high", "type": "double"},
+          {"name": "low", "type": "double"},
+          {"name": "close", "type": "double"},
+          {"name": "volume", "type": "double"},
+          {"name": "vwap", "type": ["null", "double"], "default": null},
+          {"name": "trades", "type": ["null", "long"], "default": null},
+          {
+            "name": "quality",
+            "type": {
+              "type": "enum",
+              "name": "BarQuality",
+              "symbols": ["GOOD", "GAP", "REPAIRED", "PARTIAL"]
+            },
+            "default": "GOOD"
+          }
+        ]
+      }
+    }
+  ]
+}

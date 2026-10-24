@@ -1,0 +1,92 @@
+{
+  "hpo": {
+    "symbols": ["TSLA"],
+    "start": "2024-11-01 09:30:00",
+    "end": "2024-11-15 16:00:00",
+    "interval_sec": 60,
+    "clickhouse": {
+      "host": "localhost",
+      "port": 9000,
+      "database": "market_data",
+      "table": "bars_1m"
+    },
+    "strategy_path": "strategies.tsla_v7_2.TSLASimplifiedV7_2",
+    "initial_cash": 100000.0,
+    "commission_rate": 0.0001,
+    "slippage_rate": 0.0001,
+    "fold_generator": {
+      "start": "2024-11-01 09:30:00",
+      "end": "2024-11-15 16:00:00",
+      "is_days": 5,
+      "oos_days": 2,
+      "gap_days": 0,
+      "step_days": 2,
+      "embargo_days": 0
+    },
+    "folds": [
+      {
+        "is_start": "2024-11-01 09:30:00",
+        "is_end": "2024-11-08 16:00:00",
+        "oos_start": "2024-11-09 09:30:00",
+        "oos_end": "2024-11-15 16:00:00",
+        "embargo_days": 0
+      }
+    ],
+    "grid": {
+      "rsi_period": [10, 14, 20],
+      "rsi_oversold": [25, 30, 35],
+      "rsi_overbought": [65, 70, 75],
+      "bb_period": [15, 20, 25],
+      "bb_std": [1.5, 2.0, 2.5],
+      "atr_period": [10, 14, 20],
+      "atr_mult_sl": [1.5, 2.0, 2.5],
+      "atr_mult_tp": [2.0, 3.0, 4.0]
+    },
+    "objective": {
+      "metric": "sharpe",
+      "maximize": true,
+      "min_trades": 10,
+      "max_mdd": 0.35,
+      "formula": null
+    },
+    "overlay_config": {
+      "max_position_pct": 0.25,
+      "max_gross_exposure": 1.0,
+      "max_net_exposure": 0.8,
+      "max_drawdown_halt": 0.20,
+      "volatility_lookback": 20,
+      "volatility_target": 0.15,
+      "vol_scaling_enabled": false
+    },
+    "parallel": {
+      "enabled": true,
+      "workers": 4
+    }
+  },
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-5"
+  },
+  "ml": {
+    "n_points": 16
+  },
+  "heuristic": {
+    "widen": 0.2
+  },
+  "coop": {
+    "cap_per_param": 5
+  },
+  "guard": {
+    "max_combinations": 10000,
+    "max_values_per_param": 10,
+    "param_range_multiplier": 5.0
+  },
+  "optuna": {
+    "trials": 50,
+    "target": "is",
+    "direction": "maximize",
+    "sampler": "tpe",
+    "widen": 0.10,
+    "neighbor_scale": 0.20
+  }
+}

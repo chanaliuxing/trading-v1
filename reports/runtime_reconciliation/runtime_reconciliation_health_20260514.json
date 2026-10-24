@@ -1,0 +1,56 @@
+{
+  "audit_dir": "./runtime/audit/2026-05-14",
+  "blockers": [
+    "financial_snapshot_stale",
+    "runtime_reconciliation_audit_stale"
+  ],
+  "day": "20260514",
+  "financial_snapshot": {
+    "age_sec": 27845.242278,
+    "available": true,
+    "available_funds": 1046240.52,
+    "blockers": [
+      "financial_snapshot_stale"
+    ],
+    "buying_power": 4184962.09,
+    "gross_position_value": 461.72,
+    "net_liquidation": 1047472.7,
+    "ok": false,
+    "realized_pnl": 0.0,
+    "table": "ibkr_account_realtime",
+    "total_cash": 1045960.51,
+    "ts_ny": "2026-05-14T08:35:58-04:00",
+    "unrealized_pnl": 0.0
+  },
+  "generated_at": "2026-05-14T16:20:03-04:00",
+  "latest_position_audit_age_sec": 27719.446338,
+  "latest_position_audit_payload": {
+    "active_quarantine_count": 0,
+    "db_open_count": 4,
+    "ghosts": 0,
+    "ib_open_count": 4,
+    "ib_positions": {
+      "NVDA": 2.0
+    },
+    "ib_pre_submitted": 4,
+    "ledger_positions": {
+      "NVDA": 2.0,
+      "OPT:NVDA:20260506:197.5:C": 0.0,
+      "OPT:NVDA:20260506:197.5:P": 0.0,
+      "OPT:NVDA:20260506:205:C": 0.0,
+      "OPT:NVDA:20260506:205:P": 0.0,
+      "OPT:NVDA:20260508:215:P": 0.0,
+      "OPT:NVDA:20260508:217.5:P": 0.0,
+      "OPT:QQQ:20260513:712:C": 0.0
+    },
+    "mismatch_samples": [],
+    "mismatches": 0,
+    "orphans_detected": 0,
+    "orphans_unresolved": 0,
+    "position_mismatches": 0
+  },
+  "latest_position_audit_ts": "2026-05-14T08:38:03.795940-04:00",
+  "latest_reconciliation_alert_payload": {},
+  "latest_reconciliation_alert_ts": null,
+  "ok": false
+}

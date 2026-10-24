@@ -1,0 +1,61 @@
+{
+  "decision_version": "candidate_factory_trim.v1",
+  "objective": "only_keep_modules_that_directly_produce_daily_candidates",
+  "decisions": [
+    {
+      "module": "run_system live execution loop",
+      "reason": "not required for candidate generation",
+      "decision": "pause"
+    },
+    {
+      "module": "intraday order routing and broker adapters",
+      "reason": "execution only, no candidate production",
+      "decision": "pause"
+    },
+    {
+      "module": "manual evening_review interactive optimization",
+      "reason": "requires human prompt input",
+      "decision": "pause"
+    },
+    {
+      "module": "self_programming auto code patch engine",
+      "reason": "research/meta tooling, not daily candidate output",
+      "decision": "pause"
+    },
+    {
+      "module": "full live/shadow launch orchestration",
+      "reason": "deployment pipeline, not candidate factory core",
+      "decision": "pause"
+    },
+    {
+      "module": "data reconciliation + feature computation",
+      "reason": "direct input for candidate production",
+      "decision": "keep"
+    },
+    {
+      "module": "nightly candidate generator (super_win_nightly_optimize)",
+      "reason": "directly generates candidate parameter sets",
+      "decision": "keep"
+    },
+    {
+      "module": "backtest and robustness checks",
+      "reason": "required evidence for candidate quality",
+      "decision": "keep"
+    },
+    {
+      "module": "prometheus/grafana broad production dashboards",
+      "reason": "observability only, no candidate decision output",
+      "decision": "pause"
+    },
+    {
+      "module": "option active strategy rollout evidence gate",
+      "reason": "useful as review evidence but not candidate generation itself",
+      "decision": "keep"
+    },
+    {
+      "module": "historical replay archives not used in daily windows",
+      "reason": "storage/forensics only",
+      "decision": "remove"
+    }
+  ]
+}

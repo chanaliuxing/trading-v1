@@ -1,0 +1,126 @@
+# QQQ intraday *_logic.py reference audit
+# Generated: 2026-04-20T18:50:15Z
+# Per QQQ_KERNEL_MIGRATION_EXECUTION_PLAN_2026-04-20.md §7
+
+================================================================
+MODULE: qqq_intraday_entry_block_logic
+FILE:   strategies/qqq_intraday_entry_block_logic.py  (63 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:33:from strategies.qqq_intraday_entry_block_logic import (
+tests//unit/strategies/test_qqq_intraday_entry_block_logic.py:1:from strategies.qqq_intraday_entry_block_logic import (
+
+================================================================
+MODULE: qqq_intraday_entry_logic
+FILE:   strategies/qqq_intraday_entry_logic.py  (59 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:23:from strategies.qqq_intraday_entry_logic import build_probe_add_plan, check_day_gross_notional_cap
+tests//unit/strategies/test_qqq_intraday_entry_logic.py:3:from strategies.qqq_intraday_entry_logic import build_probe_add_plan, check_day_gross_notional_cap
+
+================================================================
+MODULE: qqq_intraday_execution_intent_logic
+FILE:   strategies/qqq_intraday_execution_intent_logic.py  (36 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_core.py:27:from strategies.qqq_intraday_execution_intent_logic import build_close_only_extras, exit_target_qty
+tests//unit/strategies/test_qqq_intraday_execution_intent_logic.py:1:from strategies.qqq_intraday_execution_intent_logic import build_close_only_extras, exit_target_qty
+
+================================================================
+MODULE: qqq_intraday_execution_logic
+FILE:   strategies/qqq_intraday_execution_logic.py  (85 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:24:from strategies.qqq_intraday_execution_logic import (
+tests//unit/strategies/test_qqq_intraday_execution_logic.py:1:from strategies.qqq_intraday_execution_logic import (
+
+================================================================
+MODULE: qqq_intraday_feature_context_logic
+FILE:   strategies/qqq_intraday_feature_context_logic.py  (50 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:39:from strategies.qqq_intraday_feature_context_logic import apply_feature_context
+tests//unit/strategies/test_qqq_intraday_feature_context_logic.py:6:from strategies.qqq_intraday_feature_context_logic import apply_feature_context
+
+================================================================
+MODULE: qqq_intraday_gate_audit_logic
+FILE:   strategies/qqq_intraday_gate_audit_logic.py  (111 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:40:from strategies.qqq_intraday_gate_audit_logic import (
+strategies//qqq_intraday_rules/parity.py:8:from strategies.qqq_intraday_gate_audit_logic import trader_reason_code
+tests//unit/strategies/test_qqq_intraday_gate_audit_logic.py:1:from strategies.qqq_intraday_gate_audit_logic import (
+
+================================================================
+MODULE: qqq_intraday_manage_logic
+FILE:   strategies/qqq_intraday_manage_logic.py  (173 lines)
+----------------------------------------------------------------
+strategies//stocks_kernel/modules/protection.py:5:from strategies.qqq_intraday_manage_logic import (
+strategies//options_kernel/modules/profit_management_policy.py:6:from strategies.qqq_intraday_manage_logic import trailing_stop_decision
+strategies//options_kernel/modules/risk_policy.py:7:from strategies.qqq_intraday_manage_logic import breakeven_stop_price
+strategies//index_super_win_replica_core.py:18:from strategies.qqq_intraday_manage_logic import (
+
+================================================================
+MODULE: qqq_intraday_market_state_logic
+FILE:   strategies/qqq_intraday_market_state_logic.py  (140 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:45:from strategies.qqq_intraday_market_state_logic import (
+tests//unit/strategies/test_qqq_intraday_market_state_logic.py:5:from strategies.qqq_intraday_market_state_logic import (
+
+================================================================
+MODULE: qqq_intraday_order_shell_logic
+FILE:   strategies/qqq_intraday_order_shell_logic.py  (40 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:54:from strategies.qqq_intraday_order_shell_logic import (
+tests//unit/strategies/test_qqq_intraday_order_shell_logic.py:3:from strategies.qqq_intraday_order_shell_logic import (
+
+================================================================
+MODULE: qqq_intraday_protection_logic
+FILE:   strategies/qqq_intraday_protection_logic.py  (71 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:71:from strategies.qqq_intraday_protection_logic import (
+tests//unit/strategies/test_qqq_intraday_protection_logic.py:3:from strategies.qqq_intraday_protection_logic import (
+
+================================================================
+MODULE: qqq_intraday_protection_payload_logic
+FILE:   strategies/qqq_intraday_protection_payload_logic.py  (46 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:78:from strategies.qqq_intraday_protection_payload_logic import (
+tests//unit/strategies/test_qqq_intraday_protection_payload_logic.py:1:from strategies.qqq_intraday_protection_payload_logic import (
+
+================================================================
+MODULE: qqq_intraday_runtime_shell_logic
+FILE:   strategies/qqq_intraday_runtime_shell_logic.py  (162 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:62:from strategies.qqq_intraday_runtime_shell_logic import (
+tests//unit/strategies/test_qqq_intraday_runtime_shell_logic.py:6:from strategies.qqq_intraday_runtime_shell_logic import (
+
+================================================================
+MODULE: qqq_intraday_session_gate_logic
+FILE:   strategies/qqq_intraday_session_gate_logic.py  (67 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:96:from strategies.qqq_intraday_session_gate_logic import previous_session_gate, session_window_gate
+tests//unit/strategies/test_qqq_intraday_session_gate_logic.py:6:from strategies.qqq_intraday_session_gate_logic import in_session_window, previous_session_gate, session_window_gate
+
+================================================================
+MODULE: qqq_intraday_submit_preview_logic
+FILE:   strategies/qqq_intraday_submit_preview_logic.py  (39 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:95:from strategies.qqq_intraday_submit_preview_logic import preview_row, preview_row_from_outcome
+tests//unit/strategies/test_qqq_intraday_submit_preview_logic.py:3:from strategies.qqq_intraday_submit_preview_logic import preview_row, preview_row_from_outcome
+
+================================================================
+MODULE: qqq_intraday_sync_logic
+FILE:   strategies/qqq_intraday_sync_logic.py  (84 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:83:from strategies.qqq_intraday_sync_logic import (
+tests//unit/strategies/test_qqq_intraday_sync_logic.py:3:from strategies.qqq_intraday_sync_logic import (
+
+================================================================
+MODULE: qqq_intraday_time_logic
+FILE:   strategies/qqq_intraday_time_logic.py  (61 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:90:from strategies.qqq_intraday_time_logic import (
+tests//unit/strategies/test_qqq_intraday_time_logic.py:6:from strategies.qqq_intraday_time_logic import coerce_datetime, feature_now_et, parse_hms_tuple
+
+================================================================
+MODULE: qqq_intraday_v47_logic
+FILE:   strategies/qqq_intraday_v47_logic.py  (235 lines)
+----------------------------------------------------------------
+strategies//index_super_win_replica_strategy.py:97:from strategies.qqq_intraday_v47_logic import (
+strategies//qqq_intraday_rules/direction.py:6:from strategies.qqq_intraday_v47_logic import V47GateConfig, opening_gate_reason, veto_reason
+

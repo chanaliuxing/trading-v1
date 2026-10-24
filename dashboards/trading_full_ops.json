@@ -1,0 +1,343 @@
+{
+  "uid": "trading-full-ops",
+  "title": "Trading — Ops & Research Overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "timezone": "browser",
+  "refresh": "10s",
+  "editable": true,
+  "tags": ["trading", "ops", "research"],
+  "time": { "from": "now-24h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "type": "datasource",
+        "name": "DS_CH",
+        "label": "ClickHouse",
+        "query": "grafana-clickhouse-datasource"
+      },
+      {
+        "type": "datasource",
+        "name": "DS_LOKI",
+        "label": "Loki",
+        "query": "loki"
+      },
+      {
+        "type": "datasource",
+        "name": "DS_TEMPO",
+        "label": "Tempo",
+        "query": "tempo"
+      },
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "includeAll": true,
+        "allValue": "%",
+        "multi": false,
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+        "query": "SELECT DISTINCT symbol FROM trading.exec_events ORDER BY symbol",
+        "refresh": 1,
+        "current": { "text": "All", "value": "%", "selected": true }
+      },
+      {
+        "type": "query",
+        "name": "strategy_id",
+        "label": "Strategy",
+        "includeAll": true,
+        "allValue": "%",
+        "multi": false,
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+        "query": "SELECT DISTINCT strategy_id FROM trading.exec_events ORDER BY strategy_id",
+        "refresh": 1,
+        "current": { "text": "All", "value": "%", "selected": true }
+      },
+      {
+        "type": "textbox",
+        "name": "trace_id",
+        "label": "trace_id (optional)"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Fills (last 5m)",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT sum(event_type = 'FILLED') AS fills FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND ts >= now() - INTERVAL 5 MINUTE"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0 } }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Fill Rate (%)",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT if(total=0, 0, filled/total*100) AS fill_rate FROM (SELECT sum(event_type IN ('SUBMITTED','FILLED','REJECTED')) AS total, sum(event_type = 'FILLED') AS filled FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts))"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent", "decimals": 2 } }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Reject Rate (%)",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT if(total=0, 0, rejected/total*100) AS reject_rate FROM (SELECT sum(event_type IN ('SUBMITTED','FILLED','REJECTED')) AS total, sum(event_type = 'REJECTED') AS rejected FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts))"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent", "decimals": 2 } }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Equity (latest)",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT anyLast(equity) AS equity FROM (SELECT ts, equity FROM trading.portfolio_snapshots WHERE strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) ORDER BY ts)"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "currencyUSD", "decimals": 2 } }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "MTM (latest)",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT anyLast(mtm) AS mtm FROM (SELECT ts_end AS ts, mtm FROM trading.pnl_pos_5s WHERE strategy_id LIKE '${strategy_id}' AND symbol LIKE '${symbol}' AND $__timeFilter(ts) ORDER BY ts)"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "currencyUSD", "decimals": 2 } }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Open Position Qty",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT anyLast(pos_qty) AS qty FROM (SELECT ts_end AS ts, pos_qty FROM trading.pnl_pos_5s WHERE strategy_id LIKE '${strategy_id}' AND symbol LIKE '${symbol}' AND $__timeFilter(ts) ORDER BY ts)"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0 } }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Equity Curve — ${strategy_id}",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts, equity FROM trading.portfolio_snapshots WHERE strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) ORDER BY ts"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "currencyUSD", "decimals": 2 } }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Mark-to-Market & UPL — ${symbol}",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts_end AS ts, mtm FROM trading.pnl_pos_5s WHERE strategy_id LIKE '${strategy_id}' AND symbol LIKE '${symbol}' AND $__timeFilter(ts) ORDER BY ts",
+          "legendFormat": "mtm"
+        },
+        {
+          "refId": "B",
+          "query": "SELECT ts_end AS ts, upl FROM trading.pnl_pos_5s WHERE strategy_id LIKE '${strategy_id}' AND symbol LIKE '${symbol}' AND $__timeFilter(ts) ORDER BY ts",
+          "legendFormat": "upl"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "currencyUSD", "decimals": 2 } },
+      "options": { "legend": { "displayMode": "table", "placement": "right" } }
+    },
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Order Events per Interval",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, countIf(event_type = 'SUBMITTED') AS submitted FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "submitted"
+        },
+        {
+          "refId": "B",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, countIf(event_type = 'FILLED') AS filled FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "filled"
+        },
+        {
+          "refId": "C",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, countIf(event_type = 'REJECTED') AS rejected FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "rejected"
+        }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "right" } }
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "Fill Volume (qty)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, sumIf(qty, event_type = 'FILLED') AS qty FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "filled_qty"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short", "decimals": 0 } },
+      "options": { "legend": { "displayMode": "hidden" } }
+    },
+    {
+      "id": 30,
+      "type": "table",
+      "title": "Recent Orders",
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 20 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts, strategy_id, symbol, event_type, qty, price, details FROM trading.exec_events WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "ts" }, "properties": [ { "id": "unit", "value": "dateTimeAsIso" } ] }
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "type": "table",
+      "title": "Recent Fills",
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 20 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts, strategy_id, symbol, side, qty, price, fee, liquidity, order_id FROM trading.fills_live WHERE symbol LIKE '${symbol}' AND strategy_id LIKE '${strategy_id}' AND $__timeFilter(ts) ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "ts" }, "properties": [ { "id": "unit", "value": "dateTimeAsIso" } ] }
+        ]
+      }
+    },
+    {
+      "id": 40,
+      "type": "timeseries",
+      "title": "HPO Runs — AUC (Relay on/off)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 30 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL 1 DAY) AS t, avg(auc) AS auc FROM trading.runs WHERE symbol LIKE '${symbol}' AND use_relay = 1 AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "use_relay = 1"
+        },
+        {
+          "refId": "B",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL 1 DAY) AS t, avg(auc) AS auc FROM trading.runs WHERE symbol LIKE '${symbol}' AND use_relay = 0 AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "use_relay = 0"
+        }
+      ],
+      "fieldConfig": { "defaults": { "decimals": 3 } },
+      "options": { "legend": { "displayMode": "table", "placement": "right" } }
+    },
+    {
+      "id": 41,
+      "type": "table",
+      "title": "Recent HPO Runs",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 38 },
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "$DS_CH" },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts, study, trial_id, run_id, symbol, use_relay, round(auc,4) AS auc, params_json FROM trading.runs WHERE symbol LIKE '${symbol}' AND $__timeFilter(ts) ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto" } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "ts" }, "properties": [ { "id": "unit", "value": "dateTimeAsIso" } ] },
+          { "matcher": { "id": "byName", "options": "use_relay" }, "properties": [ { "id": "custom.displayMode", "value": "color-background" } ] }
+        ]
+      }
+    },
+    {
+      "id": 50,
+      "type": "logs",
+      "title": "Live Logs (Loki)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 48 },
+      "datasource": { "type": "loki", "uid": "$DS_LOKI" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | strategy_id = \"$strategy_id\" | symbol = \"$symbol\""
+        }
+      ],
+      "options": { "prettifyLogMessage": true, "wrapLogMessage": true }
+    },
+    {
+      "id": 51,
+      "type": "timeseries",
+      "title": "Log Volume by Event",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 48 },
+      "datasource": { "type": "loki", "uid": "$DS_LOKI" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (event) (count_over_time({job=\"trader\"} | json | strategy_id = \"$strategy_id\" | symbol = \"$symbol\" [$__interval]))",
+          "legendFormat": "{{event}}"
+        }
+      ],
+      "options": { "legend": { "displayMode": "table", "placement": "right" } }
+    },
+    {
+      "id": 60,
+      "type": "traces",
+      "title": "Trace Viewer",
+      "gridPos": { "h": 16, "w": 24, "x": 0, "y": 56 },
+      "datasource": { "type": "tempo", "uid": "$DS_TEMPO" },
+      "targets": [
+        { "refId": "A", "queryType": "traceId", "query": "${trace_id}" }
+      ],
+      "options": { "showSpanBar": true, "showTable": true }
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "uid": "trading-why-not",
+  "title": "Trading — Why Not Order?",
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "tags": ["trading", "observability", "reasons"],
+  "panels": [
+    {
+      "id": 10,
+      "type": "piechart",
+      "title": "Top Reasons (last 6h)",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(reason) (count_over_time({job=\"trader\"} |= \"order_skipped\" | json [6h]))"
+        }
+      ],
+      "options": {
+        "legend": {"displayMode": "list", "placement": "right"},
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}
+      }
+    },
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Reasons Over Time",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} |= \"order_skipped\" | json [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {"unit": "short"},
+        "overrides": []
+      }
+    },
+    {
+      "id": 30,
+      "type": "table",
+      "title": "Recent Blocks / Skips",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 12, "w": 12, "x": 0, "y": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"order_skipped\" or |= \"overlay_block\" | json",
+          "lineLimit": 100
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "footer": {"show": false}
+      },
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "format": "json",
+            "source": "_source"
+          }
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "type": "logs",
+      "title": "Overlay Blocks",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 12, "w": 12, "x": 12, "y": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"overlay_block\" | json"
+        }
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      }
+    }
+  ]
+}

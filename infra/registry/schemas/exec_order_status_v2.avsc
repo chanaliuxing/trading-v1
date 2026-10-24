@@ -1,0 +1,45 @@
+{
+  "type": "record",
+  "name": "ExecOrderStatusV2",
+  "namespace": "trading.events",
+  "fields": [
+    {"name": "schema_v", "type": "int"},
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "MetadataExec",
+        "fields": [
+          {"name": "ts_us", "type": "long"},
+          {"name": "producer", "type": "string"}
+        ]
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "ExecStatus",
+        "fields": [
+          {"name": "order_ref", "type": "string"},
+          {"name": "broker_order_id", "type": ["null", "string"], "default": null},
+          {"name": "perm_id", "type": ["null", "long"], "default": null},
+          {"name": "symbol", "type": "string"},
+          {"name": "side", "type": "string"},
+          {
+            "name": "state",
+            "type": {
+              "type": "enum",
+              "name": "ExecState",
+              "symbols": ["PENDING_SUBMIT", "SUBMITTED", "PARTIALLY_FILLED", "FILLED", "CANCELLED", "INACTIVE", "STALLED"]
+            }
+          },
+          {"name": "filled_qty", "type": "double", "default": 0.0},
+          {"name": "avg_fill_px", "type": ["null", "double"], "default": null},
+          {"name": "tif", "type": ["null", "string"], "default": null},
+          {"name": "oca_group", "type": ["null", "string"], "default": null}
+        ]
+      }
+    }
+  ]
+}

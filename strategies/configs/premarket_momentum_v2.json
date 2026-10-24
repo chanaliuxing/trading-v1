@@ -1,0 +1,85 @@
+{
+  "symbol": "DYNAMIC",
+  "asof": "2025-10-17",
+  "description": "Premarket Momentum V2 - Dynamic scanner-driven strategy targeting 5B-50B midcaps",
+
+  "timing": {
+    "scan_times": [
+      "07:00:00",
+      "07:30:00",
+      "08:00:00",
+      "08:30:00",
+      "09:00:00",
+      "09:27:00"
+    ],
+    "market_open": "09:30:00",
+    "entry_start": "09:30:00",
+    "entry_end": "09:35:00",
+    "force_exit": "10:10:00"
+  },
+
+  "scanner": {
+    "scan_code": "TOP_PERC_GAIN",
+    "rows": 50,
+    "min_pm_change_pct": 3.0,
+    "max_spread_pct": 0.005,
+    "min_price": 5.0,
+    "min_pm_notional": 5000000,
+    "min_market_cap": 5000000000
+  },
+
+  "execution": {
+    "spread_max": 0.0025,
+    "ttl_ms": 30000,
+    "dlb_ms": 1000
+  },
+
+  "take_profit": {
+    "levels_pct": [0.02, 0.03],
+    "qtys_pct": [0.5, 0.5]
+  },
+
+  "stop_loss": {
+    "level_pct": 0.02
+  },
+
+  "risk": {
+    "per_trade_pct": 0.005,
+    "max_notional_usd": 50000
+  },
+
+  "scoring": {
+    "change_weight": 0.3,
+    "duration_weight": 0.4,
+    "notional_weight": 0.3
+  },
+
+  "positioning": {
+    "base_unit_pct": 0.005,
+    "cap_symbol": 0.1,
+    "max_concurrent": 1
+  },
+
+  "slippage": {
+    "eps_p95": 0.0005,
+    "min": 0.0002,
+    "max": 0.001
+  },
+
+  "commission_per_share": 0.0035,
+
+  "dd_limits": {
+    "soft_pct": 0.015,
+    "hard_pct": 0.025,
+    "lookback_days": 30,
+    "fallback_soft": 0.015,
+    "fallback_hard": 0.025
+  },
+
+  "notes": [
+    "Dynamic scanner-based strategy for midcap momentum",
+    "Scans every 30min from 07:00-09:27 ET",
+    "Selects THE ONE stock with strongest sustained momentum",
+    "Quick in/out targeting 2-3% profit"
+  ]
+}

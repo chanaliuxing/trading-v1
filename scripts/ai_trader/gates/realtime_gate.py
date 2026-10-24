@@ -1,0 +1,90 @@
+from __future__ import annotations
+"""
+Realtime Gate (Redis-first)
+
+Checks that per-symbol 1s streams are alive using Redis keys sfs:1s:{SYMBOL}.
+Success criteria: fraction of symbols with last update <= max_age_sec meets min_ok_ratio.
+
+Config (suggested via ai_trader.yaml > policies.gates.realtime):
+  enabled: true
+  max_age_sec: 90
+  min_ok_ratio: 0.8
+  redis_url: env:REDIS_URL if unspecified
+"""
+import json
+import time
+from typing import Any, Dict, List, Optional
+
+
+def _redis_client(url: str):
+    try:
+        import redis  # type: ignore
+    except Exception as e:  # pragma: no cover
+        return None, f"redis_import_error:{e}"
+    try:
+        cli = redis.Redis.from_url(url, socket_timeout=2, socket_connect_timeout=2)
+        # ping to confirm connectivity
+        try:
+            cli.ping()
+        except Exception as e:
+            return None, f"redis_ping_failed:{e}"
+        return cli, None
+    except Exception as e:  # pragma: no cover
+        return None, f"redis_connect_error:{e}"
+
+
+def _latest_item(cli, key: str):
+    try:
+        # Assume newest at head (index 0)
+        raw = cli.lindex(key, 0)
+        if not raw:
+            return None
+        try:
+            item = json.loads(raw)
+            return item
+        except Exception:
+            return None
+    except Exception:
+        return None
+
+
+def _age_sec_from_item(item: dict) -> Optional[float]:
+    if not isinstance(item, dict):
+        return None
+    ts = item.get("ts")
+    now_ms = time.time() * 1000.0
+    try:
+        # integer milliseconds
+        if isinstance(ts, (int, float)):
+            age_ms = now_ms - float(ts)
+            return max(0.0, age_ms / 1000.0)
+    except Exception:
+        pass
+    return None
+
+
+def check(symbols: List[str], redis_url: Optional[str] = None, max_age_sec: int = 60, min_ok_ratio: float = 0.8) -> Dict[str, Any]:
+    if not symbols:
+        return {"ok": True, "reason": "no_symbols"}
+    url = redis_url
+    if not url:
+        # fall back to env
+        import os
+        url = os.getenv("REDIS_URL") or os.getenv("REDIS_URI") or "redis://localhost:6379/0"
+    cli, err = _redis_client(url)
+    if cli is None:
+        return {"ok": False, "reason": err or "redis_unavailable"}
+    ok_cnt = 0
+    ages: Dict[str, Optional[float]] = {}
+    for s in symbols:
+        key = f"sfs:1s:{s.upper()}"
+        item = _latest_item(cli, key)
+        age = _age_sec_from_item(item)
+        ages[s] = age
+        if age is not None and age <= max_age_sec:
+            ok_cnt += 1
+    total = len(symbols)
+    ratio = ok_cnt / max(1, total)
+    ok = ratio >= float(min_ok_ratio)
+    return {"ok": ok, "ok_count": ok_cnt, "total": total, "ratio": ratio, "max_age_sec": int(max_age_sec), "ages": ages}
+

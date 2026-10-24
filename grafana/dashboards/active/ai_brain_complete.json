@@ -1,0 +1,475 @@
+{
+  "title": "AI Brain - 完整视图 (推理+配置+状态)",
+  "description": "显示 AI 的推理过程、配置参数、系统状态",
+  "tags": [
+    "ai",
+    "brain",
+    "complete"
+  ],
+  "timezone": "America/New_York",
+  "editable": true,
+  "uid": "ai-brain-complete",
+  "refresh": "1m",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "🚦 系统健康检查",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "AI Brain 状态",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value_and_name",
+        "colorMode": "background"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": 0,
+                "to": 1,
+                "result": {
+                  "text": "🟢 运行中",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1,
+                "to": 2,
+                "result": {
+                  "text": "🟡 延迟",
+                  "color": "yellow"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 2,
+                "to": 999,
+                "result": {
+                  "text": "🔴 停止",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT round((toUnixTimestamp(now()) - toUnixTimestamp(max(ts_ny))) / 3600, 1) FROM llm.ai_brain_calls",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "最后活动",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT formatDateTime(max(ts_ny), '%Y-%m-%d %H:%i') FROM llm.ai_brain_calls",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "今日调用",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "value"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT count() FROM llm.ai_brain_calls WHERE ts_ny > now() - INTERVAL 24 HOUR",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "调用类型",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "textMode": "name_and_value",
+        "orientation": "vertical"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nSELECT \n    concat(kind, ': ', toString(count())) as metric\nFROM llm.ai_brain_calls \nWHERE ts_ny > now() - INTERVAL 24 HOUR\nGROUP BY kind\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "row",
+      "title": "🧠 A. AI 的推理过程 (为什么这么做)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": 7,
+      "type": "text",
+      "title": "💡 AI 推理说明",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# 🧠 AI 推理过程\n\n**重要**: AI 的详细推理过程 (REASONING) 目前存储在文件系统中,未写入 ClickHouse。\n\n**文件位置**:\n```\n./runs/ai_trader/YYYY-MM-DD/brain_raw_response_*.txt\n```\n\n**最新推理** (2025-11-01 14:49):\n\n```\nREASONING:\n好的,让我理解一下任务。我需要作为交易系统的控制大脑,\n根据最新的健康快照和约束条件生成 JSON 计划。\n\n输入显示所有指标如 overall_pnl, consistency, market_alignment 等\n都是 null 或 0。这说明没有历史交易数据。市场环境显示看跌\n倾向和横盘走势。\n\n诊断应该解释为什么没有数据。由于 n_decisions 是 0,意味着\n没有进行交易。建议需要概述如何开始收集数据。安全的初始\n步骤是启动低风险交易并设置严格约束。\n\n对于建议,启用安全模式来限制风险是合理的。分配 deepseek 和\ngemini,使用慢间隔 (600s) 确保低频交易,符合偏好低频的约束\n除非必要。从交易池中选择流动性好的 AAPL 和 TSLA,这些可能是\n历史上表现最好的。使用 0.7/0.3 的 AB 测试分配遵循默认值除非\n有证据建议其他...\n```\n\n---\n\n## 📝 如何查看完整推理\n\n### 方法 1: 查看文件\n```bash\n# 查看最新的推理\ncat ./runs/ai_trader/$(date +%Y-%m-%d)/brain_raw_response_*.txt | tail -100\n```\n\n### 方法 2: 查看今天所有推理\n```bash\nls -lt ./runs/ai_trader/$(date +%Y-%m-%d)/brain_raw_* | head -10\n```\n\n---\n\n## 🔮 未来改进\n\n将 REASONING 写入 ClickHouse,然后在此 dashboard 显示:\n- 最近的推理文本\n- 推理的时间线\n- 推理长度趋势\n"
+      }
+    },
+    {
+      "id": 8,
+      "type": "row",
+      "title": "⚙️ B. AI 配置的参数 (做了什么)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      }
+    },
+    {
+      "id": 9,
+      "type": "table",
+      "title": "📊 最新诊断 (Diagnosis)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "options": {
+        "showHeader": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nSELECT concat(\n    '⏰ 时间: ', formatDateTime(ts_ny, '%Y-%m-%d %H:%i'), '\\n\\n',\n    '🔍 诊断: ', JSONExtractString(output_json, 'diagnosis'), '\\n\\n',\n    '📝 含义:\\n',\n    CASE JSONExtractString(output_json, 'diagnosis')\n        WHEN 'no_trading_history_due_to_new_system_init' THEN '  → 系统刚初始化,无交易历史'\n        WHEN 'no_trading_history_due_to_zero_decisions' THEN '  → 系统运行但未产生决策'\n        WHEN '' THEN '  → 正常运行'\n        ELSE concat('  → ', JSONExtractString(output_json, 'diagnosis'))\n    END\n) as '诊断详情'\nFROM llm.ai_brain_calls\nWHERE kind = 'propose_plan'\nORDER BY ts_ny DESC\nLIMIT 1\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "table",
+      "title": "💊 AI 建议 (Prescription)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "confidence"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.5
+                    },
+                    {
+                      "color": "green",
+                      "value": 0.8
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nWITH latest AS (\n    SELECT output_json\n    FROM llm.ai_brain_calls\n    WHERE kind = 'propose_plan'\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    JSONExtractString(arrayJoin(JSONExtract(output_json, 'prescription', 'Array(String)')), 'action') as action,\n    JSONExtractFloat(arrayJoin(JSONExtract(output_json, 'prescription', 'Array(String)')), 'confidence') as confidence\nFROM latest\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "🔧 建议参数详情",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "options": {
+        "showHeader": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nWITH latest_decide AS (\n    SELECT ts_ny, output_json\n    FROM llm.ai_brain_calls\n    WHERE kind = 'decide'\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    formatDateTime(ts_ny, '%Y-%m-%d %H:%i') as time,\n    JSONExtractString(arrayJoin(JSONExtractArrayRaw(output_json, 'apply')), 'key') as parameter,\n    JSONExtractString(arrayJoin(JSONExtractArrayRaw(output_json, 'apply')), 'value') as value\nFROM latest_decide\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "row",
+      "title": "📊 C. 系统运行状态 (效果怎么样)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      }
+    },
+    {
+      "id": 13,
+      "type": "table",
+      "title": "🎛️ 当前配置 (最后一次 decide)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "options": {
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nWITH latest_decide AS (\n    SELECT ts_ny, output_json\n    FROM llm.ai_brain_calls\n    WHERE kind = 'decide'\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    formatDateTime(ts_ny, '%Y-%m-%d %H:%i') as 配置时间,\n    JSONExtractString(arrayJoin(JSONExtractArrayRaw(output_json, 'apply')), 'key') as 参数,\n    JSONExtractString(arrayJoin(JSONExtractArrayRaw(output_json, 'apply')), 'value') as 值\nFROM latest_decide\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "table",
+      "title": "💭 决策理由",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "options": {
+        "showHeader": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nSELECT concat(\n    '⏰ ', formatDateTime(ts_ny, '%Y-%m-%d %H:%i'), '\\n\\n',\n    '💭 AI 说:\\n\"', JSONExtractString(output_json, 'notes'), '\"'\n) as '理由'\nFROM llm.ai_brain_calls\nWHERE kind = 'decide'\nORDER BY ts_ny DESC\nLIMIT 1\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "text",
+      "title": "📈 今日交易结果",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 40
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# 📈 今日交易结果\n\n**注**: 需要接入实际交易数据表 (如 `trading.fills`, `trading.positions`)\n\n**应该显示**:\n- 📊 今日决策数: ?\n- 💰 今日盈亏: $?\n- 📈 胜率: ?%\n- 🎯 当前持仓: ?\n\n**数据源**: \n```sql\n-- 今日决策\nSELECT count() FROM llm.llm_decisions WHERE toDate(ts_ny) = today()\n\n-- 今日盈亏\nSELECT sum(realized_pnl) FROM trading.fills WHERE toDate(fill_time) = today()\n\n-- 当前持仓\nSELECT symbol, quantity, avg_price FROM trading.positions WHERE quantity != 0\n```\n"
+      }
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+groups:
+  - name: trading_critical
+    interval: 30s
+    rules:
+      # ======================================================================
+      # Risk & Capital Management
+      # ======================================================================
+
+      - alert: ReservationFailureRate
+        expr: rate(pf_reserve_rejected_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+          component: risk
+        annotations:
+          summary: "High reservation failure rate"
+          description: "Reservation rejections at {{ $value | humanizePercentage }} over last 5m (threshold: 10%)"
+
+      - alert: CapitalExhausted
+        expr: (pf_capital_reserved / pf_capital_total) > 0.95
+        for: 1m
+        labels:
+          severity: critical
+          component: risk
+        annotations:
+          summary: "Capital near exhaustion"
+          description: "{{ $value | humanizePercentage }} of capital reserved (threshold: 95%)"
+
+      - alert: RegLiteBlockRate
+        expr: rate(risk_reglite_blocks_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          component: risk
+        annotations:
+          summary: "High Reg-Lite block rate"
+          description: "Regulatory blocks at {{ $value | humanizePercentage }} over last 5m (threshold: 5%)"
+
+      # ======================================================================
+      # Execution & Latency
+      # ======================================================================
+
+      - alert: ExecutionLatencyP95High
+        expr: histogram_quantile(0.95, rate(exec_latency_ms_bucket[5m])) > 500
+        for: 3m
+        labels:
+          severity: warning
+          component: execution
+        annotations:
+          summary: "Execution latency P95 high"
+          description: "P95 latency {{ $value }}ms (threshold: 500ms)"
+
+      - alert: ExecutionLatencyP99Critical
+        expr: histogram_quantile(0.99, rate(exec_latency_ms_bucket[5m])) > 1000
+        for: 2m
+        labels:
+          severity: critical
+          component: execution
+        annotations:
+          summary: "Execution latency P99 critical"
+          description: "P99 latency {{ $value }}ms (threshold: 1000ms)"
+
+      - alert: OrderErrorRate
+        expr: rate(exec_order_errors_total[5m]) > 0.02
+        for: 2m
+        labels:
+          severity: warning
+          component: execution
+        annotations:
+          summary: "High order error rate"
+          description: "Order errors at {{ $value | humanizePercentage }} over last 5m (threshold: 2%)"
+
+      # ======================================================================
+      # Broker Connectivity
+      # ======================================================================
+
+      - alert: BrokerDisconnected
+        expr: ib_connection_status == 0
+        for: 30s
+        labels:
+          severity: critical
+          component: broker
+        annotations:
+          summary: "Broker connection lost"
+          description: "IB Gateway/TWS disconnected for >30s"
+
+      - alert: BrokerConnectionFlapping
+        expr: changes(ib_connection_status[5m]) > 3
+        for: 1m
+        labels:
+          severity: warning
+          component: broker
+        annotations:
+          summary: "Broker connection flapping"
+          description: "Connection changed {{ $value }} times in 5m (threshold: 3)"
+
+      # ======================================================================
+      # Data Staleness & Quality
+      # ======================================================================
+
+      - alert: MarketDataStale
+        expr: (time() - md_last_bar_ts_us / 1e6) > 30
+        for: 1m
+        labels:
+          severity: critical
+          component: market_data
+        annotations:
+          summary: "Market data stale"
+          description: "Last bar {{ $value }}s ago (threshold: 30s)"
+
+      - alert: TickDataGap
+        expr: rate(md_tick_gaps_total[5m]) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+          component: market_data
+        annotations:
+          summary: "Tick data gaps detected"
+          description: "Gaps at {{ $value | humanizePercentage }} over last 5m"
+
+      - alert: FeatureCalculationFailed
+        expr: rate(feature_calc_errors_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          component: features
+        annotations:
+          summary: "Feature calculation errors"
+          description: "Errors at {{ $value | humanizePercentage }} over last 5m"
+
+      # ======================================================================
+      # Infrastructure Health
+      # ======================================================================
+
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "Primary database unreachable"
+
+      - alert: PostgreSQLReplicationLag
+        expr: pg_replication_lag_seconds > 10
+        for: 2m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "PostgreSQL replication lag"
+          description: "Replica {{ $labels.instance }} lagging {{ $value }}s (threshold: 10s)"
+
+      - alert: ClickHouseDown
+        expr: up{job="clickhouse"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: analytics
+        annotations:
+          summary: "ClickHouse is down"
+          description: "Analytics database unreachable"
+
+      - alert: ClickHouseQuerySlow
+        expr: histogram_quantile(0.95, rate(ch_query_duration_seconds_bucket[5m])) > 5
+        for: 3m
+        labels:
+          severity: warning
+          component: analytics
+        annotations:
+          summary: "ClickHouse queries slow"
+          description: "P95 query time {{ $value }}s (threshold: 5s)"
+
+      - alert: KafkaConsumerLag
+        expr: kafka_consumer_lag_messages > 10000
+        for: 5m
+        labels:
+          severity: warning
+          component: messaging
+        annotations:
+          summary: "Kafka consumer lag high"
+          description: "Consumer {{ $labels.consumer_group }} lagging {{ $value }} messages"
+
+      - alert: KafkaBrokerDown
+        expr: kafka_brokers_online < 2
+        for: 1m
+        labels:
+          severity: critical
+          component: messaging
+        annotations:
+          summary: "Kafka broker(s) down"
+          description: "Only {{ $value }} brokers online (min: 2)"
+
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: cache
+        annotations:
+          summary: "Redis is down"
+          description: "State cache unreachable"
+
+      # ======================================================================
+      # System Resources
+      # ======================================================================
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage {{ $value | humanizePercentage }} on {{ $labels.instance }}"
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage {{ $value }}% on {{ $labels.instance }}"
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "Disk space low"
+          description: "Only {{ $value | humanizePercentage }} free on {{ $labels.instance }}:{{ $labels.mountpoint }}"
+
+  - name: trading_slo
+    interval: 1m
+    rules:
+      # ======================================================================
+      # Service Level Objectives (SLOs)
+      # ======================================================================
+
+      - alert: DecisionLatencySLOViolation
+        expr: histogram_quantile(0.99, rate(decision_latency_ms_bucket[5m])) > 100
+        for: 10m
+        labels:
+          severity: warning
+          component: slo
+        annotations:
+          summary: "Decision latency SLO violation"
+          description: "P99 decision latency {{ $value }}ms exceeds 100ms SLO for 10m"
+
+      - alert: OrderFillRateLow
+        expr: rate(exec_fills_total[5m]) / rate(exec_orders_submitted_total[5m]) < 0.95
+        for: 10m
+        labels:
+          severity: warning
+          component: slo
+        annotations:
+          summary: "Order fill rate below SLO"
+          description: "Fill rate {{ $value | humanizePercentage }} below 95% SLO"
+
+      - alert: SystemUptimeSLO
+        expr: avg_over_time(up[1h]) < 0.999
+        for: 5m
+        labels:
+          severity: critical
+          component: slo
+        annotations:
+          summary: "System uptime below SLO"
+          description: "Uptime {{ $value | humanizePercentage }} below 99.9% SLO"

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-04T00:24:15.258903+00:00",
+  "source": "ib_insync.positions",
+  "host": "127.0.0.1",
+  "port": 4002,
+  "client_id": 9917,
+  "readonly": true,
+  "target_positions": {
+    "SOXS": {
+      "symbol": "SOXS",
+      "qty": 0.0,
+      "missing_from_broker_positions": true
+    }
+  },
+  "all_nonzero_positions": []
+}

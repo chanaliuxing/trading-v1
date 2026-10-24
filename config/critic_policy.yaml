@@ -1,0 +1,7 @@
+# Critic thresholds and defaults.
+# Used by libs/critic/critic_client.py to decide warnings and should_block behavior.
+min_sample_size: 30
+block_sharpe_threshold: -0.2
+block_confidence_threshold: 0.8
+default_regime: "unknown"
+default_strategy: "generic"

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.trading.real_session.shadow_capture.intraday</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>__PROGRAM__</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__PROJECT_ROOT__</string>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>9</integer>
+      <key>Minute</key>
+      <integer>35</integer>
+    </dict>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>HOME</key>
+      <string>__HOME__</string>
+      <key>PATH</key>
+      <string>__PATH__</string>
+      <key>REAL_SESSION_SHADOW_SYMBOLS</key>
+      <string>TQQQ</string>
+      <key>REAL_SESSION_SHADOW_ITERATIONS</key>
+      <string>78</string>
+      <key>REAL_SESSION_SHADOW_SLEEP_INTERVAL_SEC</key>
+      <string>300</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_OUT__</string>
+    <key>StandardErrorPath</key>
+    <string>__LOG_ERR__</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+  </dict>
+</plist>

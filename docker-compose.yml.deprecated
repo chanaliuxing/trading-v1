@@ -1,0 +1,96 @@
+version: "3.8"
+services:
+  grafana:
+    image: grafana/grafana:11.1.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+  loki:
+    image: grafana/loki:2.9.5
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/config/local-config.yaml:/etc/loki/local-config.yaml:ro
+      - ./loki/data:/data
+  promtail:
+    image: grafana/promtail:2.9.5
+    command: -config.file=/etc/promtail/config.yml
+    volumes:
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+      - /workspace/grafana-stack/logs:/var/log/trader:ro
+  node_exporter:
+    image: prom/node-exporter:v1.8.1
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
+    command:
+      - '--path.rootfs=/host'
+    volumes:
+      - /:/host:ro
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+  kafka_exporter:
+    image: danielqsj/kafka-exporter:v1.7.0
+    ports:
+      - "9308:9308"
+    restart: unless-stopped
+    command:
+      - '--kafka.server=host.docker.internal:9092'
+  redis_exporter:
+    image: oliver006/redis_exporter:v1.58.0
+    ports:
+      - "9121:9121"
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis://host.docker.internal:6379
+      - REDIS_EXPORTER_LOG_FORMAT=json
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    ports:
+      - "9187:9187"
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:postgres@host.docker.internal:5432/test?sslmode=disable
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    volumes:
+      - ./infra/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infra/prometheus_alerts.yml:/etc/prometheus/prometheus_alerts.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+  tempo:
+    image: grafana/tempo:2.4.1
+    command: ["-config.file=/etc/tempo.yaml"]
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - ./tempo/data:/tmp/tempo
+
+volumes:
+  grafana-data:
+  prometheus-data:

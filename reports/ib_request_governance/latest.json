@@ -1,0 +1,163 @@
+{
+  "approved_broker_modules": [
+    {
+      "calls": [
+        {
+          "call": "qualifyContractsAsync",
+          "line": 1258
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 1661
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 1722
+        }
+      ],
+      "path": "services/exec/adapters/ib_adapter.py"
+    },
+    {
+      "calls": [
+        {
+          "call": "reqMktData",
+          "line": 716
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 704
+        },
+        {
+          "call": "cancelMktData",
+          "line": 1164
+        },
+        {
+          "call": "reqMktData",
+          "line": 750
+        },
+        {
+          "call": "cancelMktData",
+          "line": 993
+        },
+        {
+          "call": "cancelMktData",
+          "line": 298
+        }
+      ],
+      "path": "services/market/ib_market_data.py"
+    },
+    {
+      "calls": [
+        {
+          "call": "reqMktData",
+          "line": 577
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 708
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 1203
+        },
+        {
+          "call": "cancelMktData",
+          "line": 625
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 883
+        },
+        {
+          "call": "reqSecDefOptParamsAsync",
+          "line": 910
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 1020
+        }
+      ],
+      "path": "services/market/options_data.py"
+    }
+  ],
+  "governed_callers": [
+    {
+      "calls": [
+        {
+          "call": "qualifyContractsAsync",
+          "line": 790
+        },
+        {
+          "call": "reqHistoricalDataAsync",
+          "line": 814
+        }
+      ],
+      "has_governor": true,
+      "path": "services/market/backfill_service.py"
+    },
+    {
+      "calls": [
+        {
+          "call": "qualifyContractsAsync",
+          "line": 252
+        },
+        {
+          "call": "reqMktData",
+          "line": 262
+        }
+      ],
+      "has_governor": true,
+      "path": "services/market/market_state_provider.py"
+    },
+    {
+      "calls": [
+        {
+          "call": "qualifyContractsAsync",
+          "line": 858
+        }
+      ],
+      "has_governor": true,
+      "path": "strategies/options/bull_put_spread_strategy.py"
+    },
+    {
+      "calls": [
+        {
+          "call": "reqHistoricalDataAsync",
+          "line": 2716
+        },
+        {
+          "call": "reqHistoricalDataAsync",
+          "line": 2753
+        },
+        {
+          "call": "qualifyContractsAsync",
+          "line": 2702
+        }
+      ],
+      "has_governor": true,
+      "path": "strategies/qqq_intraday_strategy.py"
+    },
+    {
+      "calls": [
+        {
+          "call": "qualifyContractsAsync",
+          "line": 203
+        }
+      ],
+      "has_governor": true,
+      "path": "strategies/v3_1/execution_guard.py"
+    }
+  ],
+  "policy": {
+    "approved_broker_modules": [
+      "services/exec/adapters/ib_adapter.py",
+      "services/ibkr/ib_connection_manager.py",
+      "services/ibkr/ib_request_governor.py",
+      "services/market/ib_market_data.py",
+      "services/market/options_data.py"
+    ],
+    "require_governor_for_non_approved_runtime_callers": true
+  },
+  "status": "PASS",
+  "violations": []
+}

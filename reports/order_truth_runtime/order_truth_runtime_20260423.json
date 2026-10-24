@@ -1,0 +1,37 @@
+{
+  "audit_dir": "./runtime/audit/2026-04-23",
+  "audit_dir_exists": true,
+  "blocked_reason_counts": {
+    "amp_not_locked": 1,
+    "anti_chase_blocked": 1,
+    "data_integrity_fail_closed": 30,
+    "delayed_confirm_not_met": 7,
+    "fast_cooldown_active": 1,
+    "fast_drift_not_ready": 16,
+    "first_entry_seed_not_ready": 2,
+    "sign_mismatch": 14
+  },
+  "date": "2026-04-23",
+  "false_block_removed": false,
+  "legacy_open_orders_block_count": 109,
+  "legitimate_block_observed": true,
+  "legitimate_block_reason_counts": {
+    "amp_not_locked": 1,
+    "anti_chase_blocked": 1,
+    "data_integrity_fail_closed": 30,
+    "delayed_confirm_not_met": 7,
+    "fast_cooldown_active": 1,
+    "fast_drift_not_ready": 16,
+    "first_entry_seed_not_ready": 2,
+    "sign_mismatch": 14
+  },
+  "ok": false,
+  "position_sync_flat_count": 9323,
+  "reasons": [
+    "legacy_open_orders_block_still_present"
+  ],
+  "recommendation": "HOLD",
+  "rows_scanned": 233357,
+  "strategy_id": "qqq_intraday_001",
+  "strategy_row_count": 10630
+}

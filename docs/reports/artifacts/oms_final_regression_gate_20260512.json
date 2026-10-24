@@ -1,0 +1,86 @@
+{
+  "verdict": "PASS_FOR_CANARY_PREP",
+  "generated_at": "2026-05-12T06:13:46Z",
+  "test_results": {
+    "no_live": "4 passed",
+    "services": "648 passed",
+    "exec": "291 passed",
+    "reconciliation": "76 passed",
+    "reports": "24 passed",
+    "watchdog_readiness_selected": "23 passed, 57 deselected",
+    "strategy_surface": "5 passed",
+    "oms_contract": "16 passed",
+    "owner_identity_order_event": "13 passed",
+    "owner_scoped_quarantine": "7 passed",
+    "safety_plan_key": "6 passed",
+    "oco_persistence": "24 passed",
+    "durable_cancel": "6 passed",
+    "stop_loss_owner_binding": "7 passed",
+    "reconnect_rebind": "10 passed",
+    "broker_aggregate_reconciliation": "9 passed",
+    "intraday_owner_flatten": "11 passed",
+    "overnight_carry": "10 passed",
+    "manual_broker_adjudication": "12 passed",
+    "git_diff_check": "passed"
+  },
+  "contract_status": {
+    "no_live_test_guard": "PASS",
+    "owner_identity": "PASS",
+    "owner_scoped_quarantine": "PASS",
+    "safety_plan_key_isolation": "PASS",
+    "durable_cancel_ownership": "PASS",
+    "stop_loss_owner_position_binding": "PASS",
+    "reconnect_rebind_to_strategy_instance": "PASS",
+    "broker_aggregate_vs_virtual_position": "PASS",
+    "intraday_owner_scoped_flatten": "PASS",
+    "overnight_carry_detection": "PASS",
+    "manual_unknown_broker_order_adjudication": "PASS",
+    "oms_contract_aggregate": "PASS"
+  },
+  "cross_scenario_status": {
+    "same_symbol_same_direction": "PASS",
+    "same_symbol_opposite_direction_policy": "PASS",
+    "quarantine_scope_isolation": "PASS",
+    "plan_key_isolation": "PASS",
+    "durable_cancel_isolation": "PASS",
+    "stop_loss_owner_binding": "PASS",
+    "reconnect_rebind": "PASS",
+    "broker_aggregate_no_virtual_overwrite": "PASS",
+    "intraday_flat_owner_scope": "PASS",
+    "overnight_carry_after_restart": "PASS",
+    "unknown_manual_broker_order_not_assigned": "PASS",
+    "unknown_manual_fill_not_pnl_ready": "PASS"
+  },
+  "production_readiness_status": {
+    "broker_truth_contract": "PASS",
+    "position_safety_dependency_contract": "PASS",
+    "tradability_state_contract": "PASS",
+    "production_state_aggregator_contract": "PASS",
+    "strategy_surface_path_isolation": "PASS",
+    "runtime_version_freshness": "PASS",
+    "vegas_measurement_report": "PASS",
+    "approved_to_fill_conversion_report": "PASS"
+  },
+  "no_live_leak": true,
+  "remaining_risks": [
+    "runtime/manual operator adjudication UI/workflow hardening",
+    "production canary readiness gate",
+    "live/paper runtime data collection",
+    "approved-to-fill diagnostics needs real audit samples",
+    "Vegas measurement needs real audit samples",
+    "OMS end-to-end paper soak still required"
+  ],
+  "approved_scope": [
+    "paper/shadow validation",
+    "canary preparation with manual gates",
+    "offline diagnostics and regression monitoring"
+  ],
+  "not_approved_scope": [
+    "full live trading",
+    "unattended production live",
+    "auto-cancel unknown broker orders",
+    "auto-flatten unknown owner positions",
+    "symbol-only strategy attribution",
+    "order_ref prefix or substring owner attribution"
+  ]
+}

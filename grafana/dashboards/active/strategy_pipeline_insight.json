@@ -1,0 +1,774 @@
+{
+  "uid": "strategy-pipeline",
+  "title": "Strategy & Decision Pipeline Insight",
+  "schemaVersion": 39,
+  "style": "dark",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "strategy_id",
+        "label": "Strategy",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "label_values({job=\"trader\"}, strategy_id)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "definition": "label_values({job=\"trader\"}, strategy_id)",
+        "hide": 0,
+        "options": [],
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0
+      },
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "label_values({job=\"trader\"}, symbol)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "definition": "label_values({job=\"trader\"}, symbol)",
+        "hide": 0,
+        "options": [],
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "-- Grafana --",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": false,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "Strategy Overview",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Active Strategies",
+      "datasource": {
+        "type": "postgres",
+        "uid": "pg"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 1,
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      },
+      "description": "Count of active strategies from strategy_status snapshot",
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "datasource": {
+            "type": "postgres",
+            "uid": "pg"
+          },
+          "rawSql": "SELECT count(*) AS active_count FROM public.strategy_status WHERE is_active = true;"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Signal Rate (signals/min)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"Signal Matched\" [5m])) * 60"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "opm"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Cost Gate Pass Rate",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | passed = \"true\" [5m])) / sum(rate({job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 0.3,
+                "color": "yellow"
+              },
+              {
+                "value": 0.5,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "PnL Today (All Strategies)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(last_over_time({job=\"trader\"} |= \"pnl_today\" | json | unwrap pnl_today [1h]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              {
+                "value": -1000,
+                "color": "red"
+              },
+              {
+                "value": 0,
+                "color": "yellow"
+              },
+              {
+                "value": 100,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "Signal Activity",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Signal Generation by Module (A1/A2/B1)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (details_type) (rate({job=\"trader\"} |= \"Signal Matched\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [$__interval]))",
+          "legendFormat": "{{details_type}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Strategy Execution Latency (P95)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, rate(strategy_execution_seconds_bucket{strategy_id=~\"$strategy_id\"}[$__interval]))",
+          "legendFormat": "{{strategy_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 0.2,
+                "color": "yellow"
+              },
+              {
+                "value": 0.5,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "Exposure & Net Edge",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Cost Gate: Net Edge vs Floor",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | unwrap details_net_edge | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Net Edge"
+        },
+        {
+          "refId": "B",
+          "expr": "{job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | unwrap details_edge_floor | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Edge Floor"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "type": "piechart",
+      "title": "Cost Gate: Pass vs Reject",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (passed) (count_over_time({job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [1h]))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "true"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "false"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "Rejections & Blocks",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      }
+    },
+    {
+      "id": 50,
+      "type": "timeseries",
+      "title": "Blocks & Rejects Over Time",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 0,
+        "y": 23
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} |= \"order_skipped\" or |= \"order_rejected\" or |= \"overlay_block\" | json | reason != \"\" [$__interval]))",
+          "legendFormat": "{{reason}}"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "type": "table",
+      "title": "Top Reject Reasons (Last 6h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 14,
+        "y": 23
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (reason) (count_over_time({job=\"trader\"} |~ \"signal REJECTED\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [6h])))",
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "reason": "Reject Reason",
+              "Value": "Count"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "type": "table",
+      "title": "Top Blocking Symbols",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 19,
+        "y": 23
+      },
+      "options": {
+        "showHeader": true
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Value",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(20, sum by (symbol) (count_over_time({job=\"trader\"} |~ \"order_rejected|order_trimmed|overlay_block\" | json [${__range_s}s])))",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Strategy Leaderboard",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      }
+    },
+    {
+      "id": 70,
+      "type": "timeseries",
+      "title": "Aggregate Realized PnL",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 31
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toDateTime(d) AS t, sum(realized_pnl) AS pnl FROM trading.pnl_day WHERE d BETWEEN toDate($__from/1000) AND toDate($__to/1000) GROUP BY d ORDER BY d",
+          "format": "time_series",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "id": 71,
+      "type": "table",
+      "title": "Strategy PnL Summary",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 31
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT strategy_id, sum(realized_pnl) AS realized_pnl, sum(fees) AS fees, anyLast(nav_close) AS nav_close, count() AS records FROM trading.pnl_day WHERE d BETWEEN toDate($__from/1000) AND toDate($__to/1000) GROUP BY strategy_id ORDER BY realized_pnl DESC LIMIT 25",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "description": "Pulled from trading.pnl_day; nav_close may be NULL if strategy idle."
+    },
+    {
+      "type": "row",
+      "title": "Strategy Logs",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      }
+    },
+    {
+      "id": 80,
+      "type": "logs",
+      "title": "Strategy Logs (filtered)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | strategy_id =~ \"$strategy_id\" | symbol =~ \"$symbol\" | level =~ \"info|warning|error\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "exact",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    },
+    {
+      "id": 81,
+      "type": "logs",
+      "title": "Recent Blocks / Skips Logs",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json"
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "type": "table",
+      "title": "Strategy Inventory Snapshot",
+      "datasource": {
+        "type": "postgres",
+        "uid": "pg"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 50
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawSql": "SELECT strategy_id, name, COALESCE(symbol, '-') AS symbol, is_active, updated_at FROM public.strategy_status ORDER BY strategy_id;",
+          "datasource": {
+            "type": "postgres",
+            "uid": "pg"
+          }
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    }
+  ]
+}

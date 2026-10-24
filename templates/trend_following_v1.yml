@@ -1,0 +1,105 @@
+# Trend Following Template V1
+# Based on doc/65.md specification
+#
+# Strategy: Trend following with dynamic position sizing
+# Entry: EMA crossover + pullback confirmation
+# Add: Pyramid on profit (every 1*ATR gain, max 3 layers)
+# Reduce: Cut half on 1*ATR drawdown
+# Protection: Trailing stop (max of entry or peak - 1.5*ATR) + 45min time stop
+
+name: trend_following_v1
+
+defaults:
+  cadence_s: 5
+  ttl_ms: 2000
+  min_lot: 10
+  lot_round: 10
+  max_layers: 3
+  base_risk_usd: 2500
+  atr_k: 1.3
+  time_limit_s: 2700        # 45 minute time stop
+  trail_atr_mult: 1.5       # Trailing stop multiplier
+  reversal_atomic: false    # No automatic reversal for trend following
+  quality_qscore_min: 70
+  quality_gap_max: 0.04
+  pyramid_atr_step: 1.0     # Add position every 1*ATR profit
+  reduce_atr_dd: 1.0        # Cut half on 1*ATR drawdown
+
+rules:
+  # Quality gate
+  - id: quality_gate
+    when:
+      all:
+        - "f['qscore'] >= quality_qscore_min"
+        - "f['gap_ratio'] <= quality_gap_max"
+    then: continue
+
+  # Trend entry - EMA crossover + pullback
+  - id: trend_entry
+    when:
+      all:
+        - "signal['side'] != 0"
+        - "f.get('ema_fast', 0) > f.get('ema_slow', 0)"  # Uptrend
+        - "f.get('pullback_to_ema', False)"              # Pullback entry
+    compute:
+      lot_base: "floor(base_risk_usd / max(0.01, atr_k * f['atr_14']), lot_round)"
+    emit:
+      type: target
+      mode: net
+      qty: "clamp(int(lot_base * sign(signal['side'])), -5000, 5000)"
+      style:
+        kind: LMT
+        limit_px: "signal['ref_px']"
+      extras:
+        ref_px: "signal['ref_px']"
+        edge_bp: "abs(f.get('ema_spread', 0)) * 100"
+
+  # Pyramid - add on profit
+  - id: pyramid_on_profit
+    when:
+      all:
+        - "position['qty'] != 0"
+        - "f.get('unrealized_pnl', 0) >= pyramid_atr_step * f['atr_14'] * abs(position['qty'])"
+        - "abs(position['qty']) < max_layers * lot_base"
+    compute:
+      lot_base: "floor(base_risk_usd / max(0.01, atr_k * f['atr_14']), lot_round)"
+      current_layers: "floor(abs(position['qty']) / lot_base)"
+      new_qty: "int((current_layers + 1) * lot_base * sign(position['qty']))"
+    emit:
+      type: target
+      mode: net
+      qty: "clamp(new_qty, -5000, 5000)"
+      style:
+        kind: LMT
+        limit_px: "signal['ref_px']"
+
+  # Reduce on drawdown
+  - id: reduce_on_dd
+    when:
+      all:
+        - "position['qty'] != 0"
+        - "f.get('unrealized_pnl', 0) <= -reduce_atr_dd * f['atr_14'] * abs(position['qty'])"
+    compute:
+      half_qty: "int(position['qty'] / 2)"
+    emit:
+      type: target
+      mode: net
+      qty: "half_qty"
+      style:
+        kind: MKT
+
+  # Protection - dynamic trailing stop
+  - id: trend_protect
+    when:
+      any:
+        - "position['qty'] != 0"
+    compute:
+      entry_trail: "position['avg_px'] - sign(position['qty']) * trail_atr_mult * f['atr_14']"
+      peak_trail: "f.get('position_peak_px', position['avg_px']) - sign(position['qty']) * trail_atr_mult * f['atr_14']"
+      trail_px: "max(entry_trail, peak_trail) if position['qty'] > 0 else min(entry_trail, peak_trail)"
+    emit:
+      type: protect
+      oco:
+        sl_px: "trail_px"
+        trail_atr_mult: "trail_atr_mult"
+        time_stop_s: "time_limit_s"

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-04T00:18:35.904710+00:00",
+  "source": "ib_insync.positions",
+  "host": "127.0.0.1",
+  "port": 4002,
+  "client_id": 9917,
+  "readonly": true,
+  "target_positions": {},
+  "all_nonzero_positions": [
+    {
+      "symbol": "SOXS",
+      "qty": -8448.0,
+      "secType": "STK",
+      "localSymbol": "SOXS",
+      "conId": 854072548
+    }
+  ]
+}

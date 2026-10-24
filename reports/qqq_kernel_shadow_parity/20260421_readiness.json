@@ -1,0 +1,193 @@
+{
+  "checks": [
+    {
+      "detail": {},
+      "name": "qqq_live_instance_present",
+      "passed": true
+    },
+    {
+      "detail": {
+        "enabled": true
+      },
+      "name": "qqq_live_writer_enabled",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_on_001_present",
+      "passed": true
+    },
+    {
+      "detail": {
+        "enabled": false,
+        "require_disabled": true
+      },
+      "name": "qqq_kernel_shadow_legacy_on_001_disabled_until_go",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_on_001_dry_run_true",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_on_001_shadow_only_true",
+      "passed": true
+    },
+    {
+      "detail": {
+        "policy_id": "qqq_intraday_policy_v1"
+      },
+      "name": "qqq_kernel_shadow_legacy_on_001_policy_id",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_on_001_shared_plane_enabled",
+      "passed": true
+    },
+    {
+      "detail": {
+        "shared_underlying_read_mode": "plane_only"
+      },
+      "name": "qqq_kernel_shadow_legacy_on_001_shared_plane_only",
+      "passed": true
+    },
+    {
+      "detail": {
+        "shadow_origin_strategy_id": "qqq_intraday_001"
+      },
+      "name": "qqq_kernel_shadow_legacy_on_001_origin_strategy",
+      "passed": true
+    },
+    {
+      "detail": {
+        "long_exec_symbol": "TQQQ",
+        "short_exec_symbol": "SQQQ",
+        "signal_symbol": "QQQ"
+      },
+      "name": "qqq_kernel_shadow_legacy_on_001_symbol_binding",
+      "passed": true
+    },
+    {
+      "detail": {
+        "legacy_trader_parity_mode": true
+      },
+      "name": "qqq_kernel_shadow_legacy_on_001_legacy_mode_explicit",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_off_001_present",
+      "passed": true
+    },
+    {
+      "detail": {
+        "enabled": false,
+        "require_disabled": true
+      },
+      "name": "qqq_kernel_shadow_legacy_off_001_disabled_until_go",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_off_001_dry_run_true",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_off_001_shadow_only_true",
+      "passed": true
+    },
+    {
+      "detail": {
+        "policy_id": "qqq_intraday_policy_v1"
+      },
+      "name": "qqq_kernel_shadow_legacy_off_001_policy_id",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "qqq_kernel_shadow_legacy_off_001_shared_plane_enabled",
+      "passed": true
+    },
+    {
+      "detail": {
+        "shared_underlying_read_mode": "plane_only"
+      },
+      "name": "qqq_kernel_shadow_legacy_off_001_shared_plane_only",
+      "passed": true
+    },
+    {
+      "detail": {
+        "shadow_origin_strategy_id": "qqq_intraday_001"
+      },
+      "name": "qqq_kernel_shadow_legacy_off_001_origin_strategy",
+      "passed": true
+    },
+    {
+      "detail": {
+        "long_exec_symbol": "TQQQ",
+        "short_exec_symbol": "SQQQ",
+        "signal_symbol": "QQQ"
+      },
+      "name": "qqq_kernel_shadow_legacy_off_001_symbol_binding",
+      "passed": true
+    },
+    {
+      "detail": {
+        "legacy_trader_parity_mode": false
+      },
+      "name": "qqq_kernel_shadow_legacy_off_001_legacy_mode_explicit",
+      "passed": true
+    },
+    {
+      "detail": {
+        "legacy_off": false,
+        "legacy_on": true
+      },
+      "name": "legacy_on_off_modes_distinct",
+      "passed": true
+    },
+    {
+      "detail": {
+        "path": "./db/pg/migration_20260420_shadow_orders_origin_fields.ddl"
+      },
+      "name": "shadow_orders_origin_migration_exists",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "shadow_orders_origin_strategy_id_field",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "shadow_orders_legacy_mode_field",
+      "passed": true
+    },
+    {
+      "detail": {},
+      "name": "shadow_orders_shadow_profile_id_field",
+      "passed": true
+    },
+    {
+      "detail": {
+        "path": "./tool/replay/run_qqq_kernel_shadow_parity.py"
+      },
+      "name": "parity_runner_exists",
+      "passed": true
+    },
+    {
+      "detail": {
+        "path": "./reports/qqq_kernel_shadow_parity"
+      },
+      "name": "parity_output_root_exists",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "ok": true,
+  "recommendation": "GO_FOR_READINESS_ONLY"
+}

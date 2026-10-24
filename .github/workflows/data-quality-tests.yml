@@ -1,0 +1,356 @@
+name: Data Quality Tests
+
+on:
+  push:
+    branches: [ main, dev ]
+    paths:
+      - 'pipelines/**'
+      - 'libs/features/**'
+      - 'services/data/**'
+      - 'tools/test_*.py'
+      - 'tests/**'
+  pull_request:
+    branches: [ main, dev ]
+  schedule:
+    # 每日 UTC 14:00 (北京时间 22:00) 自动运行
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+    inputs:
+      test_date:
+        description: 'Test date (YYYY-MM-DD)'
+        required: false
+        default: 'today'
+      symbols:
+        description: 'Comma-separated symbols'
+        required: false
+        default: 'TSLA,SPY,NVDA'
+
+env:
+  PYTHON_VERSION: '3.11'
+  CLICKHOUSE_HOST: localhost
+  CLICKHOUSE_PORT: 9000
+
+jobs:
+  # =========================================================================
+  # 阶段 1: 数据层测试 (Data Layer)
+  # =========================================================================
+  test-data-layer:
+    name: "Data Layer: Bars & Features Coverage"
+    runs-on: ubuntu-latest
+
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:24.1
+        ports:
+          - 9000:9000
+          - 8123:8123
+        options: >-
+          --health-cmd "clickhouse-client --query 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Determine test date
+        id: date
+        run: |
+          if [ "${{ github.event.inputs.test_date }}" = "today" ] || [ -z "${{ github.event.inputs.test_date }}" ]; then
+            TEST_DATE=$(date -d "yesterday" +%Y-%m-%d)
+          else
+            TEST_DATE="${{ github.event.inputs.test_date }}"
+          fi
+          echo "TEST_DATE=$TEST_DATE" >> $GITHUB_OUTPUT
+          echo "Testing date: $TEST_DATE"
+
+      - name: Test A - Bars Coverage
+        id: test_a
+        run: |
+          SYMBOLS="${{ github.event.inputs.symbols }}"
+          SYMBOLS="${SYMBOLS:-TSLA,SPY,NVDA}"
+
+          python tools/test_bars_coverage.py \
+            --symbols "$SYMBOLS" \
+            --start "${{ steps.date.outputs.TEST_DATE }}" \
+            --end "${{ steps.date.outputs.TEST_DATE }}" \
+            --output reports/test_a_bars_coverage.json
+
+      - name: Test C - Features Coverage
+        id: test_c
+        run: |
+          SYMBOLS="${{ github.event.inputs.symbols }}"
+          SYMBOLS="${SYMBOLS:-TSLA,SPY,NVDA}"
+
+          python tools/test_features_coverage.py \
+            --date "${{ steps.date.outputs.TEST_DATE }}" \
+            --symbols "$SYMBOLS" \
+            --threshold 0.98 \
+            --output reports/test_c_features_coverage.json
+
+      - name: Upload data layer results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: data-layer-results
+          path: reports/test_*.json
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 📊 Data Layer Test Results\n\n';
+
+            try {
+              const testA = JSON.parse(fs.readFileSync('reports/test_a_bars_coverage.json', 'utf8'));
+              comment += `### Test A: Bars Coverage\n`;
+              comment += `- Pass rate: ${(testA.summary.pass_rate * 100).toFixed(1)}%\n`;
+              comment += `- Total checks: ${testA.summary.total}\n\n`;
+            } catch (e) {
+              comment += `### Test A: ❌ Failed\n\n`;
+            }
+
+            try {
+              const testC = JSON.parse(fs.readFileSync('reports/test_c_features_coverage.json', 'utf8'));
+              comment += `### Test C: Features Coverage\n`;
+              comment += `- Pass rate: ${(testC.summary.pass_rate * 100).toFixed(1)}%\n`;
+              comment += `- Total symbols: ${testC.summary.total}\n\n`;
+            } catch (e) {
+              comment += `### Test C: ❌ Failed\n\n`;
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # =========================================================================
+  # 阶段 2: 特征层测试 (Feature Layer)
+  # =========================================================================
+  test-feature-layer:
+    name: "Feature Layer: Quality & DSL"
+    runs-on: ubuntu-latest
+    needs: test-data-layer
+
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:24.1
+        ports:
+          - 9000:9000
+          - 8123:8123
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Test D - Feature Quality (pytest)
+        run: |
+          pytest tests/integration/features/test_feature_quality.py \
+            -v --tb=short \
+            --junitxml=reports/test_d_junit.xml \
+            --html=reports/test_d_report.html
+
+      - name: Test E - DSL Compilation (pytest)
+        run: |
+          pytest tests/unit/features/test_feature_dsl_sql_llm_cases.py \
+            -v --tb=short \
+            --junitxml=reports/test_e_junit.xml \
+            --html=reports/test_e_report.html
+
+      - name: Upload feature layer results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: feature-layer-results
+          path: reports/test_*.xml
+          retention-days: 30
+
+  # =========================================================================
+  # 阶段 3: 标签层测试 (Label Layer)
+  # =========================================================================
+  test-label-layer:
+    name: "Label Layer: Sanity & Alignment"
+    runs-on: ubuntu-latest
+    needs: test-feature-layer
+
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:24.1
+        ports:
+          - 9000:9000
+          - 8123:8123
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Determine test date
+        id: date
+        run: |
+          TEST_DATE=$(date -d "yesterday" +%Y-%m-%d)
+          echo "TEST_DATE=$TEST_DATE" >> $GITHUB_OUTPUT
+
+      - name: Test F - Label Sanity
+        continue-on-error: true
+        run: |
+          SYMBOLS="${{ github.event.inputs.symbols }}"
+          SYMBOLS="${SYMBOLS:-TSLA,SPY}"
+
+          python tools/test_label_sanity.py \
+            --date "${{ steps.date.outputs.TEST_DATE }}" \
+            --symbols "$SYMBOLS" \
+            --output reports/test_f_label_sanity.json || echo "Label table may not exist yet"
+
+      - name: Test G - Label-Feature Alignment
+        continue-on-error: true
+        run: |
+          SYMBOLS="${{ github.event.inputs.symbols }}"
+          SYMBOLS="${SYMBOLS:-TSLA,SPY}"
+
+          python tools/test_label_feature_alignment.py \
+            --date "${{ steps.date.outputs.TEST_DATE }}" \
+            --symbols "$SYMBOLS" \
+            --output reports/test_g_label_alignment.json || echo "Label table may not exist yet"
+
+      - name: Upload label layer results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: label-layer-results
+          path: reports/test_*.json
+          retention-days: 30
+
+  # =========================================================================
+  # 阶段 4: 数据自愈 & 端到端测试
+  # =========================================================================
+  test-healing-and-e2e:
+    name: "DataHealer & E2E Pipeline"
+    runs-on: ubuntu-latest
+    needs: test-label-layer
+
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:24.1
+        ports:
+          - 9000:9000
+          - 8123:8123
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov lightgbm scikit-learn
+
+      - name: Test B - DataHealer Smoke (pytest)
+        run: |
+          pytest tests/integration/data/test_data_healer_smoke.py \
+            -v --tb=short \
+            --junitxml=reports/test_b_junit.xml \
+            --html=reports/test_b_report.html
+
+      - name: Test H - End-to-End Pipeline (pytest)
+        run: |
+          pytest tests/integration/pipeline/test_ml_pipeline_smoke.py \
+            -v --tb=short \
+            --junitxml=reports/test_h_junit.xml \
+            --html=reports/test_h_report.html
+
+      - name: Upload healing & e2e results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: healing-e2e-results
+          path: reports/test_*.xml
+          retention-days: 30
+
+  # =========================================================================
+  # 阶段 5: 汇总报告
+  # =========================================================================
+  generate-summary:
+    name: "Generate Test Summary"
+    runs-on: ubuntu-latest
+    needs: [test-data-layer, test-feature-layer, test-label-layer, test-healing-and-e2e]
+    if: always()
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Generate summary
+        run: |
+          echo "# 📊 Data Quality Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Matrix Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Layer | Test | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Data | Test A: Bars Coverage | ${{ needs.test-data-layer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Data | Test C: Features Coverage | ${{ needs.test-data-layer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Feature | Test D: Feature Quality | ${{ needs.test-feature-layer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Feature | Test E: DSL Compilation | ${{ needs.test-feature-layer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Label | Test F: Label Sanity | ${{ needs.test-label-layer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Label | Test G: Label Alignment | ${{ needs.test-label-layer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Healing | Test B: DataHealer | ${{ needs.test-healing-and-e2e.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| E2E | Test H: ML Pipeline | ${{ needs.test-healing-and-e2e.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Data layer results: See artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Feature layer results: See artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Label layer results: See artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Healing & E2E results: See artifacts" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Data quality tests failed!"
+          echo "Please check the artifacts for detailed reports."

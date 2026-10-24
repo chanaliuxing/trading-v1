@@ -1,0 +1,17 @@
+{
+  "policy_version": "candidate_factory_stop_policy.v1",
+  "window_days": 20,
+  "max_history_days": 120,
+  "reliability_gate": {
+    "min_days_required": 5,
+    "min_constraint_pass_rate": 0.8,
+    "min_avg_corr": 0.02,
+    "require_positive_latest_corr": true,
+    "require_no_severe_alert": true
+  },
+  "stop_conditions": {
+    "consecutive_constraint_fail_days": 2,
+    "corr_non_positive_streak_days": 2,
+    "recalibration_required": true
+  }
+}

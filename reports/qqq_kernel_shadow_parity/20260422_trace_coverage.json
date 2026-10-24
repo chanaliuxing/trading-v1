@@ -1,0 +1,53 @@
+{
+  "day": "20260422",
+  "expected_strategy_ids": [
+    "qqq_intraday_001",
+    "qqq_kernel_shadow_legacy_on_001",
+    "qqq_kernel_shadow_legacy_off_001"
+  ],
+  "file_count": 3,
+  "files": [
+    {
+      "path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260422.jsonl",
+      "row_count": 214,
+      "strategy_ids": [
+        "qqq_intraday_001"
+      ]
+    },
+    {
+      "path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260422_qqq_kernel_shadow_legacy_off_001.jsonl",
+      "row_count": 11872,
+      "strategy_ids": [
+        "qqq_kernel_shadow_legacy_off_001"
+      ]
+    },
+    {
+      "path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260422_qqq_kernel_shadow_legacy_on_001.jsonl",
+      "row_count": 11869,
+      "strategy_ids": [
+        "qqq_kernel_shadow_legacy_on_001"
+      ]
+    }
+  ],
+  "generated_at": "2026-04-22T18:04:28-04:00",
+  "legacy_writer_present": true,
+  "missing_strategy_ids": [],
+  "recommendation": "PASS",
+  "strategy_counts": {
+    "qqq_intraday_001": {
+      "entry": 1,
+      "evaluation": 213,
+      "rows": 214
+    },
+    "qqq_kernel_shadow_legacy_off_001": {
+      "entry": 45,
+      "evaluation": 11827,
+      "rows": 11872
+    },
+    "qqq_kernel_shadow_legacy_on_001": {
+      "entry": 42,
+      "evaluation": 11827,
+      "rows": 11869
+    }
+  }
+}

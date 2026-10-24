@@ -1,0 +1,470 @@
+# Label Profiles Configuration
+# 标签/损失/目标配置 - AI大脑可通过修改 label_profile 名称切换预测目标
+
+profiles:
+  # ============================================================================
+  # 日内回归系列 (Intraday Regression)
+  # ============================================================================
+
+  # 5分钟收益预测（预测未来5根1分钟K线的累计收益）
+  intraday_reg_5m:
+    task: reg                     # "reg" 回归 / "clf" 分类
+    horizon_bars: 5               # 未来5根K线
+    base:
+      from_col: close             # 起点：当前close
+      to_col: close               # 终点：未来close
+      transform: log_return       # pct_change / log_return / diff
+      agg: sum                    # sum(适合多bar) / last / mean
+    clip:
+      enabled: true
+      lower_pct: 0.005            # 剪裁极端值（0.5%分位数）
+      upper_pct: 0.995            # 99.5%分位数
+    winsorize:
+      enabled: true
+      lower_pct: 0.01             # Winsorize 1%
+      upper_pct: 0.99             # 99%
+    loss: mse                     # 模型训练损失类型（提示）
+    objective:
+      metric: sharpe              # HPO优化目标
+      maximize: true
+      min_trades: 5               # 最小交易次数
+      max_mdd: 0.5                # 最大回撤
+
+  # 10分钟收益预测
+  intraday_reg_10m:
+    task: reg
+    horizon_bars: 10
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    winsorize:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 5
+
+  # 15分钟收益预测（介于10m和20m之间，适合中等节奏）
+  intraday_reg_15m:
+    task: reg
+    horizon_bars: 15
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    winsorize:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 4
+
+  # 20分钟收益预测（更长horizon，更稳定信号）
+  intraday_reg_20m:
+    task: reg
+    horizon_bars: 20
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.01             # 更宽松的剪裁
+      upper_pct: 0.99
+    winsorize:
+      enabled: true
+      lower_pct: 0.02
+      upper_pct: 0.98
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 3               # 更少交易要求
+
+  # 30分钟收益预测（更长horizon，适合捕捉趋势信号）
+  intraday_reg_30m:
+    task: reg
+    horizon_bars: 30
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.01             # 更宽松的剪裁
+      upper_pct: 0.99
+    winsorize:
+      enabled: true
+      lower_pct: 0.02
+      upper_pct: 0.98
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 3               # 更少交易要求
+
+  # 60分钟收益预测
+  intraday_reg_60m:
+    task: reg
+    horizon_bars: 60
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    winsorize:
+      enabled: true
+      lower_pct: 0.02
+      upper_pct: 0.98
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 3
+
+  # 120分钟收益预测
+  intraday_reg_120m:
+    task: reg
+    horizon_bars: 120
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    winsorize:
+      enabled: true
+      lower_pct: 0.02
+      upper_pct: 0.98
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 3
+
+  # 1分钟收益预测（高频短线）
+  intraday_reg_1m:
+    task: reg
+    horizon_bars: 1
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: last
+    clip:
+      enabled: true
+      lower_pct: 0.001            # 更严格剪裁（高频噪声大）
+      upper_pct: 0.999
+    winsorize:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 10              # 高频要求更多交易
+
+  # ============================================================================
+  # 日内分类系列 (Intraday Classification)
+  # ============================================================================
+
+  # 5分钟方向预测（三分类：涨/平/跌）
+  intraday_clf_5m_3class:
+    task: clf
+    horizon_bars: 5
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    binarize:
+      type: three_class           # three_class / sign / threshold
+      pos_threshold: 0.0005       # 大于0.05%算涨
+      neg_threshold: -0.0005      # 小于-0.05%算跌
+      labels:
+        up: 1
+        flat: 0
+        down: -1
+    loss: logloss
+    objective:
+      metric: winrate             # 分类优化胜率
+      maximize: true
+      min_trades: 10
+
+  # 5分钟二分类（只分涨/跌，去掉平盘）
+  intraday_clf_5m_binary:
+    task: clf
+    horizon_bars: 5
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    binarize:
+      type: sign                  # 简单正负号分类
+      labels:
+        pos: 1
+        neg: 0
+    loss: logloss
+    objective:
+      metric: winrate             # 分类优化胜率
+      maximize: true
+      min_trades: 10
+
+  # 10分钟方向预测（三分类）
+  intraday_clf_10m_3class:
+    task: clf
+    horizon_bars: 10
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    binarize:
+      type: three_class
+      pos_threshold: 0.001        # 10分钟阈值更高
+      neg_threshold: -0.001
+      labels:
+        up: 1
+        flat: 0
+        down: -1
+    loss: logloss
+    objective:
+      metric: sharpe              # 也可以用Sharpe优化分类
+      maximize: true
+      min_trades: 8
+
+  # ============================================================================
+  # 隔夜/Swing 系列 (Overnight / Swing)
+  # ============================================================================
+
+  # 隔夜收益回归（收盘到次日收盘）
+  overnight_reg_1d:
+    task: reg
+    horizon_bars: 390             # 1天 ≈ 390个1分钟bar（6.5小时）
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: last
+    clip:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    winsorize:
+      enabled: true
+      lower_pct: 0.02
+      upper_pct: 0.98
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 3               # 隔夜交易频率低
+
+  # 日内开盘到收盘（full day）
+  intraday_reg_fullday:
+    task: reg
+    horizon_bars: 390
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    winsorize:
+      enabled: true
+      lower_pct: 0.02
+      upper_pct: 0.98
+    loss: mse
+    objective:
+      metric: calmar              # 控回撤优化
+      maximize: true
+      min_trades: 3
+
+  # ============================================================================
+  # 特殊目标系列 (Special Objectives)
+  # ============================================================================
+
+  # IC优化（信息系数，适合排序/选股）
+  intraday_reg_5m_ic:
+    task: reg
+    horizon_bars: 5
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    winsorize:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    loss: mse
+    objective:
+      metric: ic                  # IC指标（需要多股票）
+      maximize: true
+      min_trades: 10
+
+  # Sortino优化（只惩罚下行波动）
+  intraday_reg_10m_sortino:
+    task: reg
+    horizon_bars: 10
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    winsorize:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    loss: mse
+    objective:
+      metric: sortino
+      maximize: true
+      min_trades: 5
+
+  # 最大回报（忽略风险，纯收益优化）
+  intraday_reg_5m_return:
+    task: reg
+    horizon_bars: 5
+    base:
+      from_col: close
+      to_col: close
+      transform: log_return
+      agg: sum
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    winsorize:
+      enabled: false              # 不winsorize，保留极端值
+    loss: mse
+    objective:
+      metric: total_return
+      maximize: true
+      min_trades: 5
+      max_mdd: 0.8                # 放宽回撤要求
+
+  # ============================================================================
+  # 使用已有列系列 (Use Existing Column)
+  # ============================================================================
+
+  # 如果你的 DataFrame 已经有预计算的 ret_5m 列
+  intraday_reg_use_ret5m:
+    task: reg
+    horizon_bars: 5               # 只用于记录
+    base:
+      transform: use_column       # 特殊模式：直接用列
+      column: ret_5m              # 列名
+    clip:
+      enabled: true
+      lower_pct: 0.005
+      upper_pct: 0.995
+    winsorize:
+      enabled: true
+      lower_pct: 0.01
+      upper_pct: 0.99
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 5
+
+  # 使用已有的 label 列（完全兼容老配置）
+  legacy_use_label_column:
+    task: reg
+    horizon_bars: 0               # 不需要
+    base:
+      transform: use_column
+      column: y                   # 默认label列
+    clip:
+      enabled: false
+    winsorize:
+      enabled: false
+    loss: mse
+    objective:
+      metric: sharpe
+      maximize: true
+      min_trades: 5
+
+# ============================================================================
+# 备注说明
+# ============================================================================
+
+# 1. transform 类型:
+#    - pct_change: (future - now) / now
+#    - log_return: log(future) - log(now)
+#    - diff: future - now
+#    - use_column: 直接使用指定列（不计算）
+
+# 2. binarize.type 类型:
+#    - sign: 简单正负号 (pos=1, neg=0/−1)
+#    - threshold: 单阈值二分类
+#    - three_class: 双阈值三分类 (up/flat/down)
+
+# 3. objective.metric 支持:
+#    - sharpe: Sharpe Ratio
+#    - sortino: Sortino Ratio
+#    - calmar: Calmar Ratio (Return / MaxDD)
+#    - winrate: 胜率
+#    - total_return: 总收益
+#    - ic: 信息系数（需要多股票）
+#    - 自定义: 任何 oos_summary 中的字段
+
+# 4. AI大脑使用方法:
+#    在 HPO config 中添加:
+#    {
+#      "label_profile": "intraday_reg_5m",
+#      ...
+#    }
+#    系统自动读取对应配置，生成标签和优化目标

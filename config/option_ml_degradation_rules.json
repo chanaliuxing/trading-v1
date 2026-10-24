@@ -1,0 +1,9 @@
+{
+  "lookback_days": 5,
+  "min_trades": 20,
+  "min_win_rate": 0.45,
+  "max_dd_abs_pct": 0.02,
+  "risk_downscale_factor": 0.5,
+  "min_risk_pct": 0.001,
+  "severe_dd_multiplier": 2.0
+}

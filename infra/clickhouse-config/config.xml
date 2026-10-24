@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<clickhouse>
+    <!-- Network settings -->
+    <listen_host>0.0.0.0</listen_host>
+    <http_port>8123</http_port>
+    <tcp_port>9000</tcp_port>
+    <interserver_http_port>9009</interserver_http_port>
+
+    <!-- Connection pool settings -->
+    <max_connections>4096</max_connections>
+    <max_concurrent_queries>1000</max_concurrent_queries>
+    <keep_alive_timeout>30</keep_alive_timeout>
+
+    <!-- Thread pools -->
+    <max_thread_pool_size>10000</max_thread_pool_size>
+
+    <!-- Memory settings: allow up to ~12GB and enable spill (see profiles/users) -->
+    <max_server_memory_usage>12000000000</max_server_memory_usage>  <!-- ~12GB -->
+    <!-- Keep ratio commented to rely on absolute cap -->
+    <!-- <max_server_memory_usage_to_ram_ratio>0.85</max_server_memory_usage_to_ram_ratio> -->
+
+    <!-- Optimize for writes -->
+    <background_pool_size>32</background_pool_size>
+    <background_merges_mutations_concurrency_ratio>4</background_merges_mutations_concurrency_ratio>
+
+    <!-- HTTP server settings -->
+    <http_server_default_response><![CDATA[<html><body>ClickHouse server</body></html>]]></http_server_default_response>
+
+    <!-- Logging -->
+    <logger>
+        <level>warning</level>
+        <log>/var/log/clickhouse-server/clickhouse-server.log</log>
+        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
+        <size>100M</size>
+        <count>3</count>
+    </logger>
+</clickhouse>

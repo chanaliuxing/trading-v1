@@ -1,0 +1,84 @@
+{
+  "approved_scope": [
+    "enter manual-gated canary launch review",
+    "review paper/shadow runtime evidence",
+    "prepare separate live operator opt-in drill",
+    "continue offline and paper/shadow regression monitoring"
+  ],
+  "decision": "READY_FOR_MANUAL_GATED_CANARY_LAUNCH_REVIEW",
+  "evidence": {
+    "approved_to_fill_conversion": {
+      "broker_submit_drops": 0,
+      "classification": "NO_BOTTLENECK",
+      "sample_count": 20
+    },
+    "canary_readiness_manual_gate": "CANARY_PREP_PACKAGE_READY",
+    "canary_sizing_manual_launch_checklist": "CANARY_MANUAL_REVIEW_READY",
+    "ib_reconnect_fast": "32 passed",
+    "no_live_guard": "4 passed",
+    "paper_shadow_soak_gate": "PASS",
+    "reconciliation": "76 passed",
+    "reports": "61 passed",
+    "services": "656 passed",
+    "strategy_execution_reliability": {
+      "classification": "NO_BOTTLENECK",
+      "drop_stage_counts": {
+        "none": 20
+      },
+      "sample_count": 20,
+      "stage_counts": {
+        "approved": 20,
+        "attribution": 10,
+        "broker_ack": 10,
+        "execution_gate": 20,
+        "fill": 10,
+        "paper_broker_submit": 10,
+        "pnl_replay": 10,
+        "submit_intent": 20,
+        "uom_delegate": 20
+      },
+      "uom_route_status_counts": {
+        "delegated": 10,
+        "skipped": 10
+      }
+    },
+    "uom_route_audit": "4 passed",
+    "vegas_dlb_edge_measurement": {
+      "classification": "NO_BOTTLENECK",
+      "dlb_breach_count": 0,
+      "edge_insufficient_count": 0,
+      "sample_count": 280,
+      "stale_decision_count": 0
+    }
+  },
+  "generated_at": "2026-05-12T18:05:00-04:00",
+  "manual_approvals_required": [
+    "operator confirms IB Gateway state in a separate live opt-in drill",
+    "operator confirms no unexpected live positions or open orders",
+    "operator confirms exact strategy list and permission tiers",
+    "operator sets canary max quantity and notional caps",
+    "operator confirms per-trade and daily loss caps",
+    "operator confirms kill switch and emergency stop",
+    "operator confirms unknown/manual broker order policy",
+    "operator confirms runtime freshness immediately before canary opt-in"
+  ],
+  "not_approved_scope": [
+    "full live trading",
+    "unattended live trading",
+    "start canary from this report alone",
+    "real broker order/cancel/modify from this evidence path",
+    "auto-cancel unknown broker orders",
+    "auto-flatten unknown owner positions",
+    "strategy parameter tuning"
+  ],
+  "recommended_next_batch": "Live Operator Opt-In Drill Plan",
+  "safety_conditions": {
+    "dlb_ttl_edge_cost_changed": false,
+    "live_ibkr_connected": false,
+    "order_ref_heuristic_attribution_allowed": false,
+    "real_broker_mutation": false,
+    "strategy_entry_exit_logic_changed": false,
+    "symbol_only_attribution_allowed": false,
+    "trading_test_allow_live_ibkr": "0"
+  }
+}

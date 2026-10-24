@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/ai_trader_decision.schema.json",
+  "title": "AI Trader Brain Decisions",
+  "type": "object",
+  "oneOf": [
+    {
+      "properties": {
+        "action": {"const": "start_morning"},
+        "proceed": {"type": "boolean"},
+        "notes": {"type": "string"}
+      },
+      "required": ["proceed"]
+    },
+    {
+      "properties": {
+        "action": {"const": "hpo_deploy"},
+        "apply_params": {"type": "boolean"},
+        "ab_weights": {
+          "type": "object",
+          "properties": {
+            "champion": {"type": "number", "minimum": 0, "maximum": 1},
+            "challenger": {"type": "number", "minimum": 0, "maximum": 1}
+          },
+          "additionalProperties": false
+        },
+        "notes": {"type": "string"}
+      },
+      "required": ["apply_params"]
+    }
+  ]
+}
+

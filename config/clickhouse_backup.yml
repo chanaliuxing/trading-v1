@@ -1,0 +1,23 @@
+general:
+  remote_storage: s3
+  backups_to_keep_remote: 14 # Keep 14 days of backups in S3
+  # By default, backups are created under /var/lib/clickhouse/backup
+  # You can change this if needed, but default is usually fine.
+  # backup_path: /var/lib/clickhouse/backup 
+
+s3:
+  bucket: "your-clickhouse-backups-bucket" # <-- IMPORTANT: Change this to your S3 bucket name
+  # Credentials will be read from standard AWS environment variables:
+  # - AWS_ACCESS_KEY_ID
+  # - AWS_SECRET_ACCESS_KEY
+  # This is more secure than hardcoding them here.
+  # access_key: ""
+  # secret_key: ""
+  region: "us-west-2" # <-- IMPORTANT: Change this to your bucket's region
+
+clickhouse:
+  # The script will run on the same host, so localhost is fine.
+  host: '127.0.0.1'
+  port: 9000
+  username: default
+  password: "" # Your ClickHouse password, if you have one

@@ -1,0 +1,152 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    GEMINI BRAIN TEST - ALL ISSUES FOUND                   ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+📊 ISSUE SUMMARY
+───────────────────────────────────────────────────────────────────────────
+Total Issues:      4
+Critical:          0 🟢
+Medium Severity:   3 🟡
+Low Severity:      1 🟢
+
+Production Impact: 2 HIGH, 1 MEDIUM, 1 LOW
+
+
+🔴 HIGH PRIORITY (Fix First)
+───────────────────────────────────────────────────────────────────────────
+
+Issue #3: check_active_completeness.py - SQL Column Error
+├── File: tools/check_active_completeness.py:64
+├── Error: Unknown identifier `ts` (should be `timestamp` or `bar_time`)
+├── Impact: ❌ Breaks daily DQ monitoring at 16:40 ET
+├── Fix Time: 10 minutes
+└── Fix: Query table schema, update column name in SQL query
+
+Issue #4: ml_scheduler - OOF Missing Required Params
+├── File: scripts/ai_trader/ml_scheduler.py:566
+├── Error: nightly_oof_flow.py requires --start/--end, scheduler doesn't provide
+├── Impact: ❌ Breaks nightly ML training pipeline
+├── Fix Time: 15 minutes
+└── Fix: Add date range calculation in _execute_oof()
+
+
+🟡 MEDIUM PRIORITY (Fix Soon)
+───────────────────────────────────────────────────────────────────────────
+
+Issue #1: nightly_oof_flow.py - Import Error
+├── File: tools/nightly_oof_flow.py:147
+├── Error: ModuleNotFoundError: No module named 'scripts'
+├── Impact: ⚠️ Missing ML events in ml_events.jsonl (workflow continues)
+├── Fix Time: 10 minutes
+└── Fix: Add sys.path.insert(0, str(Path(__file__).parent.parent))
+
+
+🟢 LOW PRIORITY (Nice to Have)
+───────────────────────────────────────────────────────────────────────────
+
+Issue #2: recompute_labels_1m.py - Data/Query Error
+├── File: tools/recompute_labels_1m.py:95
+├── Error: KeyError: 'ts' (empty DataFrame when no data)
+├── Impact: ⚠️ Only fails outside market hours / empty date ranges
+├── Fix Time: 5 minutes
+└── Fix: Add defensive check for empty DataFrame
+
+
+📋 DETAILED FIXES
+───────────────────────────────────────────────────────────────────────────
+
+Issue #3 Fix (Critical):
+  1. Check schema:
+     docker exec trading_clickhouse clickhouse-client --query \
+       "DESCRIBE TABLE trading.bars_1m_ibkr"
+
+  2. Update line 64 in check_active_completeness.py:
+     # Change: ts >= toDateTime(...)
+     # To:     timestamp >= toDateTime(...)  (or whatever column name is)
+
+Issue #4 Fix (Critical):
+  In scripts/ai_trader/ml_scheduler.py, _execute_oof() function (~line 557):
+
+  # ADD date calculation before building cmd:
+  from datetime import datetime, timedelta
+  from zoneinfo import ZoneInfo
+
+  et_tz = ZoneInfo("America/New_York")
+  now_et = datetime.now(et_tz)
+  end_date = params.get("end") or (now_et - timedelta(days=1)).replace(hour=23, minute=59)
+  start_date = params.get("start") or (end_date - timedelta(days=window_days)).replace(hour=9, minute=30)
+
+  # ADD to cmd list:
+  cmd.extend(["--start", start_date.strftime("%Y-%m-%d %H:%M:%S")])
+  cmd.extend(["--end", end_date.strftime("%Y-%m-%d %H:%M:%S")])
+
+Issue #1 Fix (Medium):
+  In tools/nightly_oof_flow.py, add after line 22:
+
+  import sys
+  from pathlib import Path
+  sys.path.insert(0, str(Path(__file__).parent.parent))
+
+Issue #2 Fix (Low):
+  In tools/recompute_labels_1m.py, replace line 95:
+
+  # Before:
+  df["ts"] = pd.to_datetime(df["ts"])
+
+  # After:
+  if df.empty or "ts" not in df.columns:
+      print(f"No data found for {sym}")
+      continue
+  df["ts"] = pd.to_datetime(df["ts"])
+
+
+📝 VERIFICATION COMMANDS
+───────────────────────────────────────────────────────────────────────────
+
+After fixing Issue #3 (DQ):
+  PYTHONPATH=. python tools/check_active_completeness.py \
+    --date "2025-11-06" --min-coverage 0.98 --symbols TSLA,AAPL
+
+After fixing Issue #4 (OOF):
+  python - <<'PY'
+  from scripts.ai_trader.ml_scheduler import enqueue_job
+  jid = enqueue_job({"job_type":"oof","priority":90,"params":{"symbols":["TSLA"]}})
+  print(jid)
+  PY
+
+  # Wait 15 seconds, check result:
+  tail -5 runs/ai_trader/queue/ml_jobs.jsonl | jq '.ok, .duration_sec'
+  # Should see: true, ~10-15 (not 0.048)
+
+After fixing Issue #1 (Events):
+  # Run OOF job, then:
+  grep "<job_id>" runs/ai_trader/$(date +%Y-%m-%d)/ml_events.jsonl
+  # Should see: "started" and "completed" events
+
+After fixing Issue #2 (Labels):
+  PYTHONPATH=. python tools/recompute_labels_1m.py \
+    --symbols TSLA --start "2025-11-06 09:30:00" --end "2025-11-06 10:00:00" \
+    --horizon-min 5 --label-bps 10
+
+
+📚 FULL DETAILS
+───────────────────────────────────────────────────────────────────────────
+Complete documentation with code examples, test evidence, and impact analysis:
+  → TEST_ISSUES_TRACKER.md
+
+Test results summary:
+  → TEST_RESULTS_SUMMARY.md
+
+RTH test guide:
+  → RTH_TEST_GUIDE.md
+
+
+🎯 NEXT STEPS
+───────────────────────────────────────────────────────────────────────────
+1. Fix Issue #3 (DQ SQL)      ← Critical, breaks monitoring
+2. Fix Issue #4 (OOF params)  ← Critical, breaks ML pipeline
+3. Fix Issue #1 (Events)      ← Medium, missing audit trail
+4. Fix Issue #2 (Labels)      ← Low, only fails on empty data
+5. Run smoke tests            ← Verify all fixes work
+6. Run RTH test suite         ← Complete validation (market hours)
+

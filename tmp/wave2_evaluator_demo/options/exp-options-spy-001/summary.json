@@ -1,0 +1,33 @@
+{
+  "summary_metrics": {
+    "trades": 1,
+    "exit_legs": 1,
+    "entry_count": 1,
+    "realized_pnl": -149.2000000000001,
+    "win_rate": 0.0,
+    "round_trip_win_rate": 0.0,
+    "avg_pnl_per_entry": -149.2000000000001,
+    "avg_legs_per_entry": 1.0,
+    "max_drawdown_pct": 0.0008260000000000582,
+    "final_cash": 99850.79999999999,
+    "skipped_signals": 0
+  },
+  "quality_flags": {
+    "validation_ok": true,
+    "data_ok": true,
+    "has_fills": true,
+    "enough_trades": true,
+    "passed_acceptance": true
+  },
+  "execution_reality": {
+    "modeled_slippage_bps": 384.6153846153849,
+    "spread_cost_bps": 769.2307692307699,
+    "fill_ratio": 1.0,
+    "partial_fill_rate": 0.0,
+    "latency_bucket": "10s_plus",
+    "avg_fill_latency_sec": 60.0,
+    "order_count": 1,
+    "fill_count": 2,
+    "selection_count": 1
+  }
+}

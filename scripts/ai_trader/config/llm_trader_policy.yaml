@@ -1,0 +1,10 @@
+allowed:
+  provider: ["openai","gemini","deepseek","deepseek_nvidia"]
+  interval_sec: [60, 180, 300, 600, 900, 1200]
+  flags: [
+    "wait-for-premarket","wait-for-market","wait-for-afterhours","wait-for-overnight",
+    "start-trading-at","stop-trading-at","close-at","forbid-new-positions-before","cycles","symbols"
+  ]
+forbidden:
+  hard_risk: ["max_leverage","force_close_off","disable_stop"]
+

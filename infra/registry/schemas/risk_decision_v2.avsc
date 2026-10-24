@@ -1,0 +1,48 @@
+{
+  "type": "record",
+  "name": "RiskDecisionV2",
+  "namespace": "trading.events",
+  "fields": [
+    {"name": "schema_v", "type": "int"},
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "MetadataRisk",
+        "fields": [
+          {"name": "ts_us", "type": "long"},
+          {"name": "producer", "type": "string"}
+        ]
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "RiskData",
+        "fields": [
+          {"name": "decision_id", "type": "string"},
+          {"name": "approved", "type": "boolean"},
+          {"name": "reason", "type": "string"},
+          {
+            "name": "hits",
+            "type": {
+              "type": "array",
+              "items": {
+                "type": "record",
+                "name": "RiskHit",
+                "fields": [
+                  {"name": "rule", "type": "string"},
+                  {"name": "detail", "type": ["null", "string"], "default": null}
+                ]
+              }
+            },
+            "default": []
+          },
+          {"name": "reserved_amount", "type": ["null", "double"], "default": null},
+          {"name": "strategy_cap_used", "type": ["null", "double"], "default": null}
+        ]
+      }
+    }
+  ]
+}

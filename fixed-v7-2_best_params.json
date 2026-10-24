@@ -1,0 +1,12 @@
+{
+  "A1_thr_sigma": 0.01,
+  "A1_rvol_lo": 0.85,
+  "A1_rvol_hi": 1.8,
+  "A2_grid_g": 1.0,
+  "A2_grid_g_floor": 0.8,
+  "A2_oneway_thr": 2.2,
+  "A2_max_layers": 4,
+  "B1_rvol_min": 0.75,
+  "B1_pullback_window_M": 6,
+  "k_atr": 1.6
+}

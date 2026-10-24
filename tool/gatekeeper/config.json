@@ -1,0 +1,190 @@
+{
+  "data": {
+    "anchor_symbol": "QQQ",
+    "ibkr": {
+      "host": "127.0.0.1",
+      "port": 4002,
+      "clientId": 7,
+      "market_data_type": 1
+    },
+    "bars_1m": {
+      "bar_size": "1 min",
+      "use_rth": true,
+      "lookback_min": 90,
+      "what_to_show": "TRADES",
+      "timeout_s": 8
+    }
+  },
+  "manual_priority": {
+    "manual_overrides_win": true,
+    "disable_auto_when_manual": true
+  },
+  "thresholds": {
+    "vvix": {
+      "hedge_min": 105.0,
+      "crash_min": 110.0
+    },
+    "vix": {
+      "hedge_min": 20
+    },
+    "ivr": {
+      "ic_min": 20
+    },
+    "bofa_9_3": {
+      "weekly_red_min": 8.0
+    }
+  },
+  "vwap_gate": {
+    "bar_tf": "1 min",
+    "neutral_band_pct": 0.0015
+  },
+  "skew": {
+    "method": "PUT_CALL_IV_DIFF_25D",
+    "delta_target": 0.25,
+    "dte_target": 30,
+    "high_threshold": 0.04
+  },
+  "chop": {
+    "window_min": 30,
+    "band_pct": 0.0015,
+    "cross_min": 4,
+    "touch_min": 10,
+    "trend_cap_pct": 0.004,
+    "weights": {
+      "cross": 0.5,
+      "touch": 0.3,
+      "trend": 0.2
+    },
+    "score_trigger": 1.0
+  },
+  "templates": {
+    "bps_bcs": {
+      "dte": 14,
+      "short_delta_range": [
+        0.1,
+        0.2
+      ],
+      "defensive_short_delta_range": [
+        0.08,
+        0.15
+      ]
+    },
+    "ic": {
+      "dte_range": [
+        14,
+        21
+      ],
+      "short_delta_range": [
+        0.1,
+        0.15
+      ]
+    }
+  },
+  "watchlist": [
+    "META",
+    "MSFT",
+    "NVDA",
+    "TSLA",
+    "ORCL",
+    "SQQQ"
+  ],
+  "profiles": {
+    "default_profile": "gatekeeper_v1_1",
+    "symbol_profile_map": {
+      "TSLA": "tsla_special_v1_1"
+    },
+    "gatekeeper_v1": {
+      "pipeline": [
+        "rules.data_checks",
+        "rules.market_mode",
+        "rules.vwap_gate",
+        "rules.generic_extra_gate",
+        "rules.structure_select"
+      ]
+    },
+    "tsla_special_v1": {
+      "pipeline": [
+        "rules.data_checks",
+        "rules.market_mode",
+        "rules.vwap_gate",
+        "rules.tsla_extra_gate",
+        "rules.structure_select"
+      ]
+    },
+    "gatekeeper_v1_1": {
+      "pipeline": [
+        "rules.data_checks",
+        "rules.v1_1_market_mode",
+        "rules.vwap_gate",
+        "rules.v1_1_constraints",
+        "rules.v1_1_css_gate",
+        "rules.v1_1_structure_select"
+      ]
+    },
+    "tsla_special_v1_1": {
+      "pipeline": [
+        "rules.data_checks",
+        "rules.v1_1_market_mode",
+        "rules.vwap_gate",
+        "rules.v1_1_constraints",
+        "rules.v1_1_css_gate",
+        "rules.v1_1_structure_select"
+      ]
+    }
+  },
+  "generic_gate": {
+    "enabled": true,
+    "defaults": {
+      "minutes_to_close_block_credit": 20,
+      "max_range_5m_pct": 0.01,
+      "max_range_15m_pct": 0.018,
+      "max_gap_from_open_pct": 0.02,
+      "max_vwap_deviation_pct_for_ic": 0.003,
+      "min_cross_count_for_chop": 3,
+      "block_credit_structures": [
+        "BPS",
+        "BCS",
+        "IC",
+        "TINY_IC"
+      ],
+      "block_ic_structures": [
+        "IC",
+        "TINY_IC"
+      ]
+    },
+    "symbol_rules": {
+      "TSLA": {
+        "max_range_5m_pct": 0.012,
+        "max_range_15m_pct": 0.02,
+        "max_gap_from_open_pct": 0.025,
+        "minutes_to_close_block_credit": 30
+      },
+      "NVDA": {
+        "max_range_5m_pct": 0.011,
+        "max_gap_from_open_pct": 0.022
+      },
+      "ORCL": {
+        "max_range_5m_pct": 0.008,
+        "minutes_to_close_block_credit": 15
+      }
+    },
+    "actions": {
+      "when_credit_blocked": "FLAT_OR_DEBIT",
+      "when_ic_blocked": "FLAT"
+    }
+  },
+  "tsla": {
+    "enabled": true,
+    "gate": {
+      "window_5m": 5,
+      "window_15m": 15,
+      "range_5m_cap_pct": 0.012,
+      "range_15m_cap_pct": 0.02,
+      "gap_cap_pct": 0.025,
+      "minutes_to_close_block_credit": 30
+    },
+    "actions": {
+      "when_credit_blocked": "FLAT_OR_DEBIT"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "version": "2.2_phase0",
+  "comment": "Phase 0: Soft thresholds to unblock trading. Hard floor=0.05 (reject), soft threshold=0.30 (allow but reduce size 50%)",
+  "defaults": {
+    "conf_floor": 0.45,
+    "conf_soft_threshold": 0.3,
+    "conf_soft_sizedown_scale": 0.5,
+    "max_spread_bps": 10.0,
+    "min_volume": 50000,
+    "check_after_hours": true
+  },
+  "symbols": {
+    "TSLA": {
+      "conf_floor": 0.065,
+      "conf_soft_threshold": 0.35,
+      "max_spread_bps": 15.0,
+      "min_volume": 100000
+    },
+    "AAPL": {
+      "conf_floor": 0.045,
+      "conf_soft_threshold": 0.3,
+      "max_spread_bps": 5.0,
+      "min_volume": 80000
+    },
+    "NVDA": {
+      "conf_floor": 0.053,
+      "conf_soft_threshold": 0.3,
+      "max_spread_bps": 8.0,
+      "min_volume": 100000
+    },
+    "SPY": {
+      "conf_floor": 0.0042,
+      "conf_soft_threshold": 0.25,
+      "max_spread_bps": 3.0,
+      "min_volume": 500000
+    },
+    "MSFT": {
+      "conf_floor": 0.0243,
+      "conf_soft_threshold": 0.3
+    },
+    "AMD": {
+      "conf_floor": 0.064,
+      "conf_soft_threshold": 0.3
+    },
+    "META": {
+      "conf_floor": 0.052,
+      "conf_soft_threshold": 0.3
+    },
+    "AMZN": {
+      "conf_floor": 0.1,
+      "conf_soft_threshold": 0.3
+    },
+    "GOOGL": {
+      "conf_floor": 0.045,
+      "conf_soft_threshold": 0.3
+    },
+    "QQQ": {
+      "conf_floor": 0.05,
+      "conf_soft_threshold": 0.25
+    },
+    "TQQQ": {
+      "conf_floor": 0.031
+    }
+  }
+}

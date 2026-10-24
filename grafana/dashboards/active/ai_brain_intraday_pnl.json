@@ -1,0 +1,256 @@
+{
+  "uid": "ai-brain-intraday-pnl",
+  "title": "AI Brain - Intraday PnL & Trades",
+  "description": "Focus on how AI-driven ML tuning impacts intraday PnL, trades/day, and intraday drawdown.",
+  "tags": [
+    "ai-brain",
+    "intraday",
+    "pnl"
+  ],
+  "timezone": "America/New_York",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "editable": true,
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "account",
+        "label": "Account",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "SELECT DISTINCT account FROM trading.pnl_daily ORDER BY account",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": ".*"
+        }
+      },
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "SELECT DISTINCT symbol FROM trading.pnl_daily ORDER BY symbol",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": ".*"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "⚡ AI Brain Intraday PnL Overview",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "id": 1
+    },
+    {
+      "type": "stat",
+      "title": "Today's Intraday PnL",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 6,
+        "h": 4
+      },
+      "id": 2,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n  sum(realized + unrealized_eod - fees) AS day_pnl\nFROM trading.pnl_daily\nWHERE d_local = today()\n  AND match(account, ${account:regex})\n  AND match(symbol, ${symbol:regex})\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": -1000,
+                "color": "dark-red"
+              },
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 0,
+                "color": "yellow"
+              },
+              {
+                "value": 500,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Daily Intraday PnL (Net)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 1,
+        "w": 9,
+        "h": 8
+      },
+      "id": 3,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n  d_local AS t,\n  sum(realized + unrealized_eod - fees) AS pnl\nFROM trading.pnl_daily\nWHERE $__timeFilter(d_local)\n  AND match(account, ${account:regex})\n  AND match(symbol, ${symbol:regex})\nGROUP BY t\nORDER BY t\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Trades per Day",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 1,
+        "w": 9,
+        "h": 8
+      },
+      "id": 4,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n  d_local AS t,\n  sum(trades) AS trades\nFROM trading.pnl_daily\nWHERE $__timeFilter(d_local)\n  AND match(account, ${account:regex})\n  AND match(symbol, ${symbol:regex})\nGROUP BY t\nORDER BY t\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Intraday Max Drawdown (Approx, %)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 24,
+        "h": 8
+      },
+      "id": 5,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nWITH minute_curve AS (\n  SELECT\n    toDate(ts) AS d,\n    ts,\n    sum(total_pnl) AS pnl\n  FROM trading.pnl_minute\n  WHERE $__timeFilter(ts)\n    AND match(account, ${account:regex})\n    AND match(symbol, ${symbol:regex})\n  GROUP BY d, ts\n),\nminute_eq AS (\n  SELECT\n    d,\n    ts,\n    sum(pnl) OVER (PARTITION BY d ORDER BY ts ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS eq\n  FROM minute_curve\n),\nminute_dd AS (\n  SELECT\n    d,\n    ts,\n    eq,\n    max(eq) OVER (PARTITION BY d ORDER BY ts ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS peak_eq,\n    if(peak_eq <= 0, 0.0, (eq - peak_eq) / peak_eq) AS dd\n  FROM minute_eq\n)\nSELECT\n  d AS t,\n  min(dd) * 100 AS max_dd_pct\nFROM minute_dd\nGROUP BY d\nORDER BY t\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 2,
+                "color": "yellow"
+              },
+              {
+                "value": 4,
+                "color": "orange"
+              },
+              {
+                "value": 6,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    }
+  ]
+}
+

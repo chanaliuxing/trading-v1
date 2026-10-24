@@ -1,0 +1,45 @@
+{
+  "target_version": "score_calibration_target.v1",
+  "horizons": {
+    "perf_t1": {
+      "offset_days": 1,
+      "formula": {
+        "net_pnl_usd": "net_pnl_usd",
+        "max_drawdown_penalty": "dd_penalty_coeff * abs(net_pnl_usd) * max_drawdown_pct",
+        "cost_penalty": "cost_penalty_coeff * abs(net_pnl_usd) * cost_sensitivity_ratio",
+        "stability_penalty": "stability_penalty_coeff * abs(net_pnl_usd) * (1 - stability_score)"
+      }
+    },
+    "perf_t3": {
+      "offset_days": 3,
+      "formula": {
+        "net_pnl_usd": "net_pnl_usd",
+        "max_drawdown_penalty": "dd_penalty_coeff * abs(net_pnl_usd) * max_drawdown_pct",
+        "cost_penalty": "cost_penalty_coeff * abs(net_pnl_usd) * cost_sensitivity_ratio",
+        "stability_penalty": "stability_penalty_coeff * abs(net_pnl_usd) * (1 - stability_score)"
+      }
+    },
+    "perf_t5": {
+      "offset_days": 5,
+      "formula": {
+        "net_pnl_usd": "net_pnl_usd",
+        "max_drawdown_penalty": "dd_penalty_coeff * abs(net_pnl_usd) * max_drawdown_pct",
+        "cost_penalty": "cost_penalty_coeff * abs(net_pnl_usd) * cost_sensitivity_ratio",
+        "stability_penalty": "stability_penalty_coeff * abs(net_pnl_usd) * (1 - stability_score)"
+      }
+    }
+  },
+  "penalty_coefficients": {
+    "dd_penalty_coeff": 0.8,
+    "cost_penalty_coeff": 0.7,
+    "stability_penalty_coeff": 0.6
+  },
+  "calibration_target": {
+    "formula": "w_t1*perf_t1 + w_t3*perf_t3 + w_t5*perf_t5",
+    "weights": {
+      "w_t1": 0.4,
+      "w_t3": 0.35,
+      "w_t5": 0.25
+    }
+  }
+}

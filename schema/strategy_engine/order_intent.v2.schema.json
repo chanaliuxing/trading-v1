@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "order_intent.v2.schema.json",
+  "title": "OrderIntentV2",
+  "type": "object",
+  "required": [
+    "intent_id",
+    "account_id",
+    "decision_id",
+    "strategy_id",
+    "strategy_instance_id",
+    "strategy_run_id",
+    "trigger_id",
+    "trace_id",
+    "symbol",
+    "side",
+    "qty",
+    "order_type",
+    "order_role",
+    "reduce_only",
+    "close_only",
+    "submitted_at_us"
+  ],
+  "properties": {
+    "intent_id": {"type": "string", "minLength": 1},
+    "account_id": {"type": "string", "minLength": 1},
+    "decision_id": {"type": "string", "minLength": 1},
+    "strategy_id": {"type": "string", "minLength": 1},
+    "strategy_instance_id": {"type": "string", "minLength": 1},
+    "strategy_run_id": {"type": "string", "minLength": 1},
+    "client_order_id": {"type": ["string", "null"]},
+    "trigger_id": {"type": "string", "minLength": 1},
+    "trace_id": {"type": "string", "minLength": 1},
+    "symbol": {"type": "string", "minLength": 1},
+    "side": {"type": "string", "enum": ["BUY", "SELL", "SELL_SHORT"]},
+    "qty": {"type": "number", "exclusiveMinimum": 0},
+    "order_type": {"type": "string", "enum": ["MKT", "LMT", "STP", "STP_LMT"]},
+    "order_role": {
+      "type": "string",
+      "enum": [
+        "ENTRY",
+        "EXIT",
+        "STOP_LOSS",
+        "TAKE_PROFIT",
+        "TRAILING_STOP",
+        "SCALE_IN",
+        "SCALE_OUT",
+        "STRATEGY_FLATTEN",
+        "ACCOUNT_EMERGENCY_FLATTEN",
+        "MANUAL_BROKER_ORDER",
+        "RECONCILER_DISCOVERED_ORDER",
+        "UNKNOWN_OWNER"
+      ]
+    },
+    "reduce_only": {"type": "boolean"},
+    "close_only": {"type": "boolean"},
+    "allow_reverse": {"type": "boolean"},
+    "same_symbol_multi_strategy_safe": {"type": "boolean"},
+    "ib_connection_epoch": {"type": ["integer", "null"]},
+    "source_event_id": {"type": ["string", "null"]},
+    "limit_px": {"type": ["number", "null"]},
+    "stop_px": {"type": ["number", "null"]},
+    "tif": {"type": "string"},
+    "order_ref": {"type": ["string", "null"]},
+    "oca_group": {"type": ["string", "null"]},
+    "parent_order_id": {"type": ["string", "null"]},
+    "broker_order_id": {"type": ["string", "null"]},
+    "route_mode": {"type": "string", "enum": ["direct", "netted"]},
+    "submitted_at_us": {"type": "integer", "minimum": 1},
+    "extras": {"type": "object"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"route_mode": {"const": "netted"}},
+        "required": ["route_mode"]
+      },
+      "then": {
+        "required": ["parent_order_id"]
+      }
+    }
+  ],
+  "additionalProperties": true
+}

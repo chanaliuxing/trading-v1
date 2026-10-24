@@ -1,0 +1,19 @@
+{
+  "policy_version": "ranking_recalibration_policy.v1",
+  "window_days": 5,
+  "severity": {
+    "warning": {
+      "top1_lt_top5": true,
+      "top3_lt_top5": true,
+      "corr_non_positive": true
+    },
+    "critical": {
+      "top5_lte_unpublished": true
+    }
+  },
+  "trigger_conditions": {
+    "critical_any_day": true,
+    "warning_count_threshold": 2,
+    "corr_non_positive_streak_threshold": 2
+  }
+}

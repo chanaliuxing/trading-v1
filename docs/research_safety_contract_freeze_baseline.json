@@ -1,0 +1,117 @@
+{
+  "manifest_version": "2026-04-11.phase27",
+  "scope": "ai_trader_research_safety_observability_readonly_contract",
+  "core_state_files": [
+    "runs/ai_trader/research/state/policy_compatibility_summary.json",
+    "runs/ai_trader/research/state/policy_observability_consumers.json",
+    "runs/ai_trader/research/state/policy_observability_notice_lifecycle.json",
+    "runs/ai_trader/research/state/launch_registry.json",
+    "runs/ai_trader/research/state/system_status.json"
+  ],
+  "readonly_view_files": [
+    "runs/ai_trader/research/cycles/fixture-2026-04-05/readiness_dashboard.json",
+    "runs/ai_trader/research/cycles/fixture-2026-04-05/launch_verdict.json",
+    "runs/ai_trader/research/cycles/fixture-2026-04-05/human_ops_summary.json"
+  ],
+  "contract_fields": {
+    "policy_compatibility_observability": [
+      "status",
+      "reason",
+      "source_path",
+      "counts",
+      "current_cycle",
+      "recent_examples",
+      "recent_hits",
+      "migration_progress",
+      "migration_notice",
+      "notice_lifecycle",
+      "notice_lifecycle_state_status"
+    ],
+    "migration_notice": [
+      "status",
+      "level",
+      "legacy_runtime_consumer_count",
+      "summary",
+      "details",
+      "throttled",
+      "throttle_key",
+      "legacy_fields",
+      "recommended_field",
+      "top_legacy_consumers",
+      "active",
+      "silenced",
+      "lifecycle_status",
+      "highlight",
+      "lifecycle_state_path"
+    ],
+    "notice_lifecycle": [
+      "active",
+      "silenced",
+      "lifecycle_status",
+      "first_seen",
+      "last_seen",
+      "silenced_until",
+      "last_level",
+      "last_throttle_key"
+    ],
+    "notice_lifecycle_state_file": [
+      "first_seen",
+      "last_seen",
+      "last_level",
+      "last_throttle_key",
+      "silenced_until"
+    ],
+    "migration_progress": [
+      "status",
+      "reason",
+      "source_path",
+      "runtime_legacy_consumer_count",
+      "total_runtime_consumers",
+      "migrated_runtime_consumers",
+      "docs_tests_only_references",
+      "progress_ratio"
+    ],
+    "three_entry_consistency": [
+      "status",
+      "level",
+      "active",
+      "silenced",
+      "throttle_key",
+      "first_seen",
+      "last_seen",
+      "last_level",
+      "last_throttle_key",
+      "silenced_until"
+    ]
+  },
+  "compatibility_aliases": [
+    {
+      "alias": "recent_hits",
+      "canonical": "recent_examples",
+      "relation": "exact_equal"
+    },
+    {
+      "alias": "policy_compatibility",
+      "canonical": "policy_compatibility_observability.current_cycle",
+      "relation": "legacy_projection"
+    }
+  ],
+  "execution_chain_unchanged_guards": [
+    {
+      "file": "scripts/ai_trader/research/launch_verdict.py",
+      "must_contain": "overall_status = str(preflight.get(\"overall_status\") or \"blocked\")"
+    },
+    {
+      "file": "scripts/ai_trader/research/run_fixture_cycle.py",
+      "must_contain": "mode=\"small_live\" if str(launch_verdict.get(\"verdict\")) == \"go_small_live\" else \"paper\""
+    }
+  ],
+  "freeze_constraints": {
+    "summary": "Freeze index only. Must not change main verdict semantics, overall_status meaning, or execution-chain wiring.",
+    "must_not_change": [
+      "main_verdict_logic",
+      "overall_status_semantics",
+      "execution_chain_wiring"
+    ]
+  }
+}

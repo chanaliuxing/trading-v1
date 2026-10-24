@@ -1,0 +1,127 @@
+{
+  "blockers": [],
+  "config": {
+    "qqq_intraday_001": {
+      "enabled": true,
+      "present": true
+    },
+    "shadows": {
+      "qqq_kernel_shadow_legacy_off_001": {
+        "dry_run": true,
+        "enabled": true,
+        "policy_id": "qqq_intraday_policy_v1",
+        "present": true,
+        "shadow_legacy_mode": "legacy_off",
+        "shadow_only": true,
+        "shadow_origin_strategy_id": "qqq_intraday_001",
+        "shared_underlying_read_mode": "prefer"
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "dry_run": true,
+        "enabled": true,
+        "policy_id": "qqq_intraday_policy_v1",
+        "present": true,
+        "shadow_legacy_mode": "legacy_on",
+        "shadow_only": true,
+        "shadow_origin_strategy_id": "qqq_intraday_001",
+        "shared_underlying_read_mode": "prefer"
+      }
+    }
+  },
+  "day": "20260422",
+  "generated_at": "2026-04-23T22:05:41Z",
+  "parity_reports": [
+    {
+      "diff_count_by_field": {
+        "block_reason": 137,
+        "decision_ts_delta_sec": 204,
+        "exec_symbol": 118,
+        "intent": 204,
+        "order_plan": 204,
+        "signal_authority": 204
+      },
+      "diff_total": 300,
+      "kernel_count": 12948,
+      "legacy_count": 214,
+      "legacy_mode": "legacy_off",
+      "match_ratio": 0.0,
+      "path": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "recommendation": "HOLD"
+    },
+    {
+      "diff_count_by_field": {
+        "block_reason": 138,
+        "decision_ts_delta_sec": 204,
+        "exec_symbol": 121,
+        "intent": 204,
+        "order_plan": 204,
+        "signal_authority": 204
+      },
+      "diff_total": 300,
+      "kernel_count": 12945,
+      "legacy_count": 214,
+      "legacy_mode": "legacy_on",
+      "match_ratio": 0.0,
+      "path": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_on.json",
+      "recommendation": "HOLD"
+    },
+    {
+      "diff_count_by_field": {
+        "block_reason": 18,
+        "decision_ts_delta_sec": 0,
+        "exec_symbol": 11,
+        "intent": 11,
+        "order_plan": 11,
+        "signal_authority": 18
+      },
+      "diff_total": 18,
+      "kernel_count": 12948,
+      "legacy_count": 12945,
+      "legacy_mode": "legacy_on_vs_legacy_off",
+      "match_ratio": 0.9846153846153847,
+      "path": "./reports/qqq_kernel_shadow_parity/20260422_preopen_parity_smoke.json",
+      "recommendation": "HOLD"
+    }
+  ],
+  "preopen_gate": {
+    "ok": null,
+    "present": false,
+    "recommendation": null
+  },
+  "readiness": {
+    "failed_checks": null,
+    "ok": null,
+    "present": false,
+    "recommendation": null
+  },
+  "recommendation": "CONTINUE_SHADOW",
+  "summary": {
+    "day_is_trading_day": true,
+    "parity_report_count": 3,
+    "shadow_enabled_count": 2,
+    "total_diff_count": 618
+  },
+  "trace_summary": {
+    "entry_rows": 88,
+    "evaluation_rows": 26019,
+    "present": true,
+    "rows_total": 26107,
+    "strategy_counts": {
+      "qqq_intraday_001": {
+        "entry": 1,
+        "evaluation": 213,
+        "rows": 214
+      },
+      "qqq_kernel_shadow_legacy_off_001": {
+        "entry": 45,
+        "evaluation": 12903,
+        "rows": 12948
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "entry": 42,
+        "evaluation": 12903,
+        "rows": 12945
+      }
+    }
+  }
+}

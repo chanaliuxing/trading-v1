@@ -1,0 +1,34 @@
+{
+  "audit_date": "2026-05-15",
+  "audit_dir": "./runtime/audit/2026-05-15",
+  "audit_dir_exists": true,
+  "blocked_reason_counts": {},
+  "date": "2026-05-15",
+  "false_block_removed": true,
+  "latest_legacy_block_ts": null,
+  "legacy_block_recovered": false,
+  "legacy_open_orders_block_count": 0,
+  "legitimate_block_observed": false,
+  "legitimate_block_reason_counts": {},
+  "market_day": "20260515",
+  "matched_strategy_ids": [
+    "qqq_intraday_option_v1_001"
+  ],
+  "ok": true,
+  "position_sync_flat_count": 0,
+  "post_legacy_flat_count": 0,
+  "post_legacy_strategy_row_count": 0,
+  "reasons": [
+    "legitimate_runtime_block_not_observed_yet"
+  ],
+  "recommendation": "CONTINUE",
+  "requested_day": "20260515",
+  "rows_scanned": 156072,
+  "strategy_id": "qqq_intraday_001",
+  "strategy_ids_checked": [
+    "qqq_intraday_001",
+    "qqq_intraday_option_v1_001"
+  ],
+  "strategy_row_count": 943,
+  "used_previous_completed_day": false
+}

@@ -1,0 +1,1249 @@
+{
+  "uid": "trading-ultra",
+  "title": "Trading \u2014 Ultra Ops & Research (ClickHouse + Loki + Tempo)",
+  "schemaVersion": 39,
+  "version": 1,
+  "timezone": "browser",
+  "editable": true,
+  "refresh": "10s",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "tags": [
+    "trading",
+    "ops",
+    "research",
+    "clickhouse",
+    "loki",
+    "tempo",
+    "relay",
+    "oof"
+  ],
+  "fiscalYearStartMonth": 0,
+  "liveNow": false,
+  "templating": {
+    "list": [
+      {
+        "type": "datasource",
+        "name": "DS_CH",
+        "label": "ClickHouse",
+        "query": "grafana-clickhouse-datasource",
+        "refresh": 1
+      },
+      {
+        "type": "datasource",
+        "name": "DS_LOKI",
+        "label": "Loki",
+        "query": "loki",
+        "refresh": 1
+      },
+      {
+        "type": "datasource",
+        "name": "DS_TEMPO",
+        "label": "Tempo",
+        "query": "tempo",
+        "refresh": 1
+      },
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "$DS_CH"
+        },
+        "query": "SELECT DISTINCT symbol FROM trading.features_1m ORDER BY symbol",
+        "includeAll": false,
+        "multi": false,
+        "refresh": 1,
+        "current": {
+          "text": "TSLA",
+          "value": "TSLA",
+          "selected": true
+        }
+      },
+      {
+        "type": "query",
+        "name": "strategy_id",
+        "label": "Strategy",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "$DS_CH"
+        },
+        "query": "SELECT DISTINCT strategy_id FROM trading.order_events WHERE strategy_id != '' ORDER BY strategy_id",
+        "refresh": 1,
+        "includeAll": true,
+        "current": {
+          "text": "All",
+          "value": "",
+          "selected": true
+        }
+      },
+      {
+        "type": "query",
+        "name": "run_id",
+        "label": "Run",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "$DS_CH"
+        },
+        "query": "SELECT DISTINCT run_id FROM trading.runs ORDER BY run_id DESC",
+        "refresh": 1,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": ["$__all"],
+          "selected": true
+        },
+        "options": []
+      },
+      {
+        "type": "textbox",
+        "name": "trace_id",
+        "label": "trace_id (optional, paste from logs)",
+        "query": "",
+        "current": {
+          "text": "",
+          "value": ""
+        }
+      },
+      {
+        "type": "interval",
+        "name": "interval",
+        "label": "Interval",
+        "query": "1m,5m,10m,15m,30m,1h,3h,6h,12h,1d",
+        "auto": true,
+        "auto_min": "10s",
+        "refresh": 2
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "type": "dashboard",
+        "name": "Annotations & Alerts",
+        "enable": true
+      },
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "loki",
+          "uid": "$DS_LOKI"
+        },
+        "enable": true,
+        "expr": "{job=\"trader\"} | json | symbol = \"$symbol\" | run_id =~ \"$run_id\" | line_format \"{{.event}}: {{.reason}}\"",
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "Order Events (Loki)"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "OPS \u2014 Health & KPIs",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "panels": []
+    },
+    {
+      "id": 101,
+      "type": "stat",
+      "title": "Bars / min (inference)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} | json | symbol = \"$symbol\" | event = \"inference\" [5m])) * 60"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "opm",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "id": 102,
+      "type": "stat",
+      "title": "Heartbeat Lag (s)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 1
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toFloat64(toUnixTimestamp(now()) - toUnixTimestamp(max(ts))) AS lag_s FROM trading.order_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts)",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "id": 103,
+      "type": "stat",
+      "title": "Errors (5m)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} | json | level = \"error\" [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        }
+      }
+    },
+    {
+      "id": 104,
+      "type": "stat",
+      "title": "Warnings (5m)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 1
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} | json | level = \"warning\" [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        }
+      }
+    },
+    {
+      "id": 105,
+      "type": "stat",
+      "title": "Fill Rate (%)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 1
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT if(sumIf(1, event_type='SUBMITTED')=0, 0, sumIf(1, event_type='FILLED')/sumIf(1, event_type='SUBMITTED')*100) AS fill_rate FROM trading.exec_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts)",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 106,
+      "type": "stat",
+      "title": "Reject Rate (%)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 1
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT if(sumIf(1, event_type='SUBMITTED')=0,0, sumIf(1, event_type='REJECTED')/sumIf(1, event_type='SUBMITTED')*100) AS reject_rate FROM trading.exec_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts)",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 107,
+      "type": "stat",
+      "title": "Equity (now)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT anyLast(equity) AS eq FROM (SELECT ts, equity FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts) ORDER BY ts)",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 108,
+      "type": "stat",
+      "title": "Avg Order Latency (ms)",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT avg(latency_ms) AS ms FROM trading.order_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts)",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "Strategy \u2014 Equity / PnL / Volumes / Stops",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "panels": []
+    },
+    {
+      "id": 201,
+      "type": "timeseries",
+      "title": "Equity Curve \u2014 ${symbol}",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts AS t, equity FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts) ORDER BY ts",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "hidden"
+        }
+      }
+    },
+    {
+      "id": 202,
+      "type": "timeseries",
+      "title": "PNL per Interval \u2014 ${symbol}",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, sum(realized_pnl) AS pnl FROM trading.trade_pnl WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "hidden"
+        }
+      }
+    },
+    {
+      "id": 203,
+      "type": "timeseries",
+      "title": "Order Volume \u2014 Submitted / Fills / Rejects",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, countIf(event_type='SUBMITTED') AS submitted FROM trading.exec_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "submitted",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        },
+        {
+          "refId": "B",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, countIf(event_type='FILLED') AS fills FROM trading.exec_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "fills",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        },
+        {
+          "refId": "C",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, countIf(event_type='REJECTED') AS rejected FROM trading.exec_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "rejected",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "id": 204,
+      "type": "timeseries",
+      "title": "Stops \u2014 Take Profit / Stop Loss (No Data Available)",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT now() AS t, 0 AS tp",
+          "legendFormat": "take_profit",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        },
+        {
+          "refId": "B",
+          "query": "SELECT now() AS t, 0 AS sl",
+          "legendFormat": "stop_loss",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "Quality \u2014 Latency / Slippage / Blocks",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "panels": []
+    },
+    {
+      "id": 301,
+      "type": "timeseries",
+      "title": "Order Latency (ms, avg) \u2014 ${symbol}",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 21
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, avg(latency_ms) AS ms FROM trading.order_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "id": 302,
+      "type": "timeseries",
+      "title": "Abs Slippage (bps, avg) \u2014 ${symbol} (No Data Available)",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 21
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT now() AS t, 0 AS bps",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 303,
+      "type": "timeseries",
+      "title": "\u201cWhy Not Order?\u201d \u2014 Blocks/Rejects by reason (Loki)",
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} | json | symbol = \"$symbol\" | run_id =~ \"$run_id\" | (event=\"order_rejected\" or event=\"overlay_block\" or event=\"order_trimmed\")[ $__interval]))",
+          "legendFormat": "{{reason}}"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "Live Feeds \u2014 Orders / Stops / Errors",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "panels": []
+    },
+    {
+      "id": 401,
+      "type": "table",
+      "title": "Recent Orders \u2014 ${symbol}",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts AS time, strategy_id, toString(event_type) AS event, qty, price, broker_order_id, details FROM trading.exec_events WHERE symbol='${symbol}' AND ('${strategy_id}'='' OR strategy_id='${strategy_id}') AND $__timeFilter(ts) ORDER BY ts DESC LIMIT 200",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 402,
+      "type": "table",
+      "title": "Recent Stops \u2014 ${symbol} (No Data Available)",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 36
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT now() AS time, '' AS strategy_id, '' AS event, '' AS stop_type, 0 AS qty, 0 AS price, 0 AS pnl LIMIT 0",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 403,
+      "type": "logs",
+      "title": "ERROR/WARNING Feed (Loki)",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 46
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | level =~ \"error|warning\" | symbol = \"$symbol\" | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\""
+        }
+      ],
+      "options": {
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": true
+      }
+    },
+    {
+      "type": "row",
+      "title": "Relay OOF \u2014 Coverage / Lag",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 54
+      },
+      "panels": []
+    },
+    {
+      "id": 501,
+      "type": "stat",
+      "title": "OOF Coverage (%)",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 55
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT avg(lstm_oof_h5 IS NOT NULL) * 100 AS coverage FROM trading.features_1m_with_oof WHERE symbol='${symbol}' AND $__timeFilter(ts)",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 502,
+      "type": "stat",
+      "title": "OOF Update Lag (min)",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 55
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toFloat64((toUnixTimestamp(now()) - toUnixTimestamp(max(updated_at)))/60.0) AS lag_min FROM trading.oof_lstm_h5 WHERE symbol='${symbol}'",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "minutes",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "id": 503,
+      "type": "timeseries",
+      "title": "OOF Coverage over Time",
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 8,
+        "y": 55
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL $__interval SECOND) AS t, avg(lstm_oof_h5 IS NOT NULL) * 100 AS coverage FROM trading.features_1m_with_oof WHERE symbol='${symbol}' AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 504,
+      "type": "table",
+      "title": "Latest OOF Versions (by symbol)",
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 55
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT symbol, anyLast(run_id) AS run_id, max(updated_at) AS last_updated FROM trading.oof_lstm_h5 GROUP BY symbol ORDER BY last_updated DESC LIMIT 100",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last_updated"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "Research \u2014 Backtests / HPO / LLM-ML",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 62
+      },
+      "panels": []
+    },
+    {
+      "id": 601,
+      "type": "timeseries",
+      "title": "AUC \u2014 Relay(1) vs Base(0) \u2014 ${symbol}",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 63
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL 1 DAY) AS t, avg(auc) AS value FROM trading.runs WHERE symbol='${symbol}' AND use_relay=1 AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "Relay=1",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        },
+        {
+          "refId": "B",
+          "query": "SELECT toStartOfInterval(ts, INTERVAL 1 DAY) AS t, avg(auc) AS value FROM trading.runs WHERE symbol='${symbol}' AND use_relay=0 AND $__timeFilter(ts) GROUP BY t ORDER BY t",
+          "legendFormat": "Relay=0",
+          "format": "time_series",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "id": 602,
+      "type": "bargauge",
+      "title": "Distribution \u2014 AUC (last 200 runs)",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 63
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT round(auc,2) AS bucket, count() AS n FROM (SELECT auc FROM trading.runs WHERE symbol='${symbol}' AND $__timeFilter(ts) ORDER BY ts DESC LIMIT 200) GROUP BY bucket ORDER BY bucket",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "displayMode": "gradient"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        }
+      }
+    },
+    {
+      "id": 603,
+      "type": "table",
+      "title": "Recent Runs \u2014 params & scores",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 70
+      },
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "$DS_CH"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT ts, study, trial_id, run_id, symbol, use_relay, round(auc,4) AS auc, roundIf(sharpe_ratio, sharpe_ratio IS NOT NULL, 4) AS sharpe, roundIf(max_drawdown, max_drawdown IS NOT NULL, 4) AS mdd, roundIf(total_return, total_return IS NOT NULL, 4) AS ret, params_json FROM trading.runs WHERE symbol='${symbol}' AND $__timeFilter(ts) ORDER BY ts DESC LIMIT 200",
+          "format": "table",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ts"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "use_relay"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 604,
+      "type": "timeseries",
+      "title": "LLM/ML Activity (Loki) \u2014 trials / train / plan",
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 80
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} | json | symbol = \"$symbol\" | event = \"hpo_trial\" [5m]))",
+          "legendFormat": "hpo_trial/min"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(rate({job=\"trader\"} | json | symbol = \"$symbol\" | event = \"ml_train_start\" [5m]))",
+          "legendFormat": "ml_train_start/min"
+        },
+        {
+          "refId": "C",
+          "expr": "sum(rate({job=\"trader\"} | json | symbol = \"$symbol\" | event = \"llm_plan\" [5m]))",
+          "legendFormat": "llm_plan/min"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "id": 605,
+      "type": "logs",
+      "title": "LLM/ML Logs (Loki)",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "datasource": {
+        "type": "loki",
+        "uid": "$DS_LOKI"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | symbol = \"$symbol\" | run_id =~ \"$run_id\" | (event = \"llm_plan\" or event = \"ml_train_start\" or event = \"ml_train_end\" or event = \"hpo_trial\")"
+        }
+      ],
+      "options": {
+        "wrapLogMessage": true,
+        "prettifyLogMessage": true
+      }
+    },
+    {
+      "type": "row",
+      "title": "Trace Viewer (Tempo)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 95
+      },
+      "panels": []
+    },
+    {
+      "id": 701,
+      "type": "traces",
+      "title": "Trace \u2014 ${trace_id}",
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 96
+      },
+      "datasource": {
+        "type": "tempo",
+        "uid": "$DS_TEMPO"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryType": "traceId",
+          "query": "${trace_id}"
+        }
+      ],
+      "options": {
+        "showSpanBar": true,
+        "showTable": true
+      }
+    }
+  ]
+}

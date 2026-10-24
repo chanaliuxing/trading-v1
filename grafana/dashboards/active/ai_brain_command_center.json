@@ -1,0 +1,712 @@
+{
+  "uid": "ai-brain-command-center",
+  "title": "AI Brain Command Center",
+  "description": "AI \u5927\u8111\u6307\u6325\u4e2d\u5fc3 - \u51b3\u7b56\u8fc7\u7a0b, \u6267\u884c\u8ba1\u5212, \u6027\u80fd\u76d1\u63a7",
+  "tags": [
+    "ai-brain",
+    "decisions",
+    "planning"
+  ],
+  "timezone": "America/New_York",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "1m",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "editable": true,
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "session",
+        "label": "Session",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "SELECT DISTINCT session FROM llm.ai_brain_calls WHERE session != '' ORDER BY session",
+        "refresh": 2,
+        "includeAll": true,
+        "allValue": "%",
+        "current": {
+          "text": "All",
+          "value": "%"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "\ud83c\udfaf AI Brain Status (AI \u5927\u8111\u72b6\u6001)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "id": 1
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcc5 Current Session (\u5f53\u524d\u4f1a\u8bdd)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "id": 2,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    session\nFROM llm.ai_brain_plans\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "overnight": {
+                  "text": "\ud83c\udf19 Overnight",
+                  "color": "blue"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "afterhours": {
+                  "text": "\ud83c\udf06 After Hours",
+                  "color": "orange"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "intraday": {
+                  "text": "\u2600\ufe0f Intraday",
+                  "color": "yellow"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "morning": {
+                  "text": "\ud83c\udf05 Morning",
+                  "color": "light-green"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "learn": {
+                  "text": "\ud83d\udcda Learn",
+                  "color": "purple"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83e\udd16 Active Providers (\u6d3b\u8dc3\u63d0\u4f9b\u5546)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 4,
+        "y": 1,
+        "w": 6,
+        "h": 4
+      },
+      "id": 3,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    arrayStringConcat(providers, ', ') as providers_list\nFROM llm.ai_brain_plans\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "options": {
+        "textMode": "value"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcca Trading Symbols (\u4ea4\u6613\u6807\u7684)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 1,
+        "w": 6,
+        "h": 4
+      },
+      "id": 4,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    arrayStringConcat(symbols, ', ') as symbols_list\nFROM llm.ai_brain_plans\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "options": {
+        "textMode": "value"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udee1\ufe0f Safe Mode (\u5b89\u5168\u6a21\u5f0f)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "id": 5,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    if(safe_mode, 'ON', 'OFF') as safe_mode_status\nFROM llm.ai_brain_plans\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "ON": {
+                  "text": "\ud83d\udee1\ufe0f ON",
+                  "color": "orange"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "OFF": {
+                  "text": "\u26a1 OFF",
+                  "color": "green"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83e\uddea AB Test Split (A/B \u5206\u914d)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 20,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "id": 6,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    'Champion' as group_name,\n    ab_champion * 100 as percentage\nFROM llm.ai_brain_plans\nORDER BY ts_ny DESC\nLIMIT 1\nUNION ALL\nSELECT\n    'Challenger' as group_name,\n    ab_challenger * 100 as percentage\nFROM llm.ai_brain_plans\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "pieType": "donut"
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Brain Activity Timeline (\u5927\u8111\u6d3b\u52a8\u65f6\u95f4\u7ebf)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 1
+      },
+      "id": 7
+    },
+    {
+      "type": "timeseries",
+      "title": "\u23f1\ufe0f Brain Calls Over Time (\u5927\u8111\u8c03\u7528\u65f6\u95f4\u7ebf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 18,
+        "h": 8
+      },
+      "id": 8,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    kind,\n    duration_ms / 1000 as duration_sec\nFROM llm.ai_brain_calls\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\n  AND session LIKE '${session}'\nORDER BY ts_ny\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "points",
+            "pointSize": 8,
+            "showPoints": "always"
+          }
+        }
+      }
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83e\udd67 Calls by Kind (\u6309\u7c7b\u578b)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 6,
+        "w": 6,
+        "h": 8
+      },
+      "id": 9,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    kind,\n    count(*) as count\nFROM llm.ai_brain_calls\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\n  AND session LIKE '${session}'\nGROUP BY kind\nORDER BY count DESC\n"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "pieType": "donut"
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udd0d Brain Performance (\u5927\u8111\u6027\u80fd)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 1
+      },
+      "id": 10
+    },
+    {
+      "type": "barchart",
+      "title": "\u23f1\ufe0f Average Latency by Kind (\u5e73\u5747\u5ef6\u8fdf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 15,
+        "w": 8,
+        "h": 6
+      },
+      "id": 11,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    kind,\n    round(avg(duration_ms)) as avg_duration_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\n  AND session LIKE '${session}'\nGROUP BY kind\nORDER BY avg_duration_ms DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "\ud83e\udd16 Calls by Provider (\u6309\u63d0\u4f9b\u5546)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 15,
+        "w": 8,
+        "h": 6
+      },
+      "id": 12,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    provider,\n    count(*) as count\nFROM llm.ai_brain_calls\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\n  AND session LIKE '${session}'\n  AND provider != ''\nGROUP BY provider\nORDER BY count DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "\ud83d\udcc5 Calls by Session (\u6309\u4f1a\u8bdd)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 15,
+        "w": 8,
+        "h": 6
+      },
+      "id": 13,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    session,\n    count(*) as count\nFROM llm.ai_brain_calls\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\n  AND session != ''\nGROUP BY session\nORDER BY count DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcdd Latest Brain Plans (\u6700\u65b0\u5927\u8111\u8ba1\u5212)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 24,
+        "h": 1
+      },
+      "id": 14
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udccb Recent Plans (\u8fd1\u671f\u8ba1\u5212)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 24,
+        "h": 8
+      },
+      "id": 15,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    ts_ny,\n    session,\n    status,\n    arrayStringConcat(providers, ', ') as providers,\n    arrayStringConcat(symbols, ', ') as symbols,\n    if(safe_mode, '\ud83d\udee1\ufe0f ON', '\u26a1 OFF') as safe_mode,\n    concat(toString(round(ab_champion * 100)), '%') as champion,\n    concat(toString(round(ab_challenger * 100)), '%') as challenger,\n    reasoning_profile,\n    substr(notes, 1, 100) as notes_preview\nFROM llm.ai_brain_plans\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\nORDER BY ts_ny DESC\nLIMIT 20\n"
+        }
+      ],
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ts_ny"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "session"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Session"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "providers"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Providers"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "symbols"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Symbols"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "safe_mode"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Safe Mode"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "champion"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Champion"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "challenger"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Challenger"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reasoning_profile"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Reasoning"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "notes_preview"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Notes"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcc8 Brain Calls History (\u5927\u8111\u8c03\u7528\u5386\u53f2)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 30,
+        "w": 24,
+        "h": 1
+      },
+      "id": 16
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udccb Recent Brain Calls (\u8fd1\u671f\u8c03\u7528)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 31,
+        "w": 24,
+        "h": 8
+      },
+      "id": 17,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    ts_ny,\n    kind,\n    session,\n    provider,\n    model,\n    duration_ms,\n    trading_universe_count,\n    arrayStringConcat(input_keys, ', ') as inputs\nFROM llm.ai_brain_calls\nWHERE ts_ny >= $__fromTime AND ts_ny <= $__toTime\n  AND session LIKE '${session}'\nORDER BY ts_ny DESC\nLIMIT 50\n"
+        }
+      ],
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ts_ny"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kind"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Kind"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "session"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Session"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "provider"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Provider"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Model"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "duration_ms"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Duration (ms)"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trading_universe_count"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Universe Size"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "inputs"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Inputs"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

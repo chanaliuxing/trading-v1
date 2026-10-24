@@ -1,0 +1,830 @@
+{
+  "title": "AI Brain Performance Analysis",
+  "uid": "ai-brain-performance",
+  "tags": [
+    "ai",
+    "brain",
+    "performance"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 0,
+  "refresh": "30s",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "\u26a1 Performance Overview (\u6027\u80fd\u6982\u89c8)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcca Total Calls (\u603b\u8c03\u7528\u6570)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(*) as total_calls\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 10,
+                "color": "yellow"
+              },
+              {
+                "value": 100,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\u23f1\ufe0f Average Latency (\u5e73\u5747\u5ef6\u8fdf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT round(avg(duration_ms), 1) as avg_latency_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 3,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 5000,
+                "color": "yellow"
+              },
+              {
+                "value": 10000,
+                "color": "orange"
+              },
+              {
+                "value": 20000,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcc8 P95 Latency (P95 \u5ef6\u8fdf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT round(quantile(0.95)(duration_ms), 1) as p95_latency_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 4,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 10000,
+                "color": "yellow"
+              },
+              {
+                "value": 30000,
+                "color": "orange"
+              },
+              {
+                "value": 60000,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udd04 Calls per Hour (\u6bcf\u5c0f\u65f6\u8c03\u7528\u91cf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT round(count(*) / 24.0, 1) as calls_per_hour\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 1 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 5,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 1,
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udea8 Health & Error Monitoring (\u5065\u5eb7\u4e0e\u9519\u8bef\u76d1\u63a7)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 6,
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udc22 Slow Calls >60s (\u6162\u8c03\u7528)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(*) as slow_calls\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND duration_ms > 60000\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 6
+      },
+      "id": 7,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 1,
+                "color": "yellow"
+              },
+              {
+                "value": 10,
+                "color": "orange"
+              },
+              {
+                "value": 50,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcca Call Rate (vs yesterday) (\u8c03\u7528\u9891\u7387\u53d8\u5316)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nWITH today AS (\n    SELECT count(*) as calls_today\n    FROM llm.ai_brain_calls\n    WHERE toDate(ts_ny) = today()\n),\nyesterday AS (\n    SELECT count(*) as calls_yesterday\n    FROM llm.ai_brain_calls\n    WHERE toDate(ts_ny) = today() - INTERVAL 1 DAY\n)\nSELECT\n    t.calls_today,\n    round((t.calls_today - y.calls_yesterday) * 100.0 / greatest(y.calls_yesterday, 1), 1) as pct_change\nFROM today t, yesterday y\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 6
+      },
+      "id": 8,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": -50,
+                "color": "red"
+              },
+              {
+                "value": -20,
+                "color": "orange"
+              },
+              {
+                "value": 20,
+                "color": "green"
+              },
+              {
+                "value": 100,
+                "color": "yellow"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\u23f0 Last Call (\u6700\u8fd1\u8c03\u7528)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    formatDateTime(max(ts_ny), '%Y-%m-%d %H:%M:%S ET') as last_call_time,\n    round((now() - max(ts_ny)) / 60, 0) as minutes_ago\nFROM llm.ai_brain_calls\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 9,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 60,
+                "color": "yellow"
+              },
+              {
+                "value": 180,
+                "color": "orange"
+              },
+              {
+                "value": 360,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "textMode": "value"
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Latency Analysis (\u5ef6\u8fdf\u5206\u6790)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 10,
+      "collapsed": false
+    },
+    {
+      "type": "timeseries",
+      "title": "\u23f1\ufe0f Latency Over Time (\u5ef6\u8fdf\u65f6\u95f4\u7ebf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    toStartOfHour(ts_ny) as time,\n    kind,\n    round(avg(duration_ms), 1) as avg_latency_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY time, kind\nORDER BY time\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 11
+      },
+      "id": 11,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "propose_plan avg_latency_ms"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "decide avg_latency_ms"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "evaluate avg_latency_ms"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "\ud83d\udcca Latency Percentiles by Kind (\u5ef6\u8fdf\u5206\u4f4d\u6570)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    kind,\n    round(quantile(0.50)(duration_ms), 1) as p50_ms,\n    round(quantile(0.95)(duration_ms), 1) as p95_ms,\n    round(quantile(0.99)(duration_ms), 1) as p99_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY kind\nORDER BY p95_ms DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
+      "id": 12,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 10000,
+                "color": "yellow"
+              },
+              {
+                "value": 30000,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83e\udd16 Provider & Model Analysis (\u63d0\u4f9b\u5546\u548c\u6a21\u578b\u5206\u6790)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 13,
+      "collapsed": false
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83e\udd16 Provider Usage (\u63d0\u4f9b\u5546\u4f7f\u7528\u91cf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    provider,\n    count(*) as calls\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND provider != ''\nGROUP BY provider\nORDER BY calls DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 20
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie"
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "\u26a1 Provider Latency Comparison (\u63d0\u4f9b\u5546\u5ef6\u8fdf\u5bf9\u6bd4)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    provider,\n    round(avg(duration_ms), 1) as avg_latency_ms,\n    round(quantile(0.95)(duration_ms), 1) as p95_latency_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND provider != ''\nGROUP BY provider\nORDER BY avg_latency_ms DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 20
+      },
+      "id": 15,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "options": {
+        "orientation": "horizontal",
+        "xField": "provider"
+      }
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udccb Model Usage Table (\u6a21\u578b\u4f7f\u7528\u8be6\u60c5)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    model,\n    provider,\n    count(*) as calls,\n    round(avg(duration_ms), 1) as avg_latency_ms,\n    round(quantile(0.95)(duration_ms), 1) as p95_latency_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND provider != ''\nGROUP BY model, provider\nORDER BY calls DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 20
+      },
+      "id": 16,
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "calls"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg_latency_ms"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "p95_latency_ms"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "calls",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcc8 Session & Input Analysis (\u4f1a\u8bdd\u548c\u8f93\u5165\u5206\u6790)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 17,
+      "collapsed": false
+    },
+    {
+      "type": "barchart",
+      "title": "\ud83d\udcca Calls by Session (\u6309\u4f1a\u8bdd\u8c03\u7528\u91cf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    session,\n    kind,\n    count(*) as calls\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND session != ''\nGROUP BY session, kind\nORDER BY session, kind\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 18,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "options": {
+        "orientation": "vertical",
+        "xField": "session",
+        "stacking": "normal"
+      }
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udd11 Input Keys Patterns (\u8f93\u5165\u53c2\u6570\u6a21\u5f0f)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    arrayStringConcat(input_keys, ', ') as input_pattern,\n    kind,\n    count(*) as occurrences,\n    round(avg(duration_ms), 1) as avg_latency_ms\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND length(input_keys) > 0\nGROUP BY input_pattern, kind\nORDER BY occurrences DESC\nLIMIT 20\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 19,
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg_latency_ms"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "occurrences",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83c\udf0d Trading Universe Analysis (\u4ea4\u6613\u6807\u7684\u5206\u6790)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 20,
+      "collapsed": false
+    },
+    {
+      "type": "timeseries",
+      "title": "\ud83c\udf0d Trading Universe Size Over Time (\u4ea4\u6613\u6807\u7684\u6570\u91cf\u8d8b\u52bf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    toStartOfHour(ts_ny) as time,\n    avg(trading_universe_count) as avg_universe_size\nFROM llm.ai_brain_calls\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n  AND trading_universe_count > 0\nGROUP BY time\nORDER BY time\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "id": 21,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 20,
+            "showPoints": "auto"
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      }
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "time_range",
+        "type": "interval",
+        "query": "1h,6h,12h,1d,7d,30d",
+        "current": {
+          "text": "7d",
+          "value": "7d"
+        },
+        "hide": 0,
+        "label": "Time Range"
+      }
+    ]
+  }
+}

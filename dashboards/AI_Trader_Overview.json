@@ -1,0 +1,109 @@
+{
+  "id": null,
+  "title": "AI Trader Overview",
+  "timezone": "browser",
+  "version": 1,
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["ai_trader"],
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "OOS Sharpe (Today)",
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT anyLast(value) FROM ai_trader_dash_metrics WHERE date=today() AND session='learn' AND name='oos_sharpe'"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "DQ Fail Count (Today)",
+      "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT anyLast(value) FROM ai_trader_dash_metrics WHERE date=today() AND session='learn' AND name='dq_failed_count'"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "OOS Sharpe (7d)",
+      "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='oos_sharpe' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Guardian Events (Recent)",
+      "gridPos": {"x": 0, "y": 10, "w": 12, "h": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT ts, symbol, JSON_VALUE(payload,'$.action') AS action, JSON_VALUE(payload,'$.reason') AS reason, JSON_VALUE(payload,'$.dd_pct') AS dd_pct FROM ai_trader_events WHERE kind='guardian' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "table",
+      "title": "Tool Watchdog (Recent)",
+      "gridPos": {"x": 12, "y": 10, "w": 12, "h": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT ts, JSON_VALUE(payload,'$.event') AS event, JSON_VALUE(payload,'$.reason') AS reason FROM ai_trader_events WHERE kind='tool' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "table",
+      "title": "Hedging Events (Today)",
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 10},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT ts, symbol, JSON_VALUE(payload,'$.hedge_symbol') AS hedge_sym, toFloat64OrZero(JSON_VALUE(payload,'$.hedge_qty'))*toFloat64OrZero(JSON_VALUE(payload,'$.ref_px')) AS notional FROM ai_trader_events WHERE kind='hedging' AND date=today() ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "table",
+      "title": "Brain Calls (Recent)",
+      "gridPos": {"x": 0, "y": 18, "w": 24, "h": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "query": "SELECT ts, JSON_VALUE(payload,'$.kind') AS kind, JSON_VALUE(payload,'$.session') AS session, JSON_VALUE(payload,'$.action') AS action, left(JSON_VALUE(payload,'$.output'), 200) AS output_snip FROM ai_trader_events WHERE kind='brain' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    }
+  ],
+  "templating": {"list": []},
+  "time": {"from": "now-7d", "to": "now"}
+}

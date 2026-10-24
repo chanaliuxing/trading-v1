@@ -1,0 +1,296 @@
+--- PATCH: brain.py ---
+--- brain.py
++++ brain.py.patched
+@@ -37,7 +37,7 @@
+     "Plan the next session action as JSON with this schema (no markdown, no prose):\n"
+     "{\n"
+     "  \"session\": \"morning|intraday|afterhours|overnight\",\n"
+-    "  \"providers\": [{\"name\": \"deepseek|deepseek_nvidia|openai|gemini\", \"interval_sec\": <int>, \"cycles\": <int>}],\n"
++    "  \"providers\": [{\"name\": \"deepseek|deepseek_nvidia|openai|gemini\", \"interval_sec\": <int>, \"cycles\": <int>, \"execution_prompt_id\": \"v3_fast_market_following\"|null, \"execution_prompt_text\": \"<RAW PROMPT STRING>\"|null}],\n"
+     "  \"llm_trader_flags\": {\"close_at\": \"HH:MM\", \"forbid_new_before_min\": <int>},\n"
+     "  \"safe_mode\": true|false,\n"
+     "  \"restrictions\": [\"no_new_positions\"|\"manage_only\"|\"slow_interval\"|\"reduce_sizing\"],\n"
+
+
+--- PATCH: orchestrator.py ---
+--- orchestrator.py
++++ orchestrator.py.patched
+@@ -23,6 +23,37 @@
+ from typing import List
+ 
+ 
++
++
++def _prepare_prompt_overrides(self, plan: dict) -> dict:
++    """Persist any execution_prompt_text to file and return per-provider overrides.
++
++    Returns a dict: {provider_index: {"PROMPT_ID": "...", "PROMPT_FILE": "..."}}.
++    Obeys policies.prompts.allow_text_override (default: false).
++    """
++    allow_text = bool((self.cfg.get("policies", {}).get("prompts", {}) or {}).get("allow_text_override", False))
++    out: dict[int, dict] = {}
++    providers = (plan or {}).get("providers") or []
++    dstr = datetime.date.today().isoformat()
++    out_dir = self.runs_dir / dstr / "prompts"
++    out_dir.mkdir(parents=True, exist_ok=True)
++    ts = datetime.datetime.now(self.ny_tz).strftime("%H-%M-%S")
++    for i, p in enumerate(providers):
++        entry = {}
++        eid = p.get("execution_prompt_id") or None
++        etx = p.get("execution_prompt_text") or None
++        if eid:
++            entry["PROMPT_ID"] = str(eid)
++        if allow_text and etx:
++            fp = out_dir / f"prov{i}_{p.get('name','prov')}_{ts}.txt"
++            try:
++                fp.write_text(str(etx), encoding="utf-8")
++                entry["PROMPT_FILE"] = str(fp)
++            except Exception:
++                pass
++        if entry:
++            out[i] = entry
++    return out
+ class Orchestrator:
+     def __init__(self, cfg_path="scripts/ai_trader/config/ai_trader.yaml"):
+         self.cfg_path = Path(cfg_path)
+@@ -604,7 +635,8 @@
+                 except Exception as e:
+                     self.log.warning("news_on_demand_failed", err=str(e), exc_info=True)
+                 plan = self._normalize_or_build_plan("morning", plan, mem)
+-                self.llm.run_with_plan(plan)
++                overrides = self._prepare_prompt_overrides(plan)
++                self.llm.run_with_plan(plan, prompt_overrides=overrides)
+                 # Export events for morning (best-effort)
+                 try:
+                     from scripts.ai_trader.exporters.events_exporter import export_events as export_ev
+@@ -719,7 +751,8 @@
+                 except Exception as e:
+                     self.log.warning("intraday_news_on_demand_failed", err=str(e), exc_info=True)
+                 plan = self._normalize_or_build_plan("intraday", plan, mem)
+-                self.llm.run_with_plan(plan)
++                overrides = self._prepare_prompt_overrides(plan)
++                self.llm.run_with_plan(plan, prompt_overrides=overrides)
+                 # Also write hourly memory snapshot (best effort)
+                 snap = self._maybe_write_intraday_memory_snapshot()
+                 # Process Guardian emergencies if any (best effort)
+@@ -772,7 +805,8 @@
+                     mem = {}
+                 plan = self.brain.propose_plan("afterhours", {"health": self.health.check(), "memory": mem})
+                 plan = self._normalize_or_build_plan("afterhours", plan, mem)
+-                self.llm.run_with_plan(plan)
++                overrides = self._prepare_prompt_overrides(plan)
++                self.llm.run_with_plan(plan, prompt_overrides=overrides)
+                 return {"status": "ok", "executed_plan": plan}
+             except Exception:
+                 pass
+@@ -789,7 +823,8 @@
+                     mem = {}
+                 plan = self.brain.propose_plan("overnight", {"health": self.health.check(), "memory": mem})
+                 plan = self._normalize_or_build_plan("overnight", plan, mem)
+-                self.llm.run_with_plan(plan)
++                overrides = self._prepare_prompt_overrides(plan)
++                self.llm.run_with_plan(plan, prompt_overrides=overrides)
+                 return {"status": "ok", "executed_plan": plan}
+             except Exception:
+                 pass
+
+
+--- PATCH: llm_trader_controller.py ---
+--- llm_trader_controller.py
++++ llm_trader_controller.py.patched
+@@ -14,6 +14,9 @@
+ 
+ 
+ class LLMTraderController:
++    def _run_cmd_env(self, cmd_parts, env):
++        return subprocess.Popen(cmd_parts, start_new_session=True, env=env)
++
+     """Starts llm_trader sessions using existing shell scripts with fallbacks.
+ 
+     Paper mode: prefer fallback python commands, do not enforce --dry-run.
+@@ -99,7 +102,7 @@
+             self._run_cmd(fb)
+ 
+     # --- Plan-driven execution ---
+-    def run_with_plan(self, plan: dict):
++    def run_with_plan(self, plan: dict, prompt_overrides: dict | None = None):
+         """Execute llm_trader processes based on a validated plan dict.
+ 
+         plan example:
+@@ -194,7 +197,13 @@
+                 hb_path = hb_dir / f"llm_{proc_id}.json"
+                 parts += ["--heartbeat-file", str(hb_path)]
+             # Spawn
+-            proc = subprocess.Popen(parts, start_new_session=True)
++            env = os.environ.copy()
++            ov = (prompt_overrides or {}).get(idx:=providers.index(p), {})
++            if ov.get('PROMPT_ID'):
++                env['LLM_PROMPT_ID'] = ov['PROMPT_ID']
++            if ov.get('PROMPT_FILE'):
++                env['LLM_PROMPT_FILE'] = ov['PROMPT_FILE']
++            proc = self._run_cmd_env(parts, env)
+             started += 1
+             # Register process
+             if self.runs_dir is not None:
+
+
+--- PATCH: llm_trader_bot.py ---
+--- llm_trader_bot.py
++++ llm_trader_bot.py.patched
+@@ -45,6 +45,17 @@
+     from llm_trader.prompt_builder_universal import UniversalPromptBuilder
+     from llm_trader.prompt_builder_compact import CompactPromptBuilder
+     AGGREGATOR_AVAILABLE = True
++
++import os
++PROMPT_ID = os.getenv('LLM_PROMPT_ID', '').strip() or None
++PROMPT_FILE = os.getenv('LLM_PROMPT_FILE', '').strip() or None
++PROMPT_TEXT = None
++if PROMPT_FILE:
++    try:
++        from pathlib import Path as _P
++        PROMPT_TEXT = _P(PROMPT_FILE).read_text('utf-8')
++    except Exception:
++        PROMPT_TEXT = None
+ except ImportError:
+     RealtimeAggregator = None
+     HigherTFContextLoader = None
+@@ -214,7 +225,7 @@
+             )
+ 
+             # Universal prompt builder
+-            self.universal_prompt_builder = UniversalPromptBuilder(
++            self.universal_prompt_builder = UniversalPromptBuilder(prompt_id=PROMPT_ID, prompt_text=PROMPT_TEXT,
+                 json_mode="schema" if provider_name in ("openai", "deepseek_nvidia") else "object",
+                 style="reasoning",
+             )
+@@ -231,7 +242,7 @@
+ 
+         if self.use_compact_prompt and CompactPromptBuilder:
+             # Create compact prompt builder for execution mode
+-            self.compact_prompt_builder = CompactPromptBuilder(
++            self.compact_prompt_builder = CompactPromptBuilder(prompt_id=PROMPT_ID, prompt_text=PROMPT_TEXT,
+                 mode="execution",
+                 adaptive_trim=True,
+                 max_tokens_budget=2000
+
+
+--- PATCH: prompt_builder_universal.py ---
+--- prompt_builder_universal.py
++++ prompt_builder_universal.py.patched
+@@ -124,10 +124,15 @@
+         json_mode: str = "schema",   # "schema" | "object" | "none"
+         style: str = "reasoning",    # "reasoning" | "concise"
+         max_user_json_chars: int = 15000,  # 控制 data_pack JSON 体积
++        prompt_id: str | None = None,
++        prompt_text: str | None = None,
+     ):
+         self.json_mode = json_mode
+         self.style = style
+         self.max_user_json_chars = max_user_json_chars
++        self.prompt_id = prompt_id
++        self.prompt_text = prompt_text
++        self._prompt_library = self._load_prompt_library()
+ 
+     @staticmethod
+     def _check_missing_frames(mtf_snapshot: Dict, min_requirements: Dict[str, int]) -> list:
+@@ -148,6 +153,20 @@
+         return missing
+ 
+     # ----------- 主构建函数 ----------------------------------------------------
++
++
++def _load_prompt_library(self) -> dict:
++    """Optional prompt library at ./prompts/prompt_library.json"""
++    import json
++    from pathlib import Path
++    try:
++        fp = Path("prompts/prompt_library.json")
++        if fp.exists():
++            return json.loads(fp.read_text("utf-8"))
++    except Exception:
++        pass
++    return {}
++
+     def build(
+         self,
+         *,
+@@ -239,6 +258,11 @@
+         data_json = json.dumps(data_pack, ensure_ascii=False)
+         data_json = _truncate(data_json, self.max_user_json_chars)
+ 
++        # 2.9) External prompt override
++        if self.prompt_text:
++            instr_header = self.prompt_text
++        elif self.prompt_id and self._prompt_library.get(self.prompt_id):
++            instr_header = self._prompt_library[self.prompt_id]
+         # 3) 语言/措辞
+         if language == "zh":
+             instr_header = (
+
+
+--- PATCH: prompt_builder_compact.py ---
+--- prompt_builder_compact.py
++++ prompt_builder_compact.py.patched
+@@ -185,6 +185,18 @@
+ # Compact Prompt Builder
+ # ============================================================================
+ 
++
++def _load_prompt_library(self) -> dict:
++    """Optional prompt library at ./prompts/prompt_library.json"""
++    import json
++    from pathlib import Path
++    try:
++        fp = Path("prompts/prompt_library.json")
++        if fp.exists():
++            return json.loads(fp.read_text("utf-8"))
++    except Exception:
++        pass
++    return {}
+ class CompactPromptBuilder:
+     """Two-tier compact prompt system with unified I/O contract
+ 
+@@ -344,6 +356,16 @@
+         # System message
+         if provider.lower() in ("deepseek_nvidia", "deepseek_official", "deepseek"):
+             # R1 strict mode
++            if self.prompt_text:
++                system = self.prompt_text
++            elif self.prompt_id and self._prompt_library.get(self.prompt_id):
++                system = self._prompt_library[self.prompt_id]
++            else:
++            if self.prompt_text:
++                system = self.prompt_text
++            elif self.prompt_id and self._prompt_library.get(self.prompt_id):
++                system = self._prompt_library[self.prompt_id]
++            else:
+             system = (
+                 "You are a latency-aware intraday trading decision agent. "
+                 "Follow the INPUT CONTRACT strictly. "
+@@ -353,6 +375,11 @@
+                 "No reasoning, no notes, no markdown, no extra text."
+             )
+         else:
++            if self.prompt_text:
++                system = self.prompt_text
++            elif self.prompt_id and self._prompt_library.get(self.prompt_id):
++                system = self._prompt_library[self.prompt_id]
++            else:
+             system = (
+                 "You are a latency-aware intraday trading decision agent. "
+                 "Follow the INPUT CONTRACT strictly. "
+
+
+--- PATCH: ai_trader.yaml ---
+--- ai_trader.yaml
++++ ai_trader.yaml.patched
+@@ -12,6 +12,8 @@
+   dsn: ""
+ 
+ policies:
++  prompts:
++    allow_text_override: false
+   # Global controls
+   fail_fast: false         # Critical failures in learn pipeline cause immediate stop
+   use_workflow: false      # If true and Prefect is available, run learn via Prefect Flow

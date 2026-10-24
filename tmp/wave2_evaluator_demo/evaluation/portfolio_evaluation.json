@@ -1,0 +1,22 @@
+{
+  "cycle_id": "cycle-001",
+  "candidate_set": [
+    "exp-stocks-qqq-001",
+    "exp-options-spy-001",
+    "exp-bad-robustness-001"
+  ],
+  "pairwise_correlation": 0.56,
+  "marginal_risk_contribution": {
+    "exp-stocks-qqq-001": 0.0086,
+    "exp-options-spy-001": 0.9641,
+    "exp-bad-robustness-001": 0.0273
+  },
+  "capacity_fit": "constrained",
+  "drawdown_overlap_score": 0.62,
+  "diversification_score": 0.422,
+  "notes": [
+    "exp-stocks-qqq-001:capacity_unknown",
+    "exp-options-spy-001:capacity_unknown",
+    "exp-bad-robustness-001:capacity_unknown"
+  ]
+}

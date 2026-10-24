@@ -1,0 +1,26 @@
+{
+  "_comment": "Per-column status for ClickHouse feature columns. Columns marked as 'disabled_*' are forbidden for AI Brain feature proposals. Status 'research' means available for backtesting only - NOT for production models due to train-serving skew risk.",
+  "columns": {
+    "spy_ret_1": "disabled_missing_source",
+    "spy_ret_5": "research",
+    "qqq_ret_1": "disabled_missing_source",
+    "qqq_ret_5": "disabled_missing_source",
+    "beta_spy_60": "disabled_missing_source",
+    "corr_spy_60": "disabled_missing_source",
+    "corr_qqq_20": "disabled_missing_source",
+    "ret_vs_spy_1h": "disabled_missing_source",
+    "vol_vs_spy": "disabled_missing_source",
+    "ret_vs_sector": "disabled_missing_source",
+    "tick_imbalance": "disabled_tick_data",
+    "trade_imb_5m": "disabled_tick_data",
+    "price_impact_5m": "disabled_tick_data",
+    "price_momentum_5m": "disabled_tick_data",
+    "bb_position": "disabled_unstable",
+    "bb_width": "disabled_unstable",
+    "ema_cross_1m": "disabled_unstable",
+    "ema_cross_5m": "disabled_unstable",
+    "entropy_20": "disabled_unstable",
+    "hurst_20": "disabled_unstable"
+  }
+}
+

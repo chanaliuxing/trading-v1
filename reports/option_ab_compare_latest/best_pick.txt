@@ -1,0 +1,31 @@
+baseline
+config      stop0.65_hold5_ret0.1_atr0.15_vwap12
+trades                                        28
+net_pnl                                  2508.97
+win_rate                                     0.5
+avg_pnl                                89.606071
+mdd                                     -1182.31
+tp1                                          1.2
+tp2                                          2.5
+stop                                        0.65
+nm_hold                                        5
+nm_ret                                       0.1
+nm_atr                                      0.15
+vwap_m                                        12
+
+target_net_pnl_ge=2383.52
+
+selected
+config      stop0.67_hold6_ret0.1_atr0.15_vwap12
+trades                                        29
+net_pnl                                  3067.19
+win_rate                                0.517241
+avg_pnl                               105.765172
+mdd                                       -992.3
+tp1                                          1.2
+tp2                                          2.5
+stop                                        0.67
+nm_hold                                        6
+nm_ret                                       0.1
+nm_atr                                      0.15
+vwap_m                                        12

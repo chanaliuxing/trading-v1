@@ -1,0 +1,123 @@
+{
+  "title": "AI Brain - Interactive (交互式调用查看)",
+  "description": "查看所有 AI Brain 调用和完整 JSON",
+  "tags": ["ai", "brain", "interactive"],
+  "timezone": "America/New_York",
+  "editable": true,
+  "uid": "ai-brain-interactive",
+  "refresh": "30s",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "📋 所有 AI Brain 调用 (点击展开查看详情)",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0}
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "调用列表 - 点击任意行展开下方查看完整 JSON",
+      "datasource": {"type": "grafana-clickhouse-datasource", "uid": "ch"},
+      "gridPos": {"h": 15, "w": 24, "x": 0, "y": 1},
+      "targets": [{
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "ch"},
+        "queryType": "sql",
+        "rawSql": "SELECT\n    formatDateTime(ts_ny, '%Y-%m-%d %H:%i:%S') as time,\n    kind,\n    session,\n    provider,\n    model,\n    duration_ms,\n    if(success = 1, '✅', '❌') as status,\n    length(output_json) as json_size,\n    substring(output_json, 1, 100) as preview\nFROM llm.ai_brain_calls\nORDER BY ts_ny DESC\nLIMIT 200",
+        "format": 1,
+        "refId": "A"
+      }],
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "time", "desc": true}],
+        "footer": {"show": true}
+      },
+      "fieldConfig": {
+        "defaults": {"custom": {"align": "auto"}},
+        "overrides": [
+          {"matcher": {"id": "byName", "options": "time"}, "properties": [{"id": "custom.width", "value": 180}]},
+          {"matcher": {"id": "byName", "options": "kind"}, "properties": [{"id": "custom.width", "value": 120}]},
+          {"matcher": {"id": "byName", "options": "session"}, "properties": [{"id": "custom.width", "value": 100}]},
+          {"matcher": {"id": "byName", "options": "duration_ms"}, "properties": [{"id": "unit", "value": "ms"}]},
+          {"matcher": {"id": "byName", "options": "json_size"}, "properties": [{"id": "unit", "value": "bytes"}]},
+          {"matcher": {"id": "byName", "options": "preview"}, "properties": [{"id": "custom.width", "value": 400}]}
+        ]
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "time": 0,
+              "kind": 1,
+              "session": 2,
+              "provider": 3,
+              "model": 4,
+              "duration_ms": 5,
+              "status": 6,
+              "json_size": 7,
+              "preview": 8
+            },
+            "renameByName": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "🔍 完整 JSON 查看器 (在上方表格输入时间来查看)",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 16}
+    },
+    {
+      "id": 11,
+      "type": "text",
+      "title": "使用说明",
+      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 17},
+      "options": {
+        "mode": "markdown",
+        "content": "## 📖 如何查看完整 JSON\n\n**方法 1**: 在下面的输入框输入时间 (格式: `2025-11-01 14:49:00`),然后点击右侧的查询按钮\n\n**方法 2**: 从上方表格复制时间,粘贴到下面的输入框\n\n**示例时间**: `2025-11-01 14:49:00` 或 `2025-10-31 23:58:29`"
+      }
+    },
+    {
+      "id": 12,
+      "type": "text",
+      "title": "输入要查看的时间",
+      "gridPos": {"h": 3, "w": 12, "x": 0, "y": 21},
+      "options": {
+        "mode": "markdown",
+        "content": "### 请在 Panel 13 的查询中修改时间\n\n1. 点击下方 \"完整 JSON\" Panel 的标题\n2. 点击 \"Edit\"\n3. 修改 SQL 中的时间: `WHERE formatDateTime(ts_ny, '%Y-%m-%d %H:%i:%S') = '2025-11-01 14:49:00'`\n4. 点击 \"Run query\""
+      }
+    },
+    {
+      "id": 13,
+      "type": "table",
+      "title": "🤖 完整 JSON (修改下面查询中的时间来查看不同调用)",
+      "datasource": {"type": "grafana-clickhouse-datasource", "uid": "ch"},
+      "gridPos": {"h": 25, "w": 24, "x": 0, "y": 24},
+      "targets": [{
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "ch"},
+        "queryType": "sql",
+        "rawSql": "SELECT\n    formatDateTime(ts_ny, '%Y-%m-%d %H:%i:%S') as time,\n    kind,\n    provider,\n    model,\n    output_json\nFROM llm.ai_brain_calls\nWHERE formatDateTime(ts_ny, '%Y-%m-%d %H:%i:%S') = '2025-11-01 14:49:00'\nLIMIT 1",
+        "format": 1,
+        "refId": "A"
+      }],
+      "options": {"showHeader": true},
+      "fieldConfig": {
+        "defaults": {"custom": {"align": "left"}},
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "output_json"},
+            "properties": [{"id": "custom.displayMode", "value": "json-view"}]
+          }
+        ]
+      }
+    }
+  ]
+}

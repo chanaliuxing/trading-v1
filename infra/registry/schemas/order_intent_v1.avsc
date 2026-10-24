@@ -1,0 +1,57 @@
+{
+  "type": "record",
+  "name": "OrderIntentV1",
+  "namespace": "trading.events",
+  "fields": [
+    {"name": "schema_v", "type": "int"},
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "Metadata",
+        "fields": [
+          {"name": "ts_us", "type": "long"},
+          {"name": "producer", "type": "string"},
+          {"name": "idempotency_key", "type": ["null", "string"], "default": null}
+        ]
+      }
+    },
+    {
+      "name": "data",
+      "type": {
+        "type": "record",
+        "name": "IntentData",
+        "fields": [
+          {"name": "decision_id", "type": "string"},
+          {"name": "strategy_id", "type": "string"},
+          {"name": "strategy_version", "type": ["null", "string"], "default": null},
+          {"name": "param_hash", "type": ["null", "string"], "default": null},
+          {"name": "symbol", "type": "string"},
+          {
+            "name": "side",
+            "type": {
+              "type": "enum",
+              "name": "Side",
+              "symbols": ["BUY", "SELL", "SELL_SHORT"]
+            }
+          },
+          {"name": "qty", "type": "double"},
+          {
+            "name": "order_type",
+            "type": {
+              "type": "enum",
+              "name": "OrderType",
+              "symbols": ["MKT", "LMT", "STP", "STP_LMT"]
+            }
+          },
+          {"name": "limit_px", "type": ["null", "double"], "default": null},
+          {"name": "stop_px", "type": ["null", "double"], "default": null},
+          {"name": "tif", "type": "string"},
+          {"name": "allow_prepost", "type": "boolean", "default": false},
+          {"name": "cadence_s", "type": ["null", "int"], "default": null},
+          {"name": "tags", "type": {"type": "array", "items": "string"}, "default": []}
+        ]
+      }
+    }
+  ]
+}

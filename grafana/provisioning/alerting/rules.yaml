@@ -1,0 +1,12 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: trading-loki-alerts
+    folder: Trading Alerts
+    interval: 1m
+    rules: []
+  - orgId: 1
+    name: trading-prom-alerts
+    folder: Trading Alerts
+    interval: 1m
+    rules: []

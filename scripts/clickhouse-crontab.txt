@@ -1,0 +1,19 @@
+# ClickHouse 定期维护任务
+#
+# 每周日凌晨 2:00 执行 ClickHouse 巡检和清理
+# 日志输出到 logs/maintenance/clickhouse-weekly-YYYY-MM-DD.log
+#
+# 任务说明:
+# - 检查 TTL 配置状态
+# - 查看日志表体量和最老数据
+# - 触发 OPTIMIZE 清理过期数据
+# - 显示磁盘使用情况
+
+# 每周日凌晨 2:00 执行（建议时间：系统负载较低）
+0 2 * * 0 cd . && ./scripts/clickhouse-maintenance.sh weekly >> logs/maintenance/clickhouse-weekly-$(date +\%Y-\%m-\%d).log 2>&1
+
+# 可选：每天凌晨 3:00 执行快速检查（如果需要每日监控，取消下面的注释）
+# 0 3 * * * cd . && ./scripts/clickhouse-maintenance.sh check >> logs/maintenance/clickhouse-daily-$(date +\%Y-\%m-\%d).log 2>&1
+
+# 可选：每月 1 号凌晨 4:00 清理超过 30 天的维护日志（防止日志目录膨胀）
+# 0 4 1 * * find ./logs/maintenance -name "clickhouse-*.log" -mtime +30 -delete

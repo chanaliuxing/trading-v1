@@ -1,0 +1,95 @@
+{
+  "audit_dir": "./runtime/audit/2026-04-29",
+  "blockers": [
+    "financial_snapshot_stale",
+    "runtime_reconciliation_audit_stale"
+  ],
+  "day": "20260429",
+  "financial_snapshot": {
+    "age_sec": 19214.614843,
+    "available": true,
+    "available_funds": 917274.78,
+    "blockers": [
+      "financial_snapshot_stale"
+    ],
+    "buying_power": 3666510.9,
+    "gross_position_value": 124354.56,
+    "net_liquidation": 1031625.64,
+    "ok": false,
+    "realized_pnl": -2971.3,
+    "table": "ibkr_account_realtime",
+    "total_cash": 1153753.09,
+    "ts_ny": "2026-04-29T16:11:23-04:00",
+    "unrealized_pnl": 30653.28
+  },
+  "generated_at": "2026-04-29T21:31:37-04:00",
+  "latest_position_audit_age_sec": 19907.22409,
+  "latest_position_audit_payload": {
+    "db_open_count": 0,
+    "ghosts": 0,
+    "ib_open_count": 0,
+    "ib_positions": {
+      "SOXS": -8448.0
+    },
+    "ib_pre_submitted": 0,
+    "ledger_positions": {
+      "OPT:QQQ:20260422:653:C": 0.0,
+      "OPT:QQQ:20260423:650:C": 0.0,
+      "OPT:QQQ:20260424:653:P": 0.0,
+      "OPT:QQQ:20260429:659:P": 0.0,
+      "OPT:QQQ:20260430:658:P": 0.0,
+      "SOXS": -8448.0
+    },
+    "mismatch_samples": [],
+    "mismatches": 0,
+    "orphans_detected": 0,
+    "orphans_unresolved": 0,
+    "position_mismatches": 0
+  },
+  "latest_position_audit_ts": "2026-04-29T15:59:50.390753-04:00",
+  "latest_reconciliation_alert_payload": {
+    "active_quarantine_count": 1,
+    "db_open_orders": 0,
+    "evidence": {
+      "active_quarantine": {
+        "active_count": 1,
+        "by_reason": [
+          {
+            "active_count": 1,
+            "last_observed_at": "2026-04-29T19:47:49.873575+00:00",
+            "reason": "unknown_broker_order_detected"
+          }
+        ],
+        "lookup_failed": false
+      },
+      "ghost_samples": [],
+      "ib_status_counts": {
+        "Inactive": 1
+      },
+      "mismatch_samples": [],
+      "orphan_detected_samples": [
+        {
+          "order_id": "293",
+          "order_ref": "sl:UNKNOWN_ACCOUNT|qqq_1dte_ma10_reject_0324_",
+          "order_type": "STP",
+          "perm_id": 991043598,
+          "qty": 5.0,
+          "side": "SELL",
+          "status": "Inactive",
+          "symbol": "OPT:QQQ:20260430:658:P"
+        }
+      ],
+      "orphan_unresolved_samples": []
+    },
+    "ghosts_found": 0,
+    "ib_open_orders": 1,
+    "ib_pre_submitted_orders": 0,
+    "mismatches": 0,
+    "orphans_detected": 1,
+    "orphans_found": 1,
+    "orphans_self_healed": 1,
+    "orphans_unresolved": 0
+  },
+  "latest_reconciliation_alert_ts": "2026-04-29T15:52:50.263028-04:00",
+  "ok": false
+}

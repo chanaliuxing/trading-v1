@@ -1,0 +1,718 @@
+{
+  "id": null,
+  "title": "AI Trader Complete Dashboard (All Metrics)",
+  "description": "完整的AI Trader监控大屏 - 包含所有21个打点指标",
+  "timezone": "browser",
+  "version": 3,
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["ai_trader", "complete", "all_metrics"],
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "row",
+      "title": "📊 Today Overview (今日总览)",
+      "gridPos": {"x": 0, "y": 0, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "OOS Sharpe",
+      "description": "样本外夏普比率 (越高越好)",
+      "gridPos": {"x": 0, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='oos_sharpe'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 0.5, "color": "yellow"},
+              {"value": 1.0, "color": "green"},
+              {"value": 1.5, "color": "blue"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "OOS MaxDD",
+      "description": "样本外最大回撤 (越小越好)",
+      "gridPos": {"x": 3, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='oos_mdd'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "green"},
+              {"value": 0.05, "color": "yellow"},
+              {"value": 0.10, "color": "orange"},
+              {"value": 0.15, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "OOS Trades",
+      "description": "样本外交易次数",
+      "gridPos": {"x": 6, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='oos_trades'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "RL Gate OK",
+      "description": "RL部署门槛是否通过",
+      "gridPos": {"x": 9, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='rl_gate_ok'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "mappings": [
+            {"type": "value", "options": {"0": {"text": "❌ Failed", "color": "red"}}},
+            {"type": "value", "options": {"1": {"text": "✅ Passed", "color": "green"}}}
+          ]
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "DQ OK",
+      "description": "数据质量是否通过",
+      "gridPos": {"x": 12, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='dq_ok'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "mappings": [
+            {"type": "value", "options": {"0": {"text": "❌ Failed", "color": "red"}}},
+            {"type": "value", "options": {"1": {"text": "✅ Passed", "color": "green"}}}
+          ]
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Guardian MaxDD %",
+      "description": "Guardian最大日内回撤",
+      "gridPos": {"x": 15, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='guardian_max_dd_pct'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "green"},
+              {"value": 0.02, "color": "yellow"},
+              {"value": 0.05, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Hedging Notional USD",
+      "description": "对冲名义金额",
+      "gridPos": {"x": 18, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='hedging_notional_usd'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Tools Running",
+      "description": "运行中的工具数",
+      "gridPos": {"x": 21, "y": 1, "w": 3, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='tools_running'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 1, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "📋 Data Quality (数据质量)",
+      "gridPos": {"x": 0, "y": 5, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "DQ Failed Count",
+      "description": "数据质量失败数量",
+      "gridPos": {"x": 0, "y": 6, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='dq_failed_count'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "green"},
+              {"value": 1, "color": "yellow"},
+              {"value": 5, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "DQ Passed Count",
+      "description": "数据质量通过数量",
+      "gridPos": {"x": 4, "y": 6, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='dq_passed_count'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "DQ Failed Count Trend (7d)",
+      "description": "数据质量失败趋势",
+      "gridPos": {"x": 8, "y": 6, "w": 16, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='dq_failed_count' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "🛡️ Risk & Hedging (风控与对冲)",
+      "gridPos": {"x": 0, "y": 10, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "Guardian Events",
+      "description": "Guardian熔断事件数",
+      "gridPos": {"x": 0, "y": 11, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='guardian_events'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "green"},
+              {"value": 1, "color": "yellow"},
+              {"value": 5, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Hedging Events",
+      "description": "对冲事件数",
+      "gridPos": {"x": 4, "y": 11, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='hedging_events'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Guardian MaxDD Trend (7d)",
+      "description": "Guardian最大回撤趋势",
+      "gridPos": {"x": 8, "y": 11, "w": 8, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='guardian_max_dd_pct' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10
+          },
+          "unit": "percentunit"
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Hedging Notional Trend (7d)",
+      "description": "对冲名义金额趋势",
+      "gridPos": {"x": 16, "y": 11, "w": 8, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='hedging_notional_usd' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10
+          },
+          "unit": "currencyUSD"
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "Tools Ledger (Recent Events)",
+      "description": "最近的工具事件 (kill/restart/backoff)",
+      "gridPos": {"x": 0, "y": 15, "w": 24, "h": 6},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT ts, JSONExtractString(payload, 'event') AS event, JSONExtractString(payload, 'pid') AS pid, JSONExtractString(payload, 'reason') AS reason FROM ai_trader_events WHERE kind='tool' AND ts > now() - INTERVAL 2 DAY ORDER BY ts DESC LIMIT 50"
+      }],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "row",
+      "title": "🎯 Strategy & Deployment (策略与上线)",
+      "gridPos": {"x": 0, "y": 21, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "timeseries",
+      "title": "OOS Performance (7d)",
+      "description": "样本外性能指标趋势",
+      "gridPos": {"x": 0, "y": 22, "w": 12, "h": 6},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='oos_sharpe' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        },
+        {
+          "refId": "B",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='oos_mdd' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byFrameRefID", "options": "A"},
+            "properties": [
+              {"id": "displayName", "value": "OOS Sharpe"},
+              {"id": "custom.axisPlacement", "value": "left"}
+            ]
+          },
+          {
+            "matcher": {"id": "byFrameRefID", "options": "B"},
+            "properties": [
+              {"id": "displayName", "value": "OOS MaxDD"},
+              {"id": "custom.axisPlacement", "value": "right"},
+              {"id": "unit", "value": "percentunit"}
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "Pending Actions (Today)",
+      "description": "待处理的处方分类",
+      "gridPos": {"x": 12, "y": 22, "w": 12, "h": 6},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT 'Total' as action, anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='pending_count'"
+        },
+        {
+          "refId": "B",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT 'Disable RL' as action, anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='pending_disable_rl'"
+        },
+        {
+          "refId": "C",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT 'Increase Conf' as action, anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='pending_increase_conf_floor'"
+        },
+        {
+          "refId": "D",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT 'Reduce Sizing' as action, anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='pending_reduce_sizing_multiplier'"
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      }
+    },
+    {
+      "type": "row",
+      "title": "💼 Portfolio & Overlay (组合与Overlay)",
+      "gridPos": {"x": 0, "y": 28, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "Overlay Beta",
+      "description": "组合Beta值",
+      "gridPos": {"x": 0, "y": 29, "w": 6, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='overlay_beta'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Overlay Need Hedge",
+      "description": "是否需要对冲",
+      "gridPos": {"x": 6, "y": 29, "w": 6, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='overlay_need_hedge'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "mappings": [
+            {"type": "value", "options": {"0": {"text": "✅ No", "color": "green"}}},
+            {"type": "value", "options": {"1": {"text": "⚠️ Yes", "color": "yellow"}}}
+          ]
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Overlay Beta Trend (7d)",
+      "description": "组合Beta趋势",
+      "gridPos": {"x": 12, "y": 29, "w": 12, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='overlay_beta' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "🤖 LLM Tools Health (工具健康)",
+      "gridPos": {"x": 0, "y": 33, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "Tools Kill",
+      "description": "工具Kill事件数",
+      "gridPos": {"x": 0, "y": 34, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='tools_kill'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "green"},
+              {"value": 1, "color": "yellow"},
+              {"value": 5, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Tools Restart",
+      "description": "工具Restart事件数",
+      "gridPos": {"x": 4, "y": 34, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='tools_restart'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Tools Backoff",
+      "description": "工具Backoff事件数",
+      "gridPos": {"x": 8, "y": 34, "w": 4, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT anyLast(value) as val FROM ai_trader_dash_metrics WHERE date=today() AND name='tools_backoff'"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Tools Events Trend (7d)",
+      "description": "工具事件趋势",
+      "gridPos": {"x": 12, "y": 34, "w": 12, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='tools_kill' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        },
+        {
+          "refId": "B",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='tools_restart' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        },
+        {
+          "refId": "C",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='tools_backoff' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byFrameRefID", "options": "A"},
+            "properties": [{"id": "displayName", "value": "Kill"}]
+          },
+          {
+            "matcher": {"id": "byFrameRefID", "options": "B"},
+            "properties": [{"id": "displayName", "value": "Restart"}]
+          },
+          {
+            "matcher": {"id": "byFrameRefID", "options": "C"},
+            "properties": [{"id": "displayName", "value": "Backoff"}]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "🧠 Brain Calls (AI决策追踪)",
+      "gridPos": {"x": 0, "y": 38, "w": 24, "h": 1},
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "Brain Calls (Today)",
+      "description": "今日Brain调用次数",
+      "gridPos": {"x": 0, "y": 39, "w": 6, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT count() AS val FROM ai_trader_events WHERE kind='brain' AND toDate(ts) = today()"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 1, "color": "yellow"},
+              {"value": 10, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Brain Success Rate",
+      "description": "Brain调用成功率",
+      "gridPos": {"x": 6, "y": 39, "w": 6, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT round(countIf(NOT JSONHas(payload, 'output.error')) * 100.0 / count(), 2) AS val FROM ai_trader_events WHERE kind='brain' AND toDate(ts) = today()"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 90, "color": "yellow"},
+              {"value": 95, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Brain Calls Volume (7d)",
+      "description": "Brain调用量趋势",
+      "gridPos": {"x": 12, "y": 39, "w": 12, "h": 4},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT toStartOfHour(ts) as time, count() as calls FROM ai_trader_events WHERE kind='brain' AND ts > now() - INTERVAL 7 DAY GROUP BY time ORDER BY time"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80
+          }
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "Brain Calls (Recent)",
+      "description": "最近的Brain调用记录",
+      "gridPos": {"x": 0, "y": 43, "w": 24, "h": 8},
+      "targets": [{
+        "refId": "A",
+        "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+        "rawSql": "SELECT ts, JSONExtractString(payload, 'kind') AS kind, JSONExtractString(payload, 'session') AS session, JSONExtractString(payload, 'action') AS action, JSONExtractString(payload, 'provider') AS provider, left(JSONExtractString(payload, 'output'), 200) AS output_snip FROM ai_trader_events WHERE kind='brain' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+      }],
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "ts", "desc": true}]
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "output_snip"},
+            "properties": [{"id": "custom.width", "value": 400}]
+          }
+        ]
+      }
+    }
+  ],
+  "templating": {"list": []},
+  "time": {"from": "now-7d", "to": "now"}
+}

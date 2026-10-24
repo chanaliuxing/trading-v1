@@ -1,0 +1,637 @@
+{
+  "active_strategy_ids": [
+    "agent_paper_bridge_001",
+    "nvda_minute_flip_paper_001",
+    "nvda_minute_flip_paper_002",
+    "qqq_1dte_ma10_reject_0324_v2_001",
+    "qqq_intraday_option_v1_001",
+    "qqq_intraday_plugin_001",
+    "spy_1dte_ma10_reject_0324_001",
+    "stocks_kernel_smh_001",
+    "stocks_kernel_spy_001",
+    "vegas_hma_setup_trigger_risk_v12_spy_001"
+  ],
+  "config_path": "./config.yml",
+  "dry_run_strategy_ids": [],
+  "high_risk_strategy_ids": [],
+  "live_strategy_ids": [
+    "agent_paper_bridge_001",
+    "nvda_minute_flip_paper_001",
+    "nvda_minute_flip_paper_002",
+    "qqq_1dte_ma10_reject_0324_v2_001",
+    "qqq_intraday_option_v1_001",
+    "qqq_intraday_plugin_001",
+    "spy_1dte_ma10_reject_0324_001",
+    "stocks_kernel_smh_001",
+    "stocks_kernel_spy_001",
+    "vegas_hma_setup_trigger_risk_v12_spy_001"
+  ],
+  "repo_root": ".",
+  "shadow_strategy_ids": [],
+  "strategies": [
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "stocks_kernel_strategy"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": false,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": true
+      },
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.stocks_kernel_strategy",
+      "path_type": "STOCKS_KERNEL_EXECUTION_PATH",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "agent_paper_bridge_001",
+      "strategy_refs": [],
+      "symbols": [
+        "NVDA"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "stocks_kernel_strategy"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": false,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": true
+      },
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.stocks_kernel_strategy",
+      "path_type": "STOCKS_KERNEL_EXECUTION_PATH",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "nvda_minute_flip_paper_001",
+      "strategy_refs": [],
+      "symbols": [
+        "NVDA"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "stocks_kernel_strategy"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": false,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": true
+      },
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.stocks_kernel_strategy",
+      "path_type": "STOCKS_KERNEL_EXECUTION_PATH",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "nvda_minute_flip_paper_002",
+      "strategy_refs": [],
+      "symbols": [
+        "NVDA"
+      ]
+    },
+    {
+      "asset_family": "options",
+      "class": "QQQ1DTEMA10RejectV2Strategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": true,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": false
+      },
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.qqq_1dte_ma10_reject_v2_strategy",
+      "path_type": "OPTIONS_KERNEL_PURE_PLUGIN",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/qqq_1dte_ma10_reject_v2_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "qqq_1dte_ma10_reject_0324_v2_001",
+      "strategy_refs": [
+        "qqq_0dte_opt_live_001",
+        "qqq_0dte_opt_live_v2_001",
+        "qqq_1dte_ma10_reject_0324_001",
+        "qqq_1dte_ma10_reject_0324_v2_001",
+        "qqq_1dte_ma10_reject_0324_pure_001"
+      ],
+      "symbols": [
+        "QQQ",
+        "OPT:QQQ:1DTE"
+      ]
+    },
+    {
+      "asset_family": "options",
+      "class": "QQQIntradayOptionV1Strategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": true,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": false
+      },
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.qqq_intraday_option_v1_strategy",
+      "path_type": "OPTIONS_KERNEL_PURE_PLUGIN",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/qqq_intraday_option_v1_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "qqq_intraday_option_v1_001",
+      "strategy_refs": [
+        "qqq_intraday_option_v1_001",
+        "qqq_intraday_plugin_001"
+      ],
+      "symbols": [
+        "QQQ",
+        "OPT:QQQ:0DTE"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "stocks_kernel_strategy"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "underlying_shared_plane:prefer",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": false,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": true
+      },
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.stocks_kernel_strategy",
+      "path_type": "STOCKS_KERNEL_EXECUTION_PATH",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "qqq_intraday_plugin_001",
+      "strategy_refs": [],
+      "symbols": [
+        "QQQ",
+        "TQQQ",
+        "SQQQ"
+      ]
+    },
+    {
+      "asset_family": "options",
+      "class": "SPY1DTEMA10RejectV2Strategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": true,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": false
+      },
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.spy_1dte_ma10_reject_v2_strategy",
+      "path_type": "OPTIONS_KERNEL_PURE_PLUGIN",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/spy_1dte_ma10_reject_v2_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "spy_1dte_ma10_reject_0324_001",
+      "strategy_refs": [
+        "spy_1dte_ma10_reject_0324_001",
+        "spy_1dte_ma10_reject_0324_pure_001"
+      ],
+      "symbols": [
+        "SPY",
+        "OPT:SPY:1DTE"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "stocks_kernel_strategy"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": false,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": true
+      },
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.stocks_kernel_strategy",
+      "path_type": "STOCKS_KERNEL_EXECUTION_PATH",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "stocks_kernel_smh_001",
+      "strategy_refs": [],
+      "symbols": [
+        "SMH",
+        "SOXL",
+        "SOXS"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "stocks_kernel_strategy"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": false,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": true
+      },
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.stocks_kernel_strategy",
+      "path_type": "STOCKS_KERNEL_EXECUTION_PATH",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "stocks_kernel_spy_001",
+      "strategy_refs": [],
+      "symbols": [
+        "SPY",
+        "SPXL",
+        "SPXS",
+        "RSP"
+      ]
+    },
+    {
+      "asset_family": "options",
+      "class": "VegasHMASetupTriggerRiskV12Strategy",
+      "contract_readiness": {
+        "blockers": [],
+        "data_contract_ready": true,
+        "execution_contract_ready": true,
+        "fill_attribution_ready": true,
+        "production_contract_ready": false,
+        "risk_contract_ready": true,
+        "session_contract_ready": true,
+        "source_runtime_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ],
+        "warnings": [
+          "production_parity_proof_required"
+        ]
+      },
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "evidence_flags": {
+        "direct_strategy_execution_path": false,
+        "legacy_strategy_execution_path": false,
+        "option_private_data_path": false,
+        "options_kernel_pure_plugin": true,
+        "stock_execution_blockers_disabled": false,
+        "stocks_kernel_execution_path": false
+      },
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.vegas_hma_setup_trigger_risk_v12_strategy",
+      "path_type": "OPTIONS_KERNEL_PURE_PLUGIN",
+      "permission_tier": "CANARY_ONLY",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/vegas_hma_setup_trigger_risk_v12_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "vegas_hma_setup_trigger_risk_v12_spy_001",
+      "strategy_refs": [
+        "spy_1dte_ma10_reject_0324_001",
+        "spy_1dte_ma10_reject_0324_pure_001",
+        "vegas_hma_setup_trigger_risk_v12_spy_001"
+      ],
+      "symbols": [
+        "SPY",
+        "OPT:SPY:0DTE"
+      ]
+    }
+  ],
+  "strategy_surface_summary": {
+    "canary_only_count": 10,
+    "disabled_until_contract_parity_count": 0,
+    "production_eligible_count": 0,
+    "shadow_only_count": 0,
+    "unknown_path_count": 0
+  },
+  "summary": {
+    "active_strategy_count": 10,
+    "canary_only_count": 10,
+    "disabled_until_contract_parity_count": 0,
+    "dry_run_strategy_count": 0,
+    "high_risk_strategy_count": 0,
+    "live_strategy_count": 10,
+    "production_eligible_count": 0,
+    "shadow_only_count": 0,
+    "shadow_strategy_count": 0,
+    "unknown_path_count": 0
+  }
+}

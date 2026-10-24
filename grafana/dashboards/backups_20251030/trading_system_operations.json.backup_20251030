@@ -1,0 +1,887 @@
+{
+  "uid": "trading-system-ops",
+  "title": "Trading System Operations",
+  "tags": [
+    "trading",
+    "ops",
+    "run_system"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "style": "dark",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "textbox",
+        "name": "run_id",
+        "label": "run_id (optional filter)",
+        "query": "",
+        "current": {
+          "text": "",
+          "value": ""
+        }
+      },
+      {
+        "type": "textbox",
+        "name": "strategy_id",
+        "label": "strategy_id (optional filter)",
+        "query": "",
+        "current": {
+          "text": "",
+          "value": ""
+        }
+      },
+      {
+        "type": "textbox",
+        "name": "trace_id",
+        "label": "trace_id (paste or click from logs)",
+        "query": "",
+        "current": {
+          "text": "",
+          "value": ""
+        }
+      },
+      {
+        "type": "query",
+        "name": "kafka_group",
+        "label": "Kafka Group",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "query": "label_values(kafka_consumer_group_lag, group)",
+        "refresh": 2,
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ],
+          "selected": true
+        },
+        "options": []
+      }
+    ]
+  },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "-- Grafana --",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": false,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "Ops Summary",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Bars / min (proxy: inference rate)",
+      "description": "Approx. bar processing rate = rate of 'inference' events",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"inference\" | json | line_format \"\" [5m])) * 60"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "opm"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Order fills / min",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"order_fill\" [5m])) * 60"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "opm"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Order reject / min",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"order_rejected\" [5m])) * 60"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "opm"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Overlay blocks / min",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"overlay_block\" [5m])) * 60"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "opm"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "row",
+      "title": "Throughput & Latency",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Inference Latency (ms, avg)",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"inference\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" | unwrap ms | avg_over_time($__interval)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "hidden"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Order Volume (fills / rejects / trimmed)",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (event) (rate(({job=\"trader\"} |= \"order_fill\" [1m])))",
+          "legendFormat": "fills"
+        },
+        {
+          "refId": "B",
+          "expr": "sum by (event) (rate(({job=\"trader\"} |= \"order_rejected\" [1m])))",
+          "legendFormat": "rejected"
+        },
+        {
+          "refId": "C",
+          "expr": "sum by (event) (rate(({job=\"trader\"} |= \"order_trimmed\" [1m])))",
+          "legendFormat": "trimmed"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "End-to-End Performance",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "SLO Metrics (from ClickHouse)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 0,
+        "y": 15
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toDateTime(ts_ms/1000) AS t, data_lag_ms_avg AS v FROM trading.live_metrics ORDER BY t",
+          "format": "time_series",
+          "legendFormat": "data_lag",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        },
+        {
+          "refId": "B",
+          "query": "SELECT toDateTime(ts_ms/1000) AS t, slippage_bps_avg AS v FROM trading.live_metrics ORDER BY t",
+          "format": "time_series",
+          "legendFormat": "slippage_bps",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 60
+    },
+    {
+      "type": "timeseries",
+      "title": "Error Rates (from ClickHouse)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 10,
+        "y": 15
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "SELECT toDateTime(ts_ms/1000) AS t, order_error_rate AS v FROM trading.live_metrics ORDER BY t",
+          "format": "time_series",
+          "legendFormat": "order_error_rate",
+          "queryType": "sql",
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          }
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 61
+    },
+    {
+      "id": 62,
+      "type": "text",
+      "title": "Telemetry Gaps",
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 20,
+        "y": 15
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "* Kafka lag metrics not yet exported.\n* service_up only tracks TradingSystem.\n* Consider adding Redis/Postgres exporters for infra coverage."
+      }
+    },
+    {
+      "type": "row",
+      "title": "Why Not & Diagnostics",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      }
+    },
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Why Not Order? \u2014 Reasons over Time (stacked)",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" | reason != \"\" [$__interval]))",
+          "legendFormat": "{{reason}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        }
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": "table",
+      "title": "Top Reasons (range)",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 23
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(15, sum by (reason) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" [${__range_s}s])))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 31,
+      "type": "table",
+      "title": "Top Blocking Symbols (range)",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 23
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(20, sum by (symbol) (count_over_time({job=\"trader\"} |~ \"order_rejected|order_trimmed|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" [${__range_s}s])))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "type": "row",
+      "title": "Live Investigation",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      }
+    },
+    {
+      "id": 40,
+      "type": "logs",
+      "title": "Live Run Logs (filtered)",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "id": 41,
+      "type": "logs",
+      "title": "Recent \u201cWhy Not\u201d Samples",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "type": "row",
+      "title": "Trace Drilldown",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      }
+    },
+    {
+      "id": 50,
+      "type": "traces",
+      "title": "Trace Viewer \u2014 ${trace_id}",
+      "datasource": {
+        "type": "tempo",
+        "uid": "tempo"
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryType": "traceId",
+          "query": "${trace_id}"
+        }
+      ],
+      "options": {
+        "showSpanBar": true,
+        "showTable": true
+      }
+    },
+    {
+      "type": "row",
+      "title": "Prometheus Metrics",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 58
+      }
+    },
+    {
+      "id": 70,
+      "type": "timeseries",
+      "title": "Signal\u2192Order P95 (Prometheus)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 59
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum(rate(latency_signal_to_order_ms_bucket[5m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "hidden"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 71,
+      "type": "timeseries",
+      "title": "Order\u2192Fill P95 (Prometheus)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 59
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum(rate(latency_order_to_fill_ms_bucket[5m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "hidden"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 72,
+      "type": "timeseries",
+      "title": "Kafka Lag (max by group)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 67
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by (group) (kafka_consumer_group_lag{group=~\"${kafka_group}\"})",
+          "legendFormat": "{{group}}"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 73,
+      "type": "stat",
+      "title": "Redis Exporter Up",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 67
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg(up{job=\"redis-exporter\"})",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "value": 1,
+              "text": "\ud83d\udfe2"
+            },
+            {
+              "type": "value",
+              "value": 0,
+              "text": "\ud83d\udd34"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 1,
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 74,
+      "type": "stat",
+      "title": "Postgres Exporter Up",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 67
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg(up{job=\"postgres-exporter\"})",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "value": 1,
+              "text": "\ud83d\udfe2"
+            },
+            {
+              "type": "value",
+              "value": 0,
+              "text": "\ud83d\udd34"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 1,
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": false
+        }
+      }
+    }
+  ]
+}

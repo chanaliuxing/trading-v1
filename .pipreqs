@@ -1,0 +1,1 @@
+exclude = runs, data, datasets, logs, models, **/*.json, **/*.txt, **/*.md

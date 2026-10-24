@@ -1,0 +1,140 @@
+{
+  "dashboard": {
+    "title": "PnL Baseline & Performance Monitoring",
+    "tags": ["trading", "pnl", "performance", "risk"],
+    "timezone": "America/New_York",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Cumulative PnL vs SPY Benchmark",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "SELECT date, pnl_cum FROM trading.pnl_baseline ORDER BY date",
+            "refId": "A",
+            "legendFormat": "Strategy PnL"
+          },
+          {
+            "expr": "SELECT date, cumsum(benchmark_ret) * 100000 as bench_pnl FROM trading.pnl_baseline ORDER BY date",
+            "refId": "B",
+            "legendFormat": "SPY Benchmark (100k capital)"
+          }
+        ],
+        "yaxes": [
+          {"label": "Cumulative PnL ($)", "format": "currency"}
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Daily PnL",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "SELECT date, pnl FROM trading.pnl_baseline ORDER BY date",
+            "refId": "A",
+            "legendFormat": "Daily PnL"
+          }
+        ],
+        "yaxes": [
+          {"label": "Daily PnL ($)", "format": "currency"}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Sharpe Ratio Comparison (20-day)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 8, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "SELECT date, sharpe_20 FROM trading.pnl_baseline ORDER BY date",
+            "refId": "A",
+            "legendFormat": "Strategy Sharpe"
+          },
+          {
+            "expr": "SELECT date, benchmark_sharpe_20 FROM trading.pnl_baseline ORDER BY date",
+            "refId": "B",
+            "legendFormat": "SPY Sharpe"
+          },
+          {
+            "expr": "SELECT date, 0.3 as threshold FROM trading.pnl_baseline ORDER BY date",
+            "refId": "C",
+            "legendFormat": "Threshold (0.3)"
+          }
+        ],
+        "yaxes": [
+          {"label": "Sharpe Ratio"}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Sharpe Edge (Strategy - Benchmark)",
+        "type": "graph",
+        "gridPos": {"x": 8, "y": 8, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "SELECT date, edge_sharpe_20 FROM trading.pnl_baseline ORDER BY date",
+            "refId": "A",
+            "legendFormat": "20-day Edge"
+          },
+          {
+            "expr": "SELECT date, edge_sharpe_60 FROM trading.pnl_baseline ORDER BY date",
+            "refId": "B",
+            "legendFormat": "60-day Edge"
+          }
+        ],
+        "yaxes": [
+          {"label": "Sharpe Edge"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Win Rate",
+        "type": "stat",
+        "gridPos": {"x": 16, "y": 8, "w": 4, "h": 3},
+        "targets": [
+          {
+            "expr": "SELECT wins_cum * 100.0 / (wins_cum + losses_cum) as winrate FROM trading.pnl_baseline ORDER BY date DESC LIMIT 1",
+            "refId": "A"
+          }
+        ],
+        "unit": "percent"
+      },
+      {
+        "id": 6,
+        "title": "Latest Sharpe (20d)",
+        "type": "stat",
+        "gridPos": {"x": 20, "y": 8, "w": 4, "h": 3},
+        "targets": [
+          {
+            "expr": "SELECT sharpe_20 FROM trading.pnl_baseline ORDER BY date DESC LIMIT 1",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [
+          {"value": 0, "color": "red"},
+          {"value": 0.3, "color": "yellow"},
+          {"value": 0.5, "color": "green"}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Performance Actions Log",
+        "type": "table",
+        "gridPos": {"x": 0, "y": 14, "w": 24, "h": 6},
+        "targets": [
+          {
+            "expr": "SELECT ts, action_type, trigger, sharpe, ev, reduce_factor, previous_state, new_state FROM trading.performance_actions ORDER BY ts DESC LIMIT 50",
+            "refId": "A"
+          }
+        ]
+      }
+    ],
+    "refresh": "30s",
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    }
+  }
+}

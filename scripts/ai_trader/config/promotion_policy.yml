@@ -1,0 +1,9 @@
+promotion_policy:
+  criteria:
+    sharpe_min: 1.0
+    dd_max: 0.20
+    improvement_pct: 10
+  actions:
+    on_pass: promote_to_paper
+    on_fail: keep_baseline
+

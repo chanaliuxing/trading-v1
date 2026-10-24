@@ -1,0 +1,78 @@
+{
+  "approved_scope": [
+    "manual canary launch review",
+    "review paper/shadow runtime evidence",
+    "prepare separate live operator opt-in drill"
+  ],
+  "blockers": [],
+  "canary_scope": {
+    "account_id": "REQUIRED_LIVE_OPT_IN_CHECK",
+    "allowed_session": "REQUIRED_MANUAL_INPUT",
+    "close_only_fallback": "owner_scoped_only",
+    "kill_switch": "REQUIRED_MANUAL_CONFIRMATION",
+    "manual_operator": "REQUIRED_MANUAL_INPUT",
+    "max_contracts_or_shares": "REQUIRED_MANUAL_INPUT",
+    "max_daily_loss": "REQUIRED_MANUAL_INPUT",
+    "max_notional": "REQUIRED_MANUAL_INPUT",
+    "max_open_orders": "REQUIRED_MANUAL_INPUT",
+    "max_trades_per_day": "REQUIRED_MANUAL_INPUT",
+    "permission_tier": "REQUIRED_MANUAL_REVIEW",
+    "rollback_condition": "REQUIRED_MANUAL_INPUT",
+    "strategy_id": "REQUIRED_MANUAL_INPUT",
+    "strategy_instance_id": "REQUIRED_MANUAL_INPUT",
+    "symbol": "REQUIRED_MANUAL_INPUT"
+  },
+  "decision": "CANARY_MANUAL_LAUNCH_CHECKLIST_READY",
+  "evidence": {
+    "approved_to_fill": {
+      "broker_submit_drops": 0,
+      "classification": "NO_BOTTLENECK",
+      "sample_count": 40
+    },
+    "ib_reconnect_fast": "32 passed",
+    "no_live_guard": "4 passed",
+    "paper_only_samples": 20,
+    "reconciliation": "76 passed",
+    "reports": "61 passed",
+    "services": "656 passed",
+    "shadow_only_samples": 20,
+    "soak_gate": {
+      "blockers": [],
+      "verdict": "PASS",
+      "warnings": []
+    },
+    "strategy_execution_reliability": {
+      "classification": "NO_BOTTLENECK",
+      "paper_broker_submit": 20,
+      "broker_ack": 20,
+      "fill": 20,
+      "attribution": 20,
+      "pnl_replay": 20,
+      "sample_count": 40,
+      "uom_route_status_counts": {
+        "delegated": 20,
+        "skipped": 20
+      }
+    },
+    "vegas_dlb_edge": {
+      "classification": "NO_BOTTLENECK",
+      "dlb_breach_count": 0,
+      "edge_insufficient_count": 0,
+      "sample_count": 560,
+      "stale_decision_count": 0
+    }
+  },
+  "generated_at": "2026-05-12T18:11:11-04:00",
+  "not_approved_scope": [
+    "start canary from this checklist",
+    "full live trading",
+    "unattended live trading",
+    "real broker order/cancel/modify",
+    "auto-cancel unknown broker orders",
+    "auto-flatten unknown owner positions",
+    "symbol-only attribution",
+    "order_ref prefix/substr owner attribution",
+    "DLB/TTL/edge-cost tuning",
+    "strategy entry/exit logic changes"
+  ]
+}

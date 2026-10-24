@@ -1,0 +1,513 @@
+"""
+ConfigGate - Configuration Validation Gate
+
+This gate validates configuration integrity before system startup.
+Follows the existing Gate pattern used in the system.
+
+Architecture:
+- Modular validators (schema, file_ref, consistency)
+- Reuses grid_guard.py for HPO parameter validation
+- Lightweight and fast (<2s validation time)
+- Fail-fast on critical errors, warn on minor issues
+
+Usage:
+    from scripts.ai_trader.gates.config_gate import ConfigGate, ConfigGatePolicy
+
+    policy = ConfigGatePolicy(
+        schema_validation=True,
+        grid_validation=True,
+        fail_on_schema_error=True
+    )
+
+    gate = ConfigGate(policy)
+    result = gate.check(
+        config_path="config.yml",
+        hpo_config_path="config/hpo_enhanced.json"
+    )
+
+    if not result["ok"]:
+        print(f"Validation failed: {result['reasons']}")
+"""
+
+from __future__ import annotations
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+import yaml
+import json
+
+from libs.logger import get_logger
+
+# Import validators
+from .validators.schema import SchemaValidator
+from .validators.file_ref import FileRefValidator
+from .validators.consistency import ConsistencyValidator
+
+# Import grid_guard (reuse existing HPO validation)
+try:
+    from grid_guard import sanitize_and_constrain_grid, GuardConfig
+    _HAS_GRID_GUARD = True
+except ImportError:
+    _HAS_GRID_GUARD = False
+    GuardConfig = None  # type: ignore
+
+logger = get_logger(__name__)
+
+
+@dataclass
+class ConfigGatePolicy:
+    """
+    ConfigGate 策略配置
+
+    Controls which validations are enabled and failure behavior.
+    """
+
+    # === Validation Toggles ===
+    schema_validation: bool = True           # Basic structure and type checks
+    grid_validation: bool = True              # HPO grid constraints (reuses grid_guard)
+    file_ref_validation: bool = True          # File existence checks
+    consistency_validation: bool = True       # Cross-config consistency checks
+
+    # === Failure Policies ===
+    fail_on_schema_error: bool = True         # Schema errors → block startup
+    fail_on_file_not_found: bool = True       # Missing files → block startup
+    fail_on_inconsistency: bool = False       # Inconsistencies → warn only
+    fail_on_grid_violation: bool = True       # Grid violations → block startup
+
+    # === Grid Guard Configuration (reuse existing) ===
+    grid_guard: Optional[GuardConfig] = None  # Custom grid constraints
+
+    # === Default Grid Constraints ===
+    default_grid_bounds: Dict[str, tuple] = field(default_factory=lambda: {
+        # Risk parameter bounds (in percentages)
+        "risk.stop_loss_pct": (0.005, 0.15),       # 0.5% - 15%
+        "risk.take_profit_pct": (0.005, 0.25),     # 0.5% - 25%
+        "risk.time_stop_min": (5, 240),            # 5 min - 4 hours
+
+        # Sizing parameter bounds
+        "sizing.multiplier": (0.5, 5.0),           # 0.5x - 5x
+        "sizing.base_qty": (10, 10000),            # 10 - 10,000 shares
+        "sizing.max_qty": (50, 50000),             # 50 - 50,000 shares
+
+        # Market filter bounds
+        "market_filter.conf_floor": (0.3, 0.95),   # 30% - 95%
+        "market_filter.max_spread_bps": (1, 50),   # 1 - 50 bps
+        "market_filter.min_volume": (1000, 1000000), # 1K - 1M
+
+        # Strategy-specific bounds (TSLASimplifiedV7_2)
+        "A1_thr_sigma": (0.001, 0.05),             # 0.1% - 5%
+        "A1_rvol_lo": (0.3, 2.0),                  # 0.3x - 2x
+        "A1_rvol_hi": (1.0, 5.0),                  # 1x - 5x
+        "A2_grid_g": (0.1, 3.0),                   # 0.1 - 3.0
+        "B1_rvol_min": (0.5, 3.0),                 # 0.5x - 3x
+        "k_atr": (0.5, 5.0),                       # 0.5 - 5.0
+    })
+
+    # === Performance ===
+    max_grid_combinations: int = 20000         # Warn if grid combinations exceed this
+
+
+class ConfigGate:
+    """
+    配置验证 Gate
+
+    Validates configuration integrity using modular validators.
+    Follows the system's existing Gate pattern (check() → {"ok": bool, "reasons": List[str]}).
+
+    Design Principles:
+    1. Reuse existing infrastructure (grid_guard, Gate pattern)
+    2. Fast validation (<2s)
+    3. Clear error messages with actionable guidance
+    4. Fail-fast on critical errors
+    """
+
+    def __init__(
+        self,
+        policy: ConfigGatePolicy,
+        clickhouse_client: Optional[Any] = None
+    ):
+        """
+        Initialize ConfigGate
+
+        Args:
+            policy: Validation policy
+            clickhouse_client: Optional ClickHouse client for table existence checks
+        """
+        self.policy = policy
+
+        # Initialize validators
+        self.schema_val = SchemaValidator() if policy.schema_validation else None
+
+        self.fileref_val = FileRefValidator() if policy.file_ref_validation else None
+
+        self.consistency_val = ConsistencyValidator(
+            clickhouse_client=clickhouse_client
+        ) if policy.consistency_validation else None
+
+        logger.info(
+            "ConfigGate initialized",
+            schema_validation=policy.schema_validation,
+            grid_validation=policy.grid_validation,
+            file_ref_validation=policy.file_ref_validation,
+            consistency_validation=policy.consistency_validation
+        )
+
+    def check(
+        self,
+        config_path: str = "config.yml",
+        hpo_config_path: Optional[str] = None,
+        strategy_configs_dir: str = "strategies/configs"
+    ) -> Dict[str, Any]:
+        """
+        验证配置完整性
+
+        Args:
+            config_path: Path to main config file
+            hpo_config_path: Optional path to HPO config file
+            strategy_configs_dir: Directory containing strategy configs
+
+        Returns:
+            {
+                "ok": bool,                  # Overall validation result
+                "reasons": List[str],        # Critical errors
+                "warnings": List[str],       # Non-critical warnings
+                "details": Dict[str, Any]    # Detailed validation results
+            }
+        """
+        ok = True
+        reasons = []
+        warnings = []
+        details = {}
+
+        # === Load main configuration ===
+        try:
+            with open(config_path) as f:
+                main_config = yaml.safe_load(f)
+
+            logger.debug(f"Loaded main config from {config_path}")
+        except FileNotFoundError:
+            return {
+                "ok": False,
+                "reasons": [f"config_file_not_found: {config_path}"],
+                "warnings": [],
+                "details": {}
+            }
+        except yaml.YAMLError as e:
+            return {
+                "ok": False,
+                "reasons": [f"config_yaml_parse_error: {e}"],
+                "warnings": [],
+                "details": {}
+            }
+        except Exception as e:
+            return {
+                "ok": False,
+                "reasons": [f"failed_to_load_config: {e}"],
+                "warnings": [],
+                "details": {}
+            }
+
+        # === 1. Schema Validation ===
+        if self.schema_val:
+            logger.debug("Running schema validation...")
+            result = self.schema_val.validate_main_config(main_config)
+            details["schema"] = result
+
+            if not result["ok"]:
+                if self.policy.fail_on_schema_error:
+                    ok = False
+                    reasons.extend(result["errors"])
+                else:
+                    warnings.extend(result["errors"])
+
+        # === 2. Grid Guard Validation (HPO) ===
+        if self.policy.grid_validation and hpo_config_path:
+            logger.debug("Running HPO grid validation...")
+            grid_result = self._validate_hpo_grid(hpo_config_path)
+            details["grid"] = grid_result
+
+            if not grid_result["ok"]:
+                if self.policy.fail_on_grid_violation:
+                    ok = False
+                    reasons.extend(grid_result["reasons"])
+                else:
+                    warnings.extend(grid_result["reasons"])
+
+        # === 2b. ClickHouse Features Table Validation (HPO) ===
+        if hpo_config_path and self.consistency_val:
+            logger.debug("Running ClickHouse features_table validation...")
+            table_result = self._validate_features_table(hpo_config_path)
+            details["features_table"] = table_result
+
+            if not table_result["ok"]:
+                # Features table validation failures are warnings if no CH client
+                # but errors if CH client is provided
+                if self.consistency_val.ch_client is not None:
+                    ok = False
+                    reasons.extend(table_result.get("errors", []))
+                else:
+                    warnings.extend(table_result.get("warnings", []))
+
+        # === 3. File Reference Validation ===
+        if self.fileref_val:
+            logger.debug("Running file reference validation...")
+            ref_result = self.fileref_val.validate_all_refs(
+                main_config,
+                strategy_configs_dir
+            )
+            details["file_refs"] = ref_result
+
+            if not ref_result["ok"]:
+                if self.policy.fail_on_file_not_found:
+                    ok = False
+                    reasons.extend(ref_result["missing"])
+                else:
+                    warnings.extend(ref_result["missing"])
+
+            # Add file ref warnings
+            warnings.extend(ref_result.get("warnings", []))
+
+        # === 4. Consistency Validation ===
+        if self.consistency_val:
+            logger.debug("Running consistency validation...")
+            cons_result = self.consistency_val.validate_consistency(main_config)
+            details["consistency"] = cons_result
+
+            if not cons_result["ok"]:
+                if self.policy.fail_on_inconsistency:
+                    ok = False
+                    reasons.extend(cons_result["issues"])
+                else:
+                    warnings.extend(cons_result["issues"])
+
+            # Add consistency warnings
+            warnings.extend(cons_result.get("warnings", []))
+
+        # === Log Results ===
+        if not ok:
+            logger.error(
+                "ConfigGate validation failed",
+                errors=len(reasons),
+                warnings=len(warnings),
+                details=details
+            )
+        elif warnings:
+            logger.warning(
+                "ConfigGate validation passed with warnings",
+                warnings=len(warnings)
+            )
+        else:
+            logger.info("ConfigGate validation passed")
+
+        return {
+            "ok": ok,
+            "reasons": reasons,
+            "warnings": warnings,
+            "details": details
+        }
+
+    def _build_guard_config(self, grid: Dict[str, Any]) -> Dict[str, Any]:
+        """构建 grid_guard 配置（简化版）"""
+        if self.policy.grid_guard:
+            import dataclasses
+            return dataclasses.asdict(self.policy.grid_guard)
+
+        # 使用默认配置
+        return {
+            "cap_per_param": 10,
+            "bounds": self.policy.default_grid_bounds,
+            "types": self._infer_param_types(grid),
+            "relations": self._get_default_relations()
+        }
+
+    def _infer_param_types(self, grid: Dict[str, Any]) -> Dict[str, str]:
+        """从参数名推断类型（int 或 float）"""
+        int_keywords = ['qty', 'min', 'window', 'period', 'layers']
+        return {
+            key: "int" if any(kw in key for kw in int_keywords) else "float"
+            for key in grid.keys()
+        }
+
+    def _get_default_relations(self) -> List[str]:
+        """返回默认的参数关系约束"""
+        return [
+            "risk.stop_loss_pct < risk.take_profit_pct",
+            "sizing.base_qty < sizing.max_qty",
+            "A1_rvol_lo < A1_rvol_hi",
+        ]
+
+    def _validate_features_table(
+        self,
+        hpo_config_path: str
+    ) -> Dict[str, Any]:
+        """
+        验证 HPO 配置中的 features_table 是否存在于 ClickHouse
+
+        Args:
+            hpo_config_path: Path to HPO config file
+
+        Returns:
+            {"ok": bool, "errors": List[str], "warnings": List[str]}
+        """
+        errors = []
+        warnings = []
+
+        # Load HPO config
+        try:
+            with open(hpo_config_path) as f:
+                hpo_config = json.load(f)
+        except Exception as e:
+            return {
+                "ok": False,
+                "errors": [f"hpo_config_load_error: {e}"],
+                "warnings": []
+            }
+
+        # Extract features_table (support both top-level and nested formats)
+        features_table = hpo_config.get("features_table")
+        if not features_table:
+            features_table = hpo_config.get("hpo", {}).get("features_table")
+
+        if not features_table:
+            # features_table is required for HPO
+            warnings.append(
+                "hpo.features_table: not specified in HPO config "
+                "(required for HPO execution)"
+            )
+            return {
+                "ok": True,  # Just warning, not blocking
+                "errors": [],
+                "warnings": warnings
+            }
+
+        # If we have a ClickHouse client, check table existence
+        if self.consistency_val and self.consistency_val.ch_client is not None:
+            logger.debug(f"Checking ClickHouse table existence: {features_table}")
+
+            result = self.consistency_val.validate_features_table_exists(
+                features_table
+            )
+
+            if not result["ok"]:
+                error_msg = result.get("error", "Unknown error")
+                errors.append(f"features_table_not_found: {error_msg}")
+                return {
+                    "ok": False,
+                    "errors": errors,
+                    "warnings": warnings
+                }
+            else:
+                logger.debug(f"ClickHouse table verified: {features_table}")
+        else:
+            # No ClickHouse client, just warn
+            warnings.append(
+                f"features_table_not_verified: '{features_table}' "
+                f"(ClickHouse client not provided, skipping table existence check)"
+            )
+
+        return {
+            "ok": True,
+            "errors": [],
+            "warnings": warnings
+        }
+
+    def _validate_hpo_grid(
+        self,
+        hpo_config_path: str
+    ) -> Dict[str, Any]:
+        """
+        验证 HPO 网格配置（复用 grid_guard.py）
+
+        Args:
+            hpo_config_path: Path to HPO config file
+
+        Returns:
+            {"ok": bool, "reasons": List[str], "details": Dict[str, Any]}
+        """
+        if not _HAS_GRID_GUARD:
+            return {
+                "ok": True,
+                "reasons": [],
+                "details": {"note": "grid_guard not available, skipping grid validation"}
+            }
+
+        # Load HPO config
+        try:
+            with open(hpo_config_path) as f:
+                hpo_config = json.load(f)
+        except Exception as e:
+            return {
+                "ok": False,
+                "reasons": [f"hpo_config_load_error: {e}"],
+                "details": {}
+            }
+
+        # Extract grid
+        grid = hpo_config.get("hpo", {}).get("grid", {})
+        if not grid:
+            grid = hpo_config.get("grid", {})
+
+        if not grid:
+            return {
+                "ok": True,
+                "reasons": [],
+                "details": {"note": "No grid found in HPO config"}
+            }
+
+        # Build guard_config dict
+        guard_config = self._build_guard_config(grid)
+
+        # Run grid_guard validation
+        try:
+            sanitized, report = sanitize_and_constrain_grid(
+                grid,
+                guard_config
+            )
+
+            reasons = []
+
+            # Check if parameters were clipped
+            if report.get("clipped", {}):
+                for param, info in report["clipped"].items():
+                    reasons.append(
+                        f"grid_param_clipped: {param} "
+                        f"{info.get('before', '?')} → {info.get('after', '?')}"
+                    )
+
+            # Check if parameters were pruned by relations
+            if report.get("pruned", {}):
+                for relation, info in report["pruned"].items():
+                    reasons.append(
+                        f"grid_relation_pruned: '{relation}' "
+                        f"pruned values {info}"
+                    )
+
+            # Check grid size (combinatorial explosion)
+            total_combos = 1
+            for vals in sanitized.values():
+                total_combos *= len(vals)
+
+            if total_combos > self.policy.max_grid_combinations:
+                reasons.append(
+                    f"grid_too_large: {total_combos} combinations "
+                    f"(max recommended: {self.policy.max_grid_combinations}). "
+                    f"This may waste compute resources."
+                )
+
+            return {
+                "ok": len(reasons) == 0,
+                "reasons": reasons,
+                "details": {
+                    "original_grid": grid,
+                    "sanitized_grid": sanitized,
+                    "report": report,
+                    "total_combinations": total_combos
+                }
+            }
+
+        except Exception as e:
+            return {
+                "ok": False,
+                "reasons": [f"grid_guard_error: {e}"],
+                "details": {"exception": str(e)}
+            }

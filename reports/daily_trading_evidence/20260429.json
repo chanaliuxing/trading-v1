@@ -1,0 +1,227 @@
+{
+  "blockers": [
+    "qqq_shadow_drift_hold",
+    "runtime_reconciliation:financial_snapshot_stale",
+    "runtime_reconciliation:runtime_reconciliation_audit_stale"
+  ],
+  "day": "20260429",
+  "gates": {
+    "order_quarantine": {
+      "fill_handler_path": "./services/exec/fill_event_handler.py",
+      "ok": true,
+      "quarantine_handler_path": "./services/reconciliation/order_quarantine.py",
+      "quarantine_summary_supported": true,
+      "runbook_path": "./docs/implementation/ORDER_TRUTH_RUNTIME_RUNBOOK_2026-04-23.md",
+      "runbook_supported": true,
+      "runtime_alert_supported": true,
+      "runtime_reconciler_path": "./services/reconciliation/runtime_reconciler.py",
+      "unresolved_fill_quarantine": true,
+      "unresolved_status_quarantine": true
+    },
+    "order_truth_runtime": {
+      "audit_date": "2026-04-29",
+      "false_block_removed": true,
+      "legacy_open_orders_block_count": 32,
+      "legitimate_block_observed": true,
+      "ok": true,
+      "reasons": [],
+      "recommendation": "PASS",
+      "strategy_row_count": 3736,
+      "used_previous_completed_day": false
+    },
+    "phase0": {
+      "baseline_live_strategy_ids": [
+        "qqq_1dte_ma10_reject_0324_v2_001",
+        "qqq_intraday_001",
+        "qqq_intraday_option_v1_001",
+        "spy_1dte_ma10_reject_0324_001"
+      ],
+      "baseline_summary": {
+        "active_strategy_count": 8,
+        "dry_run_strategy_count": 0,
+        "high_risk_strategy_count": 1,
+        "live_strategy_count": 4,
+        "shadow_strategy_count": 4
+      },
+      "blocking_reasons": [],
+      "blocking_strategy_ids": [],
+      "current_live_strategy_ids": [
+        "qqq_1dte_ma10_reject_0324_v2_001",
+        "qqq_intraday_001",
+        "qqq_intraday_option_v1_001",
+        "spy_1dte_ma10_reject_0324_001"
+      ],
+      "current_shadow_strategy_ids": [
+        "qqq_kernel_shadow_legacy_off_001",
+        "qqq_kernel_shadow_legacy_on_001",
+        "stocks_kernel_shadow_smh_001",
+        "stocks_kernel_shadow_spy_001"
+      ],
+      "ok": true,
+      "summary": {
+        "active_strategy_count": 8,
+        "dry_run_strategy_count": 0,
+        "high_risk_strategy_count": 1,
+        "live_strategy_count": 4,
+        "shadow_strategy_count": 4
+      }
+    },
+    "position_reconciler": {
+      "contracts_path": "./services/reconciliation/contracts.py",
+      "lot_level_supported": true,
+      "ok": true
+    },
+    "protection_registry": {
+      "ddl_path": "./db/pg/migration_20260421_uom_position_ledger.ddl",
+      "manager_path": "./services/orders/manager.py",
+      "ok": true,
+      "registry_write_supported": true,
+      "stress_test_path": "./tests/unit/services/test_unified_order_manager.py",
+      "stress_test_supported": true,
+      "table_supported": true
+    },
+    "qqq_shadow_drift": {
+      "d3_ready": true,
+      "needs_48h_attribution_count": 1639,
+      "observed_days": [
+        "20260209",
+        "20260313",
+        "20260421",
+        "20260422",
+        "20260423",
+        "20260425",
+        "20260427",
+        "20260428",
+        "20260429"
+      ],
+      "recommendation": "HOLD",
+      "unresolved_diff_count": 2553,
+      "whitelist_entry_count": 0,
+      "whitelist_ok": true
+    },
+    "runtime_reconciliation": {
+      "audit_dir": "./runtime/audit/2026-04-29",
+      "blockers": [
+        "financial_snapshot_stale",
+        "runtime_reconciliation_audit_stale"
+      ],
+      "day": "20260429",
+      "financial_snapshot": {
+        "age_sec": 19214.614843,
+        "available": true,
+        "available_funds": 917274.78,
+        "blockers": [
+          "financial_snapshot_stale"
+        ],
+        "buying_power": 3666510.9,
+        "gross_position_value": 124354.56,
+        "net_liquidation": 1031625.64,
+        "ok": false,
+        "realized_pnl": -2971.3,
+        "table": "ibkr_account_realtime",
+        "total_cash": 1153753.09,
+        "ts_ny": "2026-04-29T16:11:23-04:00",
+        "unrealized_pnl": 30653.28
+      },
+      "generated_at": "2026-04-29T21:31:37-04:00",
+      "latest_position_audit_age_sec": 19907.22409,
+      "latest_position_audit_payload": {
+        "db_open_count": 0,
+        "ghosts": 0,
+        "ib_open_count": 0,
+        "ib_positions": {
+          "SOXS": -8448.0
+        },
+        "ib_pre_submitted": 0,
+        "ledger_positions": {
+          "OPT:QQQ:20260422:653:C": 0.0,
+          "OPT:QQQ:20260423:650:C": 0.0,
+          "OPT:QQQ:20260424:653:P": 0.0,
+          "OPT:QQQ:20260429:659:P": 0.0,
+          "OPT:QQQ:20260430:658:P": 0.0,
+          "SOXS": -8448.0
+        },
+        "mismatch_samples": [],
+        "mismatches": 0,
+        "orphans_detected": 0,
+        "orphans_unresolved": 0,
+        "position_mismatches": 0
+      },
+      "latest_position_audit_ts": "2026-04-29T15:59:50.390753-04:00",
+      "latest_reconciliation_alert_payload": {
+        "active_quarantine_count": 1,
+        "db_open_orders": 0,
+        "evidence": {
+          "active_quarantine": {
+            "active_count": 1,
+            "by_reason": [
+              {
+                "active_count": 1,
+                "last_observed_at": "2026-04-29T19:47:49.873575+00:00",
+                "reason": "unknown_broker_order_detected"
+              }
+            ],
+            "lookup_failed": false
+          },
+          "ghost_samples": [],
+          "ib_status_counts": {
+            "Inactive": 1
+          },
+          "mismatch_samples": [],
+          "orphan_detected_samples": [
+            {
+              "order_id": "293",
+              "order_ref": "sl:UNKNOWN_ACCOUNT|qqq_1dte_ma10_reject_0324_",
+              "order_type": "STP",
+              "perm_id": 991043598,
+              "qty": 5.0,
+              "side": "SELL",
+              "status": "Inactive",
+              "symbol": "OPT:QQQ:20260430:658:P"
+            }
+          ],
+          "orphan_unresolved_samples": []
+        },
+        "ghosts_found": 0,
+        "ib_open_orders": 1,
+        "ib_pre_submitted_orders": 0,
+        "mismatches": 0,
+        "orphans_detected": 1,
+        "orphans_found": 1,
+        "orphans_self_healed": 1,
+        "orphans_unresolved": 0
+      },
+      "latest_reconciliation_alert_ts": "2026-04-29T15:52:50.263028-04:00",
+      "ok": false
+    },
+    "uom_caller": {
+      "blocking_files": [],
+      "ok": true,
+      "summary": {
+        "caller_count": 50,
+        "platform_internal_count": 18,
+        "production_pending_count": 0,
+        "routed_by_pipeline_count": 17,
+        "test_or_tool_count": 13
+      }
+    }
+  },
+  "generated_at": "2026-04-29T21:31:37-04:00",
+  "live_cutover_candidate": false,
+  "market_day": "20260429",
+  "non_trading_day_review_previous_market_day": false,
+  "paper_clean_candidate": false,
+  "premarket_refresh_used_previous_market_day": false,
+  "recommendation": "HOLD",
+  "repo_root": ".",
+  "reports": {
+    "live_strategy_surface": "./reports/strategy_surface/live_strategy_surface_report_20260429.json",
+    "order_truth_runtime": "./reports/order_truth_runtime/order_truth_runtime_20260429.json",
+    "phase0_baseline": "./reports/strategy_surface/live_strategy_surface_freeze_baseline.json",
+    "qqq_shadow_drift": "./reports/qqq_kernel_shadow_parity/qqq_shadow_drift_report_latest.json",
+    "runtime_reconciliation": "./reports/runtime_reconciliation/runtime_reconciliation_health_20260429.json",
+    "uom_caller_surface": "./reports/orders/uom_caller_surface_20260429.json"
+  },
+  "requested_day": "20260429",
+  "requested_day_is_trading_day": true
+}

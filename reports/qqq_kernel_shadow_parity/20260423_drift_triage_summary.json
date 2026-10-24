@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-04-23T06:35:44+00:00",
+  "source_report": "reports/qqq_kernel_shadow_parity/qqq_shadow_drift_report_latest.json",
+  "recommendation": "HOLD",
+  "unresolved_diff_count": 2807,
+  "presence_only_unresolved_count": 2738,
+  "presence_only_unresolved_ratio": 0.975419,
+  "suspected_key_alignment_mismatch": true,
+  "top_unresolved_fields_sample": [
+    [
+      "__presence__",
+      200
+    ]
+  ],
+  "top_unresolved_source_reports_sample": [
+    [
+      "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      200
+    ]
+  ],
+  "notes": [
+    "shared_plane_mode readiness false-positive fixed (prefer mode accepted)",
+    "drift report shows dominance of __presence__ diffs, likely parity key/time-alignment mismatch"
+  ]
+}

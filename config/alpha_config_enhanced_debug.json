@@ -1,0 +1,62 @@
+{
+  "label_profile": "intraday_reg_5m",
+  "hpo": {
+    "symbols": ["TSLA"],
+    "start": "2025-11-05 09:30:00",
+    "end": "2025-11-06 16:00:00",
+    "interval_sec": 60,
+    "clickhouse": {
+      "host": "localhost",
+      "port": 9000,
+      "database": "trading"
+    },
+    "features_table": "trading.features_1m",
+    "strategy_path": "strategies.enhanced_model_signal_strategy.EnhancedModelSignalStrategy",
+    "strategy_base_extras": {
+      "symbols": ["TSLA", "AAPL", "NVDA"],
+      "bar_sec": 60,
+      "config_prefix": "enhanced_ml_debug",
+      "ensemble": {"mode": "weighted_avg", "models": [{"name": "ml", "weight": 1.0}]},
+      "sizing": {"mode": "confidence_scaled", "base_qty": 100, "max_qty": 1000, "lot": 10, "multiplier": 2.0},
+      "market_filter": {"conf_floor": 0.0, "max_spread_bps": 20, "min_volume": 1000, "check_after_hours": true},
+      "risk": {"take_profit_pct": 0.02, "stop_loss_pct": 0.01, "time_stop_min": 60, "partial_exit_pct": 0.5},
+      "order_type": "LMT",
+      "limit_offset_bps": 3,
+      "lot": 10
+    },
+    "initial_cash": 100000.0,
+    "commission_rate": 0.0035,
+    "slippage_rate": 0.0001,
+    "fold_generator": {"start": "2025-11-05 09:30:00", "end": "2025-11-06 16:00:00", "is_days": 0.08, "oos_days": 0.04, "gap_days": 0, "step_days": 0.08, "embargo_days": 0},
+    "model_task": "reg",
+    "model_target_col": "y",
+    "model_horizon_bars": 5,
+    "optuna_space": {
+      "model_type": {"type": "categorical", "choices": ["xgb", "lstm", "transformer", "etsformer", "itransformer"]},
+      "feature_subset": {"type": "categorical", "choices": [
+        ["vwap", "atr_14", "rsi_14", "volume"],
+        ["vwap", "atr_14", "ret_1m", "volume"],
+        ["vwap", "atr_14", "ret_5m", "volume"]
+      ]},
+      "decision": {"type": "categorical", "choices": [
+        {"mode": "quantile", "q_long": 0.7, "q_short": 0.3, "clip": 1.0},
+        {"mode": "quantile", "q_long": 0.8, "q_short": 0.2, "clip": 1.0},
+        {"mode": "threshold", "threshold_long": 0.0001, "threshold_short": -0.0001, "clip": 1.0}
+      ]},
+      "model_params": {"type": "categorical", "choices": [
+        {"n_estimators": 120, "eta": 0.1, "max_depth": 4, "subsample": 0.8, "colsample_bytree": 0.8, "early_stopping_rounds": 10},
+        {"hidden": 64, "num_layers": 1, "dropout": 0.1, "lookback": 32, "epochs": 6, "patience": 2, "batch_size": 256, "lr": 0.001},
+        {"lookback": 32, "d_model": 128, "nhead": 4, "num_layers": 3, "dim_feedforward": 256, "dropout": 0.1, "epochs": 6, "patience": 2, "batch_size": 256, "lr": 0.001},
+        {"lookback": 48, "d_model": 128, "nhead": 4, "num_layers": 3, "dim_feedforward": 256, "dropout": 0.1, "epochs": 6, "patience": 2, "batch_size": 256, "lr": 0.001}
+      ]}
+    },
+    "grid": {
+      "sizing.base_qty": {"type": "int", "low": 50, "high": 300, "step": 50},
+      "market_filter.conf_floor": {"type": "float", "low": 0.0, "high": 0.7, "step": 0.05},
+      "risk.stop_loss_pct": {"type": "float", "low": 0.005, "high": 0.02, "step": 0.0025}
+    },
+    "objective": {"metric": "sharpe", "maximize": true, "min_trades": 3, "max_mdd": 0.5},
+    "parallel": {"enabled": true, "workers": 1}
+  },
+  "optuna": {"trials": 8, "target": "is", "direction": "maximize", "sampler": "tpe", "study_name": "alpha_enhanced_ml_debug", "storage": "sqlite:///:memory:", "n_startup_trials": 2, "multivariate": false}
+}

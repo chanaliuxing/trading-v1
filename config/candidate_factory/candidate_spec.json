@@ -1,0 +1,220 @@
+{
+  "spec_version": "candidate.v1",
+  "type": "executable_strategy_candidate",
+  "hard_requirements": {
+    "must_be_executable": true,
+    "must_include_rules": [
+      "entry",
+      "exit",
+      "risk"
+    ],
+    "must_include_validation": [
+      "backtest_with_cost_slippage",
+      "forward_or_shadow_if_available",
+      "stability_min_3_time_windows",
+      "max_drawdown",
+      "losing_streak_distribution"
+    ],
+    "must_include_failure_conditions": true,
+    "must_include_applicable_regime": true
+  },
+  "candidate_schema": {
+    "candidate_id": "string",
+    "generated_at": "ISO-8601",
+    "strategy_family": "string",
+    "instrument_scope": [
+      "string"
+    ],
+    "rules": {
+      "entry": {
+        "signal_logic": "string",
+        "time_window_et": "string",
+        "filters": [
+          "string"
+        ]
+      },
+      "exit": {
+        "take_profit": "string",
+        "stop_loss": "string",
+        "time_stop": "string",
+        "forced_flatten": "string"
+      },
+      "risk": {
+        "max_trades_per_day": "number",
+        "position_sizing": "string",
+        "capital_limit_usd": "number",
+        "hard_kill_conditions": [
+          "string"
+        ]
+      }
+    },
+    "evidence": {
+      "backtest": {
+        "window": "string",
+        "trades": "number",
+        "net_pnl_usd": "number",
+        "win_rate": "number",
+        "max_drawdown_pct": "number",
+        "cost_model": {
+          "commission_bps": "number",
+          "slippage_bps_model": "string"
+        }
+      },
+      "forward_shadow": {
+        "available": "boolean",
+        "window": "string",
+        "trades": "number",
+        "net_pnl_usd": "number",
+        "parity_or_drift": "string"
+      },
+      "stability": {
+        "windows": [
+          {
+            "name": "string",
+            "trades": "number",
+            "net_pnl_usd": "number",
+            "max_drawdown_pct": "number"
+          }
+        ],
+        "min_windows_required": 3
+      },
+      "losing_streak_distribution": {
+        "p95": "number",
+        "max": "number",
+        "histogram": {
+          "1": "number",
+          "2": "number",
+          "3": "number",
+          "4_plus": "number"
+        }
+      }
+    },
+    "failure_conditions": [
+      "string"
+    ],
+    "applicable_environment": {
+      "market_regime": [
+        "trend",
+        "chop",
+        "high_vol",
+        "low_vol"
+      ],
+      "preferred": [
+        "string"
+      ],
+      "avoid": [
+        "string"
+      ]
+    },
+    "factory_score": "number",
+    "ranking": "integer",
+    "review_status": "pending_human_review"
+  },
+  "example_candidate": {
+    "candidate_id": "cand_2026-04-11_qqq_option_ma_v2_01",
+    "generated_at": "2026-04-11T16:30:00-04:00",
+    "strategy_family": "qqq_1dte_ma10_reject",
+    "instrument_scope": [
+      "QQQ 1DTE options"
+    ],
+    "rules": {
+      "entry": {
+        "signal_logic": "MA10 reject + trend continuation confirmation",
+        "time_window_et": "09:40-15:00",
+        "filters": [
+          "spread<=0.12",
+          "quote freshness <= 60s",
+          "max 4 trades/day"
+        ]
+      },
+      "exit": {
+        "take_profit": "multi-target by ATR",
+        "stop_loss": "hard stop by ATR",
+        "time_stop": "soft/hard bars timeout",
+        "forced_flatten": "15:50 ET"
+      },
+      "risk": {
+        "max_trades_per_day": 4,
+        "position_sizing": "fixed contracts with capital guard",
+        "capital_limit_usd": 20000,
+        "hard_kill_conditions": [
+          "quote heartbeat fail streak",
+          "daily loss gate hit"
+        ]
+      }
+    },
+    "evidence": {
+      "backtest": {
+        "window": "2026-02-01..2026-03-24",
+        "trades": 34,
+        "net_pnl_usd": 1219.33,
+        "win_rate": 0.7353,
+        "max_drawdown_pct": 0.0041,
+        "cost_model": {
+          "commission_bps": 2.0,
+          "slippage_bps_model": "session-aware round-trip bps"
+        }
+      },
+      "forward_shadow": {
+        "available": true,
+        "window": "2026-03-26..2026-04-06",
+        "trades": 5,
+        "net_pnl_usd": 229.40,
+        "parity_or_drift": "partial parity, shadow coverage incomplete"
+      },
+      "stability": {
+        "windows": [
+          {
+            "name": "window_A",
+            "trades": 10,
+            "net_pnl_usd": 622.09,
+            "max_drawdown_pct": 0.0015
+          },
+          {
+            "name": "window_B",
+            "trades": 11,
+            "net_pnl_usd": 301.20,
+            "max_drawdown_pct": 0.0039
+          },
+          {
+            "name": "window_C",
+            "trades": 13,
+            "net_pnl_usd": 296.04,
+            "max_drawdown_pct": 0.0041
+          }
+        ],
+        "min_windows_required": 3
+      },
+      "losing_streak_distribution": {
+        "p95": 2,
+        "max": 3,
+        "histogram": {
+          "1": 7,
+          "2": 2,
+          "3": 1,
+          "4_plus": 0
+        }
+      }
+    },
+    "failure_conditions": [
+      "intraday spread expansion > threshold",
+      "quote freshness deterioration",
+      "mean-reverting chop with false break frequency spike"
+    ],
+    "applicable_environment": {
+      "market_regime": [
+        "trend",
+        "high_vol"
+      ],
+      "preferred": [
+        "directional session with persistent flow"
+      ],
+      "avoid": [
+        "low-range chop around VWAP"
+      ]
+    },
+    "factory_score": 73.4,
+    "ranking": 1,
+    "review_status": "pending_human_review"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "hpo": {
+    "symbols": ["TSLA"],
+    "start": "2025-10-08 09:30:00",
+    "end": "2025-10-10 16:00:00",
+    "timeframe": "1m",
+    "fold_generator": {
+      "start": "2025-10-08 09:30:00",
+      "end": "2025-10-10 16:00:00",
+      "is_days": 1,
+      "oos_days": 1,
+      "gap_days": 0,
+      "step_days": 1,
+      "embargo_days": 0
+    },
+    "features_table": "trading.features_1m",
+    "clickhouse": {
+      "host": "localhost",
+      "port": 8123,
+      "database": "trading"
+    },
+    "strategy_path": "strategies.model_signal_strategy.ModelSignalStrategy",
+    "strategy_base_extras": {
+      "symbol": "TSLA",
+      "lot": 100,
+      "max_qty": 1000,
+      "conf_floor": 0.1,
+      "scale": 1.0,
+      "order_type": "MKT",
+      "limit_offset_bps": 3.0
+    },
+    "grid": {
+      "conf_floor": [0.0, 0.1, 0.2],
+      "scale": [0.5, 1.0, 1.5],
+      "order_type": ["MKT", "LMT"],
+      "limit_offset_bps": [2.0, 3.0, 5.0]
+    },
+    "objective": {
+      "metric": "sharpe",
+      "maximize": true,
+      "min_trades": 5,
+      "max_mdd": 0.5
+    },
+    "parallel": {"enabled": true, "workers": 4}
+  },
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-5"
+  },
+  "ml": {"n_points": 16},
+  "guard": {"max_combinations": 10000, "max_values_per_param": 10, "param_range_multiplier": 5.0},
+  "optuna": {"trials": 24, "target": "is", "direction": "maximize", "sampler": "tpe"}
+}

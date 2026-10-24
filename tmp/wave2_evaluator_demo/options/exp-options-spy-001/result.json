@@ -1,0 +1,86 @@
+{
+  "experiment_id": "exp-options-spy-001",
+  "cycle_id": "cycle-001",
+  "status": "completed",
+  "market": "options",
+  "strategy_family": "qqq_intraday_option",
+  "strategy_archetype": "stock_signal_option",
+  "definition_id": "QQQ_INTRADAY_OPTION_PARITY_V1",
+  "replay_strategy_id": "orb",
+  "replay_strategy_source": "adapter_fallback",
+  "underlying": "QQQ",
+  "risk_symbol": "OPT:QQQ:0DTE",
+  "audit_namespace": "qqq_intraday_option",
+  "adapter": "options_single_leg_replay",
+  "data_mode": "provided",
+  "summary_metrics": {
+    "trades": 1,
+    "exit_legs": 1,
+    "entry_count": 1,
+    "realized_pnl": -149.2000000000001,
+    "win_rate": 0.0,
+    "round_trip_win_rate": 0.0,
+    "avg_pnl_per_entry": -149.2000000000001,
+    "avg_legs_per_entry": 1.0,
+    "max_drawdown_pct": 0.0008260000000000582,
+    "final_cash": 99850.79999999999,
+    "skipped_signals": 0
+  },
+  "quality_flags": {
+    "validation_ok": true,
+    "data_ok": true,
+    "has_fills": true,
+    "enough_trades": true,
+    "passed_acceptance": true
+  },
+  "robustness": {
+    "wf_pass": true
+  },
+  "execution_reality": {
+    "modeled_slippage_bps": 384.6153846153849,
+    "spread_cost_bps": 769.2307692307699,
+    "fill_ratio": 1.0,
+    "partial_fill_rate": 0.0,
+    "latency_bucket": "10s_plus",
+    "avg_fill_latency_sec": 60.0,
+    "order_count": 1,
+    "fill_count": 2,
+    "selection_count": 1
+  },
+  "sizing": {
+    "risk_per_trade_bps": 15
+  },
+  "lineage": {
+    "family_id": "qqq_intraday_option",
+    "parent_experiment_id": null,
+    "mutation_type": "seed"
+  },
+  "artifacts": {
+    "run_dir": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001",
+    "result_json": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/result.json",
+    "summary_json": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/summary.json",
+    "trades_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/trades.csv",
+    "equity_curve_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/equity_curve.csv",
+    "orders_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/orders.csv",
+    "fills_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/fills.csv",
+    "selection_audit_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/selection_audit.csv",
+    "entry_audit_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/entry_audit.csv",
+    "bracket_audit_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/bracket_audit.csv",
+    "skips_csv": "./tmp/wave2_evaluator_demo/options/exp-options-spy-001/skips.csv"
+  },
+  "validation": {
+    "ok": true,
+    "issues": [],
+    "definition_id": "QQQ_INTRADAY_OPTION_PARITY_V1",
+    "replay_strategy_id": "orb",
+    "replay_strategy_source": "adapter_fallback",
+    "underlying": "QQQ",
+    "risk_symbol": "OPT:QQQ:0DTE",
+    "audit_namespace": "qqq_intraday_option",
+    "strategy_family": "qqq_intraday_option",
+    "strategy_archetype": "stock_signal_option"
+  },
+  "notes": [
+    "options_single_leg_replay adapter normalization"
+  ]
+}

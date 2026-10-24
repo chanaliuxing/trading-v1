@@ -1,0 +1,273 @@
+{
+  "_version": 1,
+  "tools": [
+    {
+      "id": "dry_run_feature",
+      "name": "dry_run_feature",
+      "kind": "core",
+      "description": "MUST be called before submitting a feature_build. Used to validate if the SQL expression is valid and to check for ClickHouse alias errors.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sql_expression": {
+            "type": "string",
+            "description": "ClickHouse SQL expression fragment, e.g. 'm5.close / f.open'"
+          },
+          "table_alias": {
+            "type": "string",
+            "description": "The alias used for the joined table, usually 'm5' or 'd1'",
+            "default": "m5"
+          }
+        },
+        "required": ["sql_expression"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "sql_expression": { "type": "string" },
+          "table_alias": { "type": "string" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "is_valid": { "type": "boolean" },
+          "error_message": { "type": "string" }
+        }
+      }
+    },
+    {
+      "id": "diagnose_data_integrity",
+      "name": "diagnose_data_integrity",
+      "kind": "core",
+      "description": "Check if the active feature table (features_1m_active) is properly synced with raw data. Use this when Gateway blocks trades due to 'invalid_features' or '[data_integrity]' errors. Can automatically repair sync issues.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of symbols to check (e.g., ['TSLA', 'SPY', 'NVDA'])"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date to check in YYYY-MM-DD format. Defaults to today if not specified.",
+            "default": "today"
+          },
+          "auto_fix": {
+            "type": "boolean",
+            "description": "If true, attempts to auto-seed the active table to fix synchronization issues. Default: true",
+            "default": true
+          },
+          "min_coverage": {
+            "type": "number",
+            "description": "Minimum acceptable coverage ratio (0.0-1.0). Default: 0.95 (95%)",
+            "default": 0.95
+          }
+        },
+        "required": ["symbols"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "symbols": { "type": "array", "items": { "type": "string" } },
+          "date": { "type": "string" },
+          "auto_fix": { "type": "boolean" },
+          "min_coverage": { "type": "number" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "issues": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "id": "check_feature_coverage",
+      "name": "check_feature_coverage",
+      "kind": "core",
+      "description": "Check which features in features_1m table have NULL values (air columns). Use this to diagnose which specific features are missing data and causing gateway errors.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of symbols to analyze"
+          },
+          "days": {
+            "type": "integer",
+            "description": "Number of days to look back for analysis. Default: 5",
+            "default": 5
+          },
+          "table": {
+            "type": "string",
+            "description": "Table to check: 'trading.features_1m' or 'trading.features_1m_active'. Default: features_1m_active",
+            "default": "trading.features_1m_active"
+          }
+        },
+        "required": ["symbols"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "symbols": { "type": "array", "items": { "type": "string" } },
+          "days": { "type": "integer" },
+          "table": { "type": "string" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "missing_features": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "id": "pi_propose_and_train",
+      "name": "pi_propose_and_train",
+      "kind": "pi_pipeline",
+      "description": "Propose and train a new predictive immunity model.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "model_name": {
+            "type": "string",
+            "description": "Name of the model to propose."
+          }
+        },
+        "required": ["model_name"]
+      },
+      "constraints": {
+        "max_risk_score": 0.5,
+        "max_training_rows": 1000000,
+        "max_features": 50,
+        "allowed_model_types": ["xgb", "lstm", "transformer"]
+      },
+      "safety": {
+        "always_human_review": true,
+        "label_source": "LabelRegistry",
+        "data_checks": ["TrainingGate"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "model_name": { "type": "string" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "model_id": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    {
+      "id": "skip_training",
+      "name": "skip_training",
+      "kind": "meta",
+      "description": "Skip training a model.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "model_name": {
+            "type": "string",
+            "description": "Name of the model to skip."
+          }
+        },
+        "required": ["model_name"]
+      },
+      "input_schema": "none",
+      "output": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" }
+        }
+      }
+    },
+    {
+      "id": "ask_human",
+      "name": "ask_human",
+      "kind": "meta",
+      "description": "Ask a human for guidance or decision.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "The question to ask the human."
+          }
+        },
+        "required": ["question"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "response": { "type": "string" }
+        }
+      }
+    },
+    {
+      "id": "reuse_existing_model",
+      "name": "reuse_existing_model",
+      "kind": "meta",
+      "description": "Reuse an existing model.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "model_name": {
+            "type": "string",
+            "description": "Name of the model to reuse."
+          }
+        },
+        "required": ["model_name"]
+      },
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "model_name": { "type": "string" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "model_id": { "type": "string" }
+        }
+      }
+    }
+  ],
+  "safety_rules": {
+    "no_arbitrary_sql": "Arbitrary SQL queries are forbidden.",
+    "no_arbitrary_labels": "Arbitrary labels are forbidden for model training.",
+    "no_system_changes": "System changes (e.g., file system, external APIs) outside of explicit tool calls are forbidden.",
+    "audit_trail_required": "All critical actions require an audit trail."
+  },
+  "action_precedence": {
+    "order": [
+      {
+        "actions": ["diagnose_data_integrity", "check_feature_coverage"],
+        "priority": 1
+      }
+    ]
+  },
+  "validation_layers": {
+    "layer_1": {
+      "rules": ["no_arbitrary_sql"],
+      "tools": ["dry_run_feature"],
+      "Pydantic": true
+    }
+  }
+}

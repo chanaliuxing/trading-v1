@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.trading.run_system.0925</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>./scripts/run_system_autostart.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>.</string>
+
+    <!-- Start at 09:25 local time (system timezone). -->
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>9</integer>
+      <key>Minute</key>
+      <integer>25</integer>
+    </dict>
+
+    <!-- If the process dies after startup, restart it. -->
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Prevent rapid restart loops. -->
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>HOME</key>
+      <string>/workspace</string>
+      <key>PATH</key>
+      <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+      <key>REPO_DIR</key>
+      <string>.</string>
+      <key>LOG_DIR</key>
+      <string>/workspace/Library/Logs/trading</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/workspace/Library/Logs/trading/launchd_run_system.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/workspace/Library/Logs/trading/launchd_run_system.err.log</string>
+  </dict>
+</plist>

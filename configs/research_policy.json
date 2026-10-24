@@ -1,0 +1,51 @@
+{
+  "version": "3.0.0",
+  "objectives": {
+    "trading": {
+      "weight": 0.6,
+      "risk_aversion": 0.8
+    },
+    "desktop": {
+      "weight": 0.3,
+      "risk_aversion": 0.3
+    },
+    "legal": {
+      "weight": 0.1,
+      "risk_aversion": 0.9
+    }
+  },
+  "experiment_budget": {
+    "daily_compute_hours": 12.0,
+    "max_parallel_experiments": 5,
+    "exploration_ratio": 0.2
+  },
+  "strategy_focus_rules": {
+    "min_data_points_for_eval": 50,
+    "min_oos_sharpe_for_scaleup": 0.8
+  },
+  "safety_limits": {
+    "max_unreviewed_patches_per_day": 3,
+    "forbidden_targets": [
+      "kernel:",
+      "execution:",
+      "risk:"
+    ]
+  },
+  "auto_evolution": {
+    "allow_kinds": [
+      "tool",
+      "data_pipeline",
+      "module"
+    ],
+    "require_human_review_for": [
+      "data_pipeline",
+      "module:ml_train_core"
+    ],
+    "max_auto_patches_per_day": 1,
+    "max_files_touched": 3
+  },
+  "governance": {
+    "auto_merge_threshold": 0.96
+  },
+  "other_fields": {}
+}

@@ -1,0 +1,155 @@
+{
+  "_comment": "Feature Registry - canonical catalog of features that AI Brain is encouraged to use. This is NOT a hard whitelist yet.",
+  "version": "1.0",
+  "features": {
+    "open": {
+      "kind": "native",
+      "freq": ["1m"],
+      "base_cols": ["open"],
+      "tags": ["price", "ohlc", "base"],
+      "desc": "Bar open price",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "high": {
+      "kind": "native",
+      "freq": ["1m"],
+      "base_cols": ["high"],
+      "tags": ["price", "ohlc", "base"],
+      "desc": "Bar high price",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "low": {
+      "kind": "native",
+      "freq": ["1m"],
+      "base_cols": ["low"],
+      "tags": ["price", "ohlc", "base"],
+      "desc": "Bar low price",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "close": {
+      "kind": "native",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["price", "ohlc", "base"],
+      "desc": "Bar close price",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "volume": {
+      "kind": "native",
+      "freq": ["1m"],
+      "base_cols": ["volume"],
+      "tags": ["volume", "base"],
+      "desc": "Bar traded volume",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+
+    "ret_1b": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["return", "short_horizon"],
+      "desc": "1 bar simple return, computed in Python",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "ret_5b": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["return", "short_horizon"],
+      "desc": "5 bar simple return, computed in Python",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "ret_10b": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["return", "medium_horizon"],
+      "desc": "10 bar simple return, computed in Python",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+
+    "vol_20b": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["volatility", "rolling"],
+      "desc": "20 bar rolling std of ret_1b",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+
+    "ma_20_close": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["trend", "moving_average"],
+      "desc": "20 bar moving average of close",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "ma_50_close": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["trend", "moving_average"],
+      "desc": "50 bar moving average of close",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "ma_200_close": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["close"],
+      "tags": ["trend", "moving_average"],
+      "desc": "200 bar moving average of close",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+
+    "vol_ma_20": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["volume"],
+      "tags": ["volume", "moving_average"],
+      "desc": "20 bar moving average of volume",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "rvol_20": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["volume"],
+      "tags": ["volume", "rvol"],
+      "desc": "Relative volume: volume / vol_ma_20",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+
+    "minute_of_day": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["ts"],
+      "tags": ["time", "session"],
+      "desc": "Minutes since midnight",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    },
+    "day_of_week": {
+      "kind": "python",
+      "freq": ["1m"],
+      "base_cols": ["ts"],
+      "tags": ["time", "session"],
+      "desc": "Day of week, Monday=0",
+      "leak_safe": true,
+      "default_exposed_to_llm": true
+    }
+  }
+}

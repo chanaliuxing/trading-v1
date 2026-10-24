@@ -1,0 +1,28 @@
+{
+  "blockers": [],
+  "day": "20260423",
+  "generated_at": "2026-04-23T09:37:46-04:00",
+  "parity_smoke": {
+    "diff_total": 0,
+    "legacy_off_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260423_qqq_kernel_shadow_legacy_off_001.jsonl",
+    "legacy_on_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260423_qqq_kernel_shadow_legacy_on_001.jsonl",
+    "match_ratio": 1.0,
+    "ok": true,
+    "output": "./reports/qqq_kernel_shadow_parity/20260423_preopen_parity_smoke.json",
+    "recommendation": "PASS"
+  },
+  "postclose_refresh": {
+    "blockers": [],
+    "output": "./reports/qqq_kernel_shadow_parity/20260423_postclose_report.json",
+    "recommendation": "CONTINUE_SHADOW"
+  },
+  "readiness": {
+    "failed_checks": [],
+    "ok": true
+  },
+  "recommendation": "PASS",
+  "shadow_status": {
+    "qqq_kernel_shadow_legacy_off_001": "true",
+    "qqq_kernel_shadow_legacy_on_001": "true"
+  }
+}

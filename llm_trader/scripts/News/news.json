@@ -1,0 +1,66 @@
+[
+  {
+    "ticker": "TSLA",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "mixed",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "quarters",
+    "key_reasons": [
+      "薪酬方案通过可能稳定管理层",
+      "潜在股权稀释风险存在",
+      "未明确披露薪酬方案财务影响细节"
+    ],
+    "signal_quality": "medium",
+    "notes": "需进一步评估股权激励具体条款"
+  },
+  {
+    "ticker": "TSLA",
+    "subject_match": "exact",
+    "event_type": "rating_down",
+    "direction": "bearish",
+    "strength_0to3": 2,
+    "forward_looking": true,
+    "time_horizon": "days",
+    "key_reasons": [
+      "明确提及评级下调",
+      "涉及公司治理风险",
+      "分析师报告具可验证性"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  {
+    "ticker": "NVDA",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "bearish",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "quarters",
+    "key_reasons": [
+      "联邦AI补贴政策变化影响行业环境",
+      "可能增加自主研发成本压力",
+      "政策声明来自前政府官员需验证时效性"
+    ],
+    "signal_quality": "medium",
+    "notes": "需区分现行政策与历史言论"
+  },
+  {
+    "ticker": "NVDA",
+    "subject_match": "exact",
+    "event_type": "exec_exit",
+    "direction": "bearish",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "days",
+    "key_reasons": [
+      "内部人士减持披露",
+      "可能引发市场信心波动",
+      "SEC备案文件可验证"
+    ],
+    "signal_quality": "high",
+    "notes": "需区分例行减持与异常行为"
+  }
+]

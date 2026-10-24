@@ -1,0 +1,22 @@
+{
+  "audit_date": "2026-04-24",
+  "audit_dir": "./runtime/audit/2026-04-24",
+  "audit_dir_exists": true,
+  "blocked_reason_counts": {},
+  "date": "2026-04-24",
+  "false_block_removed": false,
+  "legacy_open_orders_block_count": 0,
+  "legitimate_block_observed": false,
+  "legitimate_block_reason_counts": {},
+  "ok": false,
+  "position_sync_flat_count": 0,
+  "reasons": [
+    "strategy_runtime_evidence_missing"
+  ],
+  "recommendation": "HOLD",
+  "requested_day": "20260424",
+  "rows_scanned": 16245,
+  "strategy_id": "qqq_intraday_001",
+  "strategy_row_count": 0,
+  "used_previous_completed_day": false
+}

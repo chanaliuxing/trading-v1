@@ -1,0 +1,122 @@
+{
+  "analysis": "通过分析试验结果，发现综合特征组合（comprehensive_v1）表现最佳，夏普比率1.45。新增特征工程方向：1) 在综合版本中增加波动率调整动量特征（feat_momo_vol_ratio）以提升泛化性；2) 引入有效价差滚动平滑（feat_effspread_roll10）捕捉流动性持续性；3) 增加vwap偏离与成交量的交互特征（feat_vwap_vol_interact）捕捉量价共振效应。删除过时的momentum_v1以简化空间。",
+  "feature_programs_patch": {
+    "add_or_update": {
+      "comprehensive_v2": {
+        "description": "增强版综合特征：增加波动率调整动量、流动性平滑及量价交互特征",
+        "steps": [
+          {
+            "name": "feat_vwap_dev",
+            "op": "ratio_minus_1",
+            "num": "close",
+            "den": "vwap",
+            "eps": 1e-06
+          },
+          {
+            "name": "feat_ret1m_over_atr",
+            "op": "ratio",
+            "num": "ret_1",
+            "den": "atr_14",
+            "eps": 1e-06
+          },
+          {
+            "name": "feat_log_volume",
+            "op": "log1p",
+            "col": "volume"
+          },
+          {
+            "name": "feat_ret_1m_roll_10",
+            "op": "rolling_sum",
+            "col": "ret_1",
+            "window_bars": 10,
+            "min_periods": 3,
+            "per_symbol": true
+          },
+          {
+            "name": "feat_price_impact",
+            "op": "price_impact_hl",
+            "per_symbol": true
+          },
+          {
+            "name": "feat_effective_spread",
+            "op": "effective_spread",
+            "eps": 1e-06
+          },
+          {
+            "name": "feat_vol_20",
+            "op": "rolling_std",
+            "col": "ret_1",
+            "window_bars": 20,
+            "min_periods": 5,
+            "per_symbol": true
+          },
+          {
+            "name": "feat_momo_vol_ratio",
+            "op": "ratio",
+            "num": "feat_ret_1m_roll_10",
+            "den": "feat_vol_20",
+            "eps": 1e-06
+          },
+          {
+            "name": "feat_effspread_roll10",
+            "op": "rolling_mean",
+            "col": "feat_effective_spread",
+            "window_bars": 10,
+            "min_periods": 3,
+            "per_symbol": true
+          },
+          {
+            "name": "feat_vwap_vol_interact",
+            "op": "product",
+            "col1": "feat_vwap_dev",
+            "col2": "feat_log_volume"
+          }
+        ]
+      }
+    },
+    "delete": [
+      "momentum_v1"
+    ]
+  },
+  "alpha_hpo_patch": {
+    "feature_program_id_choices": [
+      "none",
+      "baseline_v1",
+      "comprehensive_v1",
+      "comprehensive_v2",
+      "momentum_v2",
+      "volatility_v1"
+    ],
+    "feature_subset_choices": [
+      [
+        "ret_1",
+        "atr_14",
+        "feat_momo_vol_ratio",
+        "feat_effspread_roll10"
+      ],
+      [
+        "ret_1",
+        "vwap",
+        "feat_vwap_dev",
+        "feat_ret1m_over_atr",
+        "feat_vwap_vol_interact"
+      ],
+      [
+        "feat_price_impact",
+        "feat_effective_spread",
+        "feat_vol_20",
+        "atr_14"
+      ],
+      [
+        "ret_1",
+        "feat_momo_vol_ratio",
+        "feat_effspread_roll10",
+        "feat_vwap_vol_interact"
+      ]
+    ],
+    "model_scale_mode_choices": [
+      "zscore",
+      "robust"
+    ]
+  }
+}

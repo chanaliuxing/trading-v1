@@ -1,0 +1,73 @@
+{
+  "audit_dir": "./runtime/audit/2026-05-05",
+  "blockers": [],
+  "day": "20260505",
+  "financial_snapshot": {
+    "age_sec": 209.719517,
+    "available": true,
+    "available_funds": 1047356.71,
+    "blockers": [],
+    "buying_power": 4189426.82,
+    "gross_position_value": 0.0,
+    "net_liquidation": 1047625.03,
+    "ok": true,
+    "realized_pnl": 0.0,
+    "table": "ibkr_account_realtime",
+    "total_cash": 1047530.01,
+    "ts_ny": "2026-05-05T16:16:31-04:00",
+    "unrealized_pnl": 0.0
+  },
+  "generated_at": "2026-05-05T16:20:00-04:00",
+  "latest_position_audit_age_sec": 207.673575,
+  "latest_position_audit_payload": {
+    "active_quarantine_count": 0,
+    "db_open_count": 1,
+    "ghosts": 0,
+    "ib_open_count": 1,
+    "ib_positions": {},
+    "ib_pre_submitted": 0,
+    "ledger_positions": {
+      "OPT:NVDA:20260506:197.5:C": 0.0,
+      "OPT:NVDA:20260506:197.5:P": 0.0,
+      "SOXL": 0.0
+    },
+    "mismatch_samples": [],
+    "mismatches": 0,
+    "orphans_detected": 0,
+    "orphans_unresolved": 0,
+    "position_mismatches": 0
+  },
+  "latest_position_audit_ts": "2026-05-05T16:16:33.045942-04:00",
+  "latest_reconciliation_alert_payload": {
+    "active_quarantine_count": 1,
+    "db_open_orders": 0,
+    "evidence": {
+      "active_quarantine": {
+        "active_count": 1,
+        "by_reason": [
+          {
+            "active_count": 1,
+            "last_observed_at": "2026-05-05T18:31:32.120142+00:00",
+            "reason": "db_persist_submitted_failed"
+          }
+        ],
+        "lookup_failed": false
+      },
+      "ghost_samples": [],
+      "ib_status_counts": {},
+      "mismatch_samples": [],
+      "orphan_detected_samples": [],
+      "orphan_unresolved_samples": []
+    },
+    "ghosts_found": 0,
+    "ib_open_orders": 0,
+    "ib_pre_submitted_orders": 0,
+    "mismatches": 0,
+    "orphans_detected": 0,
+    "orphans_found": 0,
+    "orphans_self_healed": 0,
+    "orphans_unresolved": 0
+  },
+  "latest_reconciliation_alert_ts": "2026-05-05T14:41:32.255918-04:00",
+  "ok": true
+}

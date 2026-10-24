@@ -1,0 +1,83 @@
+{
+  "blockers": [
+    "qqq_kernel_shadow_legacy_on_001_not_enabled",
+    "qqq_kernel_shadow_legacy_on_001_dry_run_not_true",
+    "qqq_kernel_shadow_legacy_on_001_shadow_only_not_true",
+    "qqq_kernel_shadow_legacy_off_001_not_enabled",
+    "qqq_kernel_shadow_legacy_off_001_dry_run_not_true",
+    "qqq_kernel_shadow_legacy_off_001_shadow_only_not_true",
+    "no_entry_candidate_today"
+  ],
+  "config": {
+    "qqq_intraday_001": {
+      "enabled": true,
+      "present": true
+    },
+    "shadows": {
+      "qqq_kernel_shadow_legacy_off_001": {
+        "dry_run": false,
+        "enabled": false,
+        "policy_id": null,
+        "present": false,
+        "shadow_legacy_mode": null,
+        "shadow_only": false,
+        "shadow_origin_strategy_id": null,
+        "shared_underlying_read_mode": null
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "dry_run": false,
+        "enabled": false,
+        "policy_id": null,
+        "present": false,
+        "shadow_legacy_mode": null,
+        "shadow_only": false,
+        "shadow_origin_strategy_id": null,
+        "shared_underlying_read_mode": null
+      }
+    }
+  },
+  "day": "20260506",
+  "generated_at": "2026-05-07T13:20:05Z",
+  "parity_reports": [],
+  "preopen_gate": {
+    "ok": null,
+    "present": false,
+    "recommendation": null
+  },
+  "readiness": {
+    "failed_checks": null,
+    "ok": null,
+    "present": false,
+    "recommendation": null
+  },
+  "recommendation": "HOLD",
+  "summary": {
+    "day_is_trading_day": true,
+    "parity_report_count": 0,
+    "shadow_enabled_count": 0,
+    "total_diff_count": 0
+  },
+  "trace_summary": {
+    "entry_rows": 0,
+    "evaluation_rows": 17300,
+    "present": true,
+    "rows_total": 17300,
+    "strategy_counts": {
+      "qqq_intraday_001": {
+        "entry": 0,
+        "evaluation": 195,
+        "rows": 195
+      },
+      "qqq_kernel_legacy_off_001": {
+        "entry": 0,
+        "evaluation": 8552,
+        "rows": 8552
+      },
+      "qqq_kernel_legacy_on_001": {
+        "entry": 0,
+        "evaluation": 8553,
+        "rows": 8553
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "day": "2026-05-12",
+  "diag_path": "runtime/state/qqq_intraday_diag_qqq_intraday_001.jsonl",
+  "mismatch_count": 1,
+  "mismatches": [
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": true,
+        "decision": "ENTRY_ALLOWED",
+        "instrument": "SQQQ",
+        "reason": "entry_allowed",
+        "side": "SHORT"
+      },
+      "ts_iso": "2026-05-12T10:28:00.469076-04:00"
+    }
+  ],
+  "ok": true,
+  "parity": {
+    "allow_match_ratio": 1.0,
+    "exec_symbol_match_ratio": 1.0,
+    "reason_match_ratio": 0.988636,
+    "rows": 88,
+    "side_match_ratio": 1.0
+  },
+  "rows": 88,
+  "strategy_id": "qqq_intraday_plugin_001"
+}

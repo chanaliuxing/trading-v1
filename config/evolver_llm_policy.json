@@ -1,0 +1,7 @@
+{
+  "base_prompt": "You are a senior engineer. Given the skill spec and tests, propose a minimal patch that preserves behavior and improves performance/clarity. Respond with unified diff only.",
+  "models": {
+    "primary": "qwen2.5vl:latest",
+    "secondary": "my-deepseek-uncensored:latest"
+  }
+}

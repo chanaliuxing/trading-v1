@@ -1,0 +1,102 @@
+{
+  "blockers": [
+    "qqq_observability_not_ready",
+    "run_system_down"
+  ],
+  "day": "20260423",
+  "generated_at": "2026-04-23T09:37:20-04:00",
+  "market_data": {
+    "qqq_age_sec": 38.656747,
+    "qqq_last_present": true,
+    "qqq_vwap_present": true,
+    "sqqq_age_sec": 38.656747,
+    "sqqq_last_present": true,
+    "tqqq_age_sec": 38.656747,
+    "tqqq_last_present": true
+  },
+  "phase": "open",
+  "qqq_observability": {
+    "age_sec": 19.892691,
+    "exists": true,
+    "file_age_sec": 19.881826162338257,
+    "missing_required": [
+      "QQQ:last_stale"
+    ],
+    "path": "./runtime/state/qqq_intraday_observability_qqq_intraday_001.json",
+    "ready": false,
+    "ts_now_et": "2026-04-23T09:37:00.656747-04:00"
+  },
+  "qqq_state": {
+    "age_sec": 424.010478,
+    "exists": true,
+    "file_age_sec": 424.0094726085663,
+    "path": "./runtime/state/qqq_intraday_qqq_intraday_001.json",
+    "requires_heartbeat": false,
+    "updated_at": "2026-04-23T09:30:16.538960-04:00",
+    "updated_at_semantics": "event_driven_state_snapshot"
+  },
+  "recommendation": "AUTO_REMEDIATE",
+  "remediation_actions": [
+    "start_run_system"
+  ],
+  "run_system": {
+    "lock_path": "./runtime/locks/run_system.lock",
+    "lock_pid": 82896,
+    "lock_pid_alive": false,
+    "process_alive": false,
+    "process_pids": []
+  },
+  "trace_coverage": {
+    "day": "20260423",
+    "expected_strategy_ids": [
+      "qqq_intraday_001",
+      "qqq_kernel_shadow_legacy_on_001",
+      "qqq_kernel_shadow_legacy_off_001"
+    ],
+    "file_count": 3,
+    "files": [
+      {
+        "path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260423.jsonl",
+        "row_count": 8,
+        "strategy_ids": [
+          "qqq_intraday_001"
+        ]
+      },
+      {
+        "path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260423_qqq_kernel_shadow_legacy_off_001.jsonl",
+        "row_count": 5509,
+        "strategy_ids": [
+          "qqq_kernel_shadow_legacy_off_001"
+        ]
+      },
+      {
+        "path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260423_qqq_kernel_shadow_legacy_on_001.jsonl",
+        "row_count": 5509,
+        "strategy_ids": [
+          "qqq_kernel_shadow_legacy_on_001"
+        ]
+      }
+    ],
+    "generated_at": "2026-04-23T09:37:20-04:00",
+    "legacy_writer_present": true,
+    "missing_strategy_ids": [],
+    "recommendation": "PASS",
+    "strategy_counts": {
+      "qqq_intraday_001": {
+        "entry": 0,
+        "evaluation": 8,
+        "rows": 8
+      },
+      "qqq_kernel_shadow_legacy_off_001": {
+        "entry": 0,
+        "evaluation": 5509,
+        "rows": 5509
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "entry": 0,
+        "evaluation": 5509,
+        "rows": 5509
+      }
+    }
+  }
+}

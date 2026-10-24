@@ -1,0 +1,16 @@
+{
+  "artifact_paths": {
+    "reports": "reports",
+    "runtime_audit": "runtime/audit",
+    "runtime_readiness": "runtime/readiness"
+  },
+  "broker_connection_policy": "live_broker_disabled_mocked",
+  "env": {
+    "TRADING_TEST_ALLOW_LIVE_IBKR": "0"
+  },
+  "generated_at": "2026-05-12T10:04:53.718517-04:00",
+  "mode": "SIMULATED_SHADOW",
+  "order_mutation_policy": "real_order_cancel_modify_disabled",
+  "reconciliation_mode": "report_only",
+  "verdict": "PASS"
+}

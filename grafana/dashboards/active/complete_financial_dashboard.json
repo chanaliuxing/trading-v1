@@ -1,0 +1,1064 @@
+{
+  "uid": "complete-financial-dashboard",
+  "title": "Complete Financial Dashboard - IBKR Real Data",
+  "description": "\u5b8c\u6574\u8d22\u52a1Dashboard - \u57fa\u4e8echeck_ibkr_acc.py\u7684\u6240\u6709\u771f\u5b9eIBKR\u6570\u636e",
+  "tags": [
+    "financial",
+    "ibkr",
+    "complete",
+    "trading"
+  ],
+  "timezone": "America/New_York",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "editable": true,
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "SELECT DISTINCT symbol FROM llm.llm_fills WHERE symbol != '' ORDER BY symbol",
+        "refresh": 2,
+        "includeAll": true,
+        "allValue": "%",
+        "current": {
+          "text": "All",
+          "value": "%"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "\ud83d\udcbc Account Overview (\u8d26\u6237\u603b\u89c8) - From IBKR",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "id": 1
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcb0 Net Liquidation (\u51c0\u8d44\u4ea7)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 6,
+        "h": 6
+      },
+      "id": 2,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    net_liquidation\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 200000,
+                "color": "yellow"
+              },
+              {
+                "value": 230000,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "graphMode": "area",
+        "colorMode": "background",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcb5 Total Cash (\u73b0\u91d1)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 1,
+        "w": 4,
+        "h": 3
+      },
+      "id": 3,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    total_cash\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udce6 Position Value (\u6301\u4ed3\u5e02\u503c)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 1,
+        "w": 4,
+        "h": 3
+      },
+      "id": 4,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    gross_position_value as position_value\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcc8 Unrealized P&L (\u6d6e\u52a8\u76c8\u4e8f)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 1,
+        "w": 5,
+        "h": 3
+      },
+      "id": 5,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    unrealized_pnl as total_unrealized\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": -500,
+                "color": "red"
+              },
+              {
+                "value": 0,
+                "color": "yellow"
+              },
+              {
+                "value": 500,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcaa Buying Power (\u8d2d\u4e70\u529b)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 1,
+        "w": 5,
+        "h": 3
+      },
+      "id": 6,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    buying_power\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 500000,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\u2705 Realized P&L Today (\u5df2\u5b9e\u73b0\u76c8\u4e8f)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 4,
+        "w": 4,
+        "h": 3
+      },
+      "id": 7,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    realized_pnl as total_realized\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": -100,
+                "color": "red"
+              },
+              {
+                "value": 0,
+                "color": "yellow"
+              },
+              {
+                "value": 100,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcb8 Available Funds (\u53ef\u7528\u8d44\u91d1)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 4,
+        "w": 4,
+        "h": 3
+      },
+      "id": 8,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    available_funds\nFROM llm.ibkr_account_realtime\nORDER BY ts_ny DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcca Open Positions (\u6301\u4ed3\u6570)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 4,
+        "w": 5,
+        "h": 3
+      },
+      "id": 9,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    count(DISTINCT symbol) as position_count\nFROM llm.ibkr_positions_realtime\nWHERE ts_ny = (SELECT max(ts_ny) FROM llm.ibkr_positions_realtime)\n  AND position > 0\n  AND symbol LIKE '${symbol}'\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcb8 Total Fees Today (\u4eca\u65e5\u624b\u7eed\u8d39)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 4,
+        "w": 5,
+        "h": 3
+      },
+      "id": 10,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    sum(fee) as total_fees\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 5,
+                "color": "yellow"
+              },
+              {
+                "value": 10,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udce6 Open Positions (\u6301\u4ed3\u8be6\u60c5) - Real-time from IBKR",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 24,
+        "h": 1
+      },
+      "id": 11
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udccb Current Positions (\u5f53\u524d\u6301\u4ed3\u660e\u7ec6)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 14,
+        "h": 8
+      },
+      "id": 12,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nWITH latest_positions AS (\n    SELECT\n        symbol,\n        position as shares,\n        avg_cost,\n        market_value,\n        realized_pnl,\n        ts_ny\n    FROM llm.ibkr_positions_realtime\n    WHERE ts_ny = (SELECT max(ts_ny) FROM llm.ibkr_positions_realtime)\n      AND position > 0\n      AND symbol LIKE '${symbol}'\n),\nlatest_account AS (\n    SELECT\n        unrealized_pnl as total_unrealized_pnl,\n        gross_position_value as total_position_value\n    FROM llm.ibkr_account_realtime\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    p.symbol,\n    p.shares,\n    p.avg_cost,\n    p.avg_cost + (a.total_unrealized_pnl / a.total_position_value * p.market_value / p.shares) as current_price,\n    p.market_value + (a.total_unrealized_pnl / a.total_position_value * p.market_value) as adjusted_market_value,\n    (a.total_unrealized_pnl / a.total_position_value * p.market_value) as unrealized_pnl,\n    (a.total_unrealized_pnl / a.total_position_value * 100) as pnl_pct,\n    p.realized_pnl,\n    p.ts_ny as last_update\nFROM latest_positions p\nCROSS JOIN latest_account a\nORDER BY p.market_value DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "symbol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Symbol"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "shares"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Shares"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg_cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Avg Cost"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "current_price"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Current"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "adjusted_market_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Market Value"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unrealized_pnl"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Unrealized P&L"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pnl_pct"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "P&L %"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "realized_pnl"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Realized P&L"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "last_update"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Last Update"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Market Value",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83e\udd67 Position Distribution by Value (\u5e02\u503c\u5206\u5e03)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 8,
+        "w": 5,
+        "h": 8
+      },
+      "id": 13,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nWITH latest_positions AS (\n    SELECT symbol, market_value\n    FROM llm.ibkr_positions_realtime\n    WHERE ts_ny = (SELECT max(ts_ny) FROM llm.ibkr_positions_realtime)\n      AND position > 0\n      AND symbol LIKE '${symbol}'\n),\nlatest_account AS (\n    SELECT\n        unrealized_pnl as total_unrealized_pnl,\n        gross_position_value as total_position_value\n    FROM llm.ibkr_account_realtime\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    p.symbol,\n    p.market_value + (a.total_unrealized_pnl / a.total_position_value * p.market_value) as value\nFROM latest_positions p\nCROSS JOIN latest_account a\nORDER BY value DESC\n"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "pieType": "donut"
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "\ud83d\udcca Unrealized P&L by Symbol (\u5404\u80a1\u7968\u6d6e\u76c8\u6d6e\u4e8f)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 8,
+        "w": 5,
+        "h": 8
+      },
+      "id": 14,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nWITH latest_positions AS (\n    SELECT symbol, market_value\n    FROM llm.ibkr_positions_realtime\n    WHERE ts_ny = (SELECT max(ts_ny) FROM llm.ibkr_positions_realtime)\n      AND position > 0\n      AND symbol LIKE '${symbol}'\n),\nlatest_account AS (\n    SELECT\n        unrealized_pnl as total_unrealized_pnl,\n        gross_position_value as total_position_value\n    FROM llm.ibkr_account_realtime\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    p.symbol,\n    (a.total_unrealized_pnl / a.total_position_value * p.market_value) as unrealized\nFROM latest_positions p\nCROSS JOIN latest_account a\nORDER BY unrealized DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": -100,
+                "color": "red"
+              },
+              {
+                "value": 0,
+                "color": "yellow"
+              },
+              {
+                "value": 100,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcc8 Today's Trading Activity (\u4eca\u65e5\u4ea4\u6613\u6d3b\u52a8)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 24,
+        "h": 1
+      },
+      "id": 15
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udccb Today's Executions (\u4eca\u65e5\u6210\u4ea4\u660e\u7ec6)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 16,
+        "h": 8
+      },
+      "id": 16,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    ts_ny,\n    symbol,\n    qty,\n    price,\n    qty * price as total_value,\n    fee,\n    source,\n    order_id_internal\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nORDER BY ts_ny DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ts_ny"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "symbol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Symbol"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "qty"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Qty"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "price"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Price"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Value"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fee"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fee"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Source"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "order_id_internal"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Order ID"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "\ud83d\udcca Fill Volume by Symbol (\u5404\u80a1\u7968\u6210\u4ea4\u91cf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 17,
+        "w": 8,
+        "h": 4
+      },
+      "id": 17,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    symbol,\n    sum(qty * price) as volume\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nGROUP BY symbol\nORDER BY volume DESC\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "\u23f1\ufe0f Fill Timeline (\u6210\u4ea4\u65f6\u95f4\u7ebf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 21,
+        "w": 8,
+        "h": 4
+      },
+      "id": 18,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    symbol,\n    qty\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nORDER BY ts_ny\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "points",
+            "pointSize": 10,
+            "showPoints": "always"
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcc8 Equity Curve & Performance (\u6743\u76ca\u66f2\u7ebf\u4e0e\u8868\u73b0)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 24,
+        "h": 1
+      },
+      "id": 19
+    },
+    {
+      "type": "timeseries",
+      "title": "\ud83d\udcc8 Equity Curve Today (\u4eca\u65e5\u6743\u76ca\u66f2\u7ebf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 26,
+        "w": 18,
+        "h": 8
+      },
+      "id": 20,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    equity\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\nORDER BY ts_ny\n"
+        },
+        {
+          "refId": "B",
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    cash\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\nORDER BY ts_ny\n"
+        },
+        {
+          "refId": "C",
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    gross_exposure as position_value\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\nORDER BY ts_ny\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Equity"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 25
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cash"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Position Value"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "\u26a0\ufe0f Drawdown (\u56de\u64a4)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 26,
+        "w": 6,
+        "h": 8
+      },
+      "id": 21,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    anyLast(drawdown_to_date) as current_drawdown\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 0.02,
+                "color": "yellow"
+              },
+              {
+                "value": 0.05,
+                "color": "orange"
+              },
+              {
+                "value": 0.1,
+                "color": "red"
+              }
+            ]
+          },
+          "max": 0.15,
+          "min": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "symbols": ["TSLA"],
+  "timeframe": "1m",
+  "features_table": "trading.features_1m",
+  "clickhouse": {
+    "host": "localhost",
+    "port": 8123,
+    "username": "default",
+    "password": "",
+    "database": "trading"
+  },
+  "strategy_path": "strategies.tsla_v7_2.TSLASimplifiedV7_2",
+  "strategy_base_extras": {},
+  "broker": {
+    "initial_cash": 100000,
+    "commission_per_share": 0.005,
+    "commission_min": 1.0,
+    "slippage_bps": 1.0,
+    "fill_ref": "open"
+  },
+  "grid": {
+    "A1_thr_sigma": [0.008, 0.010],
+    "A2_grid_g": [1.0],
+    "k_atr": [2.0]
+  },
+  "folds": [{
+    "fold_id": 1,
+    "is_start": "2025-09-16 09:30:00",
+    "is_end": "2025-09-20 16:00:00",
+    "oos_start": "2025-09-23 09:30:00",
+    "oos_end": "2025-09-25 16:00:00",
+    "purge_days": 0,
+    "embargo_days": 0
+  }],
+  "objective": {
+    "metric": "sharpe",
+    "maximize": true,
+    "min_trades": 0
+  }
+}

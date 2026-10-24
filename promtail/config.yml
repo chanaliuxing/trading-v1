@@ -1,0 +1,57 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: trader
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: trader
+          __path__: /var/log/trader/*.log
+    pipeline_stages:
+      - json:
+          expressions:
+            level: level
+            event: event
+            symbol: symbol
+            strategy: strategy_id
+            run: run_id
+            reason: reason
+            trace_id: trace_id
+            component: component
+            service: service
+            app: app
+      - labels:
+          level:
+          symbol:
+          strategy:
+          run:
+          component:
+          service:
+          app:
+      - replace:
+          expression: '^(|unknown|null)$'
+          replacement: 'na'
+          source: component
+      - replace:
+          expression: '^(|unknown|null)$'
+          replacement: 'na'
+          source: service
+      - replace:
+          expression: '^(|unknown|null)$'
+          replacement: 'na'
+          source: app
+      - match:
+          selector: '{app="run_system"}'
+          stages:
+            - labeldrop:
+                - order_id
+                - request_id

@@ -1,0 +1,72 @@
+{
+  "blockers": [
+    "no_entry_candidate_today"
+  ],
+  "config": {
+    "qqq_intraday_001": {
+      "enabled": true,
+      "present": true
+    },
+    "shadows": {
+      "qqq_kernel_shadow_legacy_off_001": {
+        "dry_run": true,
+        "enabled": true,
+        "policy_id": "qqq_intraday_policy_v1",
+        "present": true,
+        "shadow_legacy_mode": "legacy_off",
+        "shadow_only": true,
+        "shadow_origin_strategy_id": "qqq_intraday_001",
+        "shared_underlying_read_mode": "prefer"
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "dry_run": true,
+        "enabled": true,
+        "policy_id": "qqq_intraday_policy_v1",
+        "present": true,
+        "shadow_legacy_mode": "legacy_on",
+        "shadow_only": true,
+        "shadow_origin_strategy_id": "qqq_intraday_001",
+        "shared_underlying_read_mode": "prefer"
+      }
+    }
+  },
+  "day": "20260430",
+  "generated_at": "2026-05-01T13:20:06Z",
+  "parity_reports": [],
+  "preopen_gate": {
+    "ok": null,
+    "present": false,
+    "recommendation": null
+  },
+  "readiness": {
+    "failed_checks": null,
+    "ok": null,
+    "present": false,
+    "recommendation": null
+  },
+  "recommendation": "HOLD",
+  "summary": {
+    "day_is_trading_day": true,
+    "parity_report_count": 0,
+    "shadow_enabled_count": 2,
+    "total_diff_count": 0
+  },
+  "trace_summary": {
+    "entry_rows": 0,
+    "evaluation_rows": 5782,
+    "present": true,
+    "rows_total": 5782,
+    "strategy_counts": {
+      "qqq_kernel_shadow_legacy_off_001": {
+        "entry": 0,
+        "evaluation": 2891,
+        "rows": 2891
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "entry": 0,
+        "evaluation": 2891,
+        "rows": 2891
+      }
+    }
+  }
+}

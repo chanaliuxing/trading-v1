@@ -1,0 +1,166 @@
+groups:
+  - name: trading_system_alerts
+    interval: 30s
+    rules:
+      # P0: Service down for 30 seconds
+      - alert: ServiceDown
+        expr: service_up{service=~"(TradingSystem|StrategyEngine|ExecutionService)"} == 0
+        for: 30s
+        labels:
+          severity: P0
+          component: infrastructure
+        annotations:
+          summary: "Critical service {{ $labels.service }} is down"
+          description: "Service {{ $labels.service }} has been down for more than 30 seconds. Immediate attention required."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P0: Order→Fill latency P95 exceeds 2000ms for 5 minutes
+      - alert: OrderFillLatencyHigh
+        expr: histogram_quantile(0.95, sum(rate(latency_order_to_fill_ms_bucket[5m])) by (le)) > 2000
+        for: 5m
+        labels:
+          severity: P0
+          component: execution
+        annotations:
+          summary: "Order-to-fill latency P95 exceeds 2000ms"
+          description: "The 95th percentile order-to-fill latency has been above 2000ms for 5 minutes. Current value: {{ $value }}ms"
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P0: Signal→Order latency P95 exceeds 2000ms for 5 minutes
+      - alert: SignalOrderLatencyHigh
+        expr: histogram_quantile(0.95, sum(rate(latency_signal_to_order_ms_bucket[5m])) by (le)) > 2000
+        for: 5m
+        labels:
+          severity: P0
+          component: strategy
+        annotations:
+          summary: "Signal-to-order latency P95 exceeds 2000ms"
+          description: "The 95th percentile signal-to-order latency has been above 2000ms for 5 minutes. Current value: {{ $value }}ms"
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P1: Kafka lag exceeds 50 messages for 10 minutes
+      - alert: KafkaLagHigh
+        expr: kafka_topic_lag{topic=~"events.*"} > 50
+        for: 10m
+        labels:
+          severity: P1
+          component: infrastructure
+        annotations:
+          summary: "Kafka lag on topic {{ $labels.topic }} exceeds 50"
+          description: "Kafka consumer lag for topic {{ $labels.topic }} (group {{ $labels.group }}, partition {{ $labels.partition }}) has been above 50 for 10 minutes. Current lag: {{ $value }}"
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P1: ClickHouse write errors
+      - alert: ClickHouseWriteErrors
+        expr: rate(clickhouse_write_errors_total[5m]) > 0.001
+        for: 5m
+        labels:
+          severity: P1
+          component: observability
+        annotations:
+          summary: "ClickHouse write error rate exceeds threshold"
+          description: "ClickHouse write error rate is {{ $value | humanizePercentage }}. Data may be lost."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P2: Order rejections exceed 5 in 15 minutes
+      - alert: OrderRejectionsHigh
+        expr: sum(increase(orders_rejected_total[15m])) by (code) > 5
+        for: 1m
+        labels:
+          severity: P2
+          component: execution
+        annotations:
+          summary: "Order rejections exceed threshold"
+          description: "More than 5 orders have been rejected in the last 15 minutes. Rejection code: {{ $labels.code }}"
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P2: Observability queue full warnings
+      - alert: ObservabilityQueueFull
+        expr: rate(observability_queue_drops_total[5m]) > 0
+        for: 2m
+        labels:
+          severity: P2
+          component: observability
+        annotations:
+          summary: "Observability queue is dropping events"
+          description: "Observability queue is full and dropping events at {{ $value }} events/sec. Observability data may be incomplete."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # P3: High strategy error rate
+      - alert: StrategyErrorRateHigh
+        expr: rate(strategy_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: P3
+          component: strategy
+        annotations:
+          summary: "Strategy error rate is elevated"
+          description: "Strategy {{ $labels.strategy_id }} is experiencing {{ $value | humanize }} errors per second."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      # Pluggable architecture hardening alerts
+      - alert: FlipGuardSameBarReversalDetected
+        expr: increase(exec_flip_guard_blocks_total{reason="same_bar_reversal_block"}[1d]) > 0
+        for: 1m
+        labels:
+          severity: P0
+          component: execution
+        annotations:
+          summary: "FlipGuard blocked same-bar reversal"
+          description: "Same-bar reversal blocks were observed in the last trading day. Investigate unexpected reverse-open behavior immediately."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      - alert: FlipGuardExemptionUsed
+        expr: increase(exec_flip_guard_exemption_used_total[1d]) > 0
+        for: 1m
+        labels:
+          severity: P1
+          component: execution
+        annotations:
+          summary: "FlipGuard exemption was used"
+          description: "A strategy used a time-boxed FlipGuard exemption. Review the exemption reason and expiry; normal trading days should keep this at zero."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      - alert: RuntimeIdentityEpochMismatchBurst
+        expr: increase(exec_identity_validation_total{result="rejected",reason="origin_ib_epoch_mismatch"}[1d]) > 3
+        for: 5m
+        labels:
+          severity: P1
+          component: execution
+        annotations:
+          summary: "Execution ingress epoch mismatches are elevated"
+          description: "ExecutionService rejected stale-epoch intents more than 3 times in the last trading day."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      - alert: IBAdapterEpochMismatchDetected
+        expr: increase(ib_adapter_epoch_validation_total{result="rejected"}[1d]) > 0
+        for: 1m
+        labels:
+          severity: P0
+          component: broker
+        annotations:
+          summary: "IB adapter blocked stale epoch at broker egress"
+          description: "At least one broker call was blocked at adapter egress due to stale IB epoch. Reconnect-during-submit race was detected."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      - alert: IBOrderTruthSchemaInvalid
+        expr: increase(ib_order_truth_schema_validation_total{result="invalid"}[1d]) > 0
+        for: 1m
+        labels:
+          severity: P0
+          component: broker
+        annotations:
+          summary: "IB order truth schema validation failed"
+          description: "Runtime schema validation for IB order truth tables failed. Trading startup should remain blocked until the migration mismatch is fixed."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"
+
+      - alert: SharedPlaneReadbackDiffDetected
+        expr: increase(shared_plane_readback_diff_total[1d]) > 0
+        for: 1m
+        labels:
+          severity: P0
+          component: market_data
+        annotations:
+          summary: "Shared underlying data plane readback diff detected"
+          description: "A shared-plane consumer observed data different from the producer snapshot. This invalidates zero-diff parity until resolved."
+          dashboard: "http://localhost:3000/d/hybrid-trading-3ds"

@@ -1,0 +1,72 @@
+{
+  "comment": "AI\u5927\u8111\u901a\u8fc7JSON Patch\u63a7\u5236\u6807\u7b7e/\u635f\u5931/CV/\u6837\u672c\u6743\u91cd",
+  "task": "binary",
+  "label": {
+    "name": "ret_fwd_1m",
+    "horizon_sec": 300,
+    "method": "logret",
+    "from_col": "close",
+    "to_col": "close",
+    "clip_abs": 0.2,
+    "calendar_mode": "strict",
+    "max_slip_sec": 0,
+    "cls_bins": [
+      -9,
+      -0.000296,
+      0.000299,
+      9
+    ],
+    "neutralize_against": []
+  },
+  "loss": {
+    "xgb_objective": "reg:squarederror",
+    "xgb_eval_metric": [
+      "rmse",
+      "mae"
+    ],
+    "sk_metric": "neg_mean_squared_error"
+  },
+  "weights": {
+    "scheme": "by_volatility",
+    "atr_period": 14,
+    "power": 1.0
+  },
+  "cv": {
+    "wf_splits": 5,
+    "oos_splits": 3,
+    "group_by": "date",
+    "purge_gap_min": 60
+  },
+  "imbalance": {
+    "enable": false,
+    "method": "class_weight",
+    "max_pos_ratio": 0.55
+  },
+  "no_edge": {
+    "auc_near_random_thresh": 0.02,
+    "ic_near_zero_thresh": 0.01,
+    "min_experiments_for_confirm": 10
+  },
+  "experiment": {
+    "label_grid": [
+      { "name": "h5_bps3",  "horizon_min": 5,  "label_bps": 3 },
+      { "name": "h5_bps5",  "horizon_min": 5,  "label_bps": 5 },
+      { "name": "h5_bps7",  "horizon_min": 5,  "label_bps": 7 },
+      { "name": "h5_bps10", "horizon_min": 5,  "label_bps": 10 },
+
+      { "name": "h10_bps3",  "horizon_min": 10, "label_bps": 3 },
+      { "name": "h10_bps5",  "horizon_min": 10, "label_bps": 5 },
+      { "name": "h10_bps7",  "horizon_min": 10, "label_bps": 7 },
+      { "name": "h10_bps10", "horizon_min": 10, "label_bps": 10 },
+
+      { "name": "h15_bps3",  "horizon_min": 15, "label_bps": 3 },
+      { "name": "h15_bps5",  "horizon_min": 15, "label_bps": 5 },
+      { "name": "h15_bps7",  "horizon_min": 15, "label_bps": 7 },
+      { "name": "h15_bps10", "horizon_min": 15, "label_bps": 10 }
+    ],
+    "window_days": [
+      30,
+      60
+    ]
+  }
+}

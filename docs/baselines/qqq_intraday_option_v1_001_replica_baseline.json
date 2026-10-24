@@ -1,0 +1,47 @@
+{
+  "baseline_scope": {
+    "strategy_behavior": "qqq_stock_signal_option",
+    "input_contract": [
+      "config.yml strategy params",
+      "execution.entry_isolation",
+      "reconciliation.runtime"
+    ],
+    "shared_execution_chain": [
+      "execution_service",
+      "runtime_reconciler",
+      "fill_event_handler"
+    ]
+  },
+  "behavior_freeze_contract": {
+    "strategy_id": "qqq_intraday_option_v1_001",
+    "shadow_required_before_cutover": true,
+    "qqq_cutover_policy": "last_strategy_to_cut_over",
+    "rollback_required": true,
+    "migration_mode_sequence": [
+      "audit_only",
+      "dual_write",
+      "shadow",
+      "cutover"
+    ],
+    "must_not_change": [
+      "entry_logic",
+      "exit_logic",
+      "stop_loss_logic",
+      "tp1_and_trailing_logic",
+      "signal_timing",
+      "block_reason_contract"
+    ]
+  },
+  "state_machine_upgrade_contract": {
+    "independent_state_machines": [
+      "runtime",
+      "order",
+      "flatten",
+      "protection"
+    ],
+    "state_transition_event_schema": "schema/strategy_engine/state_transition_event.v1.schema.json",
+    "unified_kernel_required": true,
+    "unique_state_owner_required": true
+  },
+  "strategy_id": "qqq_intraday_option_v1_001"
+}

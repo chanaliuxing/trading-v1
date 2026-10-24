@@ -1,0 +1,582 @@
+50:def _floor_minute(dt: datetime) -> datetime:
+51:    return dt.replace(second=0, microsecond=0)
+54:def _floor_second(dt: datetime) -> datetime:
+55:    return dt.replace(microsecond=0)
+58:def _floor_5m(dt: datetime) -> datetime:
+60:    return dt.replace(minute=m, second=0, microsecond=0)
+63:def _safe_float(x: Any) -> Optional[float]:
+66:        if not math.isfinite(v):
+67:            return None
+68:        return v
+70:        return None
+74:    def __init__(self, ctx, params):
+191:    def _all_day_test_mode(self) -> bool:
+192:        return bool((self.params.extras or {}).get("all_day_test_mode", False))
+194:    def _resolve_subscription_symbols(self, extras: Dict[str, Any]) -> list[str]:
+197:        configured = [str(s).strip().upper() for s in base_symbols if str(s).strip()]
+199:        configured = [sym for sym in configured if sym not in {"AD-NASD", "AD-NDX"}]
+205:            if sym in seen:
+210:        if raw_symbols is not None:
+211:            missing = [sym for sym in required if sym not in configured]
+212:            if missing:
+220:        return merged
+222:    async def initialize(self) -> None:
+275:    async def on_features(self, symbol: str, features: Dict[str, Any]) -> None:
+279:    async def on_order_update(self, update: OrderUpdate) -> None:
+284:        if update.strategy_id != self.strategy_id:
+287:        # Check if our entry order was filled
+288:        if update.state == "FILLED":
+290:            if update.symbol in ("TQQQ", "SQQQ") and self._success_count < 1:
+305:    async def on_position_update(self, position: Any) -> None:
+311:    async def on_shutdown(self, reason: str) -> None:
+318:        if now_et.time() > time(16, 0):
+326:        elif snapshot is not None and not (snapshot_src == "pre" and has_today_seed):
+332:        elif snapshot is not None and snapshot_src == "pre" and has_today_seed:
+340:        if self._stop_audit_task:
+348:        if self._task:
+355:        if self._sfs:
+362:    async def _run_loop(self, interval_sec: float) -> None:
+379:                # Fail-fast readiness (after timeout, if still missing required numbers during RTH).
+380:                if (asyncio.get_running_loop().time() - start_ts) > timeout_sec:
+400:    def _fatal(self, reason: str, **details: Any) -> None:
+403:        if bool(extras.get("fail_fast_enabled", False)):
+412:    def _fail_fast_if_missing(self, now: datetime) -> None:
+415:        if not bool(extras.get("fail_fast_enabled", False)):
+417:            if now.weekday() > 4:
+420:            if now.time() < time(9, 45) or now.time() > time(16, 0):
+423:            if missing:
+425:                if self._last_missing_debug_minute != minute_ts:
+433:        if now.weekday() > 4:
+437:        if now.time() < time(9, 30, 15) or now.time() > time(16, 0):
+441:        if missing:
+446:            if self._ff_miss_count >= miss_n and (loop_now - self._ff_last_trigger_ts) >= cool_sec:
+452:    def _missing_required(self, now: datetime) -> list[str]:
+456:        def _is_fresh(symbol: str) -> bool:
+458:            if ts <= 0:
+459:                return False
+461:            return (now_ms - ts) <= fresh_limit_ms
+464:        if not q_last:
+466:        elif not _is_fresh("QQQ"):
+468:        if self._vwap() <= 0:
+471:        if not qqew_last:
+473:        elif not _is_fresh(QQEW_SYMBOL):
+475:        if self._qqew_vwap() <= 0:
+479:        if require_atr:
+481:            if self._effective_atr("TQQQ", atr_p, now=now) is None:
+483:            if self._effective_atr("SQQQ", atr_p, now=now) is None:
+486:        return missing
+490:    async def _warmup_5m(self, symbol: str, warmup_n: int) -> None:
+491:        if not self._sfs:
+494:        if not rows:
+500:    async def _warmup_entry_seed_data(self) -> None:
+502:        if not self._sfs:
+515:        if warmup_override is not None:
+524:            if not rows:
+528:                if ts_ms <= 0:
+531:                if dt.date() != day:
+533:                if (not self._all_day_test_mode()) and dt.time() < time(9, 30):
+553:    async def _ingest_required(self, now: datetime) -> None:
+554:        if not self._sfs:
+562:    async def _ingest_1s(self, symbol: str, row: Dict[str, Any], now_hint: Optional[datetime] = None) -> None:
+564:        if ts_ms <= 0:
+567:        if ts_ms <= last:
+570:            if (last - ts_ms) <= rewind_ms:
+584:        if close_px is None:
+586:        if close_px <= 0:
+589:        if symbol == "QQQ":
+594:            if time(9, 30) <= dt.time() < time(9, 45):
+595:                self._orh = float(close_px) if self._orh is None else max(self._orh, float(close_px))
+596:                self._orl = float(close_px) if self._orl is None else min(self._orl, float(close_px))
+598:                if qqq_ago is not None:
+600:        elif symbol == QQEW_SYMBOL:
+606:            if minute_end not in self._qqew_minute:
+612:        elif symbol in ("TQQQ", "SQQQ"):
+615:    def _update_vwap(self, ts_ms: int, price: float, vol: float) -> None:
+618:        if (not self._all_day_test_mode()) and (dt.time() < time(9, 30) or dt.time() > time(16, 0)):
+620:        if self._vwap_last_ts_ms and ts_ms < self._vwap_last_ts_ms:
+623:        if vol > 0:
+628:        if self._price_base is None and time(9, 30) <= dt.time() < time(9, 30, 11):
+629:            if vol > 0 and dt.time() < time(9, 30, 10):
+632:            if dt.time() >= time(9, 30, 10) and self._price_base_v > 0:
+639:    def _update_qqew_vwap(self, ts_ms: int, price: float, vol: float) -> None:
+641:        if (not self._all_day_test_mode()) and (dt.time() < time(9, 30) or dt.time() > time(16, 0)):
+643:        if self._qqew_vwap_last_ts_ms and ts_ms < self._qqew_vwap_last_ts_ms:
+646:        if vol > 0:
+651:    def _weighted_price_from_rows(
+663:            if ts_ms <= 0:
+665:            if start_ts_ms is not None and ts_ms < start_ts_ms:
+667:            if end_ts_ms is not None and ts_ms >= end_ts_ms:
+670:            if close_px is None or close_px <= 0:
+675:            if vol > 0:
+678:        if vv > 0:
+679:            return float(pv / vv), used
+680:        if closes:
+681:            return float(sum(closes) / len(closes)), used
+682:        return None, 0
+684:    async def _recover_price_base(self, now: datetime, *, init_after_window: bool) -> bool:
+686:        if self._price_base_recovery_last_minute == minute_ts:
+687:            return False
+690:        if self._sfs is None:
+691:            return False
+696:        if not rows:
+711:        if price_base is not None:
+715:        if price_base is None and init_after_window and self._initialized_at_et is not None:
+723:            if price_base is not None:
+727:        if price_base is None:
+729:            if ib_price is not None:
+734:        if price_base is None:
+735:            return False
+756:        return True
+759:    def _bar_dt_et(raw_dt: Any) -> Optional[datetime]:
+760:        if isinstance(raw_dt, datetime):
+761:            return raw_dt.astimezone(ET) if raw_dt.tzinfo else raw_dt.replace(tzinfo=ET)
+762:        if isinstance(raw_dt, str):
+768:            if dt is None:
+769:                return None
+770:            return dt.astimezone(ET) if dt.tzinfo else dt.replace(tzinfo=ET)
+771:        return None
+773:    async def _recover_price_base_from_ibkr(self, now: datetime) -> tuple[Optional[float], str, int]:
+777:        if (now_ts - self._price_base_ibkr_last_attempt_ts) < cooldown_sec:
+778:            return None, "ibkr_cooldown", 0
+789:        if ib is None or (not bool(getattr(ib, "isConnected", lambda: False)())):
+790:            return None, "ibkr_unavailable", 0
+795:            return None, "ib_insync_missing", 0
+799:            if self._ibkr_qqq_contract is None:
+801:                if qualified:
+827:                if dt_et is None:
+837:            if px_1s is not None:
+838:                return float(px_1s), "ibkr_1s_0930_window", int(used_1s)
+857:                if dt_et is None:
+859:                if dt_et.hour == 9 and dt_et.minute == 30:
+861:                    if px_open and px_open > 0:
+862:                        return float(px_open), "ibkr_1m_0930_open", 1
+864:                    if px_close and px_close > 0:
+865:                        return float(px_close), "ibkr_1m_0930_close", 1
+869:        return None, "ibkr_no_data", 0
+871:    def _update_minute_close(self, ts_ms: int, price: float, vol: float) -> None:
+874:        if self._min_bar is None or self._min_bar.ts_start != minute_start:
+876:            if self._min_bar is not None:
+882:                if key not in self._min_closes:
+885:                if key not in self._vwap_minute:
+907:            if vol > 0:
+910:    def _update_5m_bar(self, symbol: str, ts_ms: int, price: float, vol: float) -> None:
+914:        if cur is None or cur.ts_start != start:
+915:            if cur is not None:
+930:        if vol > 0:
+933:    def _last_price(self, symbol: str) -> Optional[float]:
+935:        if not ts:
+936:            return None
+938:        if symbol == "QQQ":
+939:            if self._min_bar is not None:
+940:                return float(self._min_bar.close)
+941:            return None
+942:        if symbol == QQEW_SYMBOL:
+943:            return float(self._qqew_last_price) if self._qqew_last_price is not None else None
+944:        if symbol in ("TQQQ", "SQQQ"):
+946:            return float(cur.close) if cur else None
+947:        return None
+949:    def _vwap(self) -> float:
+950:        if self._vwap_v <= 0:
+951:            return 0.0
+952:        return float(self._vwap_pv / self._vwap_v)
+954:    def _qqew_vwap(self) -> float:
+955:        if self._qqew_vwap_v <= 0:
+956:            return 0.0
+957:        return float(self._qqew_vwap_pv / self._qqew_vwap_v)
+959:    def _effective_atr_observed(self, symbol: str, period: int, now: datetime) -> tuple[Optional[float], str, Optional[float], Optional[float]]:
+961:        if atr_live is not None and atr_live > 0:
+962:            return float(atr_live), "live_5m", float(atr_live), self._atr_pre.get(symbol)
+964:        if atr_pre is not None and atr_pre > 0:
+965:            return float(atr_pre), "atr_pre", None, float(atr_pre)
+966:        if now.time() >= time(9, 45) or self._all_day_test_mode():
+967:            fallback = 0.35 if symbol == "TQQQ" else 0.30
+968:            return float(fallback), "fallback", None, None
+969:        return None, "missing", None, None
+971:    def _missing_required_observed(self, now: datetime) -> list[str]:
+975:        def _is_fresh(symbol: str) -> bool:
+977:            if ts <= 0:
+978:                return False
+980:            return (now_ms - ts) <= fresh_limit_ms
+982:        if not self._last_price("QQQ"):
+984:        elif not _is_fresh("QQQ"):
+986:        if self._vwap() <= 0:
+988:        if not self._last_price(QQEW_SYMBOL):
+990:        elif not _is_fresh(QQEW_SYMBOL):
+992:        if self._qqew_vwap() <= 0:
+995:        if require_atr:
+999:            if t_eff is None:
+1001:            if s_eff is None:
+1003:        return missing
+1005:    def _latest_minute_close(self) -> tuple[Optional[float], Optional[datetime]]:
+1006:        if self._min_close_keys:
+1008:            return self._min_closes.get(key), key
+1009:        if self._min_bar is not None:
+1010:            return float(self._min_bar.close), self._min_bar.ts_start
+1011:        return None, None
+1013:    def _symbol_age_sec(self, symbol: str, now: datetime) -> Optional[float]:
+1015:        if ts_ms <= 0:
+1016:            return None
+1018:        return max(0.0, (now - dt).total_seconds())
+1020:    def _freshness_limit_ms(self, symbol: str) -> int:
+1025:        return int(max(1.0, sec) * 1000)
+1027:    def _current_entry_metrics(self, now: datetime) -> Dict[str, float]:
+1035:        if qqq_now is not None and qqq_ago is not None:
+1039:        if qqew_now is not None and qqew_vwap > 0:
+1042:        vol_t = float(self._min_bar.volume) if self._min_bar is not None else 0.0
+1043:        vol_ma10 = float(sum(self._rolling_vol_queue) / len(self._rolling_vol_queue)) if self._rolling_vol_queue else 0.0
+1044:        mu_today = float(sum(self._today_vol_series) / len(self._today_vol_series)) if self._today_vol_series else 0.0
+1046:        if mu_today > 0 and len(self._today_vol_series) > 1:
+1048:        vol_threshold = vol_ma10 * (1.0 + cv_today) if vol_ma10 > 0 else 0.0
+1049:        vol_surge_ratio = float(vol_t / vol_threshold) if vol_threshold > 0 else 0.0
+1051:        return {
+1061:    def _resolve_code_version(self) -> str:
+1071:            return sha or "unknown"
+1073:            return "unknown"
+1075:    def _append_diag_event(self, event: str, payload: Dict[str, Any]) -> None:
+1076:        if self._diag_path is None:
+1086:    def _maybe_emit_heartbeat(self, now: datetime) -> None:
+1088:        if self._last_heartbeat_minute == minute_ts:
+1114:    def _build_observability_snapshot(self, now: datetime) -> Dict[str, Any]:
+1121:        return {
+1134:                    "close_1m_ts_et": q_close_1m_ts.isoformat() if q_close_1m_ts else None,
+1153:                    "bars_5m_count": len(self._bars_5m.get("TQQQ", [])) + (1 if self._cur_5m.get("TQQQ") else 0),
+1162:                    "bars_5m_count": len(self._bars_5m.get("SQQQ", [])) + (1 if self._cur_5m.get("SQQQ") else 0),
+1198:    def _maybe_write_observability_file(self, now: datetime) -> None:
+1200:        if not bool(extras.get("enable_observability_file", True)):
+1202:        if self._obs_path is None:
+1205:        if self._last_obs_write_minute == minute_ts:
+1216:    def _atr_5m(self, symbol: str, period: int) -> Optional[float]:
+1219:        if cur is not None:
+1221:        if period <= 0:
+1222:            return None
+1223:        if len(bars) < period + 1:
+1224:            return None
+1225:        def tr(curr: _OhlcvBar, prev_close: float) -> float:
+1226:            return max(
+1238:        if len(trs) < period:
+1239:            return None
+1244:        return float(atr)
+1246:    def _refresh_atr_pre(self, symbol: str, period: int) -> None:
+1248:        if atr is not None and atr > 0:
+1251:    def _refresh_atr_pre_by_schedule(self, now: datetime) -> None:
+1254:        if self._last_atr_pre_retry_minute == minute_ts:
+1259:            if self._atr_pre.get(sym) is None:
+1262:    def _parse_atr_seed_record(self, data: Any) -> Optional[Dict[str, Any]]:
+1263:        if not isinstance(data, dict):
+1264:            return None
+1268:        if isinstance(atr_pre, dict):
+1271:            if day and t is not None and s is not None and t > 0 and s > 0:
+1272:                return {"day": day, "TQQQ": float(t), "SQQQ": float(s)}
+1276:        if day and t is not None and s is not None and t > 0 and s > 0:
+1277:            return {"day": day, "TQQQ": float(t), "SQQQ": float(s)}
+1278:        return None
+1280:    def _read_atr_seed_candidates(self) -> list[Dict[str, Any]]:
+1281:        if self._atr_seed_path is None or (not self._atr_seed_path.exists()):
+1282:            return []
+1287:            return []
+1290:        if isinstance(raw, dict):
+1292:            if isinstance(days, dict):
+1295:                    if isinstance(v, dict):
+1298:                    if rec:
+1301:            if isinstance(latest, dict):
+1303:                if rec:
+1306:            if top:
+1308:        return candidates
+1310:    def _restore_atr_seed_into_pre(self) -> None:
+1311:        if self._atr_pre.get("TQQQ") and self._atr_pre.get("SQQQ"):
+1314:        if not candidates:
+1321:            if self._atr_pre.get(sym) is None:
+1323:                if v is not None and v > 0:
+1326:        if loaded:
+1336:    def _build_atr_seed_snapshot(self, period: int) -> tuple[Optional[Dict[str, float]], str]:
+1341:            if v is None or v <= 0:
+1344:            if v is None or v <= 0:
+1345:                return None, "missing"
+1347:        return snapshot, source
+1349:    def _has_atr_seed_for_day(self, day: str) -> bool:
+1350:        if self._atr_seed_path is None or (not self._atr_seed_path.exists()):
+1351:            return False
+1355:            return False
+1356:        if not isinstance(raw, dict):
+1357:            return False
+1359:        if isinstance(days, dict) and isinstance(days.get(day), dict):
+1362:            return t is not None and t > 0 and s is not None and s > 0
+1364:        if isinstance(latest, dict):
+1367:            if latest_day == day and isinstance(atr_pre, dict):
+1370:                return t is not None and t > 0 and s is not None and s > 0
+1371:        return False
+1373:    def _maybe_persist_daily_atr_seed(self, now: datetime) -> None:
+1374:        if now.weekday() > 4:
+1377:        if now.time() < time(15, 59) or now.time() > time(16, 0):
+1380:        if self._atr_seed_saved_day == day:
+1385:        if snapshot is None:
+1390:    def _persist_atr_seed(self, day: str, atr_pre: Dict[str, float], *, reason: str) -> None:
+1391:        if self._atr_seed_path is None:
+1395:        if t is None or s is None or t <= 0 or s <= 0:
+1399:            if self._atr_seed_path.exists():
+1402:                    if isinstance(raw, dict):
+1407:            if not isinstance(days, dict):
+1434:    def _effective_atr(self, symbol: str, period: int, now: Optional[datetime] = None) -> Optional[float]:
+1443:        if atr_live is not None and atr_live > 0:
+1444:            return float(atr_live)
+1448:        if atr_pre is not None and atr_pre > 0:
+1449:            return float(atr_pre)
+1453:        if ref_now.time() >= time(9, 45) or self._all_day_test_mode():
+1454:            fallback = 0.35 if symbol == "TQQQ" else 0.30
+1455:            if not self._atr_emergency_active.get(symbol, False):
+1464:            return fallback
+1465:        return None
+1468:    def _series_value_at_or_before(series: Deque[tuple[int, float]], target_ts_ms: int) -> Optional[float]:
+1469:        if not series:
+1470:            return None
+1473:            if ts_ms <= target_ts_ms:
+1474:                return float(v)
+1475:        return None
+1477:    def _qqq_value_at_or_before(self, target_ts_ms: int) -> Optional[float]:
+1478:        return self._series_value_at_or_before(self._qqq_buffer, target_ts_ms)
+1480:    def _qqew_value_at_or_before(self, target_ts_ms: int) -> Optional[float]:
+1481:        return self._series_value_at_or_before(self._qqew_buffer, target_ts_ms)
+1483:    def _v_seed_sigma_from_samples(self) -> Optional[float]:
+1484:        if len(self._seed_velocity_samples) < 5:
+1485:            return None
+1489:        return float(max(0.0, sigma))
+1491:    def _maybe_lock_seed(self, now: datetime) -> None:
+1493:        if now.time() < time(9, 45):
+1496:        if self._seed_locked_day == day and self._seed_ready:
+1507:        if self._seed_ready:
+1523:        if self._last_seed_retry_minute != minute_key:
+1536:    def _max_gap_ms(buf: Deque[tuple[int, float]]) -> Optional[int]:
+1537:        if len(buf) < 2:
+1538:            return None
+1542:            if prev is not None:
+1545:        return max_gap
+1547:    def _has_continuous_180s(self, now: datetime) -> bool:
+1550:        qqew_seg = [(ts, v) for ts, v in self._qqew_buffer if ts >= min_ts]
+1551:        qqq_seg = [(ts, v) for ts, v in self._qqq_buffer if ts >= min_ts]
+1557:        if len(qqew_seg) < min_qqew_points or len(qqq_seg) < min_qqq_points:
+1558:            return False
+1561:        if qqew_gap is None or qqq_gap is None:
+1562:            return False
+1563:        return qqew_gap <= qqew_limit_ms and qqq_gap <= qqq_limit_ms
+1565:    def _atr_1m_qqq(self, period: int = 14) -> Optional[float]:
+1566:        if period <= 0:
+1567:            return None
+1569:        if self._min_bar is not None:
+1571:        if len(bars) < period + 1:
+1572:            return None
+1583:        if len(trs) < period:
+1584:            return None
+1588:        return float(atr)
+1592:    def _daily_reset_if_needed(self, now: datetime) -> None:
+1594:        if self._day == day:
+1683:    def _update_crosscount(self, now: datetime) -> None:
+1684:        if now.weekday() > 4:
+1686:        if not (time(9, 30) <= now.time() < time(9, 45)):
+1691:        if not px or vwap <= 0:
+1697:        if px > upper:
+1699:        elif px < lower:
+1702:        if (self._cross_state == "ABOVE" and new_state == "BELOW") or (self._cross_state == "BELOW" and new_state == "ABOVE"):
+1706:        if new_state != "MIDDLE":
+1711:    async def _lock_amp_params(self, now: datetime) -> None:
+1712:        if self._amp_locked:
+1714:        if now.weekday() > 4 and (not self._all_day_test_mode()):
+1716:        if self._all_day_test_mode():
+1732:        if now.time() < time(9, 45):
+1736:        if self._cross_count >= 3:
+1740:        if self._price_0945 is None:
+1742:            if self._price_0945:
+1746:        if self._price_base is None:
+1750:            if init_time is not None:
+1753:            if (not recovered) and init_after_window and self._price_base_window_missed_day != day:
+1761:                        "init_ts_et": init_time.isoformat() if init_time else None,
+1766:            if self._price_base is None:
+1769:        amp = abs(self._price_0945 - self._price_base) / self._price_base if self._price_base > 0 else 0.0
+1770:        if amp < 0.001:
+1776:        if 0.001 <= amp < 0.002:
+1780:        elif 0.002 <= amp < 0.0045:
+1801:    async def _maybe_enter(self, now: datetime) -> None:
+1802:        def _emit_gate(
+1842:                    "qqq_3m_ago": float(qqq_3m_ago) if qqq_3m_ago is not None else 0.0,
+1843:                    "qqew_3m_ago": float(qqew_3m_ago) if qqew_3m_ago is not None else 0.0,
+1844:                    "v3m_price": float(v3m_price) if v3m_price is not None else 0.0,
+1845:                    "v3m_signed": float(v3m_signed) if v3m_signed is not None else 0.0,
+1846:                    "qqew_vs_vwap": float(qqew_vs_vwap) if qqew_vs_vwap is not None else 0.0,
+1847:                    "qqq_close_now": float(qqq_close_now) if qqq_close_now is not None else 0.0,
+1848:                    "qqew_close_now": float(qqew_close_now) if qqew_close_now is not None else 0.0,
+1849:                    "vwap_now": float(vwap_now) if vwap_now is not None else 0.0,
+1850:                    "qqew_vwap_now": float(qqew_vwap_now) if qqew_vwap_now is not None else 0.0,
+1851:                    "atr_live": float(atr_live) if atr_live is not None else 0.0,
+1852:                    "atr_seed": float(atr_seed) if atr_seed is not None else 0.0,
+1853:                    "atr_eff": float(atr_eff) if atr_eff is not None else 0.0,
+1854:                    "atr_cap": float(atr_cap) if atr_cap is not None else 0.0,
+1855:                    "k": float(k) if k is not None else 0.0,
+1856:                    "pulse": bool(pulse) if pulse is not None else False,
+1857:                    "vol_ratio": float(vol_ratio) if vol_ratio is not None else 0.0,
+1858:                    "tv": float(tv) if tv is not None else 0.0,
+1859:                    "vol_t": float(vol_t) if vol_t is not None else 0.0,
+1860:                    "vol_ma10": float(vol_ma10) if vol_ma10 is not None else 0.0,
+1861:                    "vol_surge_ratio": float(vol_surge_ratio) if vol_surge_ratio is not None else 0.0,
+1862:                    "data_age_qqq": float(data_age_qqq_sec) if data_age_qqq_sec is not None else 0.0,
+1863:                    "data_age_qqew": float(data_age_qqew_sec) if data_age_qqew_sec is not None else 0.0,
+1864:                    "data_age_qqq_sec": float(data_age_qqq_sec) if data_age_qqq_sec is not None else 0.0,
+1865:                    "data_age_qqew_sec": float(data_age_qqew_sec) if data_age_qqew_sec is not None else 0.0,
+1872:        if now.weekday() > 4 and (not self._all_day_test_mode()):
+1876:        if self._success_count >= 1:
+1880:        if self._pending_decision_id is not None:
+1889:            if any(o.strategy_id == self.strategy_id for o in open_orders):
+1899:            if qty_t > 0 or qty_s > 0:
+1900:                if not self._is_traded:
+1909:        if self._is_traded:
+1914:        if self._last_entry_eval_second == sec_ts:
+1919:        if (not self._all_day_test_mode()) and (now.time() < time(9, 45) or now.time() > time(15, 30)):
+1943:        if qqq_now is None or qqew_now is None or age_qqq is None or age_qqew is None:
+1947:        if age_qqq > max_data_age_sec or age_qqew > max_data_age_sec:
+1951:        if not self._has_continuous_180s(now):
+1957:        if qqq_ago is None or qqew_ago is None:
+1964:        qqew_vs_vwap = float((float(qqew_now) - float(qqew_vwap_now)) / float(qqew_vwap_now)) if qqew_vwap_now > 0 else 0.0
+1967:        vol_t = float(self._min_bar.volume) if self._min_bar is not None else 0.0
+1968:        vol_ma10 = float(sum(self._rolling_vol_queue) / len(self._rolling_vol_queue)) if len(self._rolling_vol_queue) >= 10 else None
+1969:        if (
+2003:        if not (long_dir or short_dir):
+2024:        direction = "LONG" if long_dir else "SHORT"
+2025:        exec_symbol = "TQQQ" if direction == "LONG" else "SQQQ"
+2030:        k = k_pulse if pulse else k_normal
+2034:        if v3m_q < tv:
+2040:                mode="PULSE" if pulse else "NORMAL",
+2066:        if high_vol_guard:
+2068:            if vol_ratio >= high_vol_ratio:
+2069:                if vol_surge_ratio < hv_min_vol_surge:
+2075:                        mode="PULSE" if pulse else "NORMAL",
+2101:                if v3m_q < tv_hv:
+2107:                        mode="PULSE" if pulse else "NORMAL",
+2139:            mode="PULSE" if pulse else "NORMAL",
+2174:        side = "LONG" if direction == "LONG" else "SHORT"
+2176:        if (
+2184:        if not last_exec or last_exec <= 0:
+2191:        if atr is None or atr <= 0:
+2196:        if qty <= 0:
+2215:        self._locked_velocity_sign = +1 if side == "LONG" else -1
+2230:            mode=("PULSE" if pulse else "NORMAL"),
+2235:        if not self._stop_audit_started:
+2239:    def _calc_qty(self, last_price: float) -> int:
+2242:        if explicit_qty is not None:
+2245:                return max(0, q)
+2251:        if last_price <= 0:
+2252:            return 0
+2253:        return max(0, int(math.floor(notional / last_price)))
+2255:    async def _current_exec_qty_for_symbol(self, symbol: str) -> float:
+2258:            if pos is None:
+2259:                return 0.0
+2261:            if val is None:
+2263:            if val is None:
+2264:                return 0.0
+2265:            return float(val)
+2267:            return 0.0
+2269:    async def _submit_target(self, symbol: str, qty: int) -> None:
+2288:    async def _current_exec_qty(self) -> float:
+2289:        if not self._exec_symbol:
+2290:            return 0.0
+2293:            if pos is None:
+2294:                return 0.0
+2296:            if val is None:
+2298:            if val is None:
+2299:                return 0.0
+2300:            return float(val)
+2302:            return 0.0
+2304:    async def _submit_protective_stop_intent(self, reason: str) -> None:
+2305:        if not self._exec_symbol or self._stop_px is None:
+2307:        if not bool((self.params.extras or {}).get("submit_exchange_stop_intent", False)):
+2311:        if qty <= 0:
+2334:    async def _flatten(self, reason: str) -> None:
+2335:        if not self._exec_symbol:
+2339:        if self.state.get("is_flattening"):
+2345:            if qty_live <= 0 and not self._is_traded:
+2350:            if reason == "stop_hit":
+2359:                    if o.strategy_id == self.strategy_id:
+2362:                # Better: call a dedicated cancel if available, or rely on target_qty=0
+2386:    async def _maybe_update_stop_by_atr(self, now: datetime) -> None:
+2391:        if not self._is_traded or not self._exec_symbol or self._entry_px is None:
+2393:        if self._stop_dist_pre is None:
+2397:        if self._breakeven_done:
+2401:        if self._last_stop_update_5m_end == current_5m_end:
+2407:        if atr_live is None or atr_live <= 0:
+2418:        if dist_final > hard_cap:
+2424:        if dist_final > prev_dist + 0.005:
+2438:    async def _manage_position(self, now: datetime) -> None:
+2439:        if not self._is_traded or not self._exec_symbol or not self._side or self._entry_px is None:
+2443:        if not last_px or last_px <= 0:
+2448:        if target > 0 and last_px >= self._entry_px + target:
+2453:        if self._stop_px is not None and last_px <= self._stop_px:
+2459:        if not self._breakeven_done:
+2461:            if unrealized >= 1.0:
+2464:                if new_stop < last_px - 0.05:
+2470:                    return # Skip ATR update this loop if we just did breakeven
+2472:        # 4. ATR-based Widening (only if breakeven is not armed)
+2473:        if not self._breakeven_done:
+2478:        if self._last_logic_retreat_minute != minute_ts:
+2482:    async def _maybe_logic_retreat(self, now: datetime) -> None:
+2483:        if not self._exec_symbol or not self._side:
+2486:        if vwap <= 0:
+2490:        if close_now is None:
+2497:        if qqq_now is None or qqew_now is None or qqq_ago is None or qqew_ago is None:
+2502:        if abs(v_q) <= dir_deadzone or abs(v_e) <= dir_deadzone:
+2504:        if (v_q > 0 and v_e < 0) or (v_q < 0 and v_e > 0):
+2506:        vel_sign = 1 if v_q > 0 else -1
+2507:        if self._locked_velocity_sign is not None and vel_sign != 0 and vel_sign != self._locked_velocity_sign:
+2509:            if wrong_side:
+2512:    async def _force_flatten_1559(self, now: datetime) -> None:
+2517:        if now.weekday() > 4:
+2519:        if now.time() >= EOD_FLATTEN_TIME:
+2521:            if self._force_flatten_done_day == day:
+2524:            if self._is_traded and self._exec_symbol:
+2528:    def _minute_close_for_gate(self, minute_end: datetime, now: datetime) -> Optional[float]:
+2530:        if val is not None:
+2531:            return float(val)
+2532:        # Fallback: if current in-progress minute bar has already ended but hasn't been rolled yet
+2534:        if self._min_bar is not None and self._min_bar.ts_end == minute_end and now >= minute_end:
+2535:            return float(self._min_bar.close)
+2536:        return None
+2538:    async def _sync_position_state(self, force: bool = False) -> None:
+2540:        if not force and (now_ts - self._last_position_sync_at) < 5.0:
+2550:        def _pos_field(pos: Any, *names: str, default: float = 0.0) -> float:
+2551:            if pos is None:
+2552:                return float(default)
+2553:            if isinstance(pos, dict):
+2555:                    if name in pos and pos.get(name) is not None:
+2556:                        return float(pos.get(name) or 0.0)
+2557:                return float(default)
+2559:                if hasattr(pos, name):
+2561:                    if val is not None:
+2562:                        return float(val or 0.0)
+2563:            return float(default)
+2567:        live_symbol = "TQQQ" if abs(qty_t) > 0 else ("SQQQ" if abs(qty_s) > 0 else None)
+2569:        # CLEAR PENDING LOCK: If we are flat but have a pending lock, check if we should release it
+2570:        if live_symbol is None and self._pending_decision_id is not None:
+2574:                if not any(o.strategy_id == self.strategy_id for o in open_orders):
+2580:        if live_symbol is None:
+2581:            if self.state.get("is_flattening"):
+2585:            if self._is_traded and self._exec_symbol:
+2597:                self._pending_decision_id = None # Clear lock if we are flat
+2601:        pos = p_tqqq if live_symbol == "TQQQ" else p_sqqq
+2603:        inferred_side = "LONG" if live_symbol == "TQQQ" else "SHORT"
+2610:        if changed:
+2616:            if avg_px > 0:
+2627:    async def _audit_stop_order_loop(self) -> None:
+2643:                # Verify if our specific Stop Loss order exists
+2647:                    if (o.strategy_id == self.strategy_id and 
+2651:                        # Check if it's a SELL STP order (our protective stop)
+2652:                        # We look at the 'note' or order attributes if available
+2656:                if found:
+2657:                    if self._audit_miss_count > 0:
+2669:                if self._audit_miss_count >= 8:
+2685:    def _persist_runtime_state(self, *, reason: str) -> None:
+2686:        if self._state_path is None:
+2715:                "last_stop_exit_at": self._last_stop_exit_at.isoformat() if self._last_stop_exit_at else None,
+2728:    def _restore_runtime_state(self) -> None:
+2729:        if self._state_path is None or (not self._state_path.exists()):
+2738:        if day != today:
+2755:        self._price_base_source = str(pbs) if isinstance(pbs, str) and pbs else None
+2766:        self._locked_velocity_sign = int(sign) if sign in (1, -1) else None
+2768:        if isinstance(last_stop_exit_at, str) and last_stop_exit_at:
+2776:        self._last_stop_exit_side = str(last_stop_exit_side) if last_stop_exit_side in ("LONG", "SHORT") else None
+2778:        if isinstance(atr_pre, dict):

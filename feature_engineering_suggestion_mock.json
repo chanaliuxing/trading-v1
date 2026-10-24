@@ -1,0 +1,86 @@
+{
+  "analysis": "基于模拟的5次试验数据,comprehensive_v1表现最佳(OOS Sharpe=1.45)。microstructure_v1过拟合严重。建议新增momentum_v2,使用波动率归一化的多时间框架动量特征。",
+  "feature_programs_patch": {
+    "add_or_update": {
+      "momentum_v2": {
+        "description": "Multi-horizon momentum with volatility scaling",
+        "steps": [
+          {
+            "name": "feat_ret_1m_roll_10",
+            "op": "rolling_sum",
+            "col": "ret_1",
+            "window_bars": 10,
+            "min_periods": 3,
+            "per_symbol": true
+          },
+          {
+            "name": "feat_ret_5m_roll_30",
+            "op": "rolling_sum",
+            "col": "ret_5",
+            "window_bars": 30,
+            "min_periods": 10,
+            "per_symbol": true
+          },
+          {
+            "name": "feat_vol_20",
+            "op": "rolling_std",
+            "col": "ret_1",
+            "window_bars": 20,
+            "min_periods": 5,
+            "per_symbol": true
+          },
+          {
+            "name": "feat_momo_vol_ratio",
+            "op": "ratio",
+            "num": "feat_ret_1m_roll_10",
+            "den": "feat_vol_20",
+            "eps": 1e-06
+          }
+        ]
+      }
+    },
+    "delete": [
+      "microstructure_v1"
+    ]
+  },
+  "alpha_hpo_patch": {
+    "feature_program_id_choices": [
+      "none",
+      "baseline_v1",
+      "momentum_v1",
+      "momentum_v2",
+      "mean_revert_v1",
+      "volatility_v1",
+      "comprehensive_v1"
+    ],
+    "feature_subset_choices": [
+      [
+        "ret_1",
+        "atr_14",
+        "volume"
+      ],
+      [
+        "ret_1",
+        "vwap",
+        "atr_14",
+        "volume"
+      ],
+      [
+        "feat_ret_1m_roll_10",
+        "feat_vol_20",
+        "feat_momo_vol_ratio",
+        "atr_14"
+      ],
+      [
+        "ret_1",
+        "feat_vwap_dev",
+        "feat_ret1m_over_atr",
+        "feat_log_volume"
+      ]
+    ],
+    "model_scale_mode_choices": [
+      "zscore",
+      "robust"
+    ]
+  }
+}

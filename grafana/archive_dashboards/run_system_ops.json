@@ -1,0 +1,219 @@
+{
+  "uid": "run-system-ops",
+  "title": "Run System — Ops (Loki/Tempo)",
+  "tags": ["trading", "ops", "run_system"],
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "templating": {
+    "list": [
+      {
+        "type": "textbox",
+        "name": "run_id",
+        "label": "run_id (optional filter)",
+        "query": "",
+        "current": { "text": "", "value": "" }
+      },
+      {
+        "type": "textbox",
+        "name": "strategy_id",
+        "label": "strategy_id (optional filter)",
+        "query": "",
+        "current": { "text": "", "value": "" }
+      },
+      {
+        "type": "textbox",
+        "name": "trace_id",
+        "label": "trace_id (paste or click from logs)",
+        "query": "",
+        "current": { "text": "", "value": "" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Bars / min (proxy: inference rate)",
+      "description": "Approx. bar processing rate = rate of 'inference' events",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"inference\" | json | line_format \"\" [5m])) * 60"
+        }
+      ],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "fieldConfig": { "defaults": { "unit": "opm" }, "overrides": [] }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Order fills / min",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate({job=\"trader\"} |= \"order_fill\" [5m])) * 60" }
+      ],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "fieldConfig": { "defaults": { "unit": "opm" }, "overrides": [] }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Order reject / min",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate({job=\"trader\"} |= \"order_rejected\" [5m])) * 60" }
+      ],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "fieldConfig": { "defaults": { "unit": "opm" }, "overrides": [] }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Overlay blocks / min",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate({job=\"trader\"} |= \"overlay_block\" [5m])) * 60" }
+      ],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "fieldConfig": { "defaults": { "unit": "opm" }, "overrides": [] }
+    },
+
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Inference Latency (ms, avg)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"inference\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" | unwrap ms | avg_over_time($__interval)"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ms" }, "overrides": [] },
+      "options": { "legend": { "displayMode": "hidden" } }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Order Volume (fills / rejects / trimmed)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        { "refId": "A", "expr": "sum by (event) (rate(({job=\"trader\"} |= \"order_fill\" [1m])))", "legendFormat": "fills" },
+        { "refId": "B", "expr": "sum by (event) (rate(({job=\"trader\"} |= \"order_rejected\" [1m])))", "legendFormat": "rejected" },
+        { "refId": "C", "expr": "sum by (event) (rate(({job=\"trader\"} |= \"order_trimmed\" [1m])))", "legendFormat": "trimmed" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+      "options": { "legend": { "displayMode": "table", "placement": "right" } }
+    },
+
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Why Not Order? — Reasons over Time (stacked)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" | reason != \"\" [$__interval]))",
+          "legendFormat": "{{reason}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "custom": { "stacking": { "mode": "normal" } } } },
+      "options": { "legend": { "displayMode": "table", "placement": "right" } }
+    },
+
+    {
+      "id": 30,
+      "type": "table",
+      "title": "Top Reasons (range)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 22 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(15, sum by (reason) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" [${__range_s}s])))",
+          "instant": true
+        }
+      ],
+      "options": { "showHeader": true }
+    },
+    {
+      "id": 31,
+      "type": "table",
+      "title": "Top Blocking Symbols (range)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 22 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(20, sum by (symbol) (count_over_time({job=\"trader\"} |~ \"order_rejected|order_trimmed|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\" [${__range_s}s])))",
+          "instant": true
+        }
+      ],
+      "options": { "showHeader": true }
+    },
+
+    {
+      "id": 40,
+      "type": "logs",
+      "title": "Live Run Logs (filtered)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 12, "x": 0, "y": 30 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "id": 41,
+      "type": "logs",
+      "title": "Recent “Why Not” Samples",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 12, "x": 12, "y": 30 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | run_id =~ \"$run_id\" | strategy_id =~ \"$strategy_id\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+
+    {
+      "id": 50,
+      "type": "traces",
+      "title": "Trace Viewer — ${trace_id}",
+      "datasource": { "type": "tempo", "uid": "tempo" },
+      "gridPos": { "h": 16, "w": 24, "x": 0, "y": 42 },
+      "targets": [
+        { "refId": "A", "queryType": "traceId", "query": "${trace_id}" }
+      ],
+      "options": { "showSpanBar": true, "showTable": true }
+    }
+  ]
+}

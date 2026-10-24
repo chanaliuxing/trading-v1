@@ -1,0 +1,85 @@
+{
+  "artifact_type": "scoped_tradability_final_hardening",
+  "generated_for_date": "2026-05-12",
+  "decision": "SCOPED_TRADABILITY_FULLY_LANDED",
+  "authority": "TradabilityService",
+  "global_halt_retained": true,
+  "scoped_blocks_landed": true,
+  "flow_overrides_landed": true,
+  "runtime_startup_policy_wiring_landed": true,
+  "areas": [
+    {
+      "area": "EOD/session policy",
+      "status": "landed",
+      "evidence": [
+        "services/production/eod_supervisor.py",
+        "run_system.py",
+        "tests/unit/services/test_production_readiness_services.py::test_platform_eod_supervisor_uses_session_close_policy_scope",
+        "tests/unit/services/test_production_readiness_services.py::test_session_close_policies_from_config_keeps_extended_strategy_out_of_rth_flatten"
+      ]
+    },
+    {
+      "area": "Strategy pause handling",
+      "status": "landed",
+      "evidence": [
+        "strategies/stocks_kernel/strategy.py",
+        "strategies/options_kernel/base.py",
+        "tests/unit/services/test_scoped_tradability_contract.py::test_strategy_system_paused_no_longer_only_hard_return_source"
+      ]
+    },
+    {
+      "area": "Production state partial/scoped output",
+      "status": "landed",
+      "evidence": [
+        "tests/unit/services/test_production_readiness_services.py::test_production_state_go_with_entry_partial_scoped_blocks",
+        "tests/unit/services/test_production_readiness_services.py::test_production_state_partial_not_interpreted_as_global_go_for_blocked_strategy",
+        "tests/unit/services/test_production_readiness_services.py::test_production_state_partial_not_interpreted_as_global_no_go_for_allowed_strategy",
+        "tests/unit/services/test_production_readiness_services.py::test_production_state_blocked_scopes_include_account_strategy_instance_symbol_flow",
+        "tests/unit/services/test_production_readiness_services.py::test_production_state_flow_overrides_include_close_only_strategy_flatten",
+        "tests/unit/services/test_production_readiness_services.py::test_production_state_global_halt_still_blocks_all_entry"
+      ]
+    },
+    {
+      "area": "Execution second-check",
+      "status": "landed",
+      "evidence": [
+        "services/exec/execution_service.py",
+        "tests/unit/services/test_scoped_tradability_contract.py::test_execution_service_requires_tradability_decision_before_entry"
+      ]
+    },
+    {
+      "area": "Owner inheritance",
+      "status": "landed",
+      "evidence": [
+        "services/reconciliation/broker_truth_convergence.py",
+        "tests/unit/reconciliation/test_broker_truth_convergence.py::test_converge_unattributed_fill_inherits_owner_lane_from_order_note"
+      ]
+    },
+    {
+      "area": "Monitoring and alerts",
+      "status": "drafted",
+      "evidence": [
+        "docs/architecture/scoped_tradability_monitoring.md",
+        "docs/reports/artifacts/scoped_tradability_alert_rules_20260512.json"
+      ]
+    }
+  ],
+  "required_metrics": [
+    "global_halt_active",
+    "entry_go_no_go_partial",
+    "blocked_scope_count",
+    "blocked_scope_by_strategy_instance",
+    "flow_override_count",
+    "tradability_decision_denied_total",
+    "tradability_decision_allowed_total",
+    "strategy_system_paused_block_count",
+    "session_policy_block_count",
+    "eod_owner_flatten_count",
+    "unknown_owner_fill_count",
+    "owner_inheritance_failure_count",
+    "partial_state_misread_guard"
+  ],
+  "live_ibkr_connected": false,
+  "live_order_mutation_allowed": false,
+  "remaining_legacy_behavior": []
+}

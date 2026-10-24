@@ -1,0 +1,14 @@
+{
+  "append": true,
+  "audit_root": "runtime/audit/20260512",
+  "broker_policy": "live_broker_disabled_mocked",
+  "duration_sec": 60,
+  "emit_paper_broker_events": true,
+  "end": "2026-05-12T18:11:11.275290-04:00",
+  "generated_at": "2026-05-12T18:11:11.275290-04:00",
+  "mode": "PAPER_ONLY",
+  "order_mutation_policy": "real_order_cancel_modify_disabled",
+  "sample_count": 20,
+  "start": "2026-05-12T18:11:11.224202-04:00",
+  "tick_count": 20
+}

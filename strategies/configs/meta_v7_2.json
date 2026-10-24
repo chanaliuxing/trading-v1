@@ -1,0 +1,280 @@
+{
+  "symbol": "META",
+  "asof": "2025-10-08",
+  "windows": {
+    "short_days": 7,
+    "long_days": 60,
+    "baseline_days": 180
+  },
+  "initial_state": {
+    "market_regime": "NEUTRAL",
+    "market_mult": 0.75,
+    "latest_vix": 18.0,
+    "prev_vix": 18.0
+  },
+  "timing": {
+    "recalibration_interval_min": 15,
+    "eod_close_time": "15:57",
+    "cooldown": {
+      "B1": 5,
+      "A1": 3,
+      "A2": 3
+    }
+  },
+  "data_limits": {
+    "bars_1m": 240,
+    "bars_5m": 240,
+    "bars_5m_120": 120,
+    "premarket_1m": 2730,
+    "premarket_5m": 4680
+  },
+  "commission_per_share": 0.0035,
+  "market_regime_symbols": [
+    "SPY",
+    "QQQ"
+  ],
+  "description": "META Intraday Long V7.2 - Social Media/Ads",
+  "target_triggers": 4,
+  "regime": {
+    "epsilon": 0.005,
+    "market_mult": {
+      "BULL": 1.0,
+      "NEUTRAL": 0.75,
+      "BEAR": 0.5
+    },
+    "vix_symbol": "VIX"
+  },
+  "pause": {
+    "theta_vix": 0.12,
+    "theta_spread": 0.0006,
+    "theta_atr": 2.05,
+    "t_pause_min": 15
+  },
+  "k_atr": 1.4,
+  "A1": {
+    "thr_sigma": 0.013228650873650834,
+    "rvol_lo": 0.9557525334969392,
+    "rvol_hi": 1.466746768851075,
+    "time_exit_min": 25,
+    "exit": {
+      "vwap_threshold_pct": 0.003,
+      "profit_take_pct": 0.7,
+      "eod_clean_time": "14:30"
+    }
+  },
+  "A2": {
+    "grid_g": 0.92,
+    "grid_g_floor": 0.8100000000000591,
+    "oneway_thr": 10.0,
+    "max_layers": 4,
+    "layer_ratios": [
+      0.25,
+      0.2,
+      0.15,
+      0.1
+    ],
+    "exit": {
+      "anchor_profit_pct": 0.6,
+      "anchor_plus_offset": 0.5,
+      "eod_grid_multiplier": 0.25,
+      "eod_clean_time": "14:30",
+      "stop_multiplier": 1.7
+    }
+  },
+  "B1": {
+    "orb_len": 30,
+    "orb_len_extended": 45,
+    "rvol_min": 1.0206345988139287,
+    "pullback_window_M": 6,
+    "extend_orb": false,
+    "extend_threshold": 0.35,
+    "breakout": {
+      "threshold_mult": 1.001,
+      "reclaim_mult": 0.998
+    },
+    "exit": {
+      "rvol_threshold": 1.2,
+      "profit_mult": 1.002,
+      "profit_ratios": [
+        0.4,
+        0.4,
+        0.2
+      ],
+      "profit_targets_R": [
+        1.0,
+        2.0
+      ],
+      "time_exit_orb30": "11:05",
+      "time_exit_orb45": "11:20",
+      "expansion_threshold": 2.0
+    },
+    "stop": {
+      "min_percentile": 25,
+      "min_atr_mult": 0.35
+    }
+  },
+  "positioning": {
+    "base_unit_pct": 0.016,
+    "anti_starvation_probe_pct": 0.25,
+    "cap_bucket": 0.25,
+    "cap_symbol": 0.1,
+    "max_concurrent": 2,
+    "filler_cap_ratio": 0.5,
+    "ndx_bucket": {
+      "symbols": [
+        "QQQ",
+        "NVDA",
+        "AAPL",
+        "MSFT",
+        "META",
+        "AMD",
+        "AVGO",
+        "GOOGL",
+        "TSLA"
+      ],
+      "loss_max_pct": 0.015,
+      "correlation_lookback_days": 5,
+      "correlation_scale_min": 0.25
+    }
+  },
+  "slippage": {
+    "eps_p95": 0.0005,
+    "min": 0.0002,
+    "max": 0.0008
+  },
+  "edge_floor": 0.18,
+  "dd_limits": {
+    "soft_pct": 0.018,
+    "hard_pct": 0.029,
+    "soft_mult": 0.5,
+    "hard_mult": 0.0,
+    "lookback_days": 60,
+    "fallback_soft": 0.018,
+    "fallback_hard": 0.028
+  },
+  "premarket_calibration": {
+    "enabled": true,
+    "use_config_values": true,
+    "trigger_estimate_weights": {
+      "a1": 0.1,
+      "a2": 0.05
+    },
+    "bounds": {
+      "A1_thr_sigma": {
+        "min": 0.004,
+        "max": 0.018
+      },
+      "A2_grid_g": {
+        "min": 0.5,
+        "max": 2.5
+      },
+      "k_atr": {
+        "min": 1.4,
+        "max": 2.8
+      },
+      "A1_rvol_lo": {
+        "min": 0.75,
+        "max": 1.1
+      },
+      "A1_rvol_hi": {
+        "min": 1.2,
+        "max": 2.3
+      },
+      "A1_time_exit_min": {
+        "min": 25,
+        "max": 58
+      },
+      "pause_theta_spread": {
+        "min": 0.0002,
+        "max": 0.0012
+      },
+      "B1_rvol_min": {
+        "min": 0.75,
+        "max": 1.05
+      }
+    },
+    "forward_validation": {
+      "days": 30,
+      "top_k": 3,
+      "score_alpha": 1.0,
+      "score_beta": 1.0
+    },
+    "baseline_shrinkage": {
+      "enabled": true,
+      "min_weight": 0.5,
+      "max_weight": 0.9
+    },
+    "cold_start_check": {
+      "enabled": true,
+      "duration_min": 1,
+      "edge_coverage_threshold": 0.7,
+      "trigger_rate_threshold": 0.5
+    },
+    "param_file": "params/meta_v7_2_params.json",
+    "intraday_suggest_file": "params/meta_v7_2_intraday.json",
+    "intraday_alpha": 0.3
+  },
+  "anti_starvation": {
+    "enabled": true,
+    "L1_min": 90,
+    "L2_min": 150,
+    "relax_sigma": [
+      0.85,
+      0.75
+    ],
+    "relax_g": [
+      0.85,
+      0.75
+    ],
+    "probe_ratio": 0.5,
+    "probe_size_mult": 0.5,
+    "revert_after_losses": 3,
+    "cutoff": "14:00",
+    "rvol_window_expand_pct": [
+      0.05,
+      0.1
+    ],
+    "rvol_window_shrink_pct": [
+      0.05,
+      0.1
+    ]
+  },
+  "lkg": {
+    "enabled": true,
+    "adjustment_factors": {
+      "k_atr": 1.1,
+      "A1_thr_sigma": 1.05,
+      "A2_grid_g": 1.05
+    },
+    "file": "meta_v7_2_lkg.json"
+  },
+  "l1_quality": {
+    "enabled": true,
+    "window_seconds": 60,
+    "percentile_threshold": 10,
+    "lookback_days": 30,
+    "pause_duration_min": 2,
+    "metrics": {
+      "update_frequency": true,
+      "latency": true,
+      "negative_spread_ratio": true
+    }
+  },
+  "kill_switch": {
+    "enabled": true,
+    "atr_mult_1m": 3.0,
+    "luld_halt": true,
+    "l1_disconnect_seconds": 60
+  },
+  "qqq_filler": {
+    "enabled": true,
+    "no_trade_threshold_min": 30,
+    "cap_ratio": 0.5
+  },
+  "dynamic_cost_gate": {
+    "min_trades": 10,
+    "atr_floor_pct": 0.02,
+    "coldstart_weight": 0.5
+  },
+  "A1_thr_sigma": 0.013228650873650834
+}

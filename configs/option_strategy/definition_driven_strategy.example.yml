@@ -1,0 +1,39 @@
+id: sample_underlying_option_001
+enabled: false
+shadow_mode: false
+module: strategies.spy_intraday_momentum_option_paper_strategy
+class: SPYIntradayMomentumOptionPaperStrategy
+capital_limit_usd: 10000
+params:
+  cadence_s: 1
+  ttl_ms: 2000
+  extras:
+    definition_id: SPY_INTRADAY_MOMENTUM_OPTION_PAPER_V1
+    underlying: SPY
+    risk_symbol: OPT:SPY:0DTE
+    contracts: 1
+    entry_start_am: "09:45:00"
+    entry_end_am: "12:00:00"
+    entry_start_pm: "13:00:00"
+    entry_end_pm: "15:00:00"
+    no_new_entry_after: "15:00:00"
+    force_flatten_time: "15:50:00"
+    dte_preferred: 0
+    dte_fallback_max: 1
+    delta_min: 0.30
+    delta_max: 0.55
+    delta_fallback_min: 0.25
+    delta_fallback_max: 0.60
+    spread_max_pct: 0.18
+    min_open_interest: 0
+    shared_cap_group_id: SAMPLE_UNDERLYING_OPTION
+    shared_cap_group_limit_usd: 10000
+    shared_cap_group_strategy_ids:
+      - sample_underlying_option_001
+    enable_live_parity_snapshot: true
+    enable_live_shadow_mode: false
+    live_parity_profile_id: sample_underlying_option_profile_v1
+    live_parity_snapshot_root: runtime/state/decision_snapshots_sample_option
+    market_data_profile_id: standard_close_extended_sma
+    kernel_mode: pure_plugin
+    strict_scope_validation: true

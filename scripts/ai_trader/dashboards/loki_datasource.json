@@ -1,0 +1,11 @@
+{
+  "name": "Loki",
+  "type": "loki",
+  "access": "proxy",
+  "url": "http://host.docker.internal:3100",
+  "jsonData": {
+    "maxLines": 1000
+  },
+  "uid": "loki",
+  "isDefault": false
+}

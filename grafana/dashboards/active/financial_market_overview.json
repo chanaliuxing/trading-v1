@@ -1,0 +1,377 @@
+{
+  "uid": "financial-market-overview",
+  "title": "Financial & Market Overview",
+  "description": "\u5e02\u573a\u884c\u60c5\u4e0e\u6570\u636e\u6982\u89c8 (\u4f7f\u7528\u53ef\u7528\u6570\u636e)",
+  "tags": [
+    "market",
+    "data",
+    "overview"
+  ],
+  "timezone": "America/New_York",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "30s",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "query": "SELECT DISTINCT symbol FROM trading.bars_5m_current WHERE symbol != '' ORDER BY symbol LIMIT 100",
+        "refresh": 2,
+        "includeAll": true,
+        "allValue": "%",
+        "current": {
+          "text": "All",
+          "value": "%",
+          "selected": true
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Market Data Overview",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Total Symbols",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count(DISTINCT symbol) as value FROM trading.bars_5m_current WHERE ts_end > now() - INTERVAL 1 DAY"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "5m Bars (Last 24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 4,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count() as value FROM trading.bars_5m_current WHERE ts_end > now() - INTERVAL 1 DAY"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Latest Bar Time",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\n            SELECT \n                max(ts_end) as value,\n                toString(max) as formatted_time\n            FROM trading.bars_5m_current\n        "
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "dateTimeAsIso",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      },
+      "description": "\u6700\u65b0K\u7ebf\u6570\u636e\u65f6\u95f4 (America/New_York\u65f6\u533a)"
+    },
+    {
+      "type": "stat",
+      "title": "Market Indices",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count(DISTINCT symbol) as value FROM trading.market_index_snapshots"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "AI Trader Metrics",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count() as value FROM trading.ai_trader_dash_metrics WHERE date = today()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Brain Events (24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 20,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT count() as value FROM trading.ai_trader_events WHERE kind='brain' AND ts > now() - INTERVAL 1 DAY"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcc8 Market Indices",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "table",
+      "title": "Market Index Snapshots",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 24,
+        "h": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT symbol, close, high, low, volume, toString(ts) as timestamp FROM trading.market_index_snapshots ORDER BY ts DESC LIMIT 20"
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcb9 Price Charts (5m bars)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Close Price (Last 7 days)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT ts_end as time, symbol, close as value FROM trading.bars_5m_current WHERE symbol LIKE '$symbol' AND ts_end > now() - INTERVAL 7 DAY ORDER BY ts"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 0
+          },
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Volume (Last 7 days)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 13,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "SELECT ts_end as time, symbol, volume as value FROM trading.bars_5m_current WHERE symbol LIKE '$symbol' AND ts_end > now() - INTERVAL 7 DAY ORDER BY ts"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 0,
+            "fillOpacity": 70
+          },
+          "unit": "short",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Symbol Statistics",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "type": "table",
+      "title": "Top Symbols by Volume (Last 24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\n                    SELECT \n                        symbol,\n                        count() as bars,\n                        sum(volume) as total_volume,\n                        avg(close) as avg_price,\n                        max(close) as high,\n                        min(close) as low\n                    FROM trading.bars_5m_current \n                    WHERE ts_end > now() - INTERVAL 1 DAY\n                    GROUP BY symbol \n                    ORDER BY total_volume DESC \n                    LIMIT 20\n                "
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Recent Bars (Selected Symbol)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 22,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\n                    SELECT \n                        toString(ts_end) as time,\n                        symbol,\n                        open,\n                        high,\n                        low,\n                        close,\n                        volume\n                    FROM trading.bars_5m_current \n                    WHERE symbol LIKE '$symbol'\n                    ORDER BY ts_end DESC \n                    LIMIT 50\n                "
+        }
+      ]
+    }
+  ]
+}

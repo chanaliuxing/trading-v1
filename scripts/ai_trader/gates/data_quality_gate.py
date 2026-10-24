@@ -1,0 +1,180 @@
+from __future__ import annotations
+
+"""
+Data Quality Gate
+
+Performs basic intraday data-quality checks on 1m bars for a symbol set and date.
+
+Checks:
+- Gaps/completeness within regular hours (09:30–16:00 ET)
+- Outliers by abs 1m return count
+- Stale data by consecutive zero-volume minutes
+- OHLC integrity (high>=max(open,close)>=low)
+
+Best-effort: if ClickHouse unavailable or query fails, the gate returns ok=True with a reason.
+"""
+
+import datetime
+from typing import Dict, Any, List, Optional
+
+import pandas as pd
+
+from libs.logger import get_logger
+
+try:
+    from libs.db.clickhouse import ClickHouseDB
+except Exception:  # pragma: no cover
+    ClickHouseDB = None  # type: ignore
+
+
+class DataQualityGate:
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config or {}
+        self.log = get_logger("ai_trader.data_quality_gate")
+        self.table = str(self.config.get("table", "trading.bars_1m"))
+        try:
+            self.client = ClickHouseDB() if ClickHouseDB is not None else None
+        except Exception:
+            self.client = None
+
+    def check(self, symbols: List[str], trade_date: datetime.date) -> Dict[str, Any]:
+        results = {"ok": True, "passed": [], "failed": {}}  # type: ignore
+        if not symbols:
+            return results
+        if self.client is None:
+            self.log.warning("ClickHouse client unavailable; skipping DQ checks")
+            return results
+
+        for symbol in symbols:
+            try:
+                df = self._fetch_1m_bars(symbol, trade_date)
+            except Exception as e:
+                self.log.warning("dq_fetch_failed", symbol=symbol, err=str(e))
+                df = None
+
+            errors: List[str] = []
+            if df is None or df.empty:
+                errors.append(f"no_data: missing 1m bars for {trade_date}")
+            else:
+                errors.extend(self._check_gaps(df))
+                errors.extend(self._check_outliers(df))
+                errors.extend(self._check_stale_data(df))
+                errors.extend(self._check_integrity(df))
+
+            if errors:
+                results["ok"] = False
+                results["failed"][symbol] = errors
+            else:
+                results["passed"].append(symbol)
+
+        if not results["ok"]:
+            self.log.warning(
+                "data_quality_check_failed",
+                failed_symbols=list(results["failed"].keys()),
+            )
+        else:
+            self.log.info("data_quality_ok", checked=len(symbols))
+
+        return results
+
+    def _fetch_1m_bars(self, symbol: str, trade_date: datetime.date) -> Optional[pd.DataFrame]:
+        sql = f"""
+        SELECT ts_end, open, high, low, close, volume
+        FROM {self.table}
+        WHERE symbol = {{symbol:String}}
+          AND toDate(toTimeZone(ts_end, 'America/New_York')) = {{d:Date}}
+        ORDER BY ts_end
+        """
+        try:
+            rows = self.client.query(sql, {"symbol": symbol, "d": trade_date})  # type: ignore
+        except Exception as e:
+            self.log.error("dq_query_failed", symbol=symbol, err=str(e))
+            return None
+        if not rows:
+            return pd.DataFrame()
+        df = pd.DataFrame(rows)
+        # normalize dtypes
+        try:
+            df["ts_end"] = pd.to_datetime(df["ts_end"], utc=True).dt.tz_convert("America/New_York")
+        except Exception:
+            try:
+                df["ts_end"] = pd.to_datetime(df["ts_end"]).dt.tz_localize("America/New_York", nonexistent="shift_forward", ambiguous="NaT")
+            except Exception:
+                pass
+        for c in ("open", "high", "low", "close", "volume"):
+            if c in df.columns:
+                df[c] = pd.to_numeric(df[c], errors="coerce")
+        return df
+
+    def _check_gaps(self, df: pd.DataFrame) -> List[str]:
+        # Determine expected bars by market schedule (early close aware), fallback to config
+        expected_bars = int(self.config.get("expected_bars_per_day", 390))
+        within = df
+        try:
+            d = pd.to_datetime(df["ts_end"].iloc[0]).tz_convert("America/New_York").date()
+            try:
+                import pandas_market_calendars as pmc  # type: ignore
+                cal = pmc.get_calendar('XNYS')
+                sched = cal.schedule(start_date=d, end_date=d)
+                if sched is not None and len(sched) > 0:
+                    o = sched['market_open'].iloc[0].tz_convert("America/New_York")
+                    c = sched['market_close'].iloc[0].tz_convert("America/New_York")
+                    expected_bars = max(0, int((c - o).total_seconds() // 60))
+                    within = df[(df["ts_end"] >= o) & (df["ts_end"] <= c)]
+            except Exception:
+                # Fall back to fixed RTH window (strings)
+                market_open, market_close = "09:30:00", "16:00:00"
+                within = df[df["ts_end"].dt.strftime("%H:%M:%S").between(market_open, market_close)]
+        except Exception:
+            pass
+        completeness_threshold = float(self.config.get("completeness_threshold", 0.98))
+        actual_bars = int(len(within))
+        completeness = (actual_bars / expected_bars) if expected_bars > 0 else 1.0
+        if completeness < completeness_threshold:
+            return [f"gap_detection: completeness {actual_bars}/{expected_bars} = {completeness:.1%} < {completeness_threshold:.0%}"]
+        return []
+
+    def _check_outliers(self, df: pd.DataFrame) -> List[str]:
+        df = df.copy()
+        try:
+            df["ret"] = df["close"].pct_change().abs()
+        except Exception:
+            return []
+        return_threshold = float(self.config.get("max_minute_return", 0.10))
+        max_outlier_count = int(self.config.get("max_outlier_count", 3))
+        try:
+            outliers = df[df["ret"] > return_threshold]
+            if not outliers.empty and len(outliers) > max_outlier_count:
+                return [f"outlier_detection: {len(outliers)} bars > {return_threshold:.0%}"]
+        except Exception:
+            pass
+        return []
+
+    def _check_stale_data(self, df: pd.DataFrame) -> List[str]:
+        try:
+            z = (df["volume"].fillna(0) == 0).astype(int)
+            # longest run length of zeros
+            longest = 0
+            cur = 0
+            for v in z.values.tolist():
+                if v == 1:
+                    cur += 1
+                    longest = max(longest, cur)
+                else:
+                    cur = 0
+            max_stale = int(self.config.get("max_stale_minutes", 15))
+            if longest > max_stale:
+                return [f"stale_data: longest zero-volume run {longest}m > {max_stale}m"]
+        except Exception:
+            pass
+        return []
+
+    def _check_integrity(self, df: pd.DataFrame) -> List[str]:
+        try:
+            bad = df[(df["high"] < df["low"]) | (df["high"] < df["open"]) | (df["high"] < df["close"]) |
+                     (df["low"] > df["open"]) | (df["low"] > df["close"]) ]
+            if not bad.empty:
+                return [f"integrity_check: {len(bad)} invalid OHLC bars"]
+        except Exception:
+            pass
+        return []

@@ -1,0 +1,82 @@
+{
+  "title": "Bull Put Spread Monitoring",
+  "uid": "bull-put-spread",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Entry Fill Ratio (24h)",
+      "datasource": "ClickHouse",
+      "targets": [
+        {
+          "rawSql": "WITH stats AS (SELECT countIf(event='enter_submitted') AS submitted, countIf(event='entry_filled') AS filled FROM trading.bull_put_spread_events WHERE ts >= now() - INTERVAL 1 DAY) SELECT filled / nullIf(submitted, 0) AS value FROM stats",
+          "format": "table"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": ["lastNotNull"]
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "State Distribution (24h)",
+      "datasource": "ClickHouse",
+      "targets": [
+        {
+          "rawSql": "SELECT JSONExtractString(payload, 'state') AS state, count() AS events FROM trading.bull_put_spread_events WHERE ts >= now() - INTERVAL 1 DAY GROUP BY state ORDER BY events DESC",
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "type": "table",
+      "title": "Recent Bull Put Events",
+      "datasource": "ClickHouse",
+      "targets": [
+        {
+          "rawSql": "SELECT ts, event, JSONExtractString(payload, 'state') AS state, JSONExtractString(payload, 'order_status') AS order_status, JSONExtractString(payload, 'reason') AS reason FROM trading.bull_put_spread_events WHERE ts >= now() - INTERVAL 1 DAY ORDER BY ts DESC LIMIT 100",
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Pending Entries",
+      "datasource": "ClickHouse",
+      "targets": [
+        {
+          "rawSql": "SELECT countIf(JSONExtractString(payload, 'state')='PENDING') AS value FROM trading.bull_put_spread_events WHERE event='enter_submitted' AND ts >= now() - INTERVAL 1 DAY",
+          "format": "table"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": ["lastNotNull"]
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "Recent Skip Events",
+      "datasource": "ClickHouse",
+      "targets": [
+        {
+          "rawSql": "SELECT ts, event, JSONExtractString(payload, 'reason') AS reason FROM trading.bull_put_spread_events WHERE event LIKE 'skip_%' AND ts >= now() - INTERVAL 1 DAY ORDER BY ts DESC LIMIT 50",
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    }
+  ]
+}

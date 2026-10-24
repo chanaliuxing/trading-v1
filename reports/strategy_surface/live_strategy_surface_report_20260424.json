@@ -1,0 +1,321 @@
+{
+  "active_strategy_ids": [
+    "qqq_1dte_ma10_reject_0324_v2_001",
+    "qqq_intraday_001",
+    "qqq_intraday_option_v1_001",
+    "qqq_kernel_shadow_legacy_off_001",
+    "qqq_kernel_shadow_legacy_on_001",
+    "spy_1dte_ma10_reject_0324_001",
+    "stocks_kernel_shadow_smh_001",
+    "stocks_kernel_shadow_spy_001"
+  ],
+  "config_path": "./config.yml",
+  "dry_run_strategy_ids": [],
+  "high_risk_strategy_ids": [
+    "qqq_intraday_001"
+  ],
+  "live_strategy_ids": [
+    "qqq_1dte_ma10_reject_0324_v2_001",
+    "qqq_intraday_001",
+    "qqq_intraday_option_v1_001",
+    "spy_1dte_ma10_reject_0324_001"
+  ],
+  "repo_root": ".",
+  "shadow_strategy_ids": [
+    "qqq_kernel_shadow_legacy_off_001",
+    "qqq_kernel_shadow_legacy_on_001",
+    "stocks_kernel_shadow_smh_001",
+    "stocks_kernel_shadow_spy_001"
+  ],
+  "strategies": [
+    {
+      "asset_family": "options",
+      "class": "QQQ1DTEMA10RejectV2Strategy",
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.qqq_1dte_ma10_reject_v2_strategy",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/qqq_1dte_ma10_reject_v2_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "qqq_1dte_ma10_reject_0324_v2_001",
+      "strategy_refs": [
+        "qqq_0dte_opt_live_001",
+        "qqq_0dte_opt_live_v2_001",
+        "qqq_1dte_ma10_reject_0324_001",
+        "qqq_1dte_ma10_reject_0324_v2_001",
+        "qqq_1dte_ma10_reject_0324_pure_001"
+      ],
+      "symbols": [
+        "QQQ",
+        "OPT:QQQ:1DTE"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "QQQIntradayStrategy",
+      "data_plane_mode": "underlying_shared_plane:prefer",
+      "enabled": true,
+      "execution_path": "direct_strategy_execution_path",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.qqq_intraday_strategy",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy",
+        "legacy_parity_mode_enabled",
+        "stock_execution_blockers_disabled",
+        "execution_path:direct_strategy_execution_path",
+        "source_data_signal:sfs_reader",
+        "source_execution_signal:submit_intent",
+        "source_execution_signal:protective_stop_flag",
+        "source_execution_signal:flatten_action_flag"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/qqq_intraday_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [
+          "sfs_reader"
+        ],
+        "execution_bypass_patterns": [
+          "submit_intent",
+          "protective_stop_flag",
+          "flatten_action_flag"
+        ],
+        "exists": true,
+        "legacy_risk_patterns": [
+          "legacy_trader_parity_mode",
+          "enforce_stock_execution_blockers"
+        ],
+        "runtime_path_signals": [
+          "on_features"
+        ]
+      },
+      "strategy_id": "qqq_intraday_001",
+      "strategy_refs": [],
+      "symbols": [
+        "QQQ",
+        "TQQQ",
+        "SQQQ",
+        "AD-NASD"
+      ]
+    },
+    {
+      "asset_family": "options",
+      "class": "QQQIntradayOptionV1Strategy",
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.qqq_intraday_option_v1_strategy",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/qqq_intraday_option_v1_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "qqq_intraday_option_v1_001",
+      "strategy_refs": [
+        "qqq_intraday_option_v1_001",
+        "qqq_intraday_001"
+      ],
+      "symbols": [
+        "QQQ",
+        "OPT:QQQ:0DTE"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "data_plane_mode": "underlying_shared_plane:prefer",
+      "enabled": true,
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "shadow",
+      "module": "strategies.stocks_kernel_strategy",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [],
+      "shadow_origin_strategy_id": "qqq_intraday_001",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "qqq_kernel_shadow_legacy_off_001",
+      "strategy_refs": [
+        "qqq_intraday_001"
+      ],
+      "symbols": [
+        "QQQ",
+        "TQQQ",
+        "SQQQ"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "data_plane_mode": "underlying_shared_plane:prefer",
+      "enabled": true,
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "shadow",
+      "module": "strategies.stocks_kernel_strategy",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [],
+      "shadow_origin_strategy_id": "qqq_intraday_001",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "qqq_kernel_shadow_legacy_on_001",
+      "strategy_refs": [
+        "qqq_intraday_001"
+      ],
+      "symbols": [
+        "QQQ",
+        "TQQQ",
+        "SQQQ"
+      ]
+    },
+    {
+      "asset_family": "options",
+      "class": "SPY1DTEMA10RejectV2Strategy",
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "execution_path": "options_kernel_pure_plugin",
+      "health_subscription_required": true,
+      "mode": "live",
+      "module": "strategies.spy_1dte_ma10_reject_v2_strategy",
+      "registry_name": "",
+      "risk_flags": [
+        "live_strategy"
+      ],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/spy_1dte_ma10_reject_v2_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "option_kernel_strategy",
+          "plugin_cls"
+        ]
+      },
+      "strategy_id": "spy_1dte_ma10_reject_0324_001",
+      "strategy_refs": [
+        "spy_1dte_ma10_reject_0324_001",
+        "spy_1dte_ma10_reject_0324_pure_001"
+      ],
+      "symbols": [
+        "SPY",
+        "OPT:SPY:1DTE"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "shadow",
+      "module": "strategies.stocks_kernel_strategy",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "stocks_kernel_shadow_smh_001",
+      "strategy_refs": [],
+      "symbols": [
+        "SMH",
+        "SOXL",
+        "SOXS"
+      ]
+    },
+    {
+      "asset_family": "equity",
+      "class": "StocksKernelStrategy",
+      "data_plane_mode": "engine_managed_features",
+      "enabled": true,
+      "execution_path": "stocks_kernel_execution_path",
+      "health_subscription_required": true,
+      "mode": "shadow",
+      "module": "strategies.stocks_kernel_strategy",
+      "registry_name": "stocks_kernel",
+      "risk_flags": [],
+      "shadow_origin_strategy_id": "",
+      "source_file": "./strategies/stocks_kernel_strategy.py",
+      "source_scan": {
+        "data_bypass_patterns": [],
+        "execution_bypass_patterns": [],
+        "exists": true,
+        "legacy_risk_patterns": [],
+        "runtime_path_signals": [
+          "stocks_kernel_strategy"
+        ]
+      },
+      "strategy_id": "stocks_kernel_shadow_spy_001",
+      "strategy_refs": [],
+      "symbols": [
+        "SPY",
+        "SPXL",
+        "SPXS",
+        "RSP"
+      ]
+    }
+  ],
+  "summary": {
+    "active_strategy_count": 8,
+    "dry_run_strategy_count": 0,
+    "high_risk_strategy_count": 1,
+    "live_strategy_count": 4,
+    "shadow_strategy_count": 4
+  }
+}

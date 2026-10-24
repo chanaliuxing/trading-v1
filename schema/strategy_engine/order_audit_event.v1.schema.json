@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "order_audit_event.v1.schema.json",
+  "title": "OrderAuditEventV1",
+  "type": "object",
+  "required": [
+    "event_id",
+    "event_type",
+    "event_ts_us",
+    "trace_id",
+    "strategy_id",
+    "strategy_run_id",
+    "decision_id",
+    "intent_id",
+    "order_id",
+    "symbol"
+  ],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "intent_received",
+        "risk_checked",
+        "order_submitted",
+        "order_ack",
+        "order_rejected",
+        "fill_received",
+        "order_cancelled",
+        "reconciler_corrected"
+      ]
+    },
+    "event_ts_us": {"type": "integer", "minimum": 1},
+    "trace_id": {"type": "string", "minLength": 1},
+    "causation_id": {"type": ["string", "null"]},
+    "strategy_id": {"type": "string", "minLength": 1},
+    "strategy_run_id": {"type": "string", "minLength": 1},
+    "trigger_id": {"type": ["string", "null"]},
+    "decision_id": {"type": "string", "minLength": 1},
+    "intent_id": {"type": "string", "minLength": 1},
+    "order_id": {"type": "string", "minLength": 1},
+    "broker_order_id": {"type": ["string", "null"]},
+    "parent_order_id": {"type": ["string", "null"]},
+    "symbol": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,1 @@
+/workspace/Documents/trading/grafana/start_monitoring.sh

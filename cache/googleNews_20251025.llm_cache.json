@@ -1,0 +1,18 @@
+{
+  "a63fb039c272c71801eb8c75269da379bc7e24c6": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述（标题与摘要均未提及实质性事件）",
+      "未提供可验证的新事实（如指引、合约、监管批文等）",
+      "不满足现金流/风险因果链的证据要求"
+    ],
+    "signal_quality": "price_recap",
+    "notes": "标题与摘要仅解释股价上涨但无实质事件披露，符合价格复述过滤规则"
+  }
+}

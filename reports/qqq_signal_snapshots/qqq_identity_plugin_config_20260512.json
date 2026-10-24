@@ -1,0 +1,1137 @@
+{
+  "day": "2026-05-12",
+  "diag_path": "runtime/state/qqq_intraday_diag_qqq_intraday_001.jsonl",
+  "mismatch_count": 70,
+  "mismatches": [
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:31:00.137833-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:32:00.520815-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:33:00.322359-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:34:00.164582-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:35:00.509139-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:36:00.743125-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:37:00.935974-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:38:00.702814-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:39:00.315983-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:40:00.800716-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:41:00.056821-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:42:00.394578-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:43:00.204295-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "outside_session_window",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "NA",
+        "reason": "first_entry_seed_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:44:00.134603-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:46:00.125006-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:47:00.249967-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:48:00.920939-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:49:00.139282-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:50:00.929668-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:51:00.938302-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:52:00.173869-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:53:00.622380-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:54:00.282453-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "delayed_confirm_not_met",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:58:00.123480-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:59:00.666963-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:00:01.045736-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:01:00.137774-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:02:01.459229-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:06:00.085104-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:07:00.184015-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:11:02.885719-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:12:00.573805-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:13:28.679970-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:14:00.508074-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:18:29.358429-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:19:00.725566-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:20:00.821619-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:21:00.434512-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:22:00.468011-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "TQQQ",
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "TQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:23:00.744283-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:27:00.938684-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": true,
+        "decision": "ENTRY_ALLOWED",
+        "instrument": "SQQQ",
+        "reason": "entry_allowed",
+        "side": "SHORT"
+      },
+      "ts_iso": "2026-05-12T10:28:00.469076-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:29:00.514791-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:30:00.576850-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:31:00.964063-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:32:00.628680-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:33:00.743457-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:34:00.324379-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:35:00.764989-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:36:00.423791-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:37:00.038995-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:38:00.721154-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:39:00.231767-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:40:00.709329-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:41:00.980850-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:42:00.905477-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:43:00.901183-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:44:00.616433-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:48:00.944318-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:49:00.735096-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:50:00.627851-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:51:00.804727-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:52:00.981345-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:53:01.075363-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:54:00.661109-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "sign_mismatch",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:55:00.374093-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "velocity_too_low",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "fast_drift_not_ready",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:56:00.373058-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:57:00.036320-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:58:00.061194-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:59:00.840712-04:00"
+    }
+  ],
+  "ok": true,
+  "parity": {
+    "allow_match_ratio": 0.477273,
+    "exec_symbol_match_ratio": 1.0,
+    "reason_match_ratio": 0.204545,
+    "rows": 88,
+    "side_match_ratio": 0.477273
+  },
+  "rows": 88,
+  "strategy_id": "qqq_intraday_plugin_001"
+}

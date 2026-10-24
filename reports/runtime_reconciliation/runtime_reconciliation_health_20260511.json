@@ -1,0 +1,104 @@
+{
+  "audit_dir": "./runtime/audit/2026-05-11",
+  "blockers": [],
+  "day": "20260511",
+  "financial_snapshot": {
+    "age_sec": 4.706466,
+    "available": true,
+    "available_funds": 1047084.83,
+    "blockers": [],
+    "buying_power": 4188339.32,
+    "gross_position_value": 0.0,
+    "net_liquidation": 1047713.7,
+    "ok": true,
+    "realized_pnl": 0.0,
+    "table": "ibkr_account_realtime",
+    "total_cash": 1047114.17,
+    "ts_ny": "2026-05-11T16:19:59-04:00",
+    "unrealized_pnl": 0.0
+  },
+  "generated_at": "2026-05-11T16:20:03-04:00",
+  "latest_position_audit_age_sec": 0.0,
+  "latest_position_audit_payload": {
+    "active_quarantine_count": 0,
+    "db_open_count": 0,
+    "ghosts": 0,
+    "ib_open_count": 0,
+    "ib_positions": {},
+    "ib_pre_submitted": 0,
+    "ledger_positions": {
+      "OPT:NVDA:20260506:197.5:C": 0.0,
+      "OPT:NVDA:20260506:197.5:P": 0.0,
+      "OPT:NVDA:20260506:205:C": 0.0,
+      "OPT:NVDA:20260506:205:P": 0.0,
+      "OPT:NVDA:20260508:215:P": 0.0,
+      "OPT:NVDA:20260508:217.5:P": 0.0
+    },
+    "mismatch_samples": [],
+    "mismatches": 0,
+    "orphans_detected": 0,
+    "orphans_unresolved": 0,
+    "position_mismatches": 0
+  },
+  "latest_position_audit_ts": "2026-05-11T16:20:07.975916-04:00",
+  "latest_reconciliation_alert_payload": {
+    "active_quarantine_count": 2,
+    "db_open_orders": 1,
+    "evidence": {
+      "active_quarantine": {
+        "active_count": 2,
+        "by_reason": [
+          {
+            "active_count": 1,
+            "last_observed_at": "2026-05-11T17:51:16.381547+00:00",
+            "reason": "recovery_action_not_executable"
+          },
+          {
+            "active_count": 1,
+            "last_observed_at": "2026-05-11T17:54:15.702651+00:00",
+            "reason": "unknown_broker_order_detected"
+          }
+        ],
+        "lookup_failed": false
+      },
+      "ghost_samples": [
+        {
+          "broker_order_id": "898",
+          "ib_perm_id": 709761677,
+          "order_id": "37cfbd59-0151-4147-b686-edc6e3a09a8a",
+          "order_ref": "stkv1:stocks_kernel_smh_001:SOXL:ENTRY:LANE:l",
+          "state": "SUBMITTED",
+          "strategy_id": "stocks_kernel_smh_001",
+          "symbol": "SOXL"
+        }
+      ],
+      "ib_status_counts": {
+        "PreSubmitted": 1
+      },
+      "mismatch_samples": [],
+      "orphan_detected_samples": [
+        {
+          "order_id": "7",
+          "order_ref": "manual_flatten:SOXL:codex:20260511T175321Z",
+          "order_type": "MKT",
+          "perm_id": 709761923,
+          "qty": 52.0,
+          "side": "SELL",
+          "status": "PreSubmitted",
+          "symbol": "SOXL"
+        }
+      ],
+      "orphan_unresolved_samples": []
+    },
+    "ghosts_found": 1,
+    "ib_open_orders": 1,
+    "ib_pre_submitted_orders": 1,
+    "mismatches": 0,
+    "orphans_detected": 1,
+    "orphans_found": 1,
+    "orphans_self_healed": 1,
+    "orphans_unresolved": 0
+  },
+  "latest_reconciliation_alert_ts": "2026-05-11T13:59:16.060350-04:00",
+  "ok": true
+}

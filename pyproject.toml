@@ -1,0 +1,43 @@
+[project]
+name = "trading-v1"
+version = "1.0.0"
+description = "Autonomous Algorithmic Trading Platform v1: Multi-Phase Real-Time Pipeline, AI Brain / LLM Trader, RL Core, and Interactive Brokers Execution"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Wei Zhang", email = "wei.zhang@example.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "ib-insync>=0.9.86",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "clickhouse-connect>=0.6.0",
+    "redis>=5.0.0",
+    "kafka-python>=2.0.2",
+    "scikit-learn>=1.3.0",
+    "optuna>=3.2.0",
+    "lightgbm>=4.0.0",
+    "xgboost>=1.7.0",
+    "torch>=2.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "httpx>=0.24.0",
+    "prometheus-client>=0.17.0",
+]
+
+[tool.setuptools]
+packages = [
+    "strategies",
+    "ai_brain",
+    "llm_trader",
+    "ml",
+    "rl_core",
+    "services",
+    "infra",
+    "schema",
+    "utils",
+    "monitoring",
+]

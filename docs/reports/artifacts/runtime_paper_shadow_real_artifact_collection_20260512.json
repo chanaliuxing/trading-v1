@@ -1,0 +1,109 @@
+{
+  "approved_scope": [
+    "proceed_to_canary_readiness_manual_gate_only",
+    "continue_bounded_paper_shadow_collection_with_broker_mutation_disabled",
+    "use_diagnostics_for_manual_review"
+  ],
+  "artifact_status": {
+    "approved_to_fill_conversion": {
+      "exists": true,
+      "fresh": true,
+      "source": "report_builder_from_runtime_audit"
+    },
+    "broker_truth_snapshot": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "paper_broker_truth_snapshot": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "position_safety": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "production_state": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "runtime_audit": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "runtime_version": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "strategy_surface": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "strategy_tradability": {
+      "exists": true,
+      "fresh": true,
+      "source": "bounded_shadow_runtime_harness"
+    },
+    "vegas_dlb_edge_measurement": {
+      "exists": true,
+      "fresh": true,
+      "source": "report_builder_from_runtime_audit"
+    }
+  },
+  "baseline": {
+    "exec": "291 passed",
+    "no_live": "4 passed",
+    "reconciliation": "76 passed",
+    "reports": "35 passed",
+    "services": "656 passed",
+    "soak_gate_unit": "11 passed"
+  },
+  "broker_policy": "live_broker_disabled_mocked",
+  "decision": "SOAK_PASS_READY_FOR_CANARY_MANUAL_GATE",
+  "diagnostics": {
+    "approved_to_fill": {
+      "classification": "BROKER_SUBMISSION_BOTTLENECK",
+      "sample_count": 1
+    },
+    "vegas_dlb_edge": {
+      "classification": "MIXED",
+      "sample_count": 24
+    }
+  },
+  "duration_sec": 6,
+  "generated_at": "2026-05-12T10:16:40-04:00",
+  "live_ibkr_connected": false,
+  "mode": "SHADOW_ONLY",
+  "not_approved_scope": [
+    "full_live_trading",
+    "unattended_live",
+    "real_broker_mutation",
+    "auto_cancel_unknown_broker_orders",
+    "auto_flatten_unknown_owner_positions",
+    "canary_without_manual_gate"
+  ],
+  "order_mutation_policy": "real_order_cancel_modify_disabled",
+  "post_run_safety_scan": {
+    "actual_runtime_attribution_violation": false,
+    "actual_runtime_live_event": false,
+    "actual_runtime_mutation_event": false,
+    "notes": [
+      "scan match was report summary key symbol_only_attribution_count: 0"
+    ]
+  },
+  "pre_run_safety_verdict": "PASS",
+  "recommended_next_batch": "Canary Readiness Manual Gate",
+  "runtime_command": "TRADING_TEST_ALLOW_LIVE_IBKR=0 venv/bin/python tool/runtime/run_bounded_paper_shadow_runtime.py --mode SHADOW_ONLY --duration-sec 6 --tick-sec 2 --day 20260512 --output-root .",
+  "soak_gate": {
+    "blockers": [],
+    "missing_artifacts": [],
+    "verdict": "PASS",
+    "warnings": []
+  }
+}

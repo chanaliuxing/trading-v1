@@ -1,0 +1,405 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "p3_p4_memory_evolution",
+    "title": "P3-P4 Memory Fabric & Evolution",
+    "tags": ["memory", "evolution", "p3", "p4"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 0,
+    "refresh": "30s",
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Memory Fabric - Total Records",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "memory_fabric_sts_records_total",
+            "legendFormat": "STS (Short-Term)",
+            "refId": "A"
+          },
+          {
+            "expr": "memory_fabric_mts_records_total",
+            "legendFormat": "MTS (Mid-Term)",
+            "refId": "B"
+          },
+          {
+            "expr": "memory_fabric_lts_records_total",
+            "legendFormat": "LTS (Long-Term)",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "options": {
+          "tooltip": {
+            "mode": "multi"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Patch Approval Queue - Status Distribution",
+        "type": "piechart",
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "patch_approval_queue_total",
+            "legendFormat": "{{status}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          }
+        },
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "values": ["value", "percent"]
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Evolution Target Priority - Top 10",
+        "type": "bargauge",
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "topk(10, evolution_target_priority_score)",
+            "legendFormat": "{{target}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "max": 1,
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 0,
+                  "color": "green"
+                },
+                {
+                  "value": 0.5,
+                  "color": "yellow"
+                },
+                {
+                  "value": 0.8,
+                  "color": "red"
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient"
+        }
+      },
+      {
+        "id": 4,
+        "title": "Patch Risk vs Benefit Scores",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 8,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "patch_benefit_score",
+            "legendFormat": "Benefit: {{patch_id}}",
+            "refId": "A"
+          },
+          {
+            "expr": "patch_risk_score",
+            "legendFormat": "Risk: {{patch_id}}",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "min": 0,
+            "max": 1,
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "options": {
+          "tooltip": {
+            "mode": "multi"
+          },
+          "legend": {
+            "displayMode": "table",
+            "placement": "bottom",
+            "values": ["value", "min", "max"]
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Memory Promotions (24h)",
+        "type": "stat",
+        "gridPos": {
+          "x": 0,
+          "y": 16,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "increase(memory_fabric_promotions_total{type=\"sts_to_mts\"}[24h])",
+            "legendFormat": "STS → MTS",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 0,
+                  "color": "green"
+                },
+                {
+                  "value": 100,
+                  "color": "yellow"
+                },
+                {
+                  "value": 500,
+                  "color": "red"
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "textMode": "value_and_name"
+        }
+      },
+      {
+        "id": 6,
+        "title": "Experiments Compared (7d)",
+        "type": "stat",
+        "gridPos": {
+          "x": 6,
+          "y": 16,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "increase(experiments_compared_total[7d])",
+            "legendFormat": "{{recommendation}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "textMode": "value_and_name"
+        }
+      },
+      {
+        "id": 7,
+        "title": "Patch Queue - Pending Count",
+        "type": "stat",
+        "gridPos": {
+          "x": 12,
+          "y": 16,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "patch_approval_queue_total{status=\"pending\"}",
+            "legendFormat": "Pending Patches",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 0,
+                  "color": "green"
+                },
+                {
+                  "value": 5,
+                  "color": "yellow"
+                },
+                {
+                  "value": 10,
+                  "color": "red"
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "textMode": "value"
+        }
+      },
+      {
+        "id": 8,
+        "title": "Auto-Approved Patches",
+        "type": "stat",
+        "gridPos": {
+          "x": 18,
+          "y": 16,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "patch_approval_queue_total{status=\"approved\"}",
+            "legendFormat": "Auto-Approved",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 0,
+                  "color": "blue"
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "textMode": "value"
+        }
+      },
+      {
+        "id": 9,
+        "title": "Memory Fabric Growth Rate",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 20,
+          "w": 24,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "rate(memory_fabric_sts_records_total[5m])",
+            "legendFormat": "STS Growth Rate",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(memory_fabric_mts_records_total[5m])",
+            "legendFormat": "MTS Growth Rate",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(memory_fabric_lts_records_total[5m])",
+            "legendFormat": "LTS Growth Rate",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "rps",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "options": {
+          "tooltip": {
+            "mode": "multi"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          }
+        }
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "name": "Patch Deployments",
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "changes(patch_approval_queue_total{status=\"applied\"}[1m]) > 0",
+          "iconColor": "green",
+          "tagKeys": "patch_id"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+strategy_id: qqq_overnight_001
+runtime_scope: index_super_win_replica_overnight
+runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_overnight_001.json
+order_namespace: iswv2
+feature_bar_sec: 5
+dry_run: false
+enable_local_audit_bridge: true
+fail_closed_on_data_integrity: true
+entry_require_market_data_healthy: true
+entry_max_data_age_sec: 5.0
+session_name: overnight
+session_start_et: "20:00:00"
+session_end_et: "03:59:59"
+force_flatten_time: "03:59:30"
+enable_entry_during_session_only: true
+require_prev_session_flat: true
+prev_session_strategy_id: qqq_premarket_001
+prev_session_runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_premarket_001.json
+prev_session_order_namespace: iswv2
+replica_manifests:
+  - key: qqq_pair
+    signal_symbol: QQQ
+    confirm_symbol: QQEW
+    long_exec_symbol: TQQQ
+    short_exec_symbol: SQQQ
+    volatility_symbol: QQQ
+    enabled: true

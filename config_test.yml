@@ -1,0 +1,83 @@
+mode: paper
+timezone: America/New_York
+
+vix:
+  enabled: true
+  fallback: 18.0
+
+clickhouse:
+  timezone: America/New_York
+
+# Market Data Service
+services:
+  market_data_service:
+    enabled: true
+
+# Universe
+universe:
+  - AAPL
+  - TSLA
+  - NVDA
+  - SPY
+  - MSFT
+
+# Strategy Registry
+strategy_registry:
+  TSLASimplifiedV7_2: "strategies.tsla_v7_2.TSLASimplifiedV7_2"
+
+# Load strategies with RELAXED test parameters
+strategies:
+  - id: "nvda_test_001"
+    enabled: true
+    module: "strategies.tsla_v7_2"
+    class: "TSLASimplifiedV7_2"
+    capital_limit_usd: 50000
+    params:
+      extras:
+        tsla_v7_2_config: "strategies/configs/nvda_v7_2_test.json"
+
+  - id: "tsla_test_001"
+    enabled: true
+    module: "strategies.tsla_v7_2"
+    class: "TSLASimplifiedV7_2"
+    capital_limit_usd: 50000
+    params:
+      extras:
+        tsla_v7_2_config: "strategies/configs/tsla_v7_2_test.json"
+
+  - id: "aapl_test_001"
+    enabled: true
+    module: "strategies.tsla_v7_2"
+    class: "TSLASimplifiedV7_2"
+    capital_limit_usd: 50000
+    params:
+      extras:
+        tsla_v7_2_config: "strategies/configs/aapl_v7_2_test.json"
+
+# ClickHouse Bar Writers
+writers:
+  - name: bars_5s_writer
+    enabled: true
+    topic: md.bar.5s.v2
+    table: bars_5s
+    group_id: ch_writer_bars_5s_test
+    batch_size: 200
+    batch_timeout_sec: 2.0
+
+# Data Lake Writers (Phase 4)
+lake_writers:
+  - name: trades_writer
+    enabled: true
+    topic: md.tick.trade.v1
+    mode: trades
+    group_id: lake_writer_trades_test
+    batch_size: 500
+    batch_timeout_sec: 1.0
+
+  - name: quotes_writer
+    enabled: true
+    topic: md.tick.quote.v1
+    mode: quotes
+    group_id: lake_writer_quotes_test
+    batch_size: 500
+    batch_timeout_sec: 1.0

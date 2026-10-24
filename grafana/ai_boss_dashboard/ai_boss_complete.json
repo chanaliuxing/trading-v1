@@ -1,0 +1,533 @@
+{
+  "uid": "ai-boss-command-center",
+  "title": "AI Boss - Trading Command Center",
+  "description": "Executive dashboard for AI trading system monitoring",
+  "tags": [
+    "ai-boss",
+    "executive",
+    "monitoring"
+  ],
+  "timezone": "America/New_York",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "editable": true,
+  "panels": [
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Executive Summary",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "id": 1
+    },
+    {
+      "type": "text",
+      "title": "Total PnL \u23f3",
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 5,
+        "h": 4
+      },
+      "id": 2,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for live trading data\n\n**Required**: `equity_pnl_snapshots` table\n\n**Query Preview**:\n```sql\nSELECT \n  anyLast(equity) - anyFirst(equity) as total_pnl\nFROM trading.equity_pnl_snapshots\nWHERE date = today()\n```\n\n**Action Required**: \nLog equity snapshots during live trading\n"
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "OOS Max Drawdown",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 1,
+        "w": 5,
+        "h": 4
+      },
+      "id": 3,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT value * 100 as drawdown_pct\nFROM trading.ai_trader_dash_metrics\nWHERE name = 'oos_mdd'\n  AND date = today()\nORDER BY ts DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 5,
+                "color": "yellow"
+              },
+              {
+                "value": 10,
+                "color": "orange"
+              },
+              {
+                "value": 15,
+                "color": "red"
+              }
+            ]
+          },
+          "min": 0,
+          "max": 20
+        }
+      },
+      "options": {
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true
+      }
+    },
+    {
+      "type": "stat",
+      "title": "OOS Sharpe Ratio",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 1,
+        "w": 4,
+        "h": 4
+      },
+      "id": 4,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT value as sharpe\nFROM trading.ai_trader_dash_metrics\nWHERE name = 'oos_sharpe'\n  AND date = today()\nORDER BY ts DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 0.5,
+                "color": "yellow"
+              },
+              {
+                "value": 1.0,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "graphMode": "none",
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "System Status",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 14,
+        "y": 1,
+        "w": 5,
+        "h": 4
+      },
+      "id": 5,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT \n  'Data Quality' as metric,\n  CASE WHEN value = 1 THEN 'OK' ELSE 'FAILED' END as status\nFROM trading.ai_trader_dash_metrics\nWHERE name = 'dq_ok' AND date = today()\nORDER BY ts DESC LIMIT 1\n"
+        },
+        {
+          "refId": "B",
+          "rawSql": "\nSELECT \n  'Tools' as metric,\n  CASE WHEN value > 0 THEN 'RUNNING' ELSE 'STOPPED' END as status\nFROM trading.ai_trader_dash_metrics\nWHERE name = 'tools_running' AND date = today()\nORDER BY ts DESC LIMIT 1\n"
+        }
+      ],
+      "options": {
+        "graphMode": "none",
+        "colorMode": "value",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Guardian Status",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 19,
+        "y": 1,
+        "w": 5,
+        "h": 4
+      },
+      "id": 6,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT value as event_count\nFROM trading.ai_trader_dash_metrics\nWHERE name = 'guardian_events'\n  AND date = today()\nORDER BY ts DESC\nLIMIT 1\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 1,
+                "color": "yellow"
+              },
+              {
+                "value": 5,
+                "color": "red"
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "\ud83d\udfe2 Active"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "options": {
+        "graphMode": "none",
+        "colorMode": "background",
+        "textMode": "value_and_name"
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83e\udde0 AI Brain Intelligence",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 1
+      },
+      "id": 7
+    },
+    {
+      "type": "text",
+      "title": "Signal Distribution \u23f3",
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 6,
+        "h": 6
+      },
+      "id": 8,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for signal logging\n\n**Required**: Trading signals table\n\n**Query Preview**:\n```sql\nSELECT \n  round(signal, 1) as signal_bucket,\n  count() as frequency\nFROM trading.trading_signals\nWHERE ts > now() - INTERVAL 24 HOUR\nGROUP BY signal_bucket\nORDER BY signal_bucket\n```\n\n**Action Required**: \nLog signal values (-1 to 1) for each trade decision\n"
+      }
+    },
+    {
+      "type": "text",
+      "title": "Confidence Distribution \u23f3",
+      "gridPos": {
+        "x": 6,
+        "y": 6,
+        "w": 6,
+        "h": 6
+      },
+      "id": 9,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for confidence logging\n\n**Required**: Trading confidence data\n\n**Query Preview**:\n```sql\nSELECT \n  round(confidence, 1) as conf_bucket,\n  count() as frequency\nFROM trading.trading_signals\nWHERE ts > now() - INTERVAL 24 HOUR\nGROUP BY conf_bucket\nORDER BY conf_bucket\n```\n\n**Action Required**: \nLog confidence scores (0 to 1) for each trade decision\n"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Brain Calls (24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 6,
+        "w": 4,
+        "h": 3
+      },
+      "id": 10,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count() as brain_calls\nFROM trading.ai_trader_events\nWHERE kind = 'brain'\n  AND ts > now() - INTERVAL 24 HOUR\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "blue"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "graphMode": "area",
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Tool Executions (24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 6,
+        "w": 4,
+        "h": 3
+      },
+      "id": 11,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count() as tool_executions\nFROM trading.ai_trader_events\nWHERE kind = 'tool'\n  AND ts > now() - INTERVAL 24 HOUR\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "purple"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "graphMode": "area",
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "table",
+      "title": "OOS Performance Metrics",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 20,
+        "y": 6,
+        "w": 4,
+        "h": 6
+      },
+      "id": 12,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nWITH latest AS (\n  SELECT name, value,\n    ROW_NUMBER() OVER (PARTITION BY name ORDER BY ts DESC) as rn\n  FROM trading.ai_trader_dash_metrics\n  WHERE name IN ('oos_sharpe', 'oos_mdd', 'oos_trades')\n    AND date = today()\n)\nSELECT\n  CASE\n    WHEN name = 'oos_sharpe' THEN 'Sharpe'\n    WHEN name = 'oos_mdd' THEN 'MDD'\n    WHEN name = 'oos_trades' THEN 'Trades'\n  END as metric,\n  CASE\n    WHEN name = 'oos_mdd' THEN round(value * 100, 1)\n    ELSE round(value, 2)\n  END as value\nFROM latest\nWHERE rn = 1\nORDER BY name\n"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Brain Call Frequency",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 9,
+        "w": 8,
+        "h": 3
+      },
+      "id": 13,
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n  toStartOfHour(ts) as time,\n  session,\n  count() as calls\nFROM trading.ai_trader_events\nWHERE kind = 'brain'\n  AND ts > $__timeFrom()\n  AND ts < $__timeTo()\nGROUP BY time, session\nORDER BY time\n"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcbc Portfolio",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 1
+      },
+      "id": 14
+    },
+    {
+      "type": "text",
+      "title": "PnL by Strategy \u23f3",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 8,
+        "h": 6
+      },
+      "id": 15,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for live trading\n\n**Required**: `portfolio_snapshots` table\n\n**Query Preview**:\n```sql\nSELECT\n  strategy_id,\n  sum(pnl) as total_pnl\nFROM trading.portfolio_snapshots\nWHERE date = today()\nGROUP BY strategy_id\nORDER BY total_pnl DESC\n```\n\n**Action Required**: \nLog portfolio snapshots during live trading\n"
+      }
+    },
+    {
+      "type": "text",
+      "title": "Current Positions \u23f3",
+      "gridPos": {
+        "x": 8,
+        "y": 13,
+        "w": 8,
+        "h": 6
+      },
+      "id": 16,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for live trading\n\n**Required**: `positions_snapshots` table\n\n**Query Preview**:\n```sql\nSELECT\n  symbol, qty, entry_price,\n  current_price, pnl\nFROM trading.positions_snapshots\nWHERE date = today()\nORDER BY abs(pnl) DESC\n```\n\n**Action Required**: \nLog position snapshots during live trading\n"
+      }
+    },
+    {
+      "type": "text",
+      "title": "Exposure Breakdown \u23f3",
+      "gridPos": {
+        "x": 16,
+        "y": 13,
+        "w": 8,
+        "h": 6
+      },
+      "id": 17,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for live trading\n\n**Required**: `positions_snapshots` table\n\n**Query Preview**:\n```sql\nSELECT\n  sector,\n  sum(notional) as exposure\nFROM trading.positions_snapshots\nWHERE date = today()\nGROUP BY sector\n```\n\n**Action Required**: \nLog position details with sector info\n"
+      }
+    },
+    {
+      "type": "row",
+      "title": "\u26a1 Execution Quality",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 19,
+        "w": 24,
+        "h": 1
+      },
+      "id": 18
+    },
+    {
+      "type": "text",
+      "title": "Avg Slippage \u23f3",
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 8,
+        "h": 6
+      },
+      "id": 19,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for execution data\n\n**Required**: `fills_live` + `order_events`\n\n**Query Preview**:\n```sql\nSELECT\n  avg((fill_price - limit_price) / limit_price * 10000) as slippage_bps\nFROM trading.fills_live f\nJOIN trading.order_events o ON f.order_id = o.order_id\nWHERE f.date = today()\n```\n\n**Action Required**: \nLog order events and fill details\n"
+      }
+    },
+    {
+      "type": "text",
+      "title": "Decision Funnel \u23f3",
+      "gridPos": {
+        "x": 8,
+        "y": 20,
+        "w": 8,
+        "h": 6
+      },
+      "id": 20,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for execution data\n\n**Required**: `exec_events` table\n\n**Query Preview**:\n```sql\nSELECT\n  stage,\n  count() as decisions\nFROM trading.exec_events\nWHERE date = today()\nGROUP BY stage\nORDER BY stage\n```\n\n**Action Required**: \nLog execution pipeline stages\n"
+      }
+    },
+    {
+      "type": "text",
+      "title": "Fill Rate \u23f3",
+      "gridPos": {
+        "x": 16,
+        "y": 20,
+        "w": 8,
+        "h": 6
+      },
+      "id": 21,
+      "options": {
+        "mode": "markdown",
+        "content": "\n# \u23f3 Placeholder\n\n**Status**: Waiting for execution data\n\n**Required**: `fills_live` + `order_events`\n\n**Query Preview**:\n```sql\nSELECT\n  countIf(status = 'filled') / count() * 100 as fill_rate_pct\nFROM trading.order_events\nWHERE date = today()\n```\n\n**Action Required**: \nLog order submission and fill status\n"
+      }
+    }
+  ]
+}

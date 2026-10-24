@@ -1,0 +1,394 @@
+{
+  "none": {
+    "description": "No feature engineering, use raw features only",
+    "steps": []
+  },
+  "baseline_v1": {
+    "description": "Original Phase 1 features (vwap dev, ret/atr, log volume, rolling momentum)",
+    "steps": [
+      {
+        "name": "feat_vwap_dev",
+        "op": "ratio_minus_1",
+        "num": "close",
+        "den": "vwap",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ret1m_over_atr",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_14",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_log_volume",
+        "op": "log1p",
+        "col": "volume"
+      },
+      {
+        "name": "feat_ret_1m_roll_10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 3,
+        "per_symbol": true
+      }
+    ]
+  },
+  "momentum_v1": {
+    "description": "Momentum-based features (rolling returns, z-scores)",
+    "steps": [
+      {
+        "name": "feat_ret_1m_roll_10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 3,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_ret_5m_roll_20",
+        "op": "rolling_sum",
+        "col": "ret_5",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_zscore_ret1m_50",
+        "op": "rolling_zscore",
+        "col": "ret_1",
+        "window_bars": 50,
+        "min_periods": 10,
+        "per_symbol": true
+      }
+    ]
+  },
+  "mean_revert_v1": {
+    "description": "Mean-reversion features (price deviations, normalized returns)",
+    "steps": [
+      {
+        "name": "feat_vwap_dev",
+        "op": "ratio_minus_1",
+        "num": "close",
+        "den": "vwap",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ret1m_over_atr",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_14",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_zscore_close_20",
+        "op": "rolling_zscore",
+        "col": "close",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      }
+    ]
+  },
+  "momentum_v2": {
+    "description": "Multi-horizon momentum with volatility scaling",
+    "steps": [
+      {
+        "name": "feat_ret_1m_roll_10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 3,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_ret_5m_roll_30",
+        "op": "rolling_sum",
+        "col": "ret_5",
+        "window_bars": 30,
+        "min_periods": 10,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_vol_20",
+        "op": "rolling_std",
+        "col": "ret_1",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_momo_vol_ratio",
+        "op": "ratio",
+        "num": "feat_ret_1m_roll_10",
+        "den": "feat_vol_20",
+        "eps": 1e-06
+      }
+    ]
+  },
+  "liquidity_momentum_v2": {
+    "description": "增强版流动性动量组合（Amihud交互特征、有效价差标准化、EMA交叉过滤）",
+    "steps": [
+      {
+        "name": "feat_ema_cross",
+        "op": "ratio_minus_1",
+        "num": "ema_12",
+        "den": "ema_26",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_amihud_ret5",
+        "op": "product",
+        "col1": "ret_5",
+        "col2": "feat_amihud"
+      },
+      {
+        "name": "feat_effective_spread_z20",
+        "op": "rolling_zscore",
+        "col": "feat_effective_spread",
+        "window_bars": 20,
+        "min_periods": 10,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_ret1_over_vol20",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "feat_rolling_volatility_20",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_rolling_volatility_20",
+        "op": "rolling_std",
+        "col": "ret_1",
+        "window_bars": 20,
+        "min_periods": 5,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_log_atr14",
+        "op": "log1p",
+        "col": "atr_14"
+      }
+    ]
+  },
+  "volatility_momentum_v1": {
+    "description": "波动率调整动量特征+流动性指标组合（ATR标准化收益、EMA交叉信号、流动性因子交互）",
+    "steps": [
+      {
+        "name": "feat_ret1m_atr5_adj",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_5",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ema12_26_cross",
+        "op": "ratio_minus_1",
+        "num": "ema_12",
+        "den": "ema_26",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ret1m_vol20_zscore",
+        "op": "rolling_zscore",
+        "col": "ret_1",
+        "window_bars": 40,
+        "min_periods": 20,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_spread_vol_interact",
+        "op": "product",
+        "col1": "spread_bps",
+        "col2": "vol_avg_20"
+      },
+      {
+        "name": "feat_atr14_log",
+        "op": "log1p",
+        "col": "atr_14"
+      },
+      {
+        "name": "feat_ret5_roll20",
+        "op": "rolling_sum",
+        "col": "ret_5",
+        "window_bars": 20,
+        "min_periods": 10,
+        "per_symbol": true
+      }
+    ]
+  },
+  "momentum_volatility_v1": {
+    "description": "动量+波动率混合特征(RSI标准化、布林带宽度、EMA交叉波动调整)",
+    "steps": [
+      {
+        "name": "feat_rsi14_clip",
+        "op": "clip",
+        "col": "rsi_14",
+        "min": 20,
+        "max": 80
+      },
+      {
+        "name": "feat_bb_width_norm",
+        "op": "ratio",
+        "num": "bb_width",
+        "den": "atr_14",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ema12_50_ratio",
+        "op": "ratio_minus_1",
+        "num": "ema_12",
+        "den": "ema_50",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ret1_vol20_adj",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "vol_avg_20",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_tick_imb_roll10",
+        "op": "rolling_mean",
+        "col": "tick_imbalance",
+        "window_bars": 10,
+        "min_periods": 3
+      },
+      {
+        "name": "feat_spread_ret1_interact",
+        "op": "product",
+        "col1": "spread_bps",
+        "col2": "ret_1"
+      }
+    ]
+  },
+  "baseline_v2": {
+    "description": "Enhanced baseline with volatility-adjusted momentum and liquidity interaction",
+    "steps": [
+      {
+        "name": "feat_vwap_dev",
+        "op": "ratio_minus_1",
+        "num": "close",
+        "den": "vwap",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ret1_over_atr14",
+        "op": "ratio",
+        "num": "ret_1",
+        "den": "atr_14",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_log_volume",
+        "op": "log1p",
+        "col": "volume"
+      },
+      {
+        "name": "feat_ret1_roll10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 5,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_vol_20",
+        "op": "rolling_std",
+        "col": "ret_1",
+        "window_bars": 20,
+        "min_periods": 10,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_momo_vol_ratio",
+        "op": "ratio",
+        "num": "feat_ret1_roll10",
+        "den": "feat_vol_20",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_spread_z20",
+        "op": "rolling_zscore",
+        "col": "spread_bps",
+        "window_bars": 20,
+        "min_periods": 10,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_ema_cross",
+        "op": "ratio_minus_1",
+        "num": "ema_12",
+        "den": "ema_26",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_momo_spread_interact",
+        "op": "product",
+        "col1": "feat_momo_vol_ratio",
+        "col2": "feat_spread_z20"
+      }
+    ]
+  },
+  "liquidity_momentum_v3": {
+    "description": "流动性与动量交互增强版（有效价差标准化、Amihud非流动性、波动率调整动量比、EMA交叉信号）",
+    "steps": [
+      {
+        "name": "feat_effective_spread",
+        "op": "effective_spread"
+      },
+      {
+        "name": "feat_effective_spread_z20",
+        "op": "rolling_zscore",
+        "col": "feat_effective_spread",
+        "window_bars": 20,
+        "min_periods": 10,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_amihud_5",
+        "op": "amihud_illiquidity",
+        "col": "ret_5"
+      },
+      {
+        "name": "feat_ema_cross",
+        "op": "ratio_minus_1",
+        "num": "ema_12",
+        "den": "ema_26",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_ret1_roll10",
+        "op": "rolling_sum",
+        "col": "ret_1",
+        "window_bars": 10,
+        "min_periods": 5,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_vol_20",
+        "op": "rolling_std",
+        "col": "ret_1",
+        "window_bars": 20,
+        "min_periods": 10,
+        "per_symbol": true
+      },
+      {
+        "name": "feat_momo_vol_ratio",
+        "op": "ratio",
+        "num": "feat_ret1_roll10",
+        "den": "feat_vol_20",
+        "eps": 1e-06
+      },
+      {
+        "name": "feat_momo_spread_interact",
+        "op": "product",
+        "col1": "feat_momo_vol_ratio",
+        "col2": "feat_effective_spread_z20"
+      }
+    ]
+  }
+}

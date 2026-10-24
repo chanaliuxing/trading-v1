@@ -1,0 +1,102 @@
+{
+  "title": "Trading Observability",
+  "uid": "trading-observability",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "tags": ["trading", "observability"],
+  "panels": [
+    {
+      "type": "logs",
+      "title": "Orders & Fills",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 12, "w": 24, "x": 0, "y": 0},
+      "targets": [
+        {"expr": "{job=\"trader\"} |= \"order_fill\" or |= \"order_rejected\" or |= \"order_trimmed\"", "refId": "A"}
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "type": "logs",
+      "title": "Why not order?",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12},
+      "targets": [
+        {"expr": "{job=\"trader\"} |= \"order_skipped\" or |= \"overlay_block\"", "refId": "A"}
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "type": "logs",
+      "title": "Strategy Decisions",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 20},
+      "targets": [
+        {"expr": "{job=\"trader\"} |= \"decision_made\"", "refId": "A"}
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "SLO Metrics (ClickHouse)",
+      "datasource": {"type": "grafana-clickhouse-datasource", "uid": "ch"},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 28},
+      "fieldConfig": {
+        "defaults": {"unit": "ms"},
+        "overrides": []
+      },
+      "targets": [
+        {"refId": "A", "query": "SELECT toDateTime(ts_ms/1000) AS t, data_lag_ms_avg AS v FROM trading.live_metrics ORDER BY t", "format": "time_series", "legendFormat": "data_lag"},
+        {"refId": "B", "query": "SELECT toDateTime(ts_ms/1000) AS t, slippage_bps_avg AS v FROM trading.live_metrics ORDER BY t", "format": "time_series", "legendFormat": "slippage_bps"}
+      ],
+      "options": {
+        "legend": {"displayMode": "list", "placement": "bottom"}
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Error Rates (ClickHouse)",
+      "datasource": {"type": "grafana-clickhouse-datasource", "uid": "ch"},
+      "gridPos": {"h": 6, "w": 24, "x": 0, "y": 36},
+      "fieldConfig": {
+        "defaults": {"unit": "percent"}
+      },
+      "targets": [
+        {"refId": "A", "query": "SELECT toDateTime(ts_ms/1000) AS t, order_error_rate AS v FROM trading.live_metrics ORDER BY t", "format": "time_series", "legendFormat": "order_error_rate"}
+      ],
+      "options": {
+        "legend": {"displayMode": "list", "placement": "bottom"}
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Kill-Switch / Overlay",
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 42},
+      "targets": [
+        {"expr": "count_over_time({job=\"trader\"} |= \"slo_breach\" or |= \"overlay_block\" [1h])", "refId": "A"}
+      ]
+    }
+  ]
+}

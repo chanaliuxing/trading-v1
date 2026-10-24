@@ -1,0 +1,73 @@
+{
+  "blockers": [],
+  "config": {
+    "qqq_intraday_001": {
+      "enabled": true,
+      "present": true
+    },
+    "shadows": {
+      "qqq_kernel_shadow_legacy_off_001": {
+        "dry_run": true,
+        "enabled": true,
+        "policy_id": "qqq_intraday_policy_v1",
+        "present": true,
+        "shadow_legacy_mode": "legacy_off",
+        "shadow_only": true,
+        "shadow_origin_strategy_id": "qqq_intraday_001",
+        "shared_underlying_read_mode": "plane_only"
+      },
+      "qqq_kernel_shadow_legacy_on_001": {
+        "dry_run": true,
+        "enabled": true,
+        "policy_id": "qqq_intraday_policy_v1",
+        "present": true,
+        "shadow_legacy_mode": "legacy_on",
+        "shadow_only": true,
+        "shadow_origin_strategy_id": "qqq_intraday_001",
+        "shared_underlying_read_mode": "plane_only"
+      }
+    }
+  },
+  "day": "20260421",
+  "generated_at": "2026-04-21T01:18:37Z",
+  "parity_reports": [
+    {
+      "diff_count_by_field": null,
+      "diff_total": null,
+      "kernel_count": null,
+      "legacy_count": null,
+      "legacy_mode": null,
+      "match_ratio": null,
+      "path": "./reports/qqq_kernel_shadow_parity/20260421_postclose_report_preview.json",
+      "recommendation": "CONTINUE_SHADOW"
+    },
+    {
+      "diff_count_by_field": null,
+      "diff_total": null,
+      "kernel_count": null,
+      "legacy_count": null,
+      "legacy_mode": null,
+      "match_ratio": null,
+      "path": "./reports/qqq_kernel_shadow_parity/20260421_preopen_gate_enabled.json",
+      "recommendation": "GO_FOR_READINESS_ONLY"
+    }
+  ],
+  "preopen_gate": {
+    "ok": true,
+    "present": true,
+    "recommendation": "GO_FOR_READINESS_ONLY"
+  },
+  "readiness": {
+    "failed_checks": [],
+    "ok": true,
+    "present": true,
+    "recommendation": "GO_FOR_READINESS_ONLY"
+  },
+  "recommendation": "CONTINUE_SHADOW",
+  "summary": {
+    "day_is_trading_day": true,
+    "parity_report_count": 2,
+    "shadow_enabled_count": 2,
+    "total_diff_count": 0
+  }
+}

@@ -1,0 +1,472 @@
+{
+  "callers": [
+    {
+      "direct_call_target": "execution_service",
+      "file": "./run_system.py",
+      "migration_status": "wired",
+      "needle": "ExecutionService",
+      "note": "production bootstrap wires UOM/ExecutionService",
+      "relative_file": "run_system.py",
+      "risk_level": "platform_bootstrap"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./run_system.py",
+      "migration_status": "wired",
+      "needle": "IBInsyncAdapter",
+      "note": "production bootstrap wires UOM/ExecutionService",
+      "relative_file": "run_system.py",
+      "risk_level": "platform_bootstrap"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./services/backtest/backtest_engine.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "services/backtest/backtest_engine.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./services/exec/__init__.py",
+      "migration_status": "platform_internal",
+      "needle": "ExecutionService",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/__init__.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/exec/adapters/__init__.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/adapters/__init__.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/exec/adapters/ib_adapter.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/adapters/ib_adapter.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./services/exec/execution_service.py",
+      "migration_status": "platform_internal",
+      "needle": "ExecutionService",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/execution_service.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_adapter",
+      "file": "./services/exec/execution_service.py",
+      "migration_status": "platform_internal",
+      "needle": "IBAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/execution_service.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "safety_kernel_place_entry_order",
+      "file": "./services/exec/execution_service.py",
+      "migration_status": "platform_internal",
+      "needle": ".place_entry_order(",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/execution_service.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/exec/fill_event_handler.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/fill_event_handler.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./services/exec/netting/__init__.py",
+      "migration_status": "platform_internal",
+      "needle": "ExecutionService",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/netting/__init__.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./services/exec/netting/netted_execution_service.py",
+      "migration_status": "platform_internal",
+      "needle": "ExecutionService",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/netting/netted_execution_service.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "safety_kernel_place_entry_order",
+      "file": "./services/exec/netting/netted_execution_service.py",
+      "migration_status": "platform_internal",
+      "needle": ".place_entry_order(",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/netting/netted_execution_service.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./services/exec/options_long_adapter.py",
+      "migration_status": "platform_internal",
+      "needle": "ExecutionService",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/options_long_adapter.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/exec/safety_kernel.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/safety_kernel.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "safety_kernel_place_order",
+      "file": "./services/exec/safety_kernel.py",
+      "migration_status": "platform_internal",
+      "needle": ".place_order(",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/exec/safety_kernel.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/ibkr/ib_connection_manager.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/ibkr/ib_connection_manager.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./services/orders/manager.py",
+      "migration_status": "platform_internal",
+      "needle": "ExecutionService",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/orders/manager.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/portfolio/account_service.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/portfolio/account_service.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/portfolio/order_monitor.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/portfolio/order_monitor.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./services/reconciliation/reconciler.py",
+      "migration_status": "platform_internal",
+      "needle": "IBInsyncAdapter",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/reconciliation/reconciler.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "safety_kernel_place_entry_order",
+      "file": "./services/risk/order_router.py",
+      "migration_status": "platform_internal",
+      "needle": ".place_entry_order(",
+      "note": "allowed inside broker/execution platform boundary",
+      "relative_file": "services/risk/order_router.py",
+      "risk_level": "platform_internal"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./services/strategy/example_mean_revert.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "services/strategy/example_mean_revert.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./services/strategy/strategy_base.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "services/strategy/strategy_base.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/enhanced_model_signal_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/enhanced_model_signal_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/index_super_win_replica_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/index_super_win_replica_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/index_super_win_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/index_super_win_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/ml_model_registry_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/ml_model_registry_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/model_signal_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/model_signal_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/options_kernel/base.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/options_kernel/base.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/qqq_0dte_opt_live_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/qqq_0dte_opt_live_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/qqq_intraday_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/qqq_intraday_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/qqq_v2/engines/position_supervisor.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/qqq_v2/engines/position_supervisor.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/research_spy_scalp_seed_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/research_spy_scalp_seed_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/reve_intraday_strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/reve_intraday_strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/sfs_fusion_demo.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/sfs_fusion_demo.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/stocks_kernel/strategy.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/stocks_kernel/strategy.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./strategies/tsla_v7_2.py",
+      "migration_status": "routed_by_pipeline",
+      "needle": ".submit_intent(",
+      "note": "strategy intent API routes through DecisionPipeline -> UOM",
+      "relative_file": "strategies/tsla_v7_2.py",
+      "risk_level": "low"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./tool/cleanup_db_orders.py",
+      "migration_status": "not_production",
+      "needle": "IBInsyncAdapter",
+      "note": "test/tool surface only",
+      "relative_file": "tool/cleanup_db_orders.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./tool/report/build_live_strategy_surface_report.py",
+      "migration_status": "not_production",
+      "needle": "ExecutionService",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_live_strategy_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "ib_adapter",
+      "file": "./tool/report/build_live_strategy_surface_report.py",
+      "migration_status": "not_production",
+      "needle": "IBAdapter",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_live_strategy_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "ctx_submit_intent",
+      "file": "./tool/report/build_uom_caller_surface_report.py",
+      "migration_status": "not_production",
+      "needle": ".submit_intent(",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_uom_caller_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./tool/report/build_uom_caller_surface_report.py",
+      "migration_status": "not_production",
+      "needle": "ExecutionService",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_uom_caller_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "ib_adapter",
+      "file": "./tool/report/build_uom_caller_surface_report.py",
+      "migration_status": "not_production",
+      "needle": "IBAdapter",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_uom_caller_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./tool/report/build_uom_caller_surface_report.py",
+      "migration_status": "not_production",
+      "needle": "IBInsyncAdapter",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_uom_caller_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "safety_kernel_place_order",
+      "file": "./tool/report/build_uom_caller_surface_report.py",
+      "migration_status": "not_production",
+      "needle": ".place_order(",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_uom_caller_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "safety_kernel_place_entry_order",
+      "file": "./tool/report/build_uom_caller_surface_report.py",
+      "migration_status": "not_production",
+      "needle": ".place_entry_order(",
+      "note": "test/tool surface only",
+      "relative_file": "tool/report/build_uom_caller_surface_report.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./tool/run_runtime_reconciler_once.py",
+      "migration_status": "not_production",
+      "needle": "IBInsyncAdapter",
+      "note": "test/tool surface only",
+      "relative_file": "tool/run_runtime_reconciler_once.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./tool/smoke/test_decision_chain_regression.py",
+      "migration_status": "not_production",
+      "needle": "ExecutionService",
+      "note": "test/tool surface only",
+      "relative_file": "tool/smoke/test_decision_chain_regression.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "execution_service",
+      "file": "./tool/smoke/test_multi_strategy_isolation_chain.py",
+      "migration_status": "not_production",
+      "needle": "ExecutionService",
+      "note": "test/tool surface only",
+      "relative_file": "tool/smoke/test_multi_strategy_isolation_chain.py",
+      "risk_level": "test_or_tool"
+    },
+    {
+      "direct_call_target": "ib_insync_adapter",
+      "file": "./tool/sync_today_fills.py",
+      "migration_status": "not_production",
+      "needle": "IBInsyncAdapter",
+      "note": "test/tool surface only",
+      "relative_file": "tool/sync_today_fills.py",
+      "risk_level": "test_or_tool"
+    }
+  ],
+  "production_pending_files": [],
+  "repo_root": ".",
+  "summary": {
+    "caller_count": 51,
+    "platform_internal_count": 19,
+    "production_pending_count": 0,
+    "routed_by_pipeline_count": 17,
+    "test_or_tool_count": 13
+  }
+}

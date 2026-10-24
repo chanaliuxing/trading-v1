@@ -1,0 +1,112 @@
+{
+  "comment": "AI大脑通过JSON Patch控制Featuretools DFS和XGB特征工具",
+  "schema_version": "1.0",
+
+  "featuretools": {
+    "enabled": true,
+    "entity_name": "bars_1m",
+    "index": "row_id",
+    "time_index": "ts",
+    "symbol_col": "symbol",
+    "cutoff_horizon_sec": 60,
+    "training_window": "30D",
+    "max_depth": 2,
+    "agg_primitives": ["mean", "std", "max", "min", "percent_true"],
+    "trans_primitives": ["day", "hour", "weekday", "absolute"],
+    "drop_contains": ["lead", "future"],
+    "drop_exact": [],
+    "topk_by_variance": 1024,
+    "save_feature_defs": "runs/feature_registry/ft_defs.json"
+  },
+
+  "xgb_feature_maker": {
+    "enabled": true,
+    "model": {
+      "n_estimators": 200,
+      "max_depth": 6,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "learning_rate": 0.05,
+      "grow_policy": "lossguide",
+      "max_leaves": 64,
+      "n_jobs": 4,
+      "tree_method": "hist"
+    },
+    "leaf_embedding": {
+      "mode": "hash",
+      "hash_dim": 512
+    }
+  },
+
+  "xgb_feature_tools": {
+    "default": {
+      "task": "regression",
+      "model": {
+        "n_estimators": 100,
+        "max_depth": 6,
+        "learning_rate": 0.1,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "objective": "reg:squarederror",
+        "tree_method": "hist",
+        "enable_categorical": false
+      },
+      "products": {
+        "leaf_embedding": {
+          "enabled": true,
+          "hash_dim": 2048,
+          "mode": "hashed_onehot"
+        },
+        "shap_interactions": {
+          "enabled": true,
+          "topk_pairs": 12,
+          "sample_n": 20000
+        },
+        "binned_stats": {
+          "enabled": true,
+          "n_bins": 10,
+          "method": "quantile"
+        },
+        "pdp": {
+          "enabled": false,
+          "topk_features": 5
+        }
+      },
+      "filters": {
+        "enabled": true,
+        "leakage_guard": {
+          "name_blacklist": ["label", "future", "lead", "forward", "target"]
+        },
+        "variance": {
+          "min": 1e-10
+        },
+        "target_corr": {
+          "enabled": true,
+          "metric": "spearman",
+          "min_abs": 0.02,
+          "sample_n": 50000
+        },
+        "mi": {
+          "enabled": false,
+          "min": 0.0,
+          "sample_n": 50000
+        },
+        "pair_corr": {
+          "enabled": true,
+          "metric": "spearman",
+          "max_abs": 0.98,
+          "sample_n": 30000
+        },
+        "max_features": 2048,
+        "save_meta": true,
+        "meta_path": "runs/feature_registry/feature_filter_meta.json"
+      }
+    }
+  },
+
+  "pipeline": {
+    "mode": "xgb_only",
+    "modes_available": ["xgb_only", "dfs_only", "xgb_then_dfs", "dfs_then_xgb"],
+    "comment": "AI大脑可通过JSON Patch修改mode字段切换特征工程流水线"
+  }
+}

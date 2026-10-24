@@ -1,0 +1,403 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: trading-clickhouse-alerts
+    folder: Trading Alerts
+    interval: 1m
+    rules:
+      # ========================================================================
+      # P0 Alert #1: Data Staleness (数据过期告警)
+      # ========================================================================
+      - uid: data-freshness-critical
+        title: "🔴 P0: Data Staleness > 1 Hour"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: ch  # ClickHouse datasource
+            model:
+              rawSql: |
+                SELECT
+                  round((now() - max(ts_ny)) / 60, 0) as minutes_ago
+                FROM llm.ibkr_account_realtime
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: classic_conditions
+              conditions:
+                - evaluator:
+                    params:
+                      - 60  # Alert if data > 60 minutes old
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: Alerting  # Alert if no data
+        execErrState: Alerting
+        for: 5m  # Alert after 5 minutes of continuous breach
+        annotations:
+          summary: "Account data is {{ $values.A.Value }} minutes old (> 60 min)"
+          description: |
+            **CRITICAL**: Trading account data has not been updated for {{ $values.A.Value }} minutes.
+
+            **Impact**: Traders may be looking at stale data, risking bad decisions.
+
+            **Action Required**:
+            1. Check data ingestion service status
+            2. Verify ClickHouse connection
+            3. Check IBKR API status
+
+            **Dashboard**: http://localhost:3000/d/ai-trading-performance
+          runbook_url: "https://github.com/your-repo/wiki/runbooks/data-staleness"
+        labels:
+          severity: critical
+          team: trading
+          component: data-ingestion
+
+      # ========================================================================
+      # P0 Alert #2: System Status Critical (系统状态告警)
+      # ========================================================================
+      - uid: system-status-critical
+        title: "🔴 P0: Trading System Critical"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: ch
+            model:
+              rawSql: |
+                WITH data_age AS (
+                    SELECT round((now() - max(ts_ny)) / 60, 0) as minutes_ago
+                    FROM llm.ibkr_account_realtime
+                ),
+                fills_today AS (
+                    SELECT count(*) as fill_count
+                    FROM llm.llm_fills
+                    WHERE toDate(ts_ny) = today()
+                )
+                SELECT
+                    CASE
+                        WHEN d.minutes_ago > 360 THEN 0  -- CRITICAL: Data > 6h old
+                        WHEN d.minutes_ago > 60 THEN 1   -- WARNING: Data > 1h old
+                        WHEN f.fill_count = 0 AND toHour(now()) >= 9 AND toHour(now()) < 16 THEN 1
+                        ELSE 2  -- OK
+                    END as status_code
+                FROM data_age d, fills_today f
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: classic_conditions
+              conditions:
+                - evaluator:
+                    params:
+                      - 1  # Alert if status_code < 1 (0 = CRITICAL)
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: Alerting
+        execErrState: Alerting
+        for: 10m
+        annotations:
+          summary: "Trading system in CRITICAL state (status={{ $values.A.Value }})"
+          description: |
+            **CRITICAL**: Trading system health check failed.
+
+            **Possible Issues**:
+            - Data not updated for > 6 hours
+            - No fills during market hours (9:30-16:00 ET)
+
+            **Action Required**:
+            1. Check Dashboard 1: http://localhost:3000/d/ai-trading-performance
+            2. Verify data ingestion pipeline
+            3. Check trading strategy execution
+            4. Review error logs
+          runbook_url: "https://github.com/your-repo/wiki/runbooks/system-critical"
+        labels:
+          severity: critical
+          team: trading
+          component: system-health
+
+      # ========================================================================
+      # P0 Alert #3: Zombie Sessions (僵尸会话告警)
+      # ========================================================================
+      - uid: zombie-sessions-high
+        title: "🟠 P1: High Zombie Sessions Count"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: ch
+            model:
+              rawSql: |
+                SELECT count(*) as zombie_count
+                FROM llm.llm_sessions
+                WHERE status = 'RUNNING'
+                  AND (now() - start_ts_ny) > 86400  -- 24 hours
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: classic_conditions
+              conditions:
+                - evaluator:
+                    params:
+                      - 10  # Alert if > 10 zombie sessions
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: NoData
+        execErrState: Error
+        for: 15m
+        annotations:
+          summary: "{{ $values.A.Value }} zombie sessions detected (> 24h running)"
+          description: |
+            **WARNING**: High number of zombie LLM sessions detected.
+
+            **Current Count**: {{ $values.A.Value }} sessions running > 24 hours
+
+            **Impact**: Resource leaks, memory accumulation
+
+            **Action Required**:
+            1. Check Dashboard 4: http://localhost:3000/d/llm-sessions-monitor
+            2. Review zombie sessions table
+            3. Run cleanup script: `python scripts/cleanup_zombie_sessions.py`
+            4. Investigate why sessions are not closing properly
+          runbook_url: "https://github.com/your-repo/wiki/runbooks/zombie-sessions"
+        labels:
+          severity: warning
+          team: engineering
+          component: llm-sessions
+
+      # ========================================================================
+      # P1 Alert #4: AI Brain P95 Latency High (性能告警)
+      # ========================================================================
+      - uid: brain-latency-high
+        title: "🟡 P1: AI Brain P95 Latency > 60s"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 3600  # Last 1 hour
+              to: 0
+            datasourceUid: ch
+            model:
+              rawSql: |
+                SELECT round(quantile(0.95)(duration_ms) / 1000, 1) as p95_latency_sec
+                FROM llm.ai_brain_calls
+                WHERE ts_ny >= now() - INTERVAL 1 HOUR
+          - refId: C
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: classic_conditions
+              conditions:
+                - evaluator:
+                    params:
+                      - 60  # Alert if P95 > 60 seconds
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: NoData
+        execErrState: Error
+        for: 30m  # Alert after 30 minutes of high latency
+        annotations:
+          summary: "AI Brain P95 latency is {{ $values.A.Value }}s (> 60s threshold)"
+          description: |
+            **Performance Degradation**: AI Brain calls are very slow.
+
+            **Current P95 Latency**: {{ $values.A.Value }} seconds
+            **Threshold**: 60 seconds
+
+            **Impact**: Trading decisions delayed, potential missed opportunities
+
+            **Action Required**:
+            1. Check Dashboard 3: http://localhost:3000/d/ai-brain-performance
+            2. Review slow calls (>60s) count
+            3. Check LLM provider status (deepseek_nvidia)
+            4. Consider implementing provider fallback
+            5. Review propose_plan performance
+          runbook_url: "https://github.com/your-repo/wiki/runbooks/brain-latency"
+        labels:
+          severity: warning
+          team: engineering
+          component: ai-brain
+
+      # ========================================================================
+      # P1 Alert #5: Slow Calls Spike (慢调用激增)
+      # ========================================================================
+      - uid: slow-calls-spike
+        title: "🟡 P1: Slow AI Brain Calls Spike"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 3600  # Last 1 hour
+              to: 0
+            datasourceUid: ch
+            model:
+              rawSql: |
+                SELECT count(*) as slow_count
+                FROM llm.ai_brain_calls
+                WHERE ts_ny >= now() - INTERVAL 1 HOUR
+                  AND duration_ms > 60000  -- > 60 seconds
+          - refId: C
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: classic_conditions
+              conditions:
+                - evaluator:
+                    params:
+                      - 20  # Alert if > 20 slow calls in 1 hour
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: NoData
+        execErrState: Error
+        for: 15m
+        annotations:
+          summary: "{{ $values.A.Value }} slow calls (>60s) in the last hour"
+          description: |
+            **Performance Issue**: Unusual spike in slow AI Brain calls.
+
+            **Slow Calls Count**: {{ $values.A.Value }} (in last 1 hour)
+            **Threshold**: 20 calls
+
+            **Possible Causes**:
+            - LLM provider degradation
+            - Network issues
+            - Oversized prompts
+            - High system load
+
+            **Action Required**:
+            1. Check Dashboard 3 Health Monitoring section
+            2. Review provider latency comparison
+            3. Check network connectivity
+            4. Consider temporary rate limiting
+          runbook_url: "https://github.com/your-repo/wiki/runbooks/slow-calls"
+        labels:
+          severity: warning
+          team: engineering
+          component: ai-brain
+
+      # ========================================================================
+      # P1 Alert #6: No Trading Activity During Market Hours
+      # ========================================================================
+      - uid: no-fills-market-hours
+        title: "🟠 P1: No Fills During Market Hours"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 7200  # Last 2 hours
+              to: 0
+            datasourceUid: ch
+            model:
+              rawSql: |
+                SELECT
+                  count(*) as fill_count,
+                  toHour(now()) as current_hour
+                FROM llm.llm_fills
+                WHERE ts_ny >= now() - INTERVAL 2 HOUR
+          - refId: C
+            relativeTimeRange:
+              from: 7200
+              to: 0
+            datasourceUid: __expr__
+            model:
+              type: classic_conditions
+              conditions:
+                - evaluator:
+                    params:
+                      - 1  # Alert if fill_count < 1
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: NoData
+        execErrState: Error
+        for: 2h  # Alert after 2 hours of no fills
+        annotations:
+          summary: "No fills in the last 2 hours (current hour: {{ $values.A.Value }})"
+          description: |
+            **Trading Activity Alert**: No fills detected during potential market hours.
+
+            **Time Window**: Last 2 hours
+            **Current Hour**: {{ $values.A.Value }}
+
+            **Note**: This is only concerning during market hours (9:30-16:00 ET)
+
+            **Possible Causes**:
+            - Market volatility too low
+            - Strategy filters too strict
+            - System execution issue
+            - Order submission failure
+
+            **Action Required**:
+            1. Check Dashboard 1 Trading Activity panel
+            2. Review strategy decision logs
+            3. Check order execution adapter
+            4. Verify IBKR connection
+          runbook_url: "https://github.com/your-repo/wiki/runbooks/no-fills"
+        labels:
+          severity: warning
+          team: trading
+          component: order-execution

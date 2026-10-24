@@ -1,0 +1,24 @@
+{
+  "artifact_paths": {
+    "audit": "runtime/audit/20260512",
+    "readiness": "runtime/readiness",
+    "reports": "reports"
+  },
+  "broker_policy": "live_broker_disabled_mocked",
+  "duration_sec": 60,
+  "env": {
+    "TRADING_TEST_ALLOW_LIVE_IBKR": "0"
+  },
+  "generated_at": "2026-05-12T18:11:11.223927-04:00",
+  "mode": "PAPER_ONLY",
+  "no_live_guard_status": "PASS",
+  "order_mutation_policy": "real_order_cancel_modify_disabled",
+  "reconciliation_mode": "report_only",
+  "strategy_surface_tiers": {
+    "canary_only_count": 1,
+    "production_eligible_count": 0
+  },
+  "unknown_owner_automatic_cancel_enabled": false,
+  "unknown_owner_automatic_flatten_enabled": false,
+  "verdict": "PASS"
+}

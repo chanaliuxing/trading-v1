@@ -1,0 +1,18 @@
+{
+  "windows_short": 7,
+  "k_atr": 1.75,
+  "regime_epsilon": 0.0044,
+  "pause": {"theta_vix": 0.11, "theta_spread": 0.0005, "theta_atr": 1.75, "t_pause_min": 15},
+  "A1_thr_sigma": 0.0044,
+  "A1_rvol_lo": 0.85,
+  "A1_rvol_hi": 1.8,
+  "A1_time_exit_min": 46,
+  "A2_grid_g": 0.98,
+  "A2_grid_g_floor": 0.73,
+  "A2_oneway_thr": 2.7,
+  "A2_max_layers": 4,
+  "B1_orb_len": 30,
+  "B1_rvol_min": 0.85,
+  "B1_pullback_window_M": 6,
+  "B1_extend_orb": false
+}

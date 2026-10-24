@@ -1,0 +1,38 @@
+{
+  "test": "bars_coverage",
+  "timestamp": "2026-03-01T01:47:45.008783",
+  "config": {
+    "symbols": [
+      "TSLA"
+    ],
+    "start": "2026-02-27",
+    "end": "2026-02-27",
+    "table": "trading.bars_1m_ibkr",
+    "expected_min": 380,
+    "expected_ideal": 390
+  },
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "pass_rate": 0.0
+  },
+  "by_symbol": {
+    "TSLA": {
+      "total": 1,
+      "passed": 0,
+      "failed": 1
+    }
+  },
+  "results": [
+    {
+      "symbol": "TSLA",
+      "date": "2026-02-27",
+      "bars_count": 0,
+      "expected_min": 380,
+      "expected_ideal": 390,
+      "ok": false,
+      "note": "no_data"
+    }
+  ]
+}

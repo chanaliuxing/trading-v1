@@ -1,0 +1,434 @@
+{
+  "title": "AI Brain - 管理视图",
+  "description": "AI 大脑管理界面 - 用人话告诉你 AI 在做什么,你应该怎么办",
+  "tags": [
+    "ai",
+    "brain",
+    "management"
+  ],
+  "timezone": "America/New_York",
+  "editable": true,
+  "uid": "ai-brain-mgmt",
+  "refresh": "30s",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "🚦 一眼健康检查",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "AI 大脑状态",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "vertical",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": 0,
+                "to": 1,
+                "result": {
+                  "text": "🟢 正常运行",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1,
+                "to": 2,
+                "result": {
+                  "text": "🟡 轻微延迟",
+                  "color": "yellow"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 2,
+                "to": 6,
+                "result": {
+                  "text": "🟠 数据过期",
+                  "color": "orange"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 6,
+                "to": 999,
+                "result": {
+                  "text": "🔴 已停止",
+                  "color": "red"
+                }
+              }
+            }
+          ],
+          "unit": "none",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 6
+              }
+            ]
+          }
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT round((toUnixTimestamp(now()) - toUnixTimestamp(max(ts_ny))) / 3600, 1) as hours_ago FROM llm.ai_brain_calls",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "最后活动",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "vertical",
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT formatDateTime(max(ts_ny), '%m月%d日 %H:%M') as last_time FROM llm.ai_brain_calls",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "今日 AI 活动",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "vertical",
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "SELECT \n            count() as '调用次数',\n            sumIf(1, kind = 'propose_plan') as '分析次数',\n            sumIf(1, kind = 'decide') as '决策次数'\n        FROM llm.ai_brain_calls \n        WHERE toDate(ts_ny) = today()",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "row",
+      "title": "🤖 AI 大脑在说什么",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      }
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "🤖 AI 大脑的最新分析",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "options": {
+        "showHeader": false,
+        "cellHeight": "auto",
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "fields": ""
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AI 的话"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 2000
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto",
+                  "mode": "basic"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nSELECT \n    concat(\n        '📅 分析时间: ', formatDateTime(ts_ny, '%Y-%m-%d %H:%i'), '\\n\\n',\n        '📊 当前状态: ', \n        CASE JSONExtractString(output_json, 'diagnosis')\n            WHEN 'no_trading_history_due_to_new_system_init' THEN '系统刚启动，正在收集数据'\n            WHEN 'no_trading_history_due_to_zero_decisions' THEN '系统运行中，暂无交易决策'\n            WHEN '' THEN '正常运行中'\n            ELSE JSONExtractString(output_json, 'diagnosis')\n        END,\n        '\\n\\n',\n        '🤖 AI 说:\\n',\n        CASE JSONExtractString(output_json, 'diagnosis')\n            WHEN 'no_trading_history_due_to_new_system_init' THEN \n                '\"你好！我刚启动，还没有交易历史数据。我需要先观察 2-4 小时，收集一些数据，然后才能给你更好的建议。\"'\n            WHEN 'no_trading_history_due_to_zero_decisions' THEN \n                '\"系统在运行，但还没有产生交易决策。我在继续监控市场，等待合适的交易机会。\"'\n            WHEN '' THEN \n                '\"系统运行正常。我在持续监控市场和性能指标。\"'\n            ELSE JSONExtractString(output_json, 'diagnosis')\n        END,\n        '\\n\\n',\n        '✅ AI 建议你:\\n',\n        CASE JSONExtractString(output_json, 'diagnosis')\n            WHEN 'no_trading_history_due_to_new_system_init' THEN \n                '• 继续运行系统 (我会自动收集数据)\\n• 保持当前设置 (已启用保护措施)\\n• 不要手动调整参数 (等我收集够数据)'\n            WHEN 'no_trading_history_due_to_zero_decisions' THEN \n                '• 继续观察 (我在监控市场)\\n• 检查策略是否过于严格\\n• 耐心等待交易信号'\n            ELSE '• 系统正常，继续运行'\n        END,\n        '\\n\\n',\n        '⏭️ 下一步:\\n',\n        CASE JSONExtractString(output_json, 'diagnosis')\n            WHEN 'no_trading_history_due_to_new_system_init' THEN \n                '预计 2-4 小时后，我会有第一次参数优化建议'\n            WHEN 'no_trading_history_due_to_zero_decisions' THEN \n                '如果 24 小时内仍无交易，建议检查策略配置'\n            ELSE '保持当前状态'\n        END,\n        '\\n\\n',\n        '🎯 置信度: ', toString(toInt32(JSONExtractFloat(JSONExtractArrayRaw(output_json, 'prescription')[1], 'confidence') * 100)), '%'\n    ) as 'AI 的话'\nFROM llm.ai_brain_calls\nWHERE kind = 'propose_plan'\nORDER BY ts_ny DESC\nLIMIT 1\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "row",
+      "title": "⚙️ AI 刚才做的配置修改",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      }
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "⚙️ AI 最近一次配置修改",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "options": {
+        "showHeader": false,
+        "cellHeight": "auto",
+        "footer": {
+          "show": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "配置修改详情"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 2000
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "ch"
+          },
+          "queryType": "sql",
+          "rawSql": "\nWITH latest_decide AS (\n    SELECT \n        ts_ny,\n        output_json,\n        JSONExtractString(output_json, 'notes') as notes\n    FROM llm.ai_brain_calls\n    WHERE kind = 'decide'\n    ORDER BY ts_ny DESC\n    LIMIT 1\n)\nSELECT\n    concat(\n        '⏰ 修改时间: ', formatDateTime(ts_ny, '%Y-%m-%d %H:%i'), '\\n\\n',\n        '🔧 修改了什么:\\n',\n        arrayStringConcat(\n            arrayMap(\n                item -> concat(\n                    '  • ',\n                    CASE JSONExtractString(item, 'key')\n                        WHEN 'risk_management.guardian.dd_intraday_pct' THEN '📉 回撤限制'\n                        WHEN 'risk_management.hedge.auto_execute' THEN '🛡️ 自动对冲'\n                        WHEN 'risk_management.position_sizing.max_allocation_pct' THEN '💰 最大仓位'\n                        ELSE JSONExtractString(item, 'key')\n                    END,\n                    ' → ',\n                    JSONExtractString(item, 'value')\n                ),\n                JSONExtractArrayRaw(output_json, 'apply')\n            ),\n            '\\n'\n        ),\n        '\\n\\n',\n        '💭 AI 为什么这么做:\\n\"', notes, '\"\\n\\n',\n        '📊 实际影响:\\n',\n        CASE JSONExtractString(JSONExtractArrayRaw(output_json, 'apply')[1], 'key')\n            WHEN 'risk_management.guardian.dd_intraday_pct' THEN \n                concat(\n                    '  ✅ 如果今天亏损达到 ', \n                    JSONExtractString(JSONExtractArrayRaw(output_json, 'apply')[1], 'value'),\n                    '%，系统会自动停止交易\\n',\n                    '  ✅ 这是一个保护措施，避免单日亏损过大\\n',\n                    '  ⚠️ 可能会限制盈利能力 (如果过于保守)'\n                )\n            WHEN 'risk_management.hedge.auto_execute' THEN \n                '  ✅ 系统会在市场下跌时自动建立对冲头寸\\n  ✅ 降低整体风险敞口\\n  ⚠️ 对冲会有成本'\n            ELSE '  配置已更新'\n        END,\n        '\\n\\n',\n        '🔧 如果你不同意这个修改，可以在 config.yml 中手动覆盖'\n    ) as '配置修改详情'\nFROM latest_decide\n",
+          "refId": "A",
+          "format": 1
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "row",
+      "title": "🔧 问题排查",
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      }
+    },
+    {
+      "id": 10,
+      "type": "text",
+      "title": "AI 大脑停止时的修复步骤",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# 🔴 AI 大脑已停止\n\n## 影响\n- ❌ 系统使用固定配置运行\n- ❌ 没有自动参数优化\n- ❌ 可能错过市场变化\n\n---\n\n## 修复步骤\n\n### 1️⃣ 检查进程是否运行\n```bash\nps aux | grep orchestrator\n```\n\n### 2️⃣ 如果没有进程，重启\n```bash\ncd .\npython scripts/ai_trader/orchestrator.py &\n```\n\n### 3️⃣ 查看日志确认\n```bash\ntail -50 logs/ai_brain_orchestrator.log\n```\n\n### 4️⃣ 验证恢复\n等待 1-2 分钟后，刷新此 dashboard  \n\"AI 大脑状态\" 应该变为 🟢 正常运行\n\n---\n\n需要帮助？联系技术支持"
+      }
+    },
+    {
+      "id": 11,
+      "type": "text",
+      "title": "常用检查命令",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# 📋 诊断命令\n\n## 检查数据新鲜度\n```sql\nSELECT \n    formatDateTime(max(ts_ny), '%Y-%m-%d %H:%M:%S')\nFROM llm.ai_brain_calls\n```\n\n## 检查今日活动\n```sql\nSELECT \n    kind,\n    count() as calls\nFROM llm.ai_brain_calls\nWHERE toDate(ts_ny) = today()\nGROUP BY kind\n```\n\n## 查看最近错误\n```bash\ndocker logs trading_system 2>&1 | grep -i error | tail -20\n```\n\n## 检查 LLM API 状态\n```bash\ncurl -s http://localhost:8000/health\n```"
+      }
+    }
+  ]
+}

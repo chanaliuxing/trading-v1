@@ -1,0 +1,92 @@
+{
+  "experiment_id": "exp-stocks-spy-intraday-core-001",
+  "cycle_id": "2026-04-13-manual",
+  "market": "stocks",
+  "strategy_family": "intraday_scalp",
+  "engine": {
+    "adapter": "stocks_kernel_backtest",
+    "mode": "backtest",
+    "backtest": {
+      "strategy_path": "strategies/stocks_kernel_strategy.py",
+      "strategy_class": "StocksKernelStrategy",
+      "starting_cash": 1000000,
+      "commission_per_share": 0.005,
+      "commission_min": 1.0,
+      "slippage_bps": 1.5,
+      "dynamic_spread_bps": 0.5,
+      "participation_cap": 0.1,
+      "fill_ref": "open"
+    }
+  },
+  "universe": {
+    "symbols": ["SPY"]
+  },
+  "strategy_ref": {
+    "template_id": "spy_intraday_core",
+    "definition_id": null
+  },
+  "module_selection": {
+    "features": ["vwap", "atr_eff", "v3m"],
+    "gates": [
+      "session_window",
+      "freshness",
+      "seed_ready",
+      "direction_match",
+      "data_integrity",
+      "open_orders_isolation",
+      "foreign_position_isolation"
+    ],
+    "risk_policy": "default_intraday",
+    "execution_policy": "paper_fill_v1"
+  },
+  "parameters": {
+    "policy_id": "spy_intraday_policy_v1",
+    "entry_model": "v47_fast_drift",
+    "confirm_symbol": "RSP",
+    "confirm_feature_prefix": "rsp",
+    "long_exec_symbol": "SPXL",
+    "short_exec_symbol": "SPXS",
+    "backtest_exec_proxy_mode": "signal_clone",
+    "backtest_confirm_proxy_mode": "none",
+    "hard_stop_atr_mult": 0.65,
+    "logic_retreat_min_hold_sec": 420,
+    "fast_v3m_atr_min": 0.45,
+    "fast_vol_min": 1.6,
+    "drift_bar_min_atr": 0.08,
+    "drift_cum_atr_min": 0.35
+  },
+  "data_window": {
+    "start": "2026-03-01 09:30:00",
+    "end": "2026-04-10 16:00:00",
+    "session": "rth"
+  },
+  "labels_and_ml": {
+    "label_profile": "intraday_h5",
+    "model_hint": "xgb_intraday_v3"
+  },
+  "robustness": {
+    "required_checks": ["walk_forward", "leakage"],
+    "min_walk_forward_folds": 3
+  },
+  "execution_reality": {
+    "cost_model_id": "default_cost_v1",
+    "fill_model_id": "paper_fill_v1",
+    "latency_model_id": "baseline_latency_v1",
+    "modeled_slippage_bps": 7.5,
+    "spread_cost_bps": 2.0
+  },
+  "sizing": {
+    "sizing_policy_id": "risk_budget_v1",
+    "capital_quota_policy_id": "default_quota_v1",
+    "de_risk_on_drawdown": true
+  },
+  "lineage": {
+    "family_id": "spy-intraday-core",
+    "parent_experiment_id": null,
+    "mutation_type": "seed"
+  },
+  "acceptance": {
+    "min_trades": 10,
+    "max_drawdown_pct": 4.0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": "2.0",
+  "global": {
+    "meta": {
+      "max_steps": 24,
+      "forbidden_names": ["future", "label", "target", "forward"],
+      "allowed_ops": [
+        "log1p","clip","power","sign","rank_pct",
+        "lag","diff","rolling_sum","rolling_mean","rolling_std","rolling_zscore","ema",
+        "ratio","ratio_minus_1","sum","product","min","max",
+        "vwap_distance","effective_spread","amihud_illiquidity","price_impact_hl",
+        "ta.rsi","ta.bbands","ta.macd","ta.atr","ta.obv"
+      ],
+      "standardize": {
+        "scaler": "robust",
+        "fit_on": "train_only",
+        "clip_sigma": 6.0
+      },
+      "nan_policy": {
+        "fill": "ffill_then_zero",
+        "min_coverage": 0.85
+      },
+      "pruning": {
+        "corr_threshold": 0.95,
+        "var_floor": 1e-8,
+        "max_features": 128
+      }
+    }
+  },
+
+  "programs": {
+    "core_v2": {
+      "description": "核心价量与动量、波动、流动性",
+      "steps": [
+        { "name": "ret_1", "op": "ratio_minus_1", "num": "close", "den": "close" },
+        { "name": "ret_5", "op": "diff", "col": "close", "periods": 5, "per_symbol": true },
+        { "name": "ret_20", "op": "diff", "col": "close", "periods": 20, "per_symbol": true },
+
+        { "name": "vol_20", "op": "rolling_std", "col": "ret_1", "window_bars": 20, "per_symbol": true },
+        { "name": "momo_10", "op": "rolling_sum", "col": "ret_1", "window_bars": 10, "per_symbol": true },
+        { "name": "momo_30", "op": "rolling_sum", "col": "ret_1", "window_bars": 30, "per_symbol": true },
+        { "name": "momo_10_z", "op": "rolling_zscore", "col": "momo_10", "window_bars": 60, "per_symbol": true },
+
+        { "name": "atr_14", "op": "ta.atr", "window_bars": 14, "per_symbol": true },
+        { "name": "rsi_14", "op": "ta.rsi", "col": "close", "window_bars": 14, "per_symbol": true },
+
+        { "name": "vwap_dev_20", "op": "vwap_distance", "price_col": "close", "vol_col": "volume", "window_bars": 20, "per_symbol": true },
+        { "name": "amihud", "op": "amihud_illiquidity", "ret_col": "ret_1", "vol_col": "volume" },
+
+        { "name": "hi_lo_spread", "op": "effective_spread", "high_col": "high", "low_col": "low", "mid_col": "close" }
+      ],
+      "post_rules": {
+        "importance_floor": 0.0,
+        "keep_top_k": 64
+      }
+    },
+
+    "microstructure_v2": {
+      "description": "微观结构与冲击",
+      "steps": [
+        { "name": "eff_spread", "op": "effective_spread" },
+        { "name": "impact_hl", "op": "price_impact_hl" },
+        { "name": "obv", "op": "ta.obv", "price_col": "close", "vol_col": "volume", "per_symbol": true },
+        { "name": "ret1_rank", "op": "rank_pct", "col": "ret_1", "per_symbol": true }
+      ],
+      "post_rules": { "keep_top_k": 32 }
+    },
+
+    "momentum_v3": {
+      "description": "多周期动量 + 波动归一",
+      "steps": [
+        { "name": "m10", "op": "rolling_sum", "col": "ret_1", "window_bars": 10, "per_symbol": true },
+        { "name": "m30", "op": "rolling_sum", "col": "ret_1", "window_bars": 30, "per_symbol": true },
+        { "name": "m60", "op": "rolling_sum", "col": "ret_1", "window_bars": 60, "per_symbol": true },
+        { "name": "vol20", "op": "rolling_std", "col": "ret_1", "window_bars": 20, "per_symbol": true },
+        { "name": "m10_n", "op": "ratio", "num": "m10", "den": "vol20", "eps": 1e-6 },
+        { "name": "m30_n", "op": "ratio", "num": "m30", "den": "vol20", "eps": 1e-6 },
+        { "name": "m60_n", "op": "ratio", "num": "m60", "den": "vol20", "eps": 1e-6 }
+      ],
+      "post_rules": { "keep_top_k": 16 }
+    },
+
+    "alpha_stack_v1": {
+      "description": "可堆叠 Alpha（价量+动量+微结构）",
+      "imports": ["core_v2", "microstructure_v2", "momentum_v3"],
+      "steps": [],
+      "post_rules": {
+        "corr_threshold": 0.9,
+        "var_floor": 1e-8,
+        "keep_top_k": 96
+      }
+    }
+  }
+}

@@ -1,0 +1,5986 @@
+{
+  "comparison_count": 80,
+  "comparison_window": {
+    "minute_ceiling": "202604291211",
+    "minute_floor": "202604291052"
+  },
+  "day": "20260429",
+  "diff_count_by_classification": {
+    "semantic_equivalent": 27,
+    "timing_only": 0,
+    "true_decision_diff": 53
+  },
+  "diff_count_by_field": {
+    "block_reason": 37,
+    "decision_ts_delta_sec": 50,
+    "exec_symbol": 23,
+    "intent": 24,
+    "order_plan": 24,
+    "signal_authority": 51
+  },
+  "diff_total": 53,
+  "generated_at": "2026-04-30T13:26:26Z",
+  "ignored_out_of_window_key_count": 313,
+  "kernel_count": 4584,
+  "kernel_strategy_id": "qqq_kernel_shadow_legacy_on_001",
+  "legacy_count": 55,
+  "legacy_mode": "preopen_parity_live_vs_legacy_on",
+  "legacy_strategy_id": "qqq_intraday_001",
+  "match_ratio": 0.3375,
+  "metrics": {
+    "qqq_kernel_shadow_parity_diff_total": 53
+  },
+  "recommendation": "HOLD",
+  "rows": [
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "amp_not_locked",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "amp_not_locked",
+          "field": "block_reason"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624572",
+        "decision_ts_epoch_s": 1777474375.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291052",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291052",
+      "legacy": {
+        "block_reason": "amp_not_locked",
+        "decision_id": "qqq_intraday_001:202604291052:NA:NA",
+        "decision_ts_epoch_s": 1777474358.859898,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291052",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "amp_not_locked",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.825552,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624573",
+        "decision_ts_epoch_s": 1777474435.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291053",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291053",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291053:NA:NA",
+        "decision_ts_epoch_s": 1777474380.174448,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291053",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.104844,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624574",
+        "decision_ts_epoch_s": 1777474495.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291054",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291054",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291054:NA:NA",
+        "decision_ts_epoch_s": 1777474440.895156,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291054",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.936224,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624575",
+        "decision_ts_epoch_s": 1777474555.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291055",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291055",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291055:NA:NA",
+        "decision_ts_epoch_s": 1777474500.063776,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291055",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "true_decision_diff",
+          "expected": "fast_drift_not_ready",
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.834691,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624576",
+        "decision_ts_epoch_s": 1777474615.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291056",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291056",
+      "legacy": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "qqq_intraday_001:202604291056:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474560.165309,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291056",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.385243,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624577",
+        "decision_ts_epoch_s": 1777474675.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291057",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291057",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291057:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474620.614757,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291057",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.947259,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624578",
+        "decision_ts_epoch_s": 1777474735.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291058",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291058",
+      "legacy": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "qqq_intraday_001:202604291058:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474680.052741,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291058",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.278573,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624579",
+        "decision_ts_epoch_s": 1777474795.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291059",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291059",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291059:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474740.721427,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291059",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "true_decision_diff",
+          "expected": "fast_drift_not_ready",
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.549191,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624580",
+        "decision_ts_epoch_s": 1777474855.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291100",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291100",
+      "legacy": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "qqq_intraday_001:202604291100:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474800.450809,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291100",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.005709,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624581",
+        "decision_ts_epoch_s": 1777474915.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291101",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291101",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291101:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474860.994291,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291101",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.892577,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624582",
+        "decision_ts_epoch_s": 1777474975.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291102",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291102",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291102:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474920.107423,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291102",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.470137,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624583",
+        "decision_ts_epoch_s": 1777475035.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291103",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291103",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291103:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777474980.529863,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291103",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "true_decision_diff",
+          "expected": "sign_mismatch",
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.617208,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624584",
+        "decision_ts_epoch_s": 1777475095.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291104",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291104",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291104:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475040.382792,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291104",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.680346,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624585",
+        "decision_ts_epoch_s": 1777475155.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291105",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291105",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291105:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475100.319654,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291105",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "true_decision_diff",
+          "expected": "sign_mismatch",
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.797866,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624586",
+        "decision_ts_epoch_s": 1777475215.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291106",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291106",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291106:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475160.202134,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291106",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.087841,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624587",
+        "decision_ts_epoch_s": 1777475275.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291107",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291107",
+      "legacy": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "qqq_intraday_001:202604291107:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475220.912159,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291107",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "true_decision_diff",
+          "expected": "sign_mismatch",
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.040929,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624588",
+        "decision_ts_epoch_s": 1777475335.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291108",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291108",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291108:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475280.959071,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291108",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.941846,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624589",
+        "decision_ts_epoch_s": 1777475395.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291109",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291109",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291109:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475340.058154,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291109",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": true,
+            "reason": "direction_allowed",
+            "side": "SHORT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "SHORT",
+            "symbol": "SQQQ",
+            "target_qty": 15.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": "SQQQ",
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 15.0,
+            "side": "SHORT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "sign_mismatch",
+          "field": "block_reason"
+        },
+        {
+          "actual": "SQQQ",
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.948299,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": null,
+        "decision_id": "QQQ:29624590",
+        "decision_ts_epoch_s": 1777475455.0,
+        "exec_symbol": "SQQQ",
+        "intent": {
+          "side": "SHORT",
+          "symbol": "SQQQ",
+          "target_qty": 15.0
+        },
+        "key": "minute:202604291110",
+        "order_plan": {
+          "exec_symbol": "SQQQ",
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 15.0,
+          "side": "SHORT"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "direction_allowed",
+          "side": "SHORT"
+        }
+      },
+      "key": "minute:202604291110",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291110:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475400.051701,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291110",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.047997,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624591",
+        "decision_ts_epoch_s": 1777475515.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291111",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291111",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291111:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475460.952003,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291111",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.799433,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624592",
+        "decision_ts_epoch_s": 1777475575.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291112",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291112",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291112:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777475520.200567,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291112",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": true,
+            "reason": "entry_allowed",
+            "side": "SHORT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "SHORT",
+            "symbol": "SQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "SQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "SHORT"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "true_decision_diff",
+          "expected": null,
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "SQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.010186,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624593",
+        "decision_ts_epoch_s": 1777475635.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291113",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291113",
+      "legacy": {
+        "block_reason": null,
+        "decision_id": "efbd6d56-e0dc-471e-8626-dcabee3483da",
+        "decision_ts_epoch_s": 1777475580.989814,
+        "exec_symbol": "SQQQ",
+        "intent": {
+          "side": "SHORT",
+          "symbol": "SQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291113",
+        "order_plan": {
+          "exec_symbol": "SQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "SHORT"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "entry_allowed",
+          "side": "SHORT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624594",
+        "decision_ts_epoch_s": 1777475695.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291114",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291114",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624595",
+        "decision_ts_epoch_s": 1777475755.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291115",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291115",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624596",
+        "decision_ts_epoch_s": 1777475815.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291116",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291116",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624597",
+        "decision_ts_epoch_s": 1777475875.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291117",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291117",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624598",
+        "decision_ts_epoch_s": 1777475935.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291118",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291118",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.496999,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624599",
+        "decision_ts_epoch_s": 1777475995.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291119",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291119",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291119:NA:NA",
+        "decision_ts_epoch_s": 1777475940.503001,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291119",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.113014,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624600",
+        "decision_ts_epoch_s": 1777476055.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291120",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291120",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291120:NA:NA",
+        "decision_ts_epoch_s": 1777476000.886986,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291120",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.92809,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624601",
+        "decision_ts_epoch_s": 1777476115.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291121",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291121",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291121:NA:NA",
+        "decision_ts_epoch_s": 1777476060.07191,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291121",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": true,
+            "reason": "direction_allowed",
+            "side": "LONG"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": true,
+            "reason": "entry_allowed",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": 15.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": "TQQQ",
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 15.0,
+            "side": "LONG"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": 54.095573,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": null,
+        "decision_id": "QQQ:29624602",
+        "decision_ts_epoch_s": 1777476175.0,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": 15.0
+        },
+        "key": "minute:202604291122",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 15.0,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "direction_allowed",
+          "side": "LONG"
+        }
+      },
+      "key": "minute:202604291122",
+      "legacy": {
+        "block_reason": null,
+        "decision_id": "b0a332b2-fd73-4469-9f30-418cd30d5589",
+        "decision_ts_epoch_s": 1777476120.904427,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291122",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "entry_allowed",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.714225,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624603",
+        "decision_ts_epoch_s": 1777476235.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291123",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291123",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291123:NA:NA",
+        "decision_ts_epoch_s": 1777476180.285775,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291123",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.866715,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624604",
+        "decision_ts_epoch_s": 1777476295.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291124",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291124",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291124:NA:NA",
+        "decision_ts_epoch_s": 1777476240.133285,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291124",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.076657,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624605",
+        "decision_ts_epoch_s": 1777476355.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291125",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291125",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291125:NA:NA",
+        "decision_ts_epoch_s": 1777476300.923343,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291125",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624606",
+        "decision_ts_epoch_s": 1777476415.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291126",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291126",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": null,
+        "decision_id": "QQQ:29624607",
+        "decision_ts_epoch_s": 1777476475.0,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": 15.0
+        },
+        "key": "minute:202604291127",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 15.0,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "direction_allowed",
+          "side": "LONG"
+        }
+      },
+      "key": "minute:202604291127",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624608",
+        "decision_ts_epoch_s": 1777476535.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291128",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291128",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624609",
+        "decision_ts_epoch_s": 1777476595.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291129",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291129",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624610",
+        "decision_ts_epoch_s": 1777476655.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291130",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291130",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 53.920151,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624611",
+        "decision_ts_epoch_s": 1777476715.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291131",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291131",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291131:NA:NA",
+        "decision_ts_epoch_s": 1777476661.079849,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291131",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.362009,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624612",
+        "decision_ts_epoch_s": 1777476775.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291132",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291132",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291132:NA:NA",
+        "decision_ts_epoch_s": 1777476720.637991,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291132",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.695965,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624613",
+        "decision_ts_epoch_s": 1777476835.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291133",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291133",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291133:NA:NA",
+        "decision_ts_epoch_s": 1777476780.304035,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291133",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 53.989616,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624614",
+        "decision_ts_epoch_s": 1777476895.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291134",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291134",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291134:NA:NA",
+        "decision_ts_epoch_s": 1777476841.010384,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291134",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624615",
+        "decision_ts_epoch_s": 1777476955.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291135",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291135",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624616",
+        "decision_ts_epoch_s": 1777477015.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291136",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291136",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624617",
+        "decision_ts_epoch_s": 1777477075.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291137",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291137",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624618",
+        "decision_ts_epoch_s": 1777477135.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291138",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291138",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624619",
+        "decision_ts_epoch_s": 1777477195.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291139",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291139",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624620",
+        "decision_ts_epoch_s": 1777477255.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291140",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291140",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624621",
+        "decision_ts_epoch_s": 1777477315.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291141",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291141",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.236918,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624622",
+        "decision_ts_epoch_s": 1777477375.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291142",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291142",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291142:NA:NA",
+        "decision_ts_epoch_s": 1777477320.763082,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291142",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.485946,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624623",
+        "decision_ts_epoch_s": 1777477435.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291143",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291143",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291143:NA:NA",
+        "decision_ts_epoch_s": 1777477380.514054,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291143",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.48925,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624624",
+        "decision_ts_epoch_s": 1777477495.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291144",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291144",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291144:NA:NA",
+        "decision_ts_epoch_s": 1777477440.51075,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291144",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624625",
+        "decision_ts_epoch_s": 1777477555.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291145",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291145",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624626",
+        "decision_ts_epoch_s": 1777477615.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291146",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291146",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624627",
+        "decision_ts_epoch_s": 1777477675.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291147",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291147",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624628",
+        "decision_ts_epoch_s": 1777477735.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291148",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291148",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624629",
+        "decision_ts_epoch_s": 1777477795.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291149",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291149",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624630",
+        "decision_ts_epoch_s": 1777477855.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291150",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291150",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": null,
+        "decision_id": "QQQ:29624631",
+        "decision_ts_epoch_s": 1777477915.0,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": 15.0
+        },
+        "key": "minute:202604291151",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 15.0,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "direction_allowed",
+          "side": "LONG"
+        }
+      },
+      "key": "minute:202604291151",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624632",
+        "decision_ts_epoch_s": 1777477975.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291152",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291152",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "true_decision_diff",
+          "expected": "sign_mismatch",
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.898393,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624633",
+        "decision_ts_epoch_s": 1777478035.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291153",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291153",
+      "legacy": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "qqq_intraday_001:202604291153:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777477980.101607,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291153",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": true,
+            "reason": "entry_allowed",
+            "side": "SHORT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "SHORT",
+            "symbol": "SQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "SQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "SHORT"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "true_decision_diff",
+          "expected": null,
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "SQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.46097,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624634",
+        "decision_ts_epoch_s": 1777478095.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291154",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291154",
+      "legacy": {
+        "block_reason": null,
+        "decision_id": "b26cf77f-636f-4fec-ad2c-a601330a160f",
+        "decision_ts_epoch_s": 1777478040.53903,
+        "exec_symbol": "SQQQ",
+        "intent": {
+          "side": "SHORT",
+          "symbol": "SQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291154",
+        "order_plan": {
+          "exec_symbol": "SQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "SHORT"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "entry_allowed",
+          "side": "SHORT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624635",
+        "decision_ts_epoch_s": 1777478155.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291155",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291155",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.853766,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624636",
+        "decision_ts_epoch_s": 1777478215.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291156",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291156",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291156:NA:NA",
+        "decision_ts_epoch_s": 1777478160.146234,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291156",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.567031,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624637",
+        "decision_ts_epoch_s": 1777478275.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291157",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291157",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291157:NA:NA",
+        "decision_ts_epoch_s": 1777478220.432969,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291157",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.259734,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624638",
+        "decision_ts_epoch_s": 1777478335.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291158",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291158",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291158:NA:NA",
+        "decision_ts_epoch_s": 1777478280.740266,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291158",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.75894,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624639",
+        "decision_ts_epoch_s": 1777478395.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291159",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291159",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291159:NA:NA",
+        "decision_ts_epoch_s": 1777478340.24106,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291159",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.158028,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624640",
+        "decision_ts_epoch_s": 1777478455.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291200",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291200",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291200:NA:NA",
+        "decision_ts_epoch_s": 1777478400.841972,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291200",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624641",
+        "decision_ts_epoch_s": 1777478515.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291201",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291201",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.870599,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624642",
+        "decision_ts_epoch_s": 1777478575.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291202",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291202",
+      "legacy": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "qqq_intraday_001:202604291202:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777478520.129401,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291202",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.869954,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624643",
+        "decision_ts_epoch_s": 1777478635.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291203",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291203",
+      "legacy": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "qqq_intraday_001:202604291203:TQQQ:LONG",
+        "decision_ts_epoch_s": 1777478580.130046,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291203",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "allow": true,
+            "reason": "entry_allowed",
+            "side": "LONG"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": {
+            "side": "FLAT",
+            "symbol": "",
+            "target_qty": 0.0
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "side": "LONG",
+            "symbol": "TQQQ",
+            "target_qty": null
+          },
+          "field": "intent"
+        },
+        {
+          "actual": {
+            "exec_symbol": null,
+            "order_type": "DRY_RUN_SHADOW",
+            "qty": 0.0,
+            "side": "FLAT"
+          },
+          "classification": "true_decision_diff",
+          "expected": {
+            "exec_symbol": "TQQQ",
+            "order_type": null,
+            "qty": null,
+            "side": "LONG"
+          },
+          "field": "order_plan"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "true_decision_diff",
+          "expected": null,
+          "field": "block_reason"
+        },
+        {
+          "actual": null,
+          "classification": "true_decision_diff",
+          "expected": "TQQQ",
+          "field": "exec_symbol"
+        },
+        {
+          "actual": 54.93631,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624644",
+        "decision_ts_epoch_s": 1777478695.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291204",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291204",
+      "legacy": {
+        "block_reason": null,
+        "decision_id": "0b92a7a5-9e5a-460a-ab0d-30463915f221",
+        "decision_ts_epoch_s": 1777478640.06369,
+        "exec_symbol": "TQQQ",
+        "intent": {
+          "side": "LONG",
+          "symbol": "TQQQ",
+          "target_qty": null
+        },
+        "key": "minute:202604291204",
+        "order_plan": {
+          "exec_symbol": "TQQQ",
+          "order_type": null,
+          "qty": null,
+          "side": "LONG"
+        },
+        "signal_authority": {
+          "allow": true,
+          "reason": "entry_allowed",
+          "side": "LONG"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.199263,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624645",
+        "decision_ts_epoch_s": 1777478755.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291205",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291205",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291205:NA:NA",
+        "decision_ts_epoch_s": 1777478700.800737,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291205",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.975401,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624646",
+        "decision_ts_epoch_s": 1777478815.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291206",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291206",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291206:NA:NA",
+        "decision_ts_epoch_s": 1777478760.024599,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291206",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624647",
+        "decision_ts_epoch_s": 1777478875.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291207",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291207",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": true,
+      "diff_classification": "true_decision_diff",
+      "diffs": [
+        {
+          "actual": true,
+          "classification": "true_decision_diff",
+          "expected": false,
+          "field": "__presence__"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624648",
+        "decision_ts_epoch_s": 1777478935.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291208",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291208",
+      "legacy": null,
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "fast_drift_not_ready",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "fast_drift_not_ready",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.011899,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "fast_drift_not_ready",
+        "decision_id": "QQQ:29624649",
+        "decision_ts_epoch_s": 1777478995.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291209",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "fast_drift_not_ready",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291209",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291209:NA:NA",
+        "decision_ts_epoch_s": 1777478940.988101,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291209",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.142626,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624650",
+        "decision_ts_epoch_s": 1777479055.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291210",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291210",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291210:NA:NA",
+        "decision_ts_epoch_s": 1777479000.857374,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291210",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    },
+    {
+      "blocking": false,
+      "diff_classification": "semantic_equivalent",
+      "diffs": [
+        {
+          "actual": {
+            "allow": false,
+            "reason": "sign_mismatch",
+            "side": "FLAT"
+          },
+          "classification": "semantic_equivalent",
+          "expected": {
+            "allow": false,
+            "reason": "data_integrity_fail_closed",
+            "side": "FLAT"
+          },
+          "field": "signal_authority"
+        },
+        {
+          "actual": "sign_mismatch",
+          "classification": "semantic_equivalent",
+          "expected": "data_integrity_fail_closed",
+          "field": "block_reason"
+        },
+        {
+          "actual": 54.658504,
+          "classification": "timing_only",
+          "expected": 0.0,
+          "field": "decision_ts_delta_sec"
+        }
+      ],
+      "kernel": {
+        "block_reason": "sign_mismatch",
+        "decision_id": "QQQ:29624651",
+        "decision_ts_epoch_s": 1777479115.0,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291211",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "sign_mismatch",
+          "side": "FLAT"
+        }
+      },
+      "key": "minute:202604291211",
+      "legacy": {
+        "block_reason": "data_integrity_fail_closed",
+        "decision_id": "qqq_intraday_001:202604291211:NA:NA",
+        "decision_ts_epoch_s": 1777479060.341496,
+        "exec_symbol": null,
+        "intent": {
+          "side": "FLAT",
+          "symbol": "",
+          "target_qty": 0.0
+        },
+        "key": "minute:202604291211",
+        "order_plan": {
+          "exec_symbol": null,
+          "order_type": "DRY_RUN_SHADOW",
+          "qty": 0.0,
+          "side": "FLAT"
+        },
+        "signal_authority": {
+          "allow": false,
+          "reason": "data_integrity_fail_closed",
+          "side": "FLAT"
+        }
+      },
+      "matched": false
+    }
+  ]
+}

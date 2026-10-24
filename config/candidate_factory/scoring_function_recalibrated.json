@@ -1,0 +1,85 @@
+{
+  "score_version": "recalibrated_score.v2_ranking",
+  "created_at": "2026-04-11T16:57:45.504398-04:00",
+  "based_on": "config/candidate_factory/score_calibration_target.json",
+  "ranking_objective": "config/candidate_factory/score_ranking_objective.json",
+  "weights_legacy": {
+    "stability": 0.3,
+    "drawdown": 0.25,
+    "consistency": 0.2,
+    "frequency": 0.15,
+    "cost_sensitivity": 0.1
+  },
+  "feature_correlations_train": {
+    "stability": 0.415011,
+    "drawdown": -0.541886,
+    "consistency": 0.443096,
+    "frequency": -0.617754,
+    "cost_sensitivity": 0.575028
+  },
+  "weights_recalibrated": {
+    "stability": 0.128196,
+    "drawdown": 0.167387,
+    "consistency": 0.254189,
+    "frequency": 0.272604,
+    "cost_sensitivity": 0.177625
+  },
+  "best_train_objective": {
+    "value": 1.028182,
+    "detail": {
+      "corr": 0.752624,
+      "groups": {
+        "top1": 597.7189853405771,
+        "top3": 472.9833803361803,
+        "top5": 467.94062992953695,
+        "unpublished": 181.42503395420763
+      },
+      "penalty": 0.0,
+      "ranking_margin": 275.557529,
+      "constraints": {
+        "top1_mean_gte_top5_mean": true,
+        "top3_mean_gte_top5_mean": true,
+        "top5_mean_gt_unpublished_mean": true
+      }
+    },
+    "transform_map": {
+      "stability": "identity",
+      "drawdown": "square",
+      "consistency": "identity",
+      "frequency": "identity",
+      "cost_sensitivity": "identity"
+    }
+  },
+  "sub_score_mapping": {
+    "stability": {
+      "source_sub_score": "stability",
+      "direction": "positive",
+      "transform": "identity",
+      "note": "positive_alignment"
+    },
+    "drawdown": {
+      "source_sub_score": "drawdown",
+      "direction": "negative",
+      "transform": "square",
+      "note": "reversed_due_to_negative_correlation"
+    },
+    "consistency": {
+      "source_sub_score": "consistency",
+      "direction": "positive",
+      "transform": "identity",
+      "note": "positive_alignment"
+    },
+    "frequency": {
+      "source_sub_score": "frequency",
+      "direction": "negative",
+      "transform": "identity",
+      "note": "reversed_due_to_negative_correlation"
+    },
+    "cost_sensitivity": {
+      "source_sub_score": "cost_sensitivity",
+      "direction": "positive",
+      "transform": "identity",
+      "note": "positive_alignment"
+    }
+  }
+}

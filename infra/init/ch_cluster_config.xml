@@ -1,0 +1,49 @@
+<clickhouse>
+    <!-- Remote servers configuration for distributed queries -->
+    <remote_servers>
+        <trading_cluster>
+            <!-- Shard 1 -->
+            <shard>
+                <internal_replication>true</internal_replication>
+                <replica>
+                    <host>clickhouse-01</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>clickhouse-02</host>
+                    <port>9000</port>
+                </replica>
+                <replica>
+                    <host>clickhouse-03</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </trading_cluster>
+    </remote_servers>
+
+    <!-- Zookeeper configuration for replication coordination -->
+    <zookeeper>
+        <node>
+            <host>zookeeper</host>
+            <port>2181</port>
+        </node>
+    </zookeeper>
+
+    <!-- Macros for distributed table creation -->
+    <macros>
+        <cluster>trading_cluster</cluster>
+        <shard>01</shard>
+        <replica>{hostname}</replica>
+    </macros>
+
+    <!-- Distributed DDL configuration -->
+    <distributed_ddl>
+        <path>/clickhouse/task_queue/ddl</path>
+    </distributed_ddl>
+
+    <!-- Replication settings -->
+    <merge_tree>
+        <replicated_deduplication_window>100</replicated_deduplication_window>
+        <replicated_deduplication_window_seconds>604800</replicated_deduplication_window_seconds>
+    </merge_tree>
+</clickhouse>

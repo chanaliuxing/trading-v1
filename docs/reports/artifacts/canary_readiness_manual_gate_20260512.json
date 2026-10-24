@@ -1,0 +1,37 @@
+{
+  "approved_scope": [
+    "prepare canary checklist",
+    "review paper/shadow artifacts",
+    "manual operator readiness review"
+  ],
+  "blocking_items": [],
+  "decision": "CANARY_PREP_PACKAGE_READY",
+  "evidence": {
+    "approved_to_fill_diagnostics": "reports/approved_to_fill_conversion/approved_to_fill_conversion_latest.json",
+    "fast_ib_reconnect_regression": "32 passed",
+    "final_oms_regression_gate": "CANARY_PREP_ALLOWED",
+    "no_live_guard": "4 passed",
+    "operator_proof_cli": "12 passed",
+    "paper_shadow_soak": "SOAK_PASS_READY_FOR_CANARY_MANUAL_GATE",
+    "soak_gate": "PASS",
+    "vegas_diagnostics": "reports/vegas_dlb_edge_measurement/vegas_dlb_edge_measurement_latest.json"
+  },
+  "generated_at": "2026-05-12T10:30:00-04:00",
+  "manual_approvals_required": [
+    "operator confirms IB Gateway state",
+    "operator confirms no unexpected live positions/open orders",
+    "operator confirms strategy list and canary sizing",
+    "operator confirms kill switch / emergency stop",
+    "operator confirms unknown broker order policy",
+    "operator confirms runtime freshness"
+  ],
+  "not_approved_scope": [
+    "start live canary",
+    "full live trading",
+    "unattended live",
+    "real broker mutation",
+    "auto-cancel unknown broker orders",
+    "auto-flatten unknown owner positions"
+  ],
+  "recommended_next_batch": "Canary Sizing and Manual Launch Checklist"
+}

@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "description": "Label Registry - 定义所有可用的标签类型",
+  "labels": {
+    "ret_10m": {
+      "kind": "forward_return",
+      "horizon_min": 10,
+      "params": {},
+      "description": "10分钟前向收益率: (close[t+10] - close[t]) / close[t]"
+    },
+    "ret_30m": {
+      "kind": "forward_return",
+      "horizon_min": 30,
+      "params": {},
+      "description": "30分钟前向收益率"
+    },
+    "ret_1h": {
+      "kind": "forward_return",
+      "horizon_min": 60,
+      "params": {},
+      "description": "1小时前向收益率"
+    },
+    "ret_10b_fwd": {
+      "kind": "forward_return",
+      "horizon_min": 10,
+      "params": {},
+      "description": "10 bars (10分钟) forward return - used by PI default"
+    },
+    "tb_10m_atr1": {
+      "kind": "triple_barrier",
+      "horizon_min": 10,
+      "params": {
+        "profit_pct": 1.0,
+        "loss_pct": 1.0,
+        "use_atr": true,
+        "atr_window": 14
+      },
+      "description": "10分钟三重障碍标签，使用1倍ATR作为止盈止损"
+    },
+    "tb_10m_fixed": {
+      "kind": "triple_barrier",
+      "horizon_min": 10,
+      "params": {
+        "profit_pct": 0.005,
+        "loss_pct": 0.005,
+        "use_atr": false
+      },
+      "description": "10分钟三重障碍标签，固定0.5%止盈止损"
+    },
+    "tb_30m_atr1": {
+      "kind": "triple_barrier",
+      "horizon_min": 30,
+      "params": {
+        "profit_pct": 1.0,
+        "loss_pct": 1.0,
+        "use_atr": true,
+        "atr_window": 14
+      },
+      "description": "30分钟三重障碍标签，使用1倍ATR"
+    },
+    "tb_1h_atr2": {
+      "kind": "triple_barrier",
+      "horizon_min": 60,
+      "params": {
+        "profit_pct": 2.0,
+        "loss_pct": 2.0,
+        "use_atr": true,
+        "atr_window": 14
+      },
+      "description": "1小时三重障碍标签，使用2倍ATR（更宽止损）"
+    }
+  },
+  "sanity_defaults": {
+    "max_nan_frac": 0.05,
+    "min_variance": 1e-6,
+    "check_balance": false,
+    "min_class_ratio": 0.1
+  },
+  "notes": [
+    "forward_return: 简单前向收益率，适用于回归任务",
+    "triple_barrier: 路径依赖标签，适用于分类任务 (-1/0/+1)",
+    "use_atr=true 时，profit_pct 和 loss_pct 是 ATR 的倍数",
+    "use_atr=false 时，profit_pct 和 loss_pct 是价格的百分比（0.01 = 1%）"
+  ]
+}

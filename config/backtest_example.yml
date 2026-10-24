@@ -1,0 +1,109 @@
+# Backtest Configuration Example
+# Based on doc/78.md specification
+#
+# Unified config for backtest/replay/paper/shadow modes
+
+run_id: auto  # Auto-generate from hash(code_rev, param_hash, data_rev, seed, timerange)
+
+mode: backtest  # backtest | replay | paper | shadow
+
+seed: 20251002
+
+universe:
+  - AAPL
+  - MSFT
+  - NVDA
+
+timerange:
+  start: "2025-08-01T13:30:00Z"
+  end: "2025-08-15T20:00:00Z"
+
+# Strategy cadence overrides (seconds)
+cadence_overrides:
+  meanrev_v2:A: 5
+  trend_v1:B: 10
+
+# Simulation parameters
+sim:
+  lob: top_of_book  # Top-of-book or multi-level
+  depth_k: 2.0      # Depth = k * trade_volume
+
+  # Market impact model: impact = gamma * (qty/depth)^alpha
+  impact:
+    gamma: 0.8
+    alpha: 0.7
+
+  # Latency (milliseconds)
+  ack_ms: [10, 30]   # ACK delay range
+  fill_ms: [5, 20]   # Fill delay range
+
+# Cost model
+costs:
+  commission:
+    per_share: 0.0035
+    min: 0.35
+
+  # Borrow costs (bps per day)
+  borrow_bps:
+    default: 50
+    hard_to_borrow: 400
+
+  # Regulatory fees
+  fees:
+    sec: true   # SEC fee
+    ta: true    # FINRA TAF
+
+# Data source
+data:
+  source: clickhouse  # clickhouse | csv | live
+  resolution: 5s      # 250ms | 1s | 5s
+
+  # Feature calculation
+  features:
+    mode: precomputed  # precomputed | online
+    cache: true
+
+# Output
+output:
+  # ClickHouse tables
+  save_to_ch: true
+  tables:
+    orders: sim_orders
+    fills: sim_fills
+    nav: sim_nav_5s
+    metrics: sim_metrics
+
+  # CSV export
+  export_csv: false
+  csv_path: ./results/
+
+# Evaluation
+evaluation:
+  # Performance metrics
+  metrics:
+    - sharpe_ratio
+    - sortino_ratio
+    - max_drawdown
+    - calmar_ratio
+    - win_rate
+    - avg_holding_time
+
+  # Execution metrics
+  execution:
+    - vwap_slippage
+    - arrival_price_slippage
+    - reject_rate
+    - oco_trigger_rate
+
+  # Consistency check (for shadow mode)
+  consistency:
+    decision_threshold_pct: 99  # 99% decision consistency
+    execution_diff_bps: 1       # Max 1 bps execution diff
+
+# Walk-forward optimization (optional)
+walk_forward:
+  enabled: false
+  train_days: 60
+  validate_days: 20
+  slide_days: 10
+  metric: sharpe_ratio  # Optimization target

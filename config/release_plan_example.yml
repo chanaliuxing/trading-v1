@@ -1,0 +1,77 @@
+# Release Plan Example
+# Based on doc/60.md specification
+#
+# Deployment: Shadow → Canary → Ramp 10% → Ramp 25% → Full
+# Safety gates at each step with automatic rollback
+
+release:
+  strategy_id: "meanrev_v2:A"
+  param_hash: "8b31a4f2d0"
+  symbols: ["AAPL", "MSFT", "NVDA"]
+
+  steps:
+    # Step 1: Shadow mode (no real orders)
+    - name: shadow
+      min_minutes: 60
+      capital_usd: 0
+      per_symbol_max_usd: 0
+      max_concurrent_plans: 0
+      gates:
+        tech_slo_p95: true
+        data_qscore_avg: 75
+
+    # Step 2: Canary (minimal capital)
+    - name: canary
+      min_minutes: 120
+      capital_usd: 5000
+      per_symbol_max_usd: 2000
+      max_concurrent_plans: 2
+      gates:
+        tech_slo_p95: true
+        reject_rate_max: 0.01
+        dd_intraday_max: 0.005
+        data_qscore_avg: 70
+
+    # Step 3: Ramp 10%
+    - name: ramp_10
+      min_minutes: 180
+      capital_usd: 20000
+      per_symbol_max_usd: 5000
+      max_concurrent_plans: 5
+      gates:
+        reject_rate_max: 0.01
+        dd_intraday_max: 0.01
+        data_qscore_avg: 70
+
+    # Step 4: Ramp 25%
+    - name: ramp_25
+      min_minutes: 240
+      capital_usd: 50000
+      per_symbol_max_usd: 10000
+      max_concurrent_plans: 10
+      gates:
+        reject_rate_max: 0.015
+        dd_intraday_max: 0.015
+        data_qscore_avg: 65
+
+    # Step 5: Full production
+    - name: full
+      min_minutes: 999999
+      capital_usd: 150000
+      per_symbol_max_usd: 50000
+      max_concurrent_plans: 20
+      gates:
+        ongoing: true
+
+  # Kill switch triggers (global, overrides step gates)
+  kill_switch:
+    drawdown_day: 0.02          # 2% daily drawdown
+    broker_disconnect_s: 20     # Broker disconnect > 20s
+    oco_invariant_breaks: 1     # Any OCO invariant violation
+
+  # Approvals required before starting rollout
+  approvals:
+    reviewers: ["trader_lead", "risk_officer"]
+    change_freeze:
+      start: "09:15:00-05:00"   # No deployments during opening
+      end: "10:00:00-05:00"

@@ -1,0 +1,53 @@
+version: '3.8'
+
+# HashiCorp Vault for Secrets Management
+# Add this to your main compose with: docker compose -f compose.yml -f vault/docker-compose.vault.yml up
+
+services:
+  vault:
+    image: hashicorp/vault:latest
+    container_name: trading_vault
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_ADDR: 'http://0.0.0.0:8200'
+      VAULT_DEV_ROOT_TOKEN_ID: '${VAULT_ROOT_TOKEN:-root}'  # Only for dev
+      VAULT_DEV_LISTEN_ADDRESS: '0.0.0.0:8200'
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - vault_data:/vault/data
+      - vault_logs:/vault/logs
+      - ./vault_config.hcl:/vault/config/vault.hcl
+    command: server
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - trading_network
+
+  # Vault initialization helper
+  vault-init:
+    image: hashicorp/vault:latest
+    container_name: trading_vault_init
+    depends_on:
+      vault:
+        condition: service_healthy
+    environment:
+      VAULT_ADDR: 'http://vault:8200'
+      VAULT_TOKEN: '${VAULT_ROOT_TOKEN:-root}'
+    volumes:
+      - ./init_vault.sh:/init_vault.sh
+    command: /bin/sh /init_vault.sh
+    networks:
+      - trading_network
+
+volumes:
+  vault_data:
+  vault_logs:
+
+networks:
+  trading_network:
+    external: true

@@ -1,0 +1,62 @@
+{
+  "symbols": ["TSLA"],
+  "timeframe": "1m",
+  "features_table": "trading.features_1m",
+
+  "clickhouse": {
+    "host": "localhost",
+    "port": 8123,
+    "username": "default",
+    "password": "",
+    "database": "trading"
+  },
+
+  "strategy_path": "strategies.tsla_v7_2.TSLASimplifiedV7_2",
+  "strategy_base_extras": {
+    "strategy_config": {
+      "symbol": "TSLA",
+      "risk_cap": 1.0
+    }
+  },
+
+  "broker": {
+    "initial_cash": 100000,
+    "commission_per_share": 0.005,
+    "commission_min": 1.0,
+    "slippage_bps": 1.0,
+    "fill_ref": "open"
+  },
+
+  "grid": {
+    "A1_thr_sigma": [0.8, 1.0, 1.2],
+    "B1_rvol_min": [1.5, 2.0, 2.5],
+    "C1_stop_mult_atr": [1.2, 1.5],
+    "C1_take_mult_atr": [2.0, 2.5, 3.0]
+  },
+
+  "folds": [
+    {
+      "fold_id": 1,
+      "is_start": "2024-07-01 09:30:00",
+      "is_end":   "2024-09-01 16:00:00",
+      "oos_start":"2024-09-03 09:30:00",
+      "oos_end":  "2024-10-01 16:00:00",
+      "purge_days": 2
+    },
+    {
+      "fold_id": 2,
+      "is_start": "2024-08-01 09:30:00",
+      "is_end":   "2024-10-01 16:00:00",
+      "oos_start":"2024-10-03 09:30:00",
+      "oos_end":  "2024-11-01 16:00:00",
+      "purge_days": 2
+    }
+  ],
+
+  "objective": {
+    "metric": "sharpe",
+    "maximize": true,
+    "min_trades": 10,
+    "max_mdd": 0.35
+  }
+}

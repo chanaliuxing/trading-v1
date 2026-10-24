@@ -1,0 +1,5 @@
+{
+  "policy_version": "observation_activation_policy.v1",
+  "min_observations": 5,
+  "min_hit_rate": 0.5
+}

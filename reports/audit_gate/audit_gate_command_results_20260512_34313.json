@@ -1,0 +1,44 @@
+{
+  "commands": [
+    {
+      "command": "./venv/bin/python -m pytest -q tests/unit/safety/test_no_live_ibkr_in_unit_tests.py",
+      "duration_sec": 1.0,
+      "name": "no_live_guard",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "configfile: pytest.ini\nplugins: anyio-4.11.0, asyncio-0.21.1, mock-3.12.0\nasyncio: mode=Mode.AUTO\ncollected 4 items\n\ntests/unit/safety/test_no_live_ibkr_in_unit_tests.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                [100%]\u001b[0m\n\n\u001b[33m========================= \u001b[32m4 passed\u001b[0m, \u001b[33m\u001b[1m1 warning\u001b[0m\u001b[33m in 0.15s\u001b[0m\u001b[33m =========================\u001b[0m"
+    },
+    {
+      "command": "git diff --check",
+      "duration_sec": 0.0,
+      "name": "git_diff_check",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ""
+    },
+    {
+      "command": "./venv/bin/python -m pytest -q tests/unit/exec",
+      "duration_sec": 5.0,
+      "name": "exec_contract",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "tests/unit/exec/test_safety_kernel_oco_persistence.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m [ 88%]\n\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                                                                   [ 90%]\u001b[0m\ntests/unit/exec/test_safety_kernel_position_accounting.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m   [ 94%]\u001b[0m\ntests/unit/exec/test_safety_plan_key_isolation.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                 [ 96%]\u001b[0m\ntests/unit/exec/test_stop_loss_owner_position_binding.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m         [ 99%]\u001b[0m\ntests/unit/exec/test_trace_utils.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                                   [100%]\u001b[0m\n\n\u001b[33m======================= \u001b[32m294 passed\u001b[0m, \u001b[33m\u001b[1m5 warnings\u001b[0m\u001b[33m in 4.25s\u001b[0m\u001b[33m ========================\u001b[0m"
+    },
+    {
+      "command": "./venv/bin/python -m pytest -q tests/unit/services",
+      "duration_sec": 81.0,
+      "name": "services_contract",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "  File \"./venv_ml/lib/python3.11/site-packages/aiokafka/producer/producer.py\", line 344, in __del__\n    self._loop.call_exception_handler(context)\n  File \"/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py\", line 1811, in call_exception_handler\n    self.default_exception_handler(context)\n  File \"/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py\", line 1785, in default_exception_handler\n    logger.error('\\n'.join(log_lines), exc_info=exc_info)\nMessage: 'Unclosed AIOKafkaProducer\\nproducer: <aiokafka.producer.producer.AIOKafkaProducer object at 0x120173c50>'\nArguments: ()"
+    },
+    {
+      "command": "scripts/run_ib_reconnect_regression.sh fast",
+      "duration_sec": 2.0,
+      "name": "ib_reconnect_fast",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "\ntests/unit/safety/test_no_live_ibkr_in_unit_tests.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                [ 12%]\u001b[0m\ntests/unit/services/test_ib_connection_manager.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m        [ 59%]\u001b[0m\ntests/unit/scripts/test_operator_ib_gateway_recovery_proof.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m     [ 78%]\u001b[0m\ntests/unit/tool/test_run_runtime_operations_watchdog.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m              [ 87%]\u001b[0m\ntests/unit/services/test_reconnect_gatekeeper.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                    [100%]\u001b[0m\n\n\u001b[33m======================== \u001b[32m32 passed\u001b[0m, \u001b[33m\u001b[1m1 warning\u001b[0m\u001b[33m in 1.13s\u001b[0m\u001b[33m =========================\u001b[0m"
+    }
+  ]
+}

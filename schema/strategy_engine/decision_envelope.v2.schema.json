@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "decision_envelope.v2.schema.json",
+  "title": "DecisionEnvelopeV2",
+  "type": "object",
+  "required": [
+    "decision_id",
+    "strategy_id",
+    "strategy_run_id",
+    "trigger_id",
+    "trace_id",
+    "symbol",
+    "ts_bar_end_us",
+    "target_qty",
+    "freshness"
+  ],
+  "properties": {
+    "decision_id": {"type": "string", "minLength": 8},
+    "strategy_id": {"type": "string", "minLength": 1},
+    "strategy_run_id": {"type": "string", "minLength": 1},
+    "trigger_id": {"type": "string", "minLength": 1},
+    "trace_id": {"type": "string", "minLength": 8},
+    "symbol": {"type": "string", "minLength": 1},
+    "ts_bar_end_us": {"type": "integer", "minimum": 1},
+    "target_qty": {"type": "number"},
+    "freshness": {
+      "type": "object",
+      "required": ["ttl_ms"],
+      "properties": {
+        "dlb_ms": {"type": "integer", "minimum": 1},
+        "ttl_ms": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": true
+    },
+    "bar_id": {"type": "string"},
+    "regime_tag": {"type": "string"},
+    "signal_score": {"type": "number"},
+    "extras": {"type": "object"}
+  },
+  "additionalProperties": true
+}

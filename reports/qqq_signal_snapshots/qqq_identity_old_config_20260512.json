@@ -1,0 +1,305 @@
+{
+  "day": "2026-05-12",
+  "diag_path": "runtime/state/qqq_intraday_diag_qqq_intraday_001.jsonl",
+  "mismatch_count": 18,
+  "mismatches": [
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T09:59:00.666963-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:00:01.045736-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:01:00.137774-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": true,
+        "decision": "ENTRY_ALLOWED",
+        "instrument": "SQQQ",
+        "reason": "entry_allowed",
+        "side": "SHORT"
+      },
+      "ts_iso": "2026-05-12T10:28:00.469076-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:29:00.514791-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:30:00.576850-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:31:00.964063-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:32:00.628680-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:33:00.743457-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:34:00.324379-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:48:00.944318-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:49:00.735096-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:50:00.627851-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:51:00.804727-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:52:00.981345-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": true,
+        "exec_symbol": "SQQQ",
+        "reason": "direction_allowed",
+        "side": "SHORT"
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:57:00.036320-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:58:00.061194-04:00"
+    },
+    {
+      "kernel": {
+        "allowed": false,
+        "exec_symbol": "",
+        "reason": "extreme_filter_block",
+        "side": ""
+      },
+      "legacy": {
+        "allowed": false,
+        "decision": "BLOCKED",
+        "instrument": "SQQQ",
+        "reason": "v47_short_chase_guard",
+        "side": ""
+      },
+      "ts_iso": "2026-05-12T10:59:00.840712-04:00"
+    }
+  ],
+  "ok": true,
+  "parity": {
+    "allow_match_ratio": 0.954545,
+    "exec_symbol_match_ratio": 1.0,
+    "reason_match_ratio": 0.795455,
+    "rows": 88,
+    "side_match_ratio": 0.954545
+  },
+  "rows": 88,
+  "strategy_id": "qqq_intraday_001"
+}

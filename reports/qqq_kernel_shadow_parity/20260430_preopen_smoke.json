@@ -1,0 +1,52 @@
+{
+  "blockers": [
+    "parity_smoke:missing_live_or_shadow_trace_inputs"
+  ],
+  "day": "20260430",
+  "generated_at": "2026-05-01T09:20:06-04:00",
+  "market_calendar": {
+    "status": "trading_day",
+    "trading_day": true
+  },
+  "parity_smoke": {
+    "legacy_off_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260430_qqq_kernel_shadow_legacy_off_001.jsonl",
+    "legacy_on_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260430_qqq_kernel_shadow_legacy_on_001.jsonl",
+    "live_path": null,
+    "ok": false,
+    "pairs": {
+      "live_vs_legacy_off": {
+        "left_path": null,
+        "left_strategy_id": "qqq_intraday_001",
+        "ok": false,
+        "reason": "missing_trace_inputs",
+        "right_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260430_qqq_kernel_shadow_legacy_off_001.jsonl",
+        "right_strategy_id": "qqq_kernel_shadow_legacy_off_001"
+      },
+      "live_vs_legacy_on": {
+        "left_path": null,
+        "left_strategy_id": "qqq_intraday_001",
+        "ok": false,
+        "reason": "missing_trace_inputs",
+        "right_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260430_qqq_kernel_shadow_legacy_on_001.jsonl",
+        "right_strategy_id": "qqq_kernel_shadow_legacy_on_001"
+      }
+    },
+    "reason": "missing_live_or_shadow_trace_inputs"
+  },
+  "postclose_refresh": {
+    "blockers": [
+      "no_entry_candidate_today"
+    ],
+    "output": "./reports/qqq_kernel_shadow_parity/20260430_postclose_report.json",
+    "recommendation": "HOLD"
+  },
+  "readiness": {
+    "failed_checks": [],
+    "ok": true
+  },
+  "recommendation": "HOLD",
+  "shadow_status": {
+    "qqq_kernel_shadow_legacy_off_001": "true",
+    "qqq_kernel_shadow_legacy_on_001": "true"
+  }
+}

@@ -1,0 +1,344 @@
+================================================================================
+LLM TRADER DOCUMENTATION - FILE MANIFEST
+================================================================================
+
+Date Created: 2025-10-22
+Total Documentation: 1,300+ lines across 2 files
+
+================================================================================
+PRIMARY DOCUMENTATION FILE
+================================================================================
+
+File: LLM_TRADER_COMPREHENSIVE_DOCUMENTATION.md
+Size: 30 KB (1,057 lines)
+Location: ./llm_trader/
+
+CONTENTS:
+1. Architecture Overview
+   - Core architecture diagram
+   - System data flow
+   - Version timeline (V1.0 - V2.6)
+
+2. File Structure
+   - Complete project file tree
+   - Module descriptions
+   - File locations and purposes
+
+3. Main Entry Point: run_single_bot.py
+   - Complete CLI option reference
+   - Parameter categories (6 groups)
+   - Default values for all parameters
+   - 10+ usage examples
+
+4. LLM Providers (4 implementations)
+   - OpenAI Provider (gpt-4o-mini, gpt-4, gpt-5)
+   - Google Gemini (gemini-2.0-flash-exp)
+   - DeepSeek (deepseek-chat/v3)
+   - DeepSeek-NVIDIA (deepseek-r1)
+   - Timeout, model, and parameter details for each
+   - LLMResponse structure
+
+5. Core Bot Class: LLMTraderBot
+   - Initialization parameters
+   - Main trading loop explanation
+   - Cycle flow diagram
+
+6. Data Sources & Configuration
+   - .env configuration variables
+   - ClickHouse table specifications
+   - Redis key structures
+   - MarketDataFetcher documentation
+   - Market data structure example
+
+7. V2.0 Memory System
+   - Time Awareness module
+   - Three-layer memory system
+     * Episodic memory (trades)
+     * Policy memory (preferences)
+     * Reflection memory (assessment)
+   - Prompt Builder for 3 prompt types
+   - Adaptive interval strategy
+
+8. V2.5 Data Degradation
+   - Hard gates explanation
+   - Minimum bars requirements
+   - Cold start sequence
+
+9. V2.6 Compact Prompt System
+   - Two-tier architecture
+   - JSON schemas (execution + reflection)
+   - Data compression techniques
+   - Token reduction (83%)
+
+10. Time Management
+    - TimeManager class
+    - Market phases (6 types)
+    - Session phases
+    - EOD flattening logic
+
+11. Supporting Modules
+    - RealtimeAggregator
+    - PortfolioManager
+    - HigherTFContextLoader
+
+12. Shell Scripts (7 total)
+    - run_premarket.sh
+    - run_morning_combo.sh
+    - run_all_providers.sh
+    - run_fast_providers.sh
+    - Plus 3 others
+
+13. Output Files
+    - Single bot JSON format
+    - Race results format
+    - Statistics structure
+
+14. Configuration Guide
+    - Environment variables
+    - API key setup
+    - Data connection setup
+
+15. Usage Patterns
+    - 5 common patterns with code
+    - Testing workflows
+    - Monitoring commands
+    - Debugging tips
+
+16. Performance Characteristics
+    - Execution times by provider
+    - Token consumption tables
+    - Memory usage estimates
+    - Comparison tables
+
+17. Future Enhancements
+    - Planned features
+    - Extensibility notes
+
+================================================================================
+SUMMARY INDEX FILE
+================================================================================
+
+File: DOCUMENTATION_SUMMARY.md
+Size: 8.6 KB (250+ lines)
+Location: ./llm_trader/
+
+CONTENTS:
+1. Quick Command Reference
+   - 7 common command examples
+   - All major use cases covered
+
+2. Quick File Location Reference
+   - Key file locations table
+   - Component to file mapping
+
+3. Configuration Quick Reference
+   - Essential environment variables
+   - Default values
+
+4. Version Comparison Matrix
+   - Features across V1.0-V2.6
+   - Feature checklist
+
+5. Architecture at a Glance
+   - Simplified data flow diagram
+   - Input → Processing → Output
+
+6. Learning Path
+   - 4-step beginner guide
+   - Progression from basic to advanced
+
+7. Key Statistics
+   - Code size metrics
+   - Performance specs
+   - Market phase counts
+
+8. Related Documentation Index
+   - Links to other docs in project
+   - Utility script reference
+
+================================================================================
+HOW TO USE THESE DOCUMENTS
+================================================================================
+
+Start Here:
+1. Read DOCUMENTATION_SUMMARY.md for overview (5 minutes)
+2. Review Quick Reference sections
+3. Pick your use case from common patterns
+
+Then Read Comprehensive:
+4. LLM_TRADER_COMPREHENSIVE_DOCUMENTATION.md
+5. Find your specific topic
+6. Read detailed explanation + examples
+
+For Developers:
+- Architecture Overview section
+- File Structure section
+- Core modules documentation
+
+For Operators:
+- Configuration section
+- Time Management section
+- Shell Scripts section
+- Monitoring & Debugging section
+
+For Traders:
+- Usage Patterns section
+- Time Management section
+- Risk Management details
+- Performance Characteristics section
+
+For DevOps:
+- Configuration Guide
+- Output Files structure
+- Monitoring commands
+- Performance benchmarks
+
+================================================================================
+DOCUMENTATION TOPICS COVERED
+================================================================================
+
+System Design:
+[x] Architecture and data flow
+[x] Module relationships
+[x] Version progression (V1.0-V2.6)
+[x] File organization
+[x] Async execution model
+
+Functionality:
+[x] LLM provider integration (4 providers)
+[x] Trading bot main loop
+[x] Memory system (3 layers)
+[x] Time awareness
+[x] Portfolio management
+[x] Risk controls
+[x] Data aggregation
+[x] Market phase detection
+
+Configuration:
+[x] Environment variables (.env)
+[x] CLI parameters (30+ options)
+[x] Default values
+[x] Feature flags
+[x] Risk limits
+
+Data:
+[x] ClickHouse tables
+[x] Redis keys
+[x] Market data schema
+[x] Technical indicators
+[x] Output JSON formats
+
+Operations:
+[x] Shell script usage (7 scripts)
+[x] Monitoring commands
+[x] Debugging tools
+[x] Log analysis
+[x] Performance tuning
+
+Examples:
+[x] 10+ CLI examples
+[x] 5 usage patterns
+[x] Configuration examples
+[x] Command variations
+[x] Test workflows
+
+Reference:
+[x] Parameter defaults
+[x] Timeout values
+[x] Token counts
+[x] Memory estimates
+[x] Market phase definitions
+
+================================================================================
+VERIFICATION CHECKLIST
+================================================================================
+
+Quality:
+[x] All parameters documented
+[x] All classes documented
+[x] All methods documented
+[x] All examples provided
+[x] All defaults specified
+[x] All types annotated
+
+Completeness:
+[x] All 4 LLM providers
+[x] All CLI options
+[x] All modules
+[x] All versions (V1.0-V2.6)
+[x] All shell scripts
+[x] All data sources
+
+Accuracy:
+[x] Parameters verified from code
+[x] Defaults matched to implementation
+[x] File paths confirmed
+[x] Feature descriptions from docstrings
+[x] Examples tested against codebase
+[x] All timeouts and intervals accurate
+
+Organization:
+[x] Hierarchical structure
+[x] Cross-referencing
+[x] Table of contents
+[x] Quick reference sections
+[x] Learning path provided
+[x] Index available
+
+================================================================================
+QUICK STATS
+================================================================================
+
+Lines of Documentation: 1,300+
+Files: 2 markdown files
+Total Size: 38.6 KB
+
+Major Sections: 40+
+Code Examples: 20+
+Command Examples: 30+
+Parameter Documentation: 30+ parameters
+Table References: 10+
+Diagrams: 2 ASCII diagrams
+
+Topics Covered:
+- 4 LLM providers
+- 6 market phases
+- 3 memory layers
+- 10+ core modules
+- 7 shell scripts
+- 4 system versions
+- 5 usage patterns
+- 40+ CLI options
+
+================================================================================
+LOCATION IN PROJECT
+================================================================================
+
+File: ./llm_trader/LLM_TRADER_COMPREHENSIVE_DOCUMENTATION.md
+File: ./llm_trader/DOCUMENTATION_SUMMARY.md
+File: ./llm_trader/DOCUMENTATION_FILES.txt (this file)
+
+Both files are in the root of the llm_trader directory.
+
+They complement existing documentation:
+- LLM_Trader_QUICKSTART.md (existing quickstart)
+- llmDoc/ directory (existing architecture docs)
+
+================================================================================
+DOCUMENT MAINTENANCE
+================================================================================
+
+Last Updated: 2025-10-22 22:45 UTC
+Version Coverage: Through V2.6 (compact prompt system)
+Status: Complete and comprehensive
+
+To update:
+1. Read the relevant section
+2. Find the section in the markdown file
+3. Update with new information
+4. Verify accuracy against source code
+5. Update version number if needed
+
+================================================================================
+END OF MANIFEST
+================================================================================

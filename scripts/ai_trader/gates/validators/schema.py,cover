@@ -1,0 +1,314 @@
+> """
+> Schema Validator - Lightweight configuration structure validation
+  
+> This validator checks:
+> - Required top-level fields
+> - Enum value constraints
+> - List/dict type correctness
+> - Strategy structure completeness
+  
+> Design: Lightweight dictionary-based validation (no Pydantic dependency)
+> """
+  
+> import re
+> from typing import Dict, List, Any
+  
+  
+> class SchemaValidator:
+>     """轻量级 Schema 验证器（不依赖 Pydantic）"""
+  
+      # 允许的 mode 枚举值
+>     VALID_MODES = {'paper', 'live'}
+  
+      # 必填的顶级字段
+>     REQUIRED_TOP_LEVEL_FIELDS = [
+>         'mode', 'universe', 'strategies', 'risk',
+>         'execution', 'kafka', 'clickhouse'
+>     ]
+  
+      # 策略必填字段
+>     REQUIRED_STRATEGY_FIELDS = ['id', 'module', 'class', 'params']
+  
+      # 股票代码格式验证 (允许大写字母、数字和点号，如 AAPL, BRK.B, GOOGL)
+>     SYMBOL_PATTERN = re.compile(r'^[A-Z][A-Z0-9]*(\.[A-Z])?$')
+  
+>     def validate_main_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
+>         """
+>         验证 config.yml 基本结构
+  
+>         Args:
+>             config: 主配置字典
+  
+>         Returns:
+>             {"ok": bool, "errors": List[str]}
+>         """
+>         errors = []
+  
+          # 1. 验证顶级必填字段
+>         errors.extend(self._validate_required_fields(config))
+  
+          # 2. 验证 mode 枚举值
+>         errors.extend(self._validate_mode(config))
+  
+          # 3. 验证 universe 结构
+>         errors.extend(self._validate_universe(config))
+  
+          # 4. 验证 strategies 结构
+>         errors.extend(self._validate_strategies(config))
+  
+          # 5. 验证 risk 配置
+>         errors.extend(self._validate_risk(config))
+  
+          # 6. 验证数据库配置
+>         errors.extend(self._validate_db_configs(config))
+  
+>         return {
+>             "ok": len(errors) == 0,
+>             "errors": errors
+>         }
+  
+>     def _validate_required_fields(self, config: Dict[str, Any]) -> List[str]:
+>         """验证顶级必填字段"""
+>         errors = []
+>         for field in self.REQUIRED_TOP_LEVEL_FIELDS:
+>             if field not in config:
+!                 errors.append(f"missing_required_field: {field}")
+>         return errors
+  
+>     def _validate_mode(self, config: Dict[str, Any]) -> List[str]:
+>         """验证 mode 字段"""
+>         errors = []
+>         mode = config.get('mode')
+  
+>         if mode is None:
+!             return errors  # Already caught by required_fields
+  
+>         if not isinstance(mode, str):
+!             errors.append(f"invalid_mode_type: mode must be string, got {type(mode).__name__}")
+>         elif mode not in self.VALID_MODES:
+!             errors.append(
+!                 f"invalid_mode_value: '{mode}' not in {self.VALID_MODES}"
+!             )
+  
+>         return errors
+  
+>     def _validate_universe(self, config: Dict[str, Any]) -> List[str]:
+>         """验证 universe 字段"""
+>         errors = []
+>         universe = config.get('universe')
+  
+>         if universe is None:
+!             return errors  # Already caught by required_fields
+  
+>         if not isinstance(universe, list):
+!             errors.append(f"invalid_universe_type: must be list, got {type(universe).__name__}")
+!             return errors
+  
+          # 验证每个符号都是大写字符串，允许字母、数字和点号 (如 AAPL, BRK.B, QQQ)
+>         for i, symbol in enumerate(universe):
+>             if not isinstance(symbol, str):
+!                 errors.append(f"universe[{i}]: must be string, got {type(symbol).__name__}")
+>             elif not self.SYMBOL_PATTERN.match(symbol):
+!                 errors.append(
+!                     f"universe[{i}]: '{symbol}' invalid format "
+!                     f"(expected: uppercase letters/numbers, optional .X suffix like BRK.B)"
+!                 )
+  
+>         return errors
+  
+>     def _validate_strategies(self, config: Dict[str, Any]) -> List[str]:
+>         """验证 strategies 结构"""
+>         errors = []
+>         strategies = config.get('strategies')
+  
+>         if strategies is None:
+!             return errors  # Already caught by required_fields
+  
+>         if not isinstance(strategies, list):
+!             errors.append(f"invalid_strategies_type: must be list, got {type(strategies).__name__}")
+!             return errors
+  
+>         if len(strategies) == 0:
+!             errors.append("strategies_empty: at least one strategy required")
+  
+          # 验证每个策略的结构
+>         for i, strat in enumerate(strategies):
+>             if not isinstance(strat, dict):
+!                 errors.append(f"strategies[{i}]: must be dict, got {type(strat).__name__}")
+!                 continue
+  
+              # 检查必填字段
+>             for field in self.REQUIRED_STRATEGY_FIELDS:
+>                 if field not in strat:
+!                     strat_id = strat.get('id', f'index_{i}')
+!                     errors.append(f"strategies[{i}] ({strat_id}): missing '{field}'")
+  
+              # 验证 enabled 字段类型（如果存在）
+>             if 'enabled' in strat and not isinstance(strat['enabled'], bool):
+!                 errors.append(
+!                     f"strategies[{i}] ({strat.get('id', 'unknown')}): "
+!                     f"'enabled' must be boolean"
+!                 )
+  
+              # 验证 params.extras 存在
+>             params = strat.get('params', {})
+>             if not isinstance(params, dict):
+!                 errors.append(
+!                     f"strategies[{i}] ({strat.get('id', 'unknown')}): "
+!                     f"'params' must be dict"
+!                 )
+>             elif 'extras' not in params:
+!                 errors.append(
+!                     f"strategies[{i}] ({strat.get('id', 'unknown')}): "
+!                     f"'params.extras' is required"
+!                 )
+  
+>         return errors
+  
+>     def _validate_risk(self, config: Dict[str, Any]) -> List[str]:
+>         """验证 risk 配置"""
+>         errors = []
+>         risk = config.get('risk')
+  
+>         if risk is None:
+!             return errors  # Already caught by required_fields
+  
+>         if not isinstance(risk, dict):
+!             errors.append(f"invalid_risk_type: must be dict, got {type(risk).__name__}")
+!             return errors
+  
+          # 验证关键风险参数
+>         required_risk_fields = [
+>             'daily_trading_capital',
+>             'per_trade_risk_pct',
+>             'max_concurrent_positions',
+>             'max_daily_dd_pct'
+>         ]
+  
+>         for field in required_risk_fields:
+>             if field not in risk:
+!                 errors.append(f"risk.{field}: required field missing")
+  
+          # 验证数值范围
+>         if 'per_trade_risk_pct' in risk:
+>             val = risk['per_trade_risk_pct']
+>             if not isinstance(val, (int, float)):
+!                 errors.append(f"risk.per_trade_risk_pct: must be number, got {type(val).__name__}")
+>             elif val <= 0 or val > 0.1:
+!                 errors.append(
+!                     f"risk.per_trade_risk_pct: {val} outside safe range (0, 0.1]"
+!                 )
+  
+>         if 'max_daily_dd_pct' in risk:
+>             val = risk['max_daily_dd_pct']
+>             if not isinstance(val, (int, float)):
+!                 errors.append(f"risk.max_daily_dd_pct: must be number, got {type(val).__name__}")
+>             elif val <= 0 or val > 0.5:
+!                 errors.append(
+!                     f"risk.max_daily_dd_pct: {val} outside safe range (0, 0.5]"
+!                 )
+  
+>         return errors
+  
+>     def _validate_db_configs(self, config: Dict[str, Any]) -> List[str]:
+>         """验证数据库配置"""
+>         errors = []
+  
+          # 验证 ClickHouse 配置
+>         ch = config.get('clickhouse', {})
+>         if not isinstance(ch, dict):
+!             errors.append(f"clickhouse: must be dict, got {type(ch).__name__}")
+  
+          # 验证 Kafka 配置
+>         kafka = config.get('kafka', {})
+>         if not isinstance(kafka, dict):
+!             errors.append(f"kafka: must be dict, got {type(kafka).__name__}")
+>         elif 'bootstrap_servers' not in kafka:
+!             errors.append("kafka.bootstrap_servers: required field missing")
+  
+>         return errors
+  
+>     def validate_hpo_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
+>         """
+>         验证 HPO 配置结构
+  
+>         Args:
+>             config: HPO 配置字典
+  
+>         Returns:
+>             {"ok": bool, "errors": List[str]}
+>         """
+!         errors = []
+  
+          # 验证必填字段
+!         required_hpo_fields = ['symbols', 'features_table', 'grid', 'objective']
+  
+!         for field in required_hpo_fields:
+!             if field not in config.get('hpo', {}):
+!                 errors.append(f"hpo.{field}: required field missing")
+  
+          # 验证 grid 结构
+!         hpo = config.get('hpo', {})
+!         grid = hpo.get('grid', {})
+  
+!         if not isinstance(grid, dict):
+!             errors.append(f"hpo.grid: must be dict, got {type(grid).__name__}")
+!         elif len(grid) == 0:
+!             errors.append("hpo.grid: must contain at least one parameter")
+  
+          # 验证 grid 参数定义
+!         for param_name, param_spec in grid.items():
+!             if not isinstance(param_spec, dict):
+!                 errors.append(
+!                     f"hpo.grid.{param_name}: must be dict, got {type(param_spec).__name__}"
+!                 )
+!                 continue
+  
+!             param_type = param_spec.get('type')
+!             if param_type not in ('int', 'float', 'choice'):
+!                 errors.append(
+!                     f"hpo.grid.{param_name}.type: must be 'int', 'float', or 'choice', "
+!                     f"got '{param_type}'"
+!                 )
+  
+              # 验证 int/float 参数
+!             if param_type in ('int', 'float'):
+!                 if 'low' not in param_spec:
+!                     errors.append(f"hpo.grid.{param_name}: 'low' required for {param_type}")
+!                 if 'high' not in param_spec:
+!                     errors.append(f"hpo.grid.{param_name}: 'high' required for {param_type}")
+  
+                  # 验证 low < high
+!                 if 'low' in param_spec and 'high' in param_spec:
+!                     if param_spec['low'] >= param_spec['high']:
+!                         errors.append(
+!                             f"hpo.grid.{param_name}: 'low' must be < 'high' "
+!                             f"({param_spec['low']} >= {param_spec['high']})"
+!                         )
+  
+              # 验证 choice 参数
+!             if param_type == 'choice':
+!                 if 'values' not in param_spec:
+!                     errors.append(f"hpo.grid.{param_name}: 'values' required for choice type")
+!                 elif not isinstance(param_spec['values'], list):
+!                     errors.append(
+!                         f"hpo.grid.{param_name}.values: must be list, "
+!                         f"got {type(param_spec['values']).__name__}"
+!                     )
+!                 elif len(param_spec['values']) == 0:
+!                     errors.append(f"hpo.grid.{param_name}.values: must contain at least one value")
+  
+          # 验证 objective
+!         objective = hpo.get('objective', {})
+!         if not isinstance(objective, dict):
+!             errors.append(f"hpo.objective: must be dict, got {type(objective).__name__}")
+!         else:
+!             if 'metric' not in objective:
+!                 errors.append("hpo.objective.metric: required field missing")
+!             if 'maximize' not in objective:
+!                 errors.append("hpo.objective.maximize: required field missing")
+  
+!         return {
+!             "ok": len(errors) == 0,
+!             "errors": errors
+!         }

@@ -1,0 +1,30 @@
+{
+  "autosettings": { "enabled": true, "require_approval": true },
+  "symbols": ["TSLA"],
+  "bar_sec": 60,
+  "ensemble": { "mode": "weighted_avg", "models": [{"name": "ml", "weight": 1.0}] },
+  "sizing": { "mode": "fixed", "base_qty": 100, "max_qty": 1000, "lot": 100 },
+  "market_filter": { "conf_floor": 0.55, "max_spread_bps": 8, "min_volume": 100000, "check_after_hours": true },
+  "rl": {
+    "enabled": true,
+    "model_path": "models/rl/sac_v2_test.zip",
+    "action_mode": "scale",
+    "max_scale_amp": 0.5,
+    "safety": {"max_position_pct": 0.25, "max_step_pct": 0.30}
+  },
+  "oco": {
+    "take_profit_bp": 250,
+    "hard_stop_bp": 180,
+    "trail_atr_mult": 2.5
+  },
+  "adaptive": {
+    "enabled": true,
+    "rules": [
+      {"when": {"time_lt": "09:50"}, "overrides": {"sizer_scale": 0.5}},
+      {"when": {"vix_gt": 22}, "overrides": {"conf_floor": 0.7, "sizer_scale": 0.75}},
+      {"when": {"gap_up_pct_ge": 3.0}, "overrides": {"sizer_scale": 0.6}},
+      {"when": {"gap_dn_pct_ge": 3.0}, "overrides": {}},
+      {"when": {"spy_abs_ret_1m_gt": 0.8}, "overrides": {"exec_mode": "TWAP", "exec_horizon_s": 120}}
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "skills": {
+    "e2e_test_skill_v1": {
+      "file_path": "tests/tmp_e2e/libs/skills/generated/test/e2e_skill.py",
+      "test_path": "tests/tmp_e2e/libs/skills/generated/test/test_e2e_skill.py",
+      "type": "hooks",
+      "description": "E2E test skill",
+      "allow_evolution": true,
+      "objective": "PERFORMANCE",
+      "metrics_impact": [],
+      "category": "unknown",
+      "approved_at": "2026-05-06T00:57:17.223923+00:00",
+      "version": 1,
+      "enabled": true,
+      "performance_baseline": {}
+    }
+  }
+}

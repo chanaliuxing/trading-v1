@@ -1,0 +1,42 @@
+{
+  "policy_version": "candidate_blacklist.v1",
+  "blacklist_store": "runtime/state/candidate_factory_blacklist.json",
+  "entry_schema": {
+    "failed_candidate_id": "string",
+    "strategy_family": "string",
+    "feature_set": [
+      "string"
+    ],
+    "param_signature": {
+      "entry": "object",
+      "exit": "object",
+      "risk": "object"
+    },
+    "market_conditions": [
+      "trend",
+      "chop",
+      "high_vol",
+      "low_vol"
+    ],
+    "failure_reason": "string",
+    "failed_at": "ISO-8601",
+    "cooldown_days": "integer"
+  },
+  "similarity_check": {
+    "formula": "sim = 0.4*feature_jaccard + 0.4*param_similarity + 0.2*regime_overlap",
+    "feature_jaccard": "|A∩B|/|A∪B|",
+    "param_similarity": "mean(1 - min(|x-y|/range,1)) over mapped numeric params + exact match score for categorical params",
+    "regime_overlap": "|A∩B|/|A∪B|",
+    "block_threshold": 0.75,
+    "actions": {
+      "sim >= 0.85": "hard_block",
+      "0.75 <= sim < 0.85": "review_block",
+      "sim < 0.75": "allow"
+    }
+  },
+  "daily_gate": {
+    "must_check_before_backtest": true,
+    "must_check_before_topn_publish": true,
+    "on_block": "mark candidate as rejected_blacklist_similarity"
+  }
+}

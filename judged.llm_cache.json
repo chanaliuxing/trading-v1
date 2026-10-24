@@ -1,0 +1,594 @@
+{
+  "f07008e928abc79eb268ae5953bd3e5003014a11": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "f527261d7a7a1d7ad3d4b4a3ab836b2408edacdf": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "3f836cc64b8fda2bba31ae501702da52385ce7fe": {
+    "ticker": "INTC",
+    "subject_match": "exact",
+    "event_type": "earnings_beat",
+    "direction": "bullish",
+    "strength_0to3": 1,
+    "forward_looking": false,
+    "time_horizon": "days",
+    "key_reasons": [
+      "公司在第三季度财报中表现超出预期",
+      "超预期的财报可能指向未来现金流的改善",
+      "信息来自权威来源，且与核心财务因子相关"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  "28fad63f01f7fc8607264773b38699612476a93d": {
+    "ticker": "AMZN",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "文章讨论了亚马逊是否为最佳投资选择，但未提供具体的财务数据或前瞻性指引",
+      "缺乏可验证的事实支持对未来现金流或风险的影响",
+      "内容主要为市场观点，未涉及具体事件或数据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "d8c68b78b3010ae7649dc847d3ade9c459ce8783": {
+    "ticker": "TSLA",
+    "subject_match": "exact",
+    "event_type": "rating_down",
+    "direction": "bearish",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "days",
+    "key_reasons": [
+      "分析师对特斯拉的评级下调",
+      "评级下调通常反映对未来现金流和利润的悲观预期",
+      "此类调整可能导致投资者信心下降，增加风险敞口"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  "f2f40a142d1e13031642c893d86c95d6475fc89d": {
+    "ticker": "AAPL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为对即将发布财报的预告，没有提供具体的财务数据或指引",
+      "未包含可验证的新事实或对未来现金流的直接影响",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "37dcb75e0990b4d07bfa1a11f8d013a0f444a0e3": {
+    "ticker": "INTC",
+    "subject_match": "exact",
+    "event_type": "earnings_miss",
+    "direction": "bearish",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "quarters",
+    "key_reasons": [
+      "公司即将面临‘最具挑战性’的季度，暗示未来业绩可能下滑",
+      "当前财报未能提供足够的正面指引",
+      "市场对未来现金流的不确定性增加"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  "d196c7c1fae02bcdbd145946783d4e8700e18c54": {
+    "ticker": "NVDA",
+    "subject_match": "related",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻提到竞争对手（Intel, AMD）技术指标改善，但未涉及Nvidia的具体财务影响",
+      "缺乏前瞻性信号或可验证的事实",
+      "信息主要为市场动态的描述，未能直接影响现金流或风险"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "cc18fd9fc37b4e80fc5e6861aac903b5a9cfc72c": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "d27fa5e5461ca3729c8f800d2e34121d3056fdfe": {
+    "ticker": "GOOGL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为个人观点的表述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "promotional",
+    "notes": ""
+  },
+  "ccc80f5c0316d1aa723ecd17a1ae315d7b3f0bf1": {
+    "ticker": "QQQ",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻仅提及投票延迟，未提供具体的财务影响或前瞻性信号",
+      "缺乏可验证的事实支持现金流或风险的变化",
+      "信息未能满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "d4da626945bd061ee13a28ccc16c1014c75f2a27": {
+    "ticker": "GOOGL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻标题提到的量子优势并未提供具体的可验证事实或数据",
+      "缺乏对未来现金流或风险的直接影响分析",
+      "内容未涉及具体的指引、合约或其他财务相关信息"
+    ],
+    "signal_quality": "promotional",
+    "notes": ""
+  },
+  "611a22f31629f59cd39b9dfeddc9a0fe422943cf": {
+    "ticker": "AAPL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "标题暗示可能的利好，但未提供具体事实或数据",
+      "摘要内容缺乏可验证的信息",
+      "未满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "promotional",
+    "notes": ""
+  },
+  "d4d3c01175ef58055e3ce66d176713f892b8fbff": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "d9907fce082991014cb0ec05f0383b82f790321c": {
+    "ticker": "META",
+    "subject_match": "exact",
+    "event_type": "rating_up",
+    "direction": "bullish",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "days",
+    "key_reasons": [
+      "Truist上调了Meta的股票目标价",
+      "Stifel重申了对Meta的买入评级，表明对未来业绩的信心",
+      "这些评级调整可能反映出对即将发布的Q3财报的乐观预期"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  "9c975c801e90c6ff566a2fc5d8b03dc25e17ee93": {
+    "ticker": "GOOGL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "文章仅讨论投资建议，未提供具体的财务数据或前瞻性指引",
+      "缺乏可验证的新事实或事件",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "7ea3e9288102a22db35d0582ddb6737c94bf18fe": {
+    "ticker": "GOOGL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "文章讨论投资建议，但未提供具体的财务数据或前瞻性指引",
+      "缺乏可验证的新信息或对未来现金流的影响",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "43ebea7ccca02371ee88081379a589a7631a090b": {
+    "ticker": "AMD",
+    "subject_match": "unrelated",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻主要讨论的是 IBM 的股价表现",
+      "未提供与 AMD 相关的可验证新事实",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "9ea5b3f07d80827562b4131622953e42a83a1fb4": {
+    "ticker": "INTC",
+    "subject_match": "exact",
+    "event_type": "earnings_beat",
+    "direction": "bullish",
+    "strength_0to3": 1,
+    "forward_looking": true,
+    "time_horizon": "quarters",
+    "key_reasons": [
+      "公司在第三季度财报中表现超出市场预期",
+      "超预期的业绩通常指向未来现金流的改善",
+      "信息来自权威来源，具有可验证性"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  "c02d687f2161874ad18a6cac7967c1eac26c54e8": {
+    "ticker": "GOOGL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "714d9ef3dbb99a8711e0f3b4bc8efae438501670": {
+    "ticker": "VOO",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为市场表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "60eb66ba76d370ec2f0b10486256f7e7bec55c29": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为标题和摘要的复述，没有提供新的信息或事实",
+      "未涉及任何可验证的事件或数据",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "96bf8a4ced81601e4740cfa3dbb367f5aecca083": {
+    "ticker": "AMZN",
+    "subject_match": "exact",
+    "event_type": "legal_win",
+    "direction": "bullish",
+    "strength_0to3": 2,
+    "forward_looking": true,
+    "time_horizon": "quarters",
+    "key_reasons": [
+      "公司在法律事务中取得胜利，减少了潜在的法律风险",
+      "法律胜利可能改善未来的现金流和利润率",
+      "分析师对目标价的上调反映了对公司未来表现的乐观预期"
+    ],
+    "signal_quality": "high",
+    "notes": "虽然提到 AI 推动，但未提供具体的可验证信息，主要依据法律胜利"
+  },
+  "b8c553171614c5974bd3b1eb6f6094d5c75c73d8": {
+    "ticker": "AAPL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "97c3d4f002e601cfbe613f7b8daaceea12806226": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为股票表现的汇总",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "e49b2126d1a4bdad4e03ddcff3bc5d3d8963dad3": {
+    "ticker": "MSFT",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "c3b48f6482e87811a2cf870c3c2607cc6a5e28df": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "56a7a624add9dc9d845b8894a1bb18c017f84143": {
+    "ticker": "TSLA",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "bearish",
+    "strength_0to3": 2,
+    "forward_looking": true,
+    "time_horizon": "quarters",
+    "key_reasons": [
+      "前高管的言论暗示特斯拉可能退出汽车行业，影响未来现金流",
+      "对特斯拉未来存在性的质疑可能导致投资者信心下降",
+      "该言论反映出对特斯拉长期业务可持续性的风险"
+    ],
+    "signal_quality": "high",
+    "notes": ""
+  },
+  "b5b4b15308c4493356f3a3200a3f415332390568": {
+    "ticker": "INTC",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "0f3374461c905466cb6c9220329e265c43094084": {
+    "ticker": "QQQ",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格和历史数据的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "bbf75ecb169ec28d8e8fe1e30611abe220692b03": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "3fdad8b6db3727fcdcf92e2004f8a23c6d25141e": {
+    "ticker": "META",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻仅为分析师对即将发布的财报持积极态度的表述",
+      "未提供具体的财务指引或可验证的新信息",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "8a2849cb6a7d374c0e286eaebd1e0e74a2104920": {
+    "ticker": "NVDA",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻标题提及对 Intel 的需求展望，但未提供具体的可验证信息",
+      "未包含任何直接影响 Nvidia 未来现金流或风险的事实",
+      "缺乏前瞻性信号或具体数据支持"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "d2228a2f4e0d9dd4a953e6dea2c46e943776d841": {
+    "ticker": "INTC",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为股票表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "71685bde458cacd429961eccb5ff404c5c93acd8": {
+    "ticker": "AMD",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "仅为价格表现的复述",
+      "未提供可验证的新事实（指引、合约、批文等）",
+      "不满足因果链到现金流/风险的证据"
+    ],
+    "signal_quality": "price_recap",
+    "notes": ""
+  },
+  "0e07cb2840f9520192df79d37e9aa46f7367cfb0": {
+    "ticker": "AAPL",
+    "subject_match": "exact",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻标题未提供具体的财务数据或前瞻性指引",
+      "缺乏可验证的事实支持未来现金流或风险的变化",
+      "仅为对公司表现的描述，未涉及具体事件"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  },
+  "07f41ed5a80cc11be7cdb4b14e3299b9f0576867": {
+    "ticker": "META",
+    "subject_match": "unrelated",
+    "event_type": "other",
+    "direction": "neutral",
+    "strength_0to3": 0,
+    "forward_looking": false,
+    "time_horizon": "hours",
+    "key_reasons": [
+      "新闻主要关注苹果公司的财报表现",
+      "未提供与META直接相关的财务信息或前瞻性指引",
+      "不满足因果链到META的现金流或风险的证据"
+    ],
+    "signal_quality": "duplicate_or_no_novelty",
+    "notes": ""
+  }
+}

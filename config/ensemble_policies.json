@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "mode": "weighted_avg",
+    "weights": {"xgb": 0.6, "lstm": 0.4}
+  },
+  "symbols": {
+    "TSLA": {"weights": {"xgb": 1.0, "lstm": 0.0}},
+    "AAPL": {"weights": {"xgb": 0.7, "lstm": 0.3}}
+  }
+}
+

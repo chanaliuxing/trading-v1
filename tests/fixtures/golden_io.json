@@ -1,0 +1,28 @@
+{
+  "dummy_math": [
+    {
+      "func": "slow_fib",
+      "args": [10],
+      "hash": "02d20bbd7e394ad5999a4cebabac9619732c343a4cac99470c03e23ba2bdc2bc"
+    }
+  ],
+  "feature_atr": [
+    {
+      "func": "op_ta_atr",
+      "dataframe": {
+        "columns": ["high", "low", "close"],
+        "data": [
+          [10, 9, 9.5],
+          [10.5, 9.7, 10],
+          [11, 10, 10.8],
+          [11.2, 10.8, 11.0]
+        ]
+      },
+      "kwargs": {
+        "window_bars": 14,
+        "per_symbol": false
+      },
+      "hash": "11ca0cd462b27bf5bc8e99fd03fd31a0decaf7600ba0d703acc85c3adac9c598"
+    }
+  ]
+}

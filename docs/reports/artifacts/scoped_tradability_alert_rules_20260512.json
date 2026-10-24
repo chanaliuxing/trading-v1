@@ -1,0 +1,49 @@
+{
+  "artifact_type": "scoped_tradability_alert_rule_draft",
+  "generated_for": "Scoped Tradability Phase Final Hardening",
+  "generated_at": "2026-05-12T00:00:00-04:00",
+  "rules": [
+    {
+      "id": "scoped_tradability_global_halt_active",
+      "severity": "critical",
+      "condition": "production_state.global_halt == true",
+      "message": "Global halt active. ENTRY and SCALE_IN must be denied for every scope.",
+      "required_fields": ["global_halt", "blocked_scopes", "tradability_authority"]
+    },
+    {
+      "id": "scoped_tradability_partial_entry",
+      "severity": "warning",
+      "condition": "production_state.go_no_go == 'go' && production_state.entry_go_no_go == 'partial'",
+      "message": "Platform is usable but at least one entry scope is blocked. Execution must still require TradabilityService decision.",
+      "required_fields": ["entry_go_no_go", "blocked_scopes", "production_state_authorizes_execution"]
+    },
+    {
+      "id": "scoped_tradability_manual_lock_global_misclassification",
+      "severity": "critical",
+      "condition": "any(blocker startswith 'manual_intervention_lock' for GLOBAL blocked_scopes.blockers)",
+      "message": "Manual lock was emitted as global halt. It must be scoped by strategy_instance/account_symbol/session unless accompanied by a hard global blocker.",
+      "required_fields": ["blocked_scopes"]
+    },
+    {
+      "id": "scoped_tradability_eod_global_misclassification",
+      "severity": "critical",
+      "condition": "any(blocker startswith 'platform_eod' for GLOBAL blocked_scopes.blockers)",
+      "message": "Platform EOD was emitted as global halt. It must be represented as session/scoped entry block unless hard broker/runtime safety also fails.",
+      "required_fields": ["blocked_scopes"]
+    },
+    {
+      "id": "scoped_tradability_owner_identity_missing",
+      "severity": "critical",
+      "condition": "decision.allow == true && decision.scope.flow_type in close_or_reduce_flows && owner_identity_complete == false",
+      "message": "Close/reduce/protective override cannot proceed without complete owner identity.",
+      "required_fields": ["scope.account_id", "scope.strategy_instance_id", "scope.symbol", "scope.lot_id"]
+    },
+    {
+      "id": "scoped_tradability_ledger_owner_lane_missing",
+      "severity": "warning",
+      "condition": "position_ledger_event.source == 'broker_truth_convergence_fill' && strategy_instance_id is empty",
+      "message": "Broker truth convergence fill did not inherit strategy_instance_id; restart flatten may reconcile into the wrong lane.",
+      "required_fields": ["strategy_id", "strategy_instance_id", "lot_id", "position_owner_key"]
+    }
+  ]
+}

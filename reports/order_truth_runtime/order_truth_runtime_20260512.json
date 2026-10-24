@@ -1,0 +1,49 @@
+{
+  "audit_date": "2026-05-12",
+  "audit_dir": "./runtime/audit/2026-05-12",
+  "audit_dir_exists": true,
+  "blocked_reason_counts": {
+    "amp_not_locked": 1,
+    "data_integrity_fail_closed": 18,
+    "delayed_confirm_not_met": 10,
+    "fast_drift_not_ready": 8,
+    "first_entry_seed_not_ready": 14,
+    "sign_mismatch": 20,
+    "v47_short_chase_guard": 17
+  },
+  "date": "2026-05-12",
+  "false_block_removed": true,
+  "latest_legacy_block_ts": null,
+  "legacy_block_recovered": false,
+  "legacy_open_orders_block_count": 0,
+  "legitimate_block_observed": true,
+  "legitimate_block_reason_counts": {
+    "amp_not_locked": 1,
+    "data_integrity_fail_closed": 18,
+    "delayed_confirm_not_met": 10,
+    "fast_drift_not_ready": 8,
+    "first_entry_seed_not_ready": 14,
+    "sign_mismatch": 20,
+    "v47_short_chase_guard": 17
+  },
+  "market_day": "20260512",
+  "matched_strategy_ids": [
+    "qqq_intraday_001",
+    "qqq_intraday_option_v1_001"
+  ],
+  "ok": true,
+  "position_sync_flat_count": 5895,
+  "post_legacy_flat_count": 0,
+  "post_legacy_strategy_row_count": 0,
+  "reasons": [],
+  "recommendation": "PASS",
+  "requested_day": "20260512",
+  "rows_scanned": 191489,
+  "strategy_id": "qqq_intraday_001",
+  "strategy_ids_checked": [
+    "qqq_intraday_001",
+    "qqq_intraday_option_v1_001"
+  ],
+  "strategy_row_count": 9311,
+  "used_previous_completed_day": false
+}

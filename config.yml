@@ -1,0 +1,3857 @@
+mode: paper
+timezone: America/New_York
+oms:
+  same_symbol_multi_strategy_safe: false
+  owner_identity_minimal_landing: true
+commands:
+  backfill_yesterday: venv/bin/python docs/daily/trigger_backfill.py
+  alpha_loop: venv/bin/python alpha_loop.py --config alpha_config_enhanced.json --provider
+    coop_optuna --gens 2 --out_dir alpha_out/daily --k-top 10
+  apply_params: ''
+  rl_train: venv/bin/python rl_core/train.py --symbols TSLA,AAPL,NVDA --start '2025-07-01
+    09:30:00' --end '2025-08-31 16:00:00' --features-table trading.features_1m --timesteps
+    200000 --cost-bps 2.0 --dd-penalty 0.1 --turnover-penalty 0.05 --out models/rl/sac_position_manager_latest
+  rl_eval: venv/bin/python scripts/ai_trader/rl/eval_rl.py --symbols TSLA,AAPL,NVDA
+    --start '2025-07-01 09:30:00' --end '2025-08-31 16:00:00' --out-dir runs/ai_trader
+  premarket_sh: ./llm_trader/run_premarket.sh
+  first_hour_sh: ./llm_trader/run_first_hour.sh
+  all_providers_sh: ./llm_trader/run_all_providers.sh market
+  premarket_fallback: venv/bin/python llm_trader/run_single_bot.py --provider deepseek_nvidia
+    --symbols TSLA --interval 600 --cycles 33 --close-at 09:35 --forbid-new-positions-before
+    9 --wait-for-premarket
+  first_hour_fallback: venv/bin/python llm_trader/run_single_bot.py --provider deepseek
+    --symbols TSLA --interval 300 --wait-for-market --start-trading-at 9:40 --stop-trading-at
+    10:30 --close-at 10:45
+  overnight_fallback: venv/bin/python llm_trader/run_single_bot.py --provider deepseek_nvidia
+    --symbols TSLA --interval 600 --cycles 50 --wait-for-overnight --close-at 03:50
+    --forbid-new-positions-before 5
+  execute_hedge: venv/bin/python scripts/options/auto_hedge.py --symbols {symbols}
+    --notional {notional_pct}
+vix:
+  enabled: true
+  fallback: 18.0
+clickhouse:
+  timezone: America/New_York
+feature_calculator:
+  # Disabled: no currently enabled strategy consumes features_* tables.
+  # Strategies read bars_*_current via subscribe_features; validator's
+  # LEFT JOIN features_5s falls back to quality=UNKNOWN + atr_bp=50.0.
+  enabled: false
+  enable_15s: false
+  enable_5s: true
+  enable_1h: false
+  rth_allowed_resolutions:
+  - 1m
+  batch_size: 2
+  max_memory_per_query: 2147483648
+  horizon_minutes: 10
+engine_adapter:
+  quote_staleness_sec: 5
+  poll_sec_1m: 3
+  poll_sec_5m: 10
+  vix_alias: VIXY
+writers:
+- name: bars_5s_writer
+  enabled: true
+  topic: md.bar.5s.v2
+  table: bars_5s
+  group_id: ch_writer_bars_5s
+  batch_size: 200
+  batch_timeout_sec: 2.0
+  allow_extended_hours: true
+- name: bars_1m_ibkr_writer
+  enabled: true
+  topic: md.bar.1m.ibkr
+  table: bars_1m_ibkr
+  group_id: ch_writer_bars_1m_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+  allow_extended_hours: true
+- name: bars_5m_ibkr_writer
+  enabled: false
+  topic: md.bar.5m.ibkr
+  table: bars_5m_ibkr
+  group_id: ch_writer_bars_5m_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_15m_ibkr_writer
+  enabled: false
+  topic: md.bar.15m.ibkr
+  table: bars_15m_ibkr
+  group_id: ch_writer_bars_15m_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_10m_ibkr_writer
+  enabled: false
+  topic: md.bar.10m.ibkr
+  table: bars_10m_ibkr
+  group_id: ch_writer_bars_10m_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_30m_ibkr_writer
+  enabled: false
+  topic: md.bar.30m.ibkr
+  table: bars_30m_ibkr
+  group_id: ch_writer_bars_30m_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_1h_ibkr_writer
+  enabled: false
+  topic: md.bar.1h.ibkr
+  table: bars_1h_ibkr
+  group_id: ch_writer_bars_1h_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_2h_ibkr_writer
+  enabled: false
+  topic: md.bar.2h.ibkr
+  table: bars_2h_ibkr
+  group_id: ch_writer_bars_2h_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_3h_ibkr_writer
+  enabled: false
+  topic: md.bar.3h.ibkr
+  table: bars_3h_ibkr
+  group_id: ch_writer_bars_3h_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_4h_ibkr_writer
+  enabled: false
+  topic: md.bar.4h.ibkr
+  table: bars_4h_ibkr
+  group_id: ch_writer_bars_4h_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+- name: bars_1d_ibkr_writer
+  enabled: false
+  topic: md.bar.1d.ibkr
+  table: bars_1d_ibkr
+  group_id: ch_writer_bars_1d_ibkr
+  batch_size: 200
+  batch_timeout_sec: 2.0
+lake_writers:
+- name: lake_trades_writer
+  enabled: true
+  topic: md.tick.trade.v1
+  mode: trades
+  group_id: lake_writer_trades
+  batch_size: 500
+  batch_timeout_sec: 1.0
+- name: lake_quotes_writer
+  enabled: true
+  topic: md.tick.quote.v1
+  mode: quotes
+  group_id: lake_writer_quotes
+  batch_size: 500
+  batch_timeout_sec: 1.0
+event_bus:
+  provider: kafka
+  keying: symbol
+  retries:
+    max_attempts: 3
+    backoff_ms:
+    - 1000
+    - 5000
+    - 15000
+  topics:
+    bars: events.bars
+    fills: events.fills
+    health: events.health
+    plans: internal.plans
+    plans_approved: internal.plans.approved
+    control: internal.control
+    risk_events: internal.risk.events
+    ml: internal.ml.status
+  max_arrival_lag_ms: 4000
+  max_consume_lag_ms: 3000
+  clock_grace_ms: 1500
+  log_drop_every_n: 20
+system_gate_bypass:
+  enabled: false
+phase0:
+  freeze_gate:
+    baseline_path: reports/strategy_surface/live_strategy_surface_freeze_baseline.json
+    require_baseline: true
+decision_pipeline:
+  bypass_validator: false
+  bypass_arbiter: false
+  respect_order_style: false
+  fallback_to_market_on_missing_l1: false
+  trace_validation:
+    blocking: true
+  validator:
+    min_hist_bars: 36
+    bar_gap_ms_max: 1200
+    min_dlb_ms: 3000
+    require_nbbo: true
+    min_volume: 1.0
+    min_atr_bp: 1.0
+    edge_buffer_bp: 0.0
+    allow_strategy_history_ready_bypass: true
+    history_ready_allowed_strategy_ids:
+    - qqq_intraday_plugin_001
+    - qqq_intraday_option_v1_001
+    - qqq_1dte_ma10_reject_0324_v2_001
+    - nvda_minute_flip_paper_001
+    - agent_paper_bridge_001
+kafka:
+  bootstrap_servers: 127.0.0.1:9092
+  acks: all
+  enable_idempotence: true
+  compression_type: lz4
+  linger_ms: 5
+  batch_size: 131072
+  message_timeout_ms: 15000
+  transactional_id: ''
+ib:
+  host: 127.0.0.1
+  port: 4002
+  client_id: 31
+  registry:
+    master_client_id: 0
+    market_client_id: 10
+    exec_client_id: 20
+    strategy_client_id_base: 100
+    allow_startup_id_rotation: false
+    state_file: runtime/state/ib_client_ids.json
+universe:
+- QQQ
+- SPY
+- TQQQ
+- SQQQ
+- SMH
+- SOXL
+- SOXS
+- NVDA
+- AD-NASD
+phase2:
+  ts:
+    prefer: kafka
+    max_transport_lag_ms: 2500
+    max_clock_skew_ms: 500
+    max_event_age_ms: 300000
+    watermark_ms: 1200
+    reorder_drop_ms: 10000
+cost_gates:
+  max_spread: 0.1
+  min_atr1m: 0.08
+  min_open_vol_mult: 0.4
+strategy:
+  atr_offset_coef: 0.2
+  vol_spike_mult: 1.5
+  tp1_atr_mult: 0.6
+  tp2_atr_mult: 1.0
+  sl_atr_mult: 0.9
+  time_stop_min: 30
+strategy_templates:
+  vwap_revert:
+    atr_k: 0.05
+    pct_k: 0.0001
+    wick_ratio_min: -1.0
+    prev_spike_min: 0.0
+    now_spike_max: 50.0
+    sl_atr: 1.0
+    tp1_vwap: true
+    tp2_atr: 1.2
+    time_stop_min: 60
+  orb_retest:
+    breakout_spike_min: 1.0
+    retest_window: 10
+    retest_band_atr: 0.15
+    sl_atr: 0.7
+    tp1_atr: 0.7
+    tp2_atr: 1.5
+    time_stop_min: 30
+  trend_pullback:
+    slope_min: 0.002
+    r2_min: 0.02
+    pullback_min_atr: 0.2
+    pullback_max_atr: 3.0
+    sl_atr: 1.0
+    tp1_atr: 1.2
+    tp2_atr: 1.8
+    time_stop_min: 30
+risk:
+  daily_trading_capital: 50000
+  per_trade_risk_pct: 0.005
+  max_concurrent_positions: 3
+  no_new_after_et: '12:30'
+  max_daily_dd_pct: 0.02
+  lose2_pause_min: 25
+  lose2_next_size_mult: 0.33
+  lose3_halt_day: true
+  check_interval_sec: 5
+  max_sector_concentration_pct: 40.0
+  sector_check_interval_sec: 60
+execution:
+  enabled: true
+  bypass_risk_checks: false
+  route: SMART
+  tif: DAY
+  default_account: ''
+  clamp_price_step: 0.01
+  trace_validation:
+    enabled: true
+    blocking: true
+  entry_isolation:
+    enabled: true
+    mode: strategy_only
+    symbols: []
+notifications:
+  enabled: true
+  queue_size: 1000
+  worker_count: 1
+  telegram:
+    enabled: true
+    strategy_allowlist:
+    - qqq_intraday_plugin_001
+    - qqq_intraday_option_v1_001
+    - qqq_1dte_ma10_reject_0324_v2_001
+    - spy_1dte_ma10_reject_0324_001
+    - stocks_kernel_smh_001
+    - system_reconciler
+    timeout_sec: 3.0
+    max_retries: 3
+    retry_base_delay_sec: 0.5
+    retry_max_delay_sec: 5.0
+    retry_jitter_sec: 0.25
+    failure_threshold: 5
+    open_timeout_sec: 60.0
+market_calendar:
+  source: America/New_York
+  holidays:
+  - '2024-01-01'
+  - '2024-01-15'
+  - '2024-02-19'
+  - '2024-03-29'
+  - '2024-05-27'
+  - '2024-06-19'
+  - '2024-07-04'
+  - '2024-09-02'
+  - '2024-11-28'
+  - '2024-12-25'
+  - '2025-01-01'
+  - '2025-01-20'
+  - '2025-02-17'
+  - '2025-04-18'
+  - '2025-05-26'
+  - '2025-06-19'
+  - '2025-07-04'
+  - '2025-09-01'
+  - '2025-11-27'
+  - '2025-12-25'
+  - '2026-01-01'
+  - '2026-01-19'
+  - '2026-02-16'
+  - '2026-04-03'
+  - '2026-05-25'
+  - '2026-06-19'
+  - '2026-07-03'
+  - '2026-09-07'
+  - '2026-11-26'
+  - '2026-12-25'
+  early_close_days:
+  - '2024-07-03'
+  - '2024-11-29'
+  - '2024-12-24'
+  - '2025-07-03'
+  - '2025-11-28'
+  - '2025-12-24'
+  - '2026-11-27'
+  - '2026-12-24'
+risk_management:
+  guardian:
+    dd_intraday_pct: 1.5
+    dd_5d_pct: 5.0
+    vol_spike_mult: 1.5
+  performance_guard:
+    enabled: false
+    window_days: 20
+    min_sharpe: 0.3
+    min_ev: 0.0
+    action: reduce
+    reduce_factor: 0.5
+    cool_off_days: 3
+    dry_run: false
+    data_source: ch
+    csv_path: reports/pnl_baseline_daily.csv
+    check_interval_sec: 600
+  hedge:
+    enabled: false
+    dry_run: false
+    check_interval_sec: 60
+    cooldown_sec: 300
+    strategy_id: sys_hedger
+    min_notional_usd: 10000
+    auto_execute: false
+    mode: delta_neutral
+    thresholds:
+      max_net_delta_usd: 50000
+    dynamic_params:
+      smooth_alpha: 0.3
+      hysteresis: 0.05
+      min_gap_usd: 10000
+      mult_min: 0.5
+      mult_max: 1.5
+      trend_weight: 0.4
+      vix_weight: 0.4
+      carry_weight: 0.2
+    options:
+      enabled: true
+      data_provider: stub
+      ibkr_host: 127.0.0.1
+      ibkr_port: 4002
+      instruments:
+      - SPY
+      - QQQ
+      - IWM
+      - DIA
+      primary: delta
+      delta_target_abs: 0.4
+      dte_preference:
+      - 7
+      - 14
+      - 30
+      min_open_interest: 2000
+      max_spread_bps: 30
+      min_last_trade_minutes: 5
+      slippage_bps: 10
+      tif: DAY
+      max_contracts_per_day: 50
+      max_notional_usd_per_day: 100000
+      dry_run: false
+      allow_linear_fallback: false
+  max_slippage_atr: 0.22
+  time_in_force_seconds: 600
+  cool_down_after_flat_s: 30
+  tams:
+    max_total_exposure: 1.0
+    max_per_prompt_exposure: 0.5
+    rebalance_threshold: 0.1
+trading_hours:
+  open_et: 09:30
+  close_et: '16:00'
+operations:
+  runtime_watchdog:
+    check_db_manual_locks: true
+    check_position_ledger_integrity: true
+production:
+  production_state_emitter:
+    enabled: true
+    interval_sec: 30
+  eod_supervisor:
+    enabled: true
+    flatten_time_et: '15:59:00'
+    poll_interval_sec: 5
+  session_end_supervisor:
+    enabled: true
+    default_deadline_et: '15:59:00'
+    manual_required_after_sec: 300
+    poll_interval_sec: 30
+  position_safety_supervisor:
+    enabled: true
+    poll_interval_sec: 30
+    flat_live_safety_order_auto_cancel_enabled: true
+reconciliation:
+  mode: report_only
+  quarantine:
+    block_new_intents_on_symbol: true
+  runtime:
+    dynamic_interval_enabled: true
+    trading_interval_seconds: 300.0
+    offhours_interval_seconds: 300.0
+    trading_window_start_et: 09:30
+    trading_window_end_et: '16:00'
+    interval_seconds: 60
+    query_offhours: false
+    flat_protective_auto_cancel_enabled: true
+    alert_cooldown_seconds: 300
+    startup_block_on_ghosts: false
+    startup_block_on_orphans: false
+    startup_block_on_mismatches: false
+  adopt_time_window_min: 15
+  price_tolerance_ticks: 3
+  executions_lookback_min: 120
+phase4:
+  max_concurrent_plans: 8
+  pacing_ms: 120
+  meta_order:
+    enabled: true
+    twap_threshold_qty: 500
+    vwap_threshold_qty: 1000
+    pov_threshold_qty: 2000
+    default_duration_sec: 1800
+    min_slice_qty: 50
+use_event_bus: true
+strategy_registry:
+  tsla_v7_2: strategies.tsla_v7_2.TSLASimplifiedV7_2
+  stocks_kernel: strategies.stocks_kernel_strategy.StocksKernelStrategy
+  qqq_intraday_v1: strategies.qqq_intraday_strategy.QQQIntradayStrategy
+  qqq_intraday_option_live_v1: strategies.qqq_intraday_option_v1_strategy.QQQIntradayOptionV1Strategy
+  spy_intraday_momentum_option_paper_v1: strategies.spy_intraday_momentum_option_paper_strategy.SPYIntradayMomentumOptionPaperStrategy
+  vegas_hma_setup_trigger_risk_v12: strategies.vegas_hma_setup_trigger_risk_v12_strategy.VegasHMASetupTriggerRiskV12Strategy
+  qqq_0dte_opt_live_v2: strategies.qqq_0dte_opt_live_v2_strategy.QQQ0DTEOptionsLiveV2Strategy
+  qqq_1dte_ma10_reject_live: strategies.qqq_1dte_ma10_reject_live_strategy.QQQ1DTEMA10RejectLiveStrategy
+  qqq_1dte_ma10_reject_live_v2: strategies.qqq_1dte_ma10_reject_v2_strategy.QQQ1DTEMA10RejectV2Strategy
+  spy_1dte_ma10_reject_live: strategies.spy_1dte_ma10_reject_v2_strategy.SPY1DTEMA10RejectV2Strategy
+  spy_1dte_ma10_reject_live_v2: strategies.spy_1dte_ma10_reject_v2_strategy.SPY1DTEMA10RejectV2Strategy
+policies:
+  health:
+    enabled: true
+    refresh_before_intraday: true
+    auto_refresh_minutes: 10
+  learning:
+    pipeline_version: learning-pipeline-v1
+    default_targets: []
+    fallback_profile: qqq_intraday
+    writeback_scope: primary
+    max_parallel_targets: 1
+  loop_sleep_sec:
+    min_interval_sec: 21600
+    weekend: 600
+    morning: 600
+    intraday: 300
+    afterhours: 900
+    overnight: 900
+  llm_trader:
+    overextend_bps: 250
+    last_minutes_block: 10
+    last_minutes_flatten: 5
+    default_limit_offset_bps: 10
+    default_time_window_s: 900
+    max_time_window_s: 3600
+    default_take_profit_bps: 50
+    default_stop_loss_bps: -30
+    persist_pending_orders: true
+    pending_orders_file: runs/llm_trader/{date}/pending_orders.json
+  auto_heal_enabled: true
+  ml:
+    slot: 1
+    actions_conf_floor: 0.6
+    min_conf_by_action:
+      data_quality_check: 0.4
+      reduce_window: 0.55
+      extend_window: 0.7
+      queue_job: 0.65
+    confidence_calibration:
+      base: 0.6
+      history_weight: 0.4
+      skip_fail_streak: 2
+    memory_source:
+      use_clickhouse: false
+      table: llm.ai_ml_actions
+      action_col: action
+      status_col: status
+      ts_col: ts
+      params_col: params
+    quiet_hours_et:
+    - 02:00
+    - 06:00
+    priorities:
+      oof: 100
+      alpha_loop: 80
+      lstm: 60
+    weekday_windows:
+    - job: oof
+      start_et: '16:20'
+      end_et: '18:00'
+    - job: alpha_loop
+      start_et: '18:00'
+      end_et: '22:00'
+    - job: lstm
+      start_et: '22:00'
+      end_et: 02:00
+    weekend_plan:
+    - job: lstm
+      day: sat
+      start_et: 08:00
+      end_et: '20:00'
+    - job: alpha_loop
+      day: sat
+      start_et: '20:00'
+      end_et: '24:00'
+    - job: oof
+      day: sun
+      start_et: 09:00
+      end_et: '18:00'
+    budgets:
+      daily_hours: 8
+      max_failures_per_day: 3
+    thresholds:
+      accept_alpha:
+        sr_min: 1.2
+        exp_ret_min: 0.5
+        folds_ok: 0.67
+      accept_lstm:
+        sr_min: 1.3
+        oos_winrate_min: 0.55
+  backfill_ml:
+    enabled: true
+    run_time_et: '16:20:00'
+    min_interval_sec: 21600
+  recon:
+    enabled: true
+    run_time_et: '16:10:00'
+    min_interval_sec: 21600
+  features:
+    use_rfe_active_table: true
+    rfe_fallback:
+      enabled: true
+      stale_sec: 90
+      symbols_pct_threshold: 0.7
+  hpo:
+    success_gates:
+      min_trials: 8
+      min_unique_params: 6
+      convergence_score_max: 0.3
+      min_ic: 0.15
+      audit_note: alpha_loop stability gates with L1 quality control (P2+P3.B)
+  autosettings:
+    enabled: false
+    require_approval: true
+  gates:
+    min_data_ratio_by_now: 0.85
+  hpo_deploy:
+    min_oos_sharpe: 1.4
+    max_oos_mdd: 0.1
+    min_oos_trades: 80
+    min_coverage: 0.85
+    min_pf: 1.2
+    min_expectancy_usd: 0.0
+    min_return: 0.0
+  hpo_budget:
+    max_rounds: 4
+    time_budget_min: 90
+    mem_budget_gb: 24.0
+    model_rotation:
+    - xgb
+    - lstm
+    - transformer
+    - etsformer
+    - itransformer
+    round0_baseline:
+      symbols: 1
+      window_days: 30
+      trials: 10
+      folds_is: 7
+      folds_oos: 3
+      n_jobs: 1
+      threads: 4
+    symbol_top_k_by_round:
+    - 1
+    - 2
+    - 3
+    - 3
+    trial_limits_by_round:
+    - 10
+    - 20
+    - 40
+    - 60
+    window_days_by_round:
+    - 30
+    - 45
+    - 60
+    - 60
+    max_total_grid_points_by_round:
+    - 200
+    - 200
+    - 300
+    - 300
+    seed_sweep:
+    - 42
+    - 1337
+    - 2025
+    shrink_factor: 0.15
+    provider_fallback:
+    - optuna
+  hpo_safe_baseline:
+    symbol_top_k: 1
+    trial_limits: 10
+    window_days: 31
+    workers: 1
+    folds: 2
+    threads: 2
+  optuna_pruner:
+    enabled: true
+    n_startup_trials: 10
+    n_warmup_steps: 5
+    interval_steps: 1
+  prompts:
+    use_prompt_challenger: false
+    max_concurrent_providers: 1
+    allow_text_override: false
+    challenger_max_notional_pct: 0.1
+  ab:
+    default_weights:
+      champion: 0.7
+      challenger: 0.3
+  rate_limiting:
+    risk_policy_min_interval_sec: 10800
+    learn_min_interval_sec: 3600
+  enhanced_model_signal: strategies.enhanced_model_signal_strategy.EnhancedModelSignalStrategy
+  dq:
+    min_active_1m_coverage_pct: 0.98
+    checks:
+      active_vs_bars: true
+      labels_recompute_et: '16:30:00'
+      active_dq_et: '16:40:00'
+  apply:
+    non_regression_tolerance:
+      profit_factor_max_drop: 0.0
+      sharpe_max_drop: 0.0
+      total_return_max_drop: 0.0
+strategies:
+- id: enhanced_ml_001
+  enabled: false
+  module: strategies.enhanced_model_signal_strategy
+  class: EnhancedModelSignalStrategy
+  capital_limit_usd: 100000
+  params:
+    ttl_ms: 60000
+    extras:
+      symbols:
+      - TSLA
+      - AAPL
+      - NVDA
+      config_dir: strategies/configs
+      config_prefix: enhanced_ml
+      config_reload_interval_sec: 60
+      bar_sec: 60
+      ensemble:
+        mode: weighted_avg
+        models:
+        - name: ml
+          weight: 1.0
+      sizing:
+        mode: options_premium
+        max_premium_usd: 500
+        max_contracts: 10
+        lot: 1
+        confidence_scaled:
+          multiplier: 1.5
+      market_filter:
+        conf_floor: 0.5
+        max_spread_bps: 20
+        min_volume: 5000
+        check_after_hours: true
+      order_type: LMT
+      limit_offset_bps: 3
+      per_symbol:
+        TSLA:
+          sizing:
+            multiplier: 2.6
+        AAPL:
+          sizing:
+            multiplier: 2.0
+        NVDA:
+          sizing:
+            multiplier: 1.4
+      risk:
+        take_profit_pct: 0.01
+        stop_loss_pct: 0.012
+        time_stop_min: 45
+      execution_routing:
+        allow_options: true
+        backend: stub
+        require_hedge_for_high_risk: true
+        option_preferences:
+          dte_range:
+          - 7
+          - 14
+          - 30
+          target_delta: 0.6
+          min_open_interest: 100
+          max_spread_pct: 0.05
+          slippage_pct: 0.01
+        ev_filter:
+          risk_reward: 2.0
+          min_rr: 1.5
+          min_p_win: 0.3
+          min_ev: 0.0
+      ensemble_weight_xgb: 0.4
+      ensemble_weight_lstm: 0.4
+      realtime_feature_engine:
+        enabled: true
+        emit_on: 1m
+        sink:
+          enabled: true
+          table: trading.features_1m_active
+- id: bull_put_spread_qqq
+  enabled: false
+  module: strategies.options.bull_put_spread_strategy
+  class: BullPutSpreadStrategy
+  capital_limit_usd: 50000
+  params:
+    ttl_ms: 60000
+    extras:
+      bull_put:
+        symbol: QQQ
+        short_delta: -0.25
+        spread_width: 5.0
+        min_credit: 0.4
+        take_profit_pct: 0.5
+        stop_loss_pct: 2.0
+        qty: 1
+        scan_interval_sec: 60
+        min_dte: 14
+        max_dte: 35
+        transmit: true
+        provider:
+          backend: clickhouse
+        tv_edge_min: -0.02
+        max_iv_skew: 0.2
+        entry_fill_timeout_sec: 3600
+        entry_reprice_interval_sec: 5
+        entry_price_step: 0.05
+        entry_max_concession: 0.3
+        entry_imbalance_sticky: 0.6
+        otm_pct_up: 0.04
+        otm_pct_down: 0.05
+        width_candidates:
+        - 5.0
+        - 10.0
+        max_spread_bps: 1000
+        min_open_interest: 100
+        vix_halt: 30.0
+        trade_window_start_et: '10:00'
+        trade_window_end_et: '15:45'
+        max_feature_age_sec: 180
+        max_margin_usd: 5000
+        clickhouse_table: bull_put_spread_events
+- id: RevF-001
+  enabled: false
+  module: strategies.reve_intraday_strategy
+  class: RevEIntradayStrategyV2
+  params:
+    ttl_ms: 5000
+    extras:
+      symbols:
+      - TSLA
+      - NVDA
+      - AAPL
+      - AMD
+      - META
+      - QQQ
+      - SPY
+      realtime_feature_engine:
+        enabled: true
+        emit_on: 1m
+        sink:
+          enabled: true
+          table: trading.features_1m_active
+      rev.debug_gating: true
+      rev.debug_every_bar: true
+      schedule_pt.stop_new_positions: '16:00:00'
+      sfs:
+        enable_1s: true
+        enable_5s: true
+- id: v3_1_equity
+  enabled: false
+  module: strategies.v3_1.strategy_v3_1
+  class: V31Strategy
+  params:
+    ttl_ms: 60000
+    extras:
+      symbols:
+      - AAPL
+      - TSLA
+      - NVDA
+      - SPY
+      - QQQ
+      execution_mode: paper
+      params_path: runs/params/v3_1/latest.json
+- id: qqq_intraday_001
+  enabled: false
+  module: strategies.qqq_intraday_strategy
+  class: QQQIntradayStrategy
+  capital_limit_usd: 100000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      all_day_test_mode: false
+      symbols:
+      - QQQ
+      - TQQQ
+      - SQQQ
+      - AD-NASD
+      data_contract:
+        production_blocking: true
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ, TQQQ, SQQQ, AD-NASD]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 20
+          rth: true
+        - dataset: market_bars
+          resolution: 1m
+          symbols: [QQQ]
+          ttl_sec: 180
+          rth: true
+          warmup_required: true
+          min_rows: 600
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: qqq_intraday_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      force_flatten_time: '15:59:00'
+      no_new_entry_after: '15:30:00'
+      freshness_max_sec: 5
+      freshness_max_sec_ad_nasd: 8
+      dlb_ms: 10000
+      data_timeout_sec: 1800
+      fail_fast_enabled: false
+      debug_missing_warn_streak: 3
+      open_orders_check_warn_interval_sec: 300
+      loop_interval_sec: 1.0
+      enable_shared_underlying_data_plane: true
+      shared_underlying_read_mode: prefer
+      # DEPRECATED: legacy_trader_parity_mode scheduled for retirement per
+      # docs/implementation/QQQ_KERNEL_MIGRATION_EXECUTION_PLAN_2026-04-20.md
+      # (target disable: D+30 after Stage 4 starts; code removal: D+45).
+      legacy_trader_parity_mode: true
+      enforce_stock_execution_blockers: false
+      broker_positions_refresh_interval_sec: 5.0
+      broker_positions_refresh_timeout_sec: 5.0
+      broker_positions_refresh_warn_interval_sec: 30.0
+      broker_positions_refresh_fallback_log_interval_sec: 30.0
+      startup_reconciled_stale_new_grace_sec: 0.0
+      entry_check_on_new_minute_only: true
+      notional_usd: 10000
+      max_day_gross_notional_usd: 10000
+      max_trades_per_day: 4
+      third_trade_requires_positive_day_pnl: false
+      probe_ratio: 0.7
+      entry_model: v47_fast_drift
+      entry_extreme_filter_enabled: true
+      entry_extreme_distance_from_vwap_atr_min: 8.1
+      entry_extreme_v3m_signed_min: 0.64
+      entry_extreme_seed_n_min: 700
+      entry_max_data_age_sec_qqq: 15.0
+      entry_trade_allow_data_age_sec_qqq: 10.0
+      entry_sync_grace_sec: 8.0
+      entry_require_continuity_180s: true
+      stable_entry_guard_enabled: true
+      first_entry_require_seed_ready: true
+      first_entry_seed_min_samples: 600
+      startup_anchor_entry_block_enabled: true
+      startup_anchor_entry_block_start: 09:30:00
+      startup_anchor_entry_block_end: '10:00:00'
+      restart_degrade_enabled: true
+      restart_degrade_default_until: '10:00:00'
+      restart_degrade_allow_early_unlock: true
+      fail_closed_on_data_integrity: true
+      elite_ab_dual_mode: true
+      ab_time_start: 09:30:00
+      ab_time_end: '14:00:00'
+      delayed_confirm_end: '10:00:00'
+      delayed_confirm_move5m_min: 0.18
+      early_lock_mode: openclose
+      long_drift_second_confirm: true
+      long_drift_second_confirm_side: long
+      long_drift_second_confirm_window_start: 09:45:00
+      long_drift_second_confirm_window_end: '10:29:00'
+      long_drift_second_confirm_delay_min: 1
+      enable_v47_chase_guard: true
+      v47_chase_guard_start: 09:45:00
+      v47_chase_guard_end: '11:50:00'
+      v47_long_pos_day_min: 1.01
+      v47_short_pos_day_max: 0.2
+      v47_long_dev_vwap_min: 0.01
+      v47_short_dev_vwap_min: 0.0025
+      atr_rank_skip_max: 0.15
+      early_override_move_mult: 0.14
+      early_override_vol_min: 0.65
+      early_override_window_start: 09:39:00
+      early_override_window_end: 09:45:00
+      enable_v47_veto: false
+      qqq_daily_atr_path: runtime/state/qqq_daily_atr_context.json
+      b_time_start: 09:40:00
+      b_time_end: '14:50:00'
+      a_overext_mult: 1.6
+      a_reentry_window_sec: 90
+      a_pullback_mult_open: 1.5
+      a_pullback_mult_late: 1.4
+      a_pullback_switch_time: '10:00:00'
+      a_latest_entry_time: '15:30:00'
+      ab_volatile_day_skip_enable: true
+      ab_volatile_check_end: '10:05:00'
+      ab_volatile_range_live_atr_min: 4.5
+      ab_volatile_directionality_live_atr_min: 1.0
+      ab_volatile_reversal_washout_live_atr_min: 1.5
+      ab_volatile_reversal_rebound_live_atr_min: 0.8
+      ab_volatile_allow_early_reversal: true
+      ab_volatile_reversal_vol_min: 1.2
+      ab_volatile_reversal_require_two_positive: true
+      ab_volatile_probe_enable: true
+      ab_volatile_probe_break_live_atr: 0.6
+      ab_volatile_probe_reclaim_live_atr: 0.2
+      a_vol_min: 1.16
+      a_entry_max_dev_live_atr: 1.3
+      a_armed_ttl_sec: 99999
+      a_recent_runup_sec: 90
+      a_recent_runup_max_live_atr: 999.0
+      a_runup_guard_sec: 60
+      a_runup_guard_live_atr: 1.45
+      a_runup_pullback_live_atr: 0.3
+      logic_retreat_min_hold_sec: 360
+      hard_stop_delay_min: 3
+      hard_stop_atr_mult: 0.75
+      fast_v3m_atr_min: 0.6
+      fast_vol_min: 2.0
+      enable_fast: true
+      drift_bar_min_atr: 0.1
+      drift_cum_atr_min: 0.45
+      fast_crosses_threshold: 3
+      fast_cooldown_min: 15
+      veto_start: 09:40:00
+      veto_end: '11:50:00'
+      veto_rebound_live_atr: 0.25
+      target_low_amp: 1.2
+      target_mid_amp: 1.0
+      target_high_amp: 1.8
+      b_decay_limit: 0.95
+      a_decay_limit: 0.95
+      elite_max_ext_mult: 1.6
+      elite_deadzone_mult: 0.15
+      elite_v3m_min_mult: 0.35
+      elite_decay_limit: 0.95
+      elite_enable_pullback_reentry: true
+      elite_reentry_window_sec: 90
+      elite_reentry_ext_mult: 1.1
+      elite_high_vol_ratio: 1.5
+      elite_high_vol_confirm_samples: 2
+      elite_vol_discount_v3m_mult: 0.5
+      elite_vol_discount: 0.1
+      atr_period: 14
+      stop_min_abs: 0.5
+      submit_exchange_stop_intent: true
+      flatten_residual_retry_enable: true
+      flatten_residual_retry_delay_sec: 0.8
+      enable_hard_stop: true
+      enable_dynamic_stop_widen: false
+      enable_breakeven_shield: false
+      break_even_profit_abs: 1.0
+      break_even_offset_abs: 0.2
+      atr_seed_path: runtime/state/qqq_intraday_atr_seed.json
+      atr_seed_keep_days: 45
+      enable_observability_file: true
+      obs_snapshot_path: runtime/state/qqq_intraday_observability_qqq_intraday_001.json
+      diag_log_path: runtime/state/qqq_intraday_diag_qqq_intraday_001.jsonl
+- id: qqq_intraday_plugin_001
+  enabled: true
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 100000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      plugin_cls: strategies.stocks_kernel.plugins.qqq_intraday:QQQIntradayStockPlugin
+      order_namespace: qqq_intraday_plugin
+      capital_budget_single_source: true
+      strategy_template: qqq_intraday_core
+      policy_id: qqq_intraday_policy_v1
+      data_profile: equity_rth_standard
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      enable_shared_history_cache: true
+      enable_shared_underlying_data_plane: true
+      shared_underlying_read_mode: prefer
+      qqq_trace_enabled: true
+      qqq_trace_root: reports/qqq_signal_snapshots
+      require_exec_symbol_snapshot: true
+      entry_check_on_new_minute_only: true
+      no_new_after_et: '15:30'
+      flatten_before_close_et: '15:59'
+      signal_symbol: QQQ
+      long_exec_symbol: TQQQ
+      short_exec_symbol: SQQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ, TQQQ, SQQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 20
+          rth: true
+        - dataset: market_bars
+          resolution: 1m
+          symbols: [QQQ]
+          ttl_sec: 180
+          rth: true
+          warmup_required: true
+          min_rows: 600
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: qqq_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - RTH
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      policy_params:
+        legacy_trader_parity_mode: true
+        rule_engine_parity: true
+        entry_model: v47_fast_drift
+        qqew_decoupled: true
+        v3m_units: ratio
+        notional_usd: 10000
+        max_day_gross_notional_usd: 10000
+        max_trades_per_day: 4
+        third_trade_requires_positive_day_pnl: false
+        probe_ratio: 0.7
+        entry_extreme_filter_enabled: true
+        entry_extreme_distance_from_vwap_atr_min: 8.1
+        entry_extreme_v3m_signed_min: 0.64
+        entry_extreme_seed_n_min: 700
+        entry_max_data_age_sec_qqq: 15.0
+        entry_trade_allow_data_age_sec_qqq: 10.0
+        entry_sync_grace_sec: 8.0
+        entry_require_continuity_180s: true
+        stable_entry_guard_enabled: true
+        first_entry_require_seed_ready: true
+        first_entry_seed_min_samples: 600
+        startup_anchor_entry_block_enabled: true
+        startup_anchor_entry_block_start: 09:30:00
+        startup_anchor_entry_block_end: '10:00:00'
+        restart_degrade_enabled: true
+        restart_degrade_default_until: '10:00:00'
+        restart_degrade_allow_early_unlock: true
+        fail_closed_on_data_integrity: true
+        elite_ab_dual_mode: true
+        ab_time_start: 09:30:00
+        ab_time_end: '14:00:00'
+        delayed_confirm_end: '10:00:00'
+        delayed_confirm_move5m_min: 0.18
+        early_lock_mode: openclose
+        long_drift_second_confirm: true
+        long_drift_second_confirm_side: long
+        long_drift_second_confirm_window_start: 09:45:00
+        long_drift_second_confirm_window_end: '10:29:00'
+        long_drift_second_confirm_delay_min: 1
+        enable_v47_chase_guard: true
+        v47_chase_guard_start: 09:45:00
+        v47_chase_guard_end: '11:50:00'
+        v47_long_pos_day_min: 1.01
+        v47_short_pos_day_max: 0.2
+        v47_long_dev_vwap_min: 0.01
+        v47_short_dev_vwap_min: 0.0025
+        atr_rank_skip_max: 0.15
+        early_override_move_mult: 0.14
+        early_override_vol_min: 0.65
+        early_override_window_start: 09:39:00
+        early_override_window_end: 09:45:00
+        enable_v47_veto: false
+        qqq_daily_atr_path: runtime/state/qqq_daily_atr_context.json
+        b_time_start: 09:40:00
+        b_time_end: '14:50:00'
+        a_overext_mult: 1.6
+        a_reentry_window_sec: 90
+        a_pullback_mult_open: 1.5
+        a_pullback_mult_late: 1.4
+        a_pullback_switch_time: '10:00:00'
+        a_latest_entry_time: '15:30:00'
+        ab_volatile_day_skip_enable: true
+        ab_volatile_check_end: '10:05:00'
+        ab_volatile_range_live_atr_min: 4.5
+        ab_volatile_directionality_live_atr_min: 1.0
+        ab_volatile_reversal_washout_live_atr_min: 1.5
+        ab_volatile_reversal_rebound_live_atr_min: 0.8
+        ab_volatile_allow_early_reversal: true
+        ab_volatile_reversal_vol_min: 1.2
+        ab_volatile_reversal_require_two_positive: true
+        ab_volatile_probe_enable: true
+        ab_volatile_probe_break_live_atr: 0.6
+        ab_volatile_probe_reclaim_live_atr: 0.2
+        a_vol_min: 1.16
+        a_entry_max_dev_live_atr: 1.3
+        a_armed_ttl_sec: 99999
+        a_recent_runup_sec: 90
+        a_recent_runup_max_live_atr: 999.0
+        a_runup_guard_sec: 60
+        a_runup_guard_live_atr: 1.45
+        a_runup_pullback_live_atr: 0.3
+        logic_retreat_min_hold_sec: 360
+        hard_stop_delay_min: 3
+        hard_stop_atr_mult: 0.75
+        fast_v3m_atr_min: 0.6
+        fast_vol_min: 2.0
+        enable_fast: true
+        drift_bar_min_atr: 0.1
+        drift_cum_atr_min: 0.45
+        fast_crosses_threshold: 3
+        fast_cooldown_min: 15
+        veto_start: 09:40:00
+        veto_end: '11:50:00'
+        veto_rebound_live_atr: 0.25
+        target_low_amp: 1.2
+        target_mid_amp: 1.0
+        target_high_amp: 1.8
+        b_decay_limit: 0.95
+        a_decay_limit: 0.95
+        elite_max_ext_mult: 1.6
+        elite_deadzone_mult: 0.15
+        elite_v3m_min_mult: 0.35
+        elite_decay_limit: 0.95
+        elite_enable_pullback_reentry: true
+        elite_reentry_window_sec: 90
+        elite_reentry_ext_mult: 1.1
+        elite_high_vol_ratio: 1.5
+        elite_high_vol_confirm_samples: 2
+        elite_vol_discount_v3m_mult: 0.5
+        elite_vol_discount: 0.1
+        atr_period: 14
+        stop_min_abs: 0.5
+        submit_exchange_stop_intent: true
+        flatten_residual_retry_enable: true
+        flatten_residual_retry_delay_sec: 0.8
+        enable_hard_stop: true
+        enable_dynamic_stop_widen: false
+        enable_breakeven_shield: false
+        break_even_profit_abs: 1.0
+        break_even_offset_abs: 0.2
+        entry_check_on_new_minute_only: true
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+- id: index_super_win_001
+  enabled: false
+  module: strategies.index_super_win_replica_strategy
+  class: IndexSuperWinReplicaStrategy
+  capital_limit_usd: 100000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      replica_manifests:
+      - key: qqq_pair
+        signal_symbol: QQQ
+        long_exec_symbol: TQQQ
+        short_exec_symbol: SQQQ
+        volatility_symbol: QQQ
+        enabled: true
+      feature_bar_sec: 5
+      notional_usd: 10000
+      runtime_scope: index_super_win_replica
+      order_namespace: iswv2
+      entry_check_on_new_minute_only: true
+      ab_time_start: 09:30:00
+      ab_time_end: '14:00:00'
+      hard_stop_delay_min: 3
+      enable_hard_stop: true
+      enable_dynamic_stop_widen: false
+      enable_breakeven_shield: false
+      logic_retreat_min_hold_sec: 420
+      logic_retreat_max_qqq_age_sec: 15
+      force_flatten_time: '15:59:00'
+      broker_reconcile_on_init: true
+      pre_entry_broker_reconcile: true
+      pre_entry_open_orders_reconcile: true
+      broker_positions_refresh_interval_sec: 2.0
+      broker_positions_refresh_timeout_sec: 3.0
+      broker_positions_refresh_warn_interval_sec: 10.0
+      enable_observability_file: true
+      diag_log_path: runtime/state/index_super_win_diag_index_super_win_001.jsonl
+      diag_snapshot_path: runtime/state/index_super_win_diag_snapshot_index_super_win_001.json
+      diag_flush_interval_sec: 5.0
+- id: qqq_afterhours_001
+  enabled: false
+  module: strategies.index_super_win_replica_strategy
+  class: IndexSuperWinReplicaStrategy
+  capital_limit_usd: 100000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      replica_manifests:
+      - key: qqq_pair
+        signal_symbol: QQQ
+        long_exec_symbol: TQQQ
+        short_exec_symbol: SQQQ
+        volatility_symbol: QQQ
+        enabled: true
+      feature_bar_sec: 5
+      notional_usd: 10000
+      runtime_scope: index_super_win_replica_afterhours
+      runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_afterhours_001.json
+      order_namespace: iswv2
+      session_name: afterhours
+      session_start_et: '16:00:00'
+      session_end_et: '19:59:59'
+      force_flatten_time: '19:59:30'
+      enable_entry_during_session_only: true
+      require_prev_session_flat: true
+      prev_session_strategy_id: qqq_intraday_001
+      prev_session_runtime_snapshot_path: runtime/state/qqq_intraday_qqq_intraday_001.json
+      prev_session_order_namespace: qqqv1
+      fail_closed_on_data_integrity: true
+      entry_require_market_data_healthy: true
+      entry_max_data_age_sec: 8.0
+      broker_reconcile_on_init: true
+      pre_entry_broker_reconcile: true
+      pre_entry_open_orders_reconcile: true
+      broker_positions_refresh_interval_sec: 2.0
+      broker_positions_refresh_timeout_sec: 3.0
+      broker_positions_refresh_warn_interval_sec: 10.0
+      enable_observability_file: true
+      diag_log_path: runtime/state/index_super_win_diag_index_super_win_afterhours_001.jsonl
+      diag_snapshot_path: runtime/state/index_super_win_diag_snapshot_index_super_win_afterhours_001.json
+      diag_flush_interval_sec: 5.0
+- id: qqq_overnight_001
+  enabled: false
+  module: strategies.index_super_win_replica_strategy
+  class: IndexSuperWinReplicaStrategy
+  capital_limit_usd: 100000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      replica_manifests:
+      - key: qqq_pair
+        signal_symbol: QQQ
+        long_exec_symbol: TQQQ
+        short_exec_symbol: SQQQ
+        volatility_symbol: QQQ
+        enabled: true
+      feature_bar_sec: 5
+      notional_usd: 10000
+      runtime_scope: index_super_win_replica_overnight
+      runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_overnight_001.json
+      order_namespace: iswv2
+      session_name: overnight
+      session_start_et: '20:00:00'
+      session_end_et: 03:59:59
+      force_flatten_time: 03:59:30
+      enable_entry_during_session_only: true
+      require_prev_session_flat: true
+      prev_session_strategy_id: qqq_premarket_001
+      prev_session_runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_premarket_001.json
+      prev_session_order_namespace: iswv2
+      fail_closed_on_data_integrity: true
+      entry_require_market_data_healthy: true
+      entry_max_data_age_sec: 8.0
+      broker_reconcile_on_init: true
+      pre_entry_broker_reconcile: true
+      pre_entry_open_orders_reconcile: true
+      broker_positions_refresh_interval_sec: 2.0
+      broker_positions_refresh_timeout_sec: 3.0
+      broker_positions_refresh_warn_interval_sec: 10.0
+      enable_observability_file: true
+      diag_log_path: runtime/state/index_super_win_diag_index_super_win_overnight_001.jsonl
+      diag_snapshot_path: runtime/state/index_super_win_diag_snapshot_index_super_win_overnight_001.json
+      diag_flush_interval_sec: 5.0
+- id: qqq_premarket_001
+  enabled: false
+  module: strategies.index_super_win_replica_strategy
+  class: IndexSuperWinReplicaStrategy
+  capital_limit_usd: 100000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      replica_manifests:
+      - key: qqq_pair
+        signal_symbol: QQQ
+        long_exec_symbol: TQQQ
+        short_exec_symbol: SQQQ
+        volatility_symbol: QQQ
+        enabled: true
+      feature_bar_sec: 5
+      notional_usd: 10000
+      runtime_scope: index_super_win_replica_premarket
+      runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_premarket_001.json
+      order_namespace: iswv2
+      session_name: premarket
+      session_start_et: 04:00:00
+      session_end_et: 09:29:59
+      force_flatten_time: 09:29:30
+      enable_entry_during_session_only: true
+      require_prev_session_flat: true
+      prev_session_strategy_id: qqq_afterhours_001
+      prev_session_runtime_snapshot_path: runtime/state/index_super_win_replica_runtime_qqq_afterhours_001.json
+      prev_session_order_namespace: iswv2
+      fail_closed_on_data_integrity: true
+      entry_require_market_data_healthy: true
+      entry_max_data_age_sec: 8.0
+      broker_reconcile_on_init: true
+      pre_entry_broker_reconcile: true
+      pre_entry_open_orders_reconcile: true
+      broker_positions_refresh_interval_sec: 2.0
+      broker_positions_refresh_timeout_sec: 3.0
+      broker_positions_refresh_warn_interval_sec: 10.0
+      enable_observability_file: true
+      diag_log_path: runtime/state/index_super_win_diag_index_super_win_premarket_001.jsonl
+      diag_snapshot_path: runtime/state/index_super_win_diag_snapshot_index_super_win_premarket_001.json
+      diag_flush_interval_sec: 5.0
+- id: tsla_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: TSLA
+        target_triggers: 4
+        commission_per_share: 0.0035
+        pause:
+          theta_vix: 0.12
+          theta_spread: 0.0007
+          theta_atr: 2.1
+          t_pause_min: 15
+        slippage:
+          eps_p95: 0.0005
+          min: 0.0002
+          max: 0.0008
+        positioning:
+          base_unit_pct: 0.012
+          max_concurrent: 2
+          filler_cap_ratio: 0.5
+        edge_floor: 0.18
+        anti_starvation:
+          L1_min: 120
+          L2_min: 180
+          relax_sigma:
+          - 0.9
+          - 0.8
+          relax_g:
+          - 0.9
+          - 0.8
+          probe_ratio: 0.5
+          revert_after_losses: 3
+          cutoff: '14:00'
+        dd_limits:
+          soft_pct: 0.018
+          hard_pct: 0.028
+        lkg:
+          enabled: true
+          file: strategies/configs/tsla_v7_2_lkg.json
+        market_regime_symbols:
+        - SPY
+        - QQQ
+- id: aapl_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: AAPL
+        premarket_calibration:
+          param_file: strategies/configs/aapl_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/aapl_v7_2_lkg.json
+- id: nvda_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: NVDA
+        premarket_calibration:
+          param_file: strategies/configs/nvda_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/nvda_v7_2_lkg.json
+- id: meta_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: META
+        premarket_calibration:
+          param_file: strategies/configs/meta_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/meta_v7_2_lkg.json
+- id: msft_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: MSFT
+        premarket_calibration:
+          param_file: strategies/configs/msft_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/msft_v7_2_lkg.json
+- id: googl_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: GOOGL
+        premarket_calibration:
+          param_file: strategies/configs/googl_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/googl_v7_2_lkg.json
+- id: amzn_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: AMZN
+        premarket_calibration:
+          param_file: strategies/configs/amzn_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/amzn_v7_2_lkg.json
+- id: amd_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: AMD
+        premarket_calibration:
+          param_file: strategies/configs/amd_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/amd_v7_2_lkg.json
+- id: qqq_v7_2_001
+  enabled: false
+  module: strategies.tsla_v7_2
+  class: TSLASimplifiedV7_2
+  capital_limit_usd: 50000
+  params:
+    extras:
+      tsla_v7_2_config:
+        symbol: QQQ
+        premarket_calibration:
+          param_file: strategies/configs/qqq_v7_2.json
+        lkg:
+          enabled: true
+          file: strategies/configs/qqq_v7_2_lkg.json
+- id: premarket_gainer_001
+  enabled: false
+  module: strategies.premarket_gainer_v1
+  class: PremarketGainerV1
+  capital_limit_usd: 50000
+  params:
+    extras:
+      premarket_config:
+        timing:
+          scan_time_et: 09:27:00
+          observe_start_et: 09:30:00
+          observe_end_et: 09:32:00
+          entry_start_et: 09:33:00
+          entry_end_et: 09:35:00
+          force_exit_time_et: '10:10:00'
+        scanner:
+          rows: 50
+          price_min: 5.0
+          pm_notional_min: 10000000
+          spread_max_observe: 0.003
+          spread_max_exec: 0.0025
+        execution:
+          spread_max_observe: 0.003
+          spread_max_exec: 0.0025
+          rvol_min: 2.0
+          breakout_buffer_pct: 0.002
+          limit_buffer_pct: 0.001
+        take_profit:
+          levels_pct:
+          - 0.035
+          - 0.055
+          - 0.08
+          qtys_pct:
+          - 0.3
+          - 0.35
+          - 0.35
+        stop_loss:
+          type: STP
+          level_calc: max(VWAP, PM_L*0.99)
+        risk:
+          per_trade_pct: 0.005
+          daily_dd_limit_pct: 0.015
+          max_notional_usd: 50000
+        oca:
+          type: REDUCE
+        scoring:
+          change_pct_weight: 0.4
+          pm_notional_weight: 0.4
+          catalyst_weight: 0.2
+        candidates:
+          max_top3: 3
+          min_top1: 1
+        market_conditions:
+          block_on_events:
+          - CPI
+          - FOMC
+          - NFP
+          vix_max: 40.0
+        logging:
+          log_level: INFO
+          log_scan_results: true
+          log_confirmations: true
+          log_oca_details: true
+        metrics:
+          track_fill_latency: true
+          track_slippage: true
+          target_fill_latency_ms: 300
+          target_entry_slippage_bp: 10
+- id: qqq_0dte_opt_live_001
+  enabled: false
+  module: strategies.qqq_0dte_opt_live_strategy
+  class: QQQ0DTEOptionsLiveStrategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      definition_id: QQQ_INTRADAY_OPTION_PARITY_V1
+      underlying: QQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ]
+          ttl_sec: 20
+          rth: true
+      risk_symbol: OPT:QQQ:0DTE
+      contracts: 3
+      entry_timeout_sec: 60
+      ab_time_start: 09:30:00
+      ab_time_end: '15:59:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:58:00'
+      max_trades_per_day: 2
+      second_trade_only_if_first_bad_exit: true
+      second_trade_first_exit_allow:
+      - HARD_STOP
+      - LATE_NO_MOVE_EXIT
+      confirm_bar_close_loc_min: 0.55
+      spread_max_pct: 0.15
+      rvol_min: 1.5
+      rvol_window: 20
+      atr_expansion_mult: 1.2
+      atr_expansion_window: 20
+      momentum_deadzone: 0.05
+      momentum_deadzone_atr_mult: 0.25
+      atr_rank_skip_max: 0.15
+      early_override_enabled: true
+      early_override_window_start: 09:39:00
+      early_override_window_end: 09:45:00
+      early_override_move_mult: 0.16
+      early_override_vol_min: 0.6
+      delayed_confirm_end: '10:00:00'
+      delayed_confirm_move5m_min: 0.155
+      tp1_mult: 1.15
+      tp2_mult: 2.5
+      stop_loss_mult: 0.67
+      no_move_min_hold_min: 6.0
+      no_move_underlying_move_atr: 0.15
+      no_move_min_opt_return: 0.1
+      vwap_exit_only_pre_tp1: true
+      vwap_exit_minutes: 12.0
+      path_b_enabled: true
+      path_b_start: '10:00:00'
+      path_b_dist_atr_threshold: 0.15
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      quote_hb_check_start: 09:45:00
+      quote_hb_check_end: '14:50:00'
+      quote_hb_warmup_min: 5
+      quote_hb_max_age_sec: 120
+      quote_hb_fail_streak_to_pause: 4
+      quote_hb_resume_fresh_streak: 2
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - qqq_0dte_opt_live_001
+      - qqq_0dte_opt_live_v2_001
+      - qqq_1dte_ma10_reject_0324_001
+      - qqq_1dte_ma10_reject_0324_pure_001
+- id: qqq_0dte_opt_live_v2_001
+  enabled: false
+  module: strategies.qqq_0dte_opt_live_v2_strategy
+  class: QQQ0DTEOptionsLiveV2Strategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      definition_id: QQQ_INTRADAY_OPTION_PARITY_V1
+      underlying: QQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ]
+          ttl_sec: 20
+          rth: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: option_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        option_contract:
+          required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      risk_symbol: OPT:QQQ:0DTE
+      contracts: 3
+      entry_timeout_sec: 60
+      ab_time_start: 09:30:00
+      ab_time_end: '15:59:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:58:00'
+      max_trades_per_day: 2
+      second_trade_only_if_first_bad_exit: true
+      second_trade_first_exit_allow:
+      - HARD_STOP
+      - LATE_NO_MOVE_EXIT
+      confirm_bar_close_loc_min: 0.55
+      spread_max_pct: 0.15
+      rvol_min: 1.5
+      rvol_window: 20
+      atr_expansion_mult: 1.2
+      atr_expansion_window: 20
+      momentum_deadzone: 0.05
+      momentum_deadzone_atr_mult: 0.25
+      atr_rank_skip_max: 0.15
+      early_override_enabled: true
+      early_override_window_start: 09:39:00
+      early_override_window_end: 09:45:00
+      early_override_move_mult: 0.16
+      early_override_vol_min: 0.6
+      delayed_confirm_end: '10:00:00'
+      delayed_confirm_move5m_min: 0.155
+      tp1_mult: 1.15
+      tp2_mult: 2.5
+      stop_loss_mult: 0.67
+      no_move_min_hold_min: 6.0
+      no_move_underlying_move_atr: 0.15
+      no_move_min_opt_return: 0.1
+      vwap_exit_only_pre_tp1: true
+      vwap_exit_minutes: 12.0
+      path_b_enabled: true
+      path_b_start: '10:00:00'
+      path_b_dist_atr_threshold: 0.15
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      quote_hb_check_start: 09:45:00
+      quote_hb_check_end: '14:50:00'
+      quote_hb_warmup_min: 5
+      quote_hb_max_age_sec: 120
+      quote_hb_fail_streak_to_pause: 4
+      quote_hb_resume_fresh_streak: 2
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - qqq_0dte_opt_live_001
+      - qqq_0dte_opt_live_v2_001
+      - qqq_1dte_ma10_reject_0324_001
+      - qqq_1dte_ma10_reject_0324_pure_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: qqq_0dte_option_live_v2
+      live_parity_snapshot_root: runtime/state/decision_snapshots_live_v2
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: plugin
+      strict_scope_validation: true
+- id: qqq_0dte_opt_live_pure_001
+  enabled: false
+  module: strategies.qqq_0dte_opt_live_pure_strategy
+  class: QQQ0DTEOptionsLivePureStrategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      underlying: QQQ
+      risk_symbol: OPT:QQQ:0DTE
+      contracts: 3
+      entry_timeout_sec: 60
+      ab_time_start: 09:30:00
+      ab_time_end: '15:59:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:58:00'
+      max_trades_per_day: 2
+      second_trade_only_if_first_bad_exit: true
+      second_trade_first_exit_allow:
+      - HARD_STOP
+      - LATE_NO_MOVE_EXIT
+      confirm_bar_close_loc_min: 0.55
+      spread_max_pct: 0.15
+      rvol_min: 1.5
+      rvol_window: 20
+      atr_expansion_mult: 1.2
+      atr_expansion_window: 20
+      momentum_deadzone: 0.05
+      momentum_deadzone_atr_mult: 0.25
+      atr_rank_skip_max: 0.15
+      early_override_enabled: true
+      early_override_window_start: 09:39:00
+      early_override_window_end: 09:45:00
+      early_override_move_mult: 0.16
+      early_override_vol_min: 0.6
+      delayed_confirm_end: '10:00:00'
+      delayed_confirm_move5m_min: 0.155
+      tp1_mult: 1.15
+      tp2_mult: 2.5
+      stop_loss_mult: 0.67
+      no_move_min_hold_min: 6.0
+      no_move_underlying_move_atr: 0.15
+      no_move_min_opt_return: 0.1
+      vwap_exit_only_pre_tp1: true
+      vwap_exit_minutes: 12.0
+      path_b_enabled: true
+      path_b_start: '10:00:00'
+      path_b_dist_atr_threshold: 0.15
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      quote_hb_check_start: 09:45:00
+      quote_hb_check_end: '14:50:00'
+      quote_hb_warmup_min: 5
+      quote_hb_max_age_sec: 120
+      quote_hb_fail_streak_to_pause: 4
+      quote_hb_resume_fresh_streak: 2
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - qqq_0dte_opt_live_001
+      - qqq_0dte_opt_live_v2_001
+      - qqq_1dte_ma10_reject_0324_001
+      - qqq_1dte_ma10_reject_0324_pure_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: qqq_0dte_option_live_v2
+      live_parity_snapshot_root: runtime/state/decision_snapshots_live_pure
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: qqq_intraday_option_v1_001
+  enabled: true
+  module: strategies.qqq_intraday_option_v1_strategy
+  class: QQQIntradayOptionV1Strategy
+  capital_limit_usd: 15000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      definition_id: QQQ_INTRADAY_OPTION_PARITY_V1
+      underlying: QQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ]
+          ttl_sec: 20
+          rth: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: option_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        option_contract:
+          required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      risk_symbol: OPT:QQQ:0DTE
+      contracts: 2
+      entry_start_am: 09:40:00
+      entry_end_am: '12:00:00'
+      entry_start_pm: '12:00:00'
+      entry_end_pm: '15:00:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:50:00'
+      dte_preferred: 0
+      dte_fallback_max: 1
+      delta_min: 0.35
+      delta_max: 0.60
+      delta_fallback_min: 0.30
+      delta_fallback_max: 0.65
+      spread_max_pct: 0.15
+      min_open_interest: 0
+      entry_quote_allow_ch_fallback: true
+      mark_quote_allow_ch_fallback: true
+      entry_retry_enabled: false
+      entry_retry_max_attempts: 1
+      entry_retry_wait_sec: 1.0
+      entry_timeout_sec: 25.0
+      force_order_style: true
+      hard_stop_atr_mult: 0.75
+      target_1r_atr_mult: 0.75
+      target_1p2r_atr_mult: 1.2
+      logic_retreat_min_hold_sec: 360
+      logic_retreat_v3m_atr_mult: 0.10
+      signal_v3m_abs_min: 0.05
+      signal_max_distance_from_vwap_atr: 4.0
+      source_bar_sec: 5
+      signal_source_mode: upstream_stock_signal
+      signal_source_source_strategy_id: qqq_intraday_plugin_001
+      signal_source_signal_family: qqq_intraday_entry
+      signal_source_require_source_alive: true
+      signal_source_max_signal_age_sec: 30.0
+      dlb_ms: 10000
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_INTRADAY_OPTION_V1
+      shared_cap_group_limit_usd: 15000
+      shared_cap_group_strategy_ids:
+      - qqq_intraday_option_v1_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: qqq_intraday_option_parity_v1
+      live_parity_snapshot_root: runtime/state/decision_snapshots_intraday_option_v1
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: qqq_1dte_ma10_reject_0324_001
+  enabled: false
+  module: strategies.qqq_1dte_ma10_reject_live_strategy
+  class: QQQ1DTEMA10RejectLiveStrategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      definition_id: QQQ_MA_CROSS_STACK_CONT_V2_DUAL
+      underlying: QQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ]
+          ttl_sec: 20
+          rth: true
+      risk_symbol: OPT:QQQ:1DTE
+      replay_strategy_id: ma_cross_stack_cont_v2_dual_exp
+      contracts: 4
+      ab_time_start: 09:40:00
+      ab_time_end: '15:50:00'
+      entry_start_am: 09:40:00
+      entry_end_am: '15:00:00'
+      entry_start_pm: '12:00:00'
+      entry_end_pm: '15:50:00'
+      no_new_entry_after: '15:50:00'
+      force_flatten_time: '15:50:00'
+      max_trades_per_day: 500
+      second_trade_only_if_first_bad_exit: false
+      spread_max_pct: 0.12
+      min_open_interest: 0
+      dte_preferred: 1
+      dte_fallback_max: 2
+      delta_min: 0.0
+      delta_max: 1.0
+      delta_fallback_min: 0.0
+      delta_fallback_max: 1.0
+      confirm_window_bars: 2
+      confirm_decay_from_bar: 99
+      confirm_decay_max_distance_atr: 0.3
+      ma10_reject_ext_atr_max: 2.2
+      enable_fresh_momentum_branch: false
+      enable_trend_continuation_branch: false
+      continuation_pending_entry_timeout_bars: 2
+      continuation_dynamic_reprice_to_ask: true
+      continuation_max_premium_expansion_pct: 0.08
+      adaptive_entry_improve_pct: 0.0
+      urgent_entry_improve_pct: 0.0
+      time_stop_soft_bars: 5
+      time_stop_hard_bars: 10
+      enable_daily_best_additive_branch: false
+      daily_best_call_only: false
+      daily_best_min_dist_vwap_atr: 0.0
+      v2_max_dist_ma10_atr: 1.8
+      v2_put_close_pos_max: 1.0
+      v2_min_vol_ratio: 0.0
+      v2_max_ma10_slope: 999.0
+      v2_call_pullback_vol_ratio_min: 0.85
+      enable_momentum_no_retest_dual: true
+      momentum_breakout_lookback_bars: 5
+      momentum_higher_low_bars: 3
+      momentum_lower_high_bars: 3
+      momentum_ma10_slope_min_abs: 0.02
+      momentum_close_pos_min_call: 0.7
+      momentum_close_pos_max_put: 0.3
+      momentum_body_frac_min: 0.5
+      momentum_vol_ratio_min: 0.85
+      momentum_dist_ma10_atr_max: 2.2
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      entry_quote_allow_ch_fallback: false
+      allow_stale_entry_quotes: true
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      mark_quote_allow_ch_fallback: true
+      exit_quote_lookback_min: 3
+      exit_degraded_nbbo_max_age_sec: 5.0
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      preload_history_bars: 260
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - qqq_0dte_opt_live_001
+      - qqq_0dte_opt_live_v2_001
+      - qqq_1dte_ma10_reject_0324_001
+      - qqq_1dte_ma10_reject_0324_pure_001
+- id: qqq_1dte_ma10_reject_0324_v2_001
+  enabled: true
+  module: strategies.qqq_1dte_ma10_reject_v2_strategy
+  class: QQQ1DTEMA10RejectV2Strategy
+  capital_limit_usd: 10000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      underlying: QQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ]
+          ttl_sec: 20
+          rth: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: option_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        option_contract:
+          required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      risk_symbol: OPT:QQQ:1DTE
+      replay_strategy_id: ma_cross_stack_cont_v2_dual_exp
+      entry_edge_bp: 90.0
+      entry_signal_score: 0.9
+      contracts: 4
+      entry_notional_usd: 10000
+      ab_time_start: 09:40:00
+      ab_time_end: '15:00:00'
+      entry_start_am: 09:40:00
+      entry_end_am: '15:00:00'
+      entry_start_pm: '12:00:00'
+      entry_end_pm: '15:00:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:50:00'
+      max_trades_per_day: 500
+      second_trade_only_if_first_bad_exit: false
+      spread_max_pct: 0.12
+      min_open_interest: 0
+      dte_preferred: 1
+      dte_fallback_max: 2
+      delta_min: 0.0
+      delta_max: 1.0
+      delta_fallback_min: 0.0
+      delta_fallback_max: 1.0
+      confirm_window_bars: 2
+      confirm_decay_from_bar: 99
+      confirm_decay_max_distance_atr: 0.3
+      ma10_reject_ext_atr_max: 2.2
+      enable_fresh_momentum_branch: false
+      enable_trend_continuation_branch: false
+      continuation_pending_entry_timeout_bars: 2
+      continuation_dynamic_reprice_to_ask: true
+      continuation_max_premium_expansion_pct: 0.08
+      adaptive_entry_improve_pct: 0.0
+      urgent_entry_improve_pct: 0.0
+      time_stop_soft_bars: 5
+      time_stop_hard_bars: 10
+      enable_daily_best_additive_branch: false
+      daily_best_call_only: false
+      daily_best_min_dist_vwap_atr: 0.0
+      v2_max_dist_ma10_atr: 1.8
+      v2_put_close_pos_max: 1.0
+      v2_min_vol_ratio: 0.0
+      v2_max_ma10_slope: 999.0
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      entry_quote_allow_ch_fallback: false
+      allow_stale_entry_quotes: true
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      mark_quote_allow_ch_fallback: true
+      exit_quote_lookback_min: 3
+      exit_degraded_nbbo_max_age_sec: 5.0
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      preload_history_bars: 260
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - qqq_0dte_opt_live_001
+      - qqq_0dte_opt_live_v2_001
+      - qqq_1dte_ma10_reject_0324_001
+      - qqq_1dte_ma10_reject_0324_v2_001
+      - qqq_1dte_ma10_reject_0324_pure_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: qqq_option_ma_ext_v1
+      live_parity_snapshot_root: runtime/state/decision_snapshots_live_v2
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: qqq_1dte_ma10_reject_0324_pure_001
+  enabled: false
+  module: strategies.qqq_1dte_ma10_reject_pure_strategy
+  class: QQQ1DTEMA10RejectPureStrategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      underlying: QQQ
+      risk_symbol: OPT:QQQ:1DTE
+      replay_strategy_id: ma_cross_stack_cont_v2_dual_exp
+      contracts: 4
+      ab_time_start: 09:40:00
+      ab_time_end: '15:00:00'
+      entry_start_am: 09:40:00
+      entry_end_am: '15:00:00'
+      entry_start_pm: '12:00:00'
+      entry_end_pm: '15:00:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:50:00'
+      max_trades_per_day: 500
+      second_trade_only_if_first_bad_exit: false
+      spread_max_pct: 0.12
+      min_open_interest: 0
+      dte_preferred: 1
+      dte_fallback_max: 2
+      delta_min: 0.0
+      delta_max: 1.0
+      delta_fallback_min: 0.0
+      delta_fallback_max: 1.0
+      confirm_window_bars: 2
+      confirm_decay_from_bar: 99
+      confirm_decay_max_distance_atr: 0.3
+      ma10_reject_ext_atr_max: 2.2
+      enable_fresh_momentum_branch: false
+      enable_trend_continuation_branch: false
+      adaptive_entry_improve_pct: 0.0
+      urgent_entry_improve_pct: 0.0
+      time_stop_soft_bars: 5
+      time_stop_hard_bars: 10
+      enable_daily_best_additive_branch: false
+      daily_best_call_only: false
+      daily_best_min_dist_vwap_atr: 0.0
+      v2_max_dist_ma10_atr: 1.8
+      v2_put_close_pos_max: 1.0
+      v2_min_vol_ratio: 0.0
+      v2_max_ma10_slope: 999.0
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      entry_quote_allow_ch_fallback: false
+      allow_stale_entry_quotes: true
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      mark_quote_allow_ch_fallback: true
+      exit_quote_lookback_min: 3
+      exit_degraded_nbbo_max_age_sec: 5.0
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      preload_history_bars: 260
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: QQQ_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - qqq_0dte_opt_live_001
+      - qqq_0dte_opt_live_v2_001
+      - qqq_1dte_ma10_reject_0324_001
+      - qqq_1dte_ma10_reject_0324_pure_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: qqq_option_ma_ext_v1
+      live_parity_snapshot_root: runtime/state/decision_snapshots_live_pure
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: spy_1dte_ma10_reject_0324_001
+  enabled: true
+  module: strategies.spy_1dte_ma10_reject_v2_strategy
+  class: SPY1DTEMA10RejectV2Strategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      definition_id: SPY_MA_CROSS_STACK_CONT_V2_DUAL
+      underlying: SPY
+      data_contract:
+        production_blocking: true
+        symbols: [SPY]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [SPY]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [SPY]
+          ttl_sec: 20
+          rth: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: option_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        option_contract:
+          required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      risk_symbol: OPT:SPY:1DTE
+      replay_strategy_id: ma_cross_stack_cont_v2_dual_exp
+      contracts: 4
+      ab_time_start: 09:40:00
+      ab_time_end: '15:00:00'
+      entry_start_am: 09:40:00
+      entry_end_am: '15:00:00'
+      entry_start_pm: '12:00:00'
+      entry_end_pm: '15:00:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:50:00'
+      max_trades_per_day: 4
+      second_trade_only_if_first_bad_exit: false
+      spread_max_pct: 0.12
+      min_open_interest: 0
+      dte_preferred: 1
+      dte_fallback_max: 2
+      delta_min: 0.45
+      delta_max: 0.55
+      delta_fallback_min: 0.4
+      delta_fallback_max: 0.6
+      confirm_window_bars: 2
+      confirm_decay_from_bar: 99
+      confirm_decay_max_distance_atr: 0.3
+      ma10_reject_ext_atr_max: 2.2
+      enable_fresh_momentum_branch: false
+      enable_trend_continuation_branch: false
+      continuation_pending_entry_timeout_bars: 2
+      continuation_dynamic_reprice_to_ask: true
+      continuation_max_premium_expansion_pct: 0.08
+      adaptive_entry_improve_pct: 0.0
+      urgent_entry_improve_pct: 0.0
+      time_stop_soft_bars: 5
+      time_stop_hard_bars: 10
+      enable_daily_best_additive_branch: false
+      daily_best_call_only: false
+      daily_best_min_dist_vwap_atr: 0.0
+      v2_max_dist_ma10_atr: 1.8
+      v2_put_close_pos_max: 1.0
+      v2_min_vol_ratio: 0.0
+      v2_max_ma10_slope: 999.0
+      v2_call_pullback_vol_ratio_min: 0.85
+      enable_momentum_no_retest_dual: true
+      momentum_breakout_lookback_bars: 5
+      momentum_higher_low_bars: 3
+      momentum_lower_high_bars: 3
+      momentum_ma10_slope_min_abs: 0.02
+      momentum_close_pos_min_call: 0.7
+      momentum_close_pos_max_put: 0.3
+      momentum_body_frac_min: 0.5
+      momentum_vol_ratio_min: 0.85
+      momentum_dist_ma10_atr_max: 2.2
+      entry_quote_lookback_min: 1
+      entry_quote_max_age_sec: 60
+      entry_quote_allow_ch_fallback: false
+      allow_stale_entry_quotes: false
+      entry_retry_enabled: true
+      entry_retry_max_attempts: 3
+      entry_retry_wait_sec: 2.0
+      entry_timeout_sec: 1.8
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      mark_quote_allow_ch_fallback: true
+      exit_quote_lookback_min: 3
+      exit_degraded_nbbo_max_age_sec: 5.0
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      preload_history_bars: 260
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: SPY_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - spy_1dte_ma10_reject_0324_001
+      - spy_1dte_ma10_reject_0324_pure_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: spy_option_ma_ext_v1
+      live_parity_snapshot_root: runtime/state/decision_snapshots_live_v2
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: spy_1dte_ma10_reject_0324_pure_001
+  enabled: false
+  module: strategies.spy_1dte_ma10_reject_pure_strategy
+  class: SPY1DTEMA10RejectPureStrategy
+  capital_limit_usd: 20000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      underlying: SPY
+      risk_symbol: OPT:SPY:1DTE
+      contracts: 4
+      ab_time_start: 09:40:00
+      ab_time_end: '15:00:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:50:00'
+      max_trades_per_day: 4
+      second_trade_only_if_first_bad_exit: false
+      spread_max_pct: 0.12
+      min_open_interest: 0
+      dte_preferred: 1
+      dte_fallback_max: 2
+      delta_min: 0.45
+      delta_max: 0.55
+      delta_fallback_min: 0.4
+      delta_fallback_max: 0.6
+      confirm_window_bars: 2
+      confirm_decay_from_bar: 99
+      ma10_reject_ext_atr_max: 2.2
+      enable_fresh_momentum_branch: true
+      enable_daily_best_additive_branch: true
+      daily_best_call_only: true
+      daily_best_min_dist_vwap_atr: 2.0
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      exit_quote_lookback_min: 3
+      exit_degraded_nbbo_max_age_sec: 5.0
+      quote_hb_gate_enabled: true
+      quote_health_min_coverage: 0.7
+      preload_history_bars: 260
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: SPY_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - spy_1dte_ma10_reject_0324_001
+      - spy_1dte_ma10_reject_0324_pure_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: spy_option_ma_ext_v1
+      live_parity_snapshot_root: runtime/state/decision_snapshots_live_pure
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: spy_intraday_momentum_option_paper_001
+  enabled: false
+  module: strategies.spy_intraday_momentum_option_paper_strategy
+  class: SPYIntradayMomentumOptionPaperStrategy
+  capital_limit_usd: 10000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      underlying: SPY
+      risk_symbol: OPT:SPY:0DTE
+      definition_id: SPY_INTRADAY_MOMENTUM_OPTION_PAPER_V1
+      contracts: 1
+      entry_start_am: 09:45:00
+      entry_end_am: '12:00:00'
+      entry_start_pm: '13:00:00'
+      entry_end_pm: '15:00:00'
+      no_new_entry_after: '15:00:00'
+      force_flatten_time: '15:50:00'
+      dte_preferred: 0
+      dte_fallback_max: 1
+      delta_min: 0.30
+      delta_max: 0.55
+      delta_fallback_min: 0.25
+      delta_fallback_max: 0.60
+      spread_max_pct: 0.18
+      min_open_interest: 0
+      signal_v3m_abs_min: 0.08
+      hard_stop_atr_mult: 0.70
+      target_1r_atr_mult: 0.90
+      target_1p2r_atr_mult: 1.40
+      logic_retreat_min_hold_sec: 180
+      logic_retreat_v3m_atr_mult: 0.12
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: SPY_INTRADAY_MOMENTUM_OPTION_PAPER
+      shared_cap_group_limit_usd: 10000
+      shared_cap_group_strategy_ids:
+      - spy_intraday_momentum_option_paper_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: spy_intraday_momentum_option_paper_v1
+      live_parity_snapshot_root: runtime/state/decision_snapshots_intraday_momentum_option_paper
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: vegas_hma_setup_trigger_risk_v12_spy_001
+  enabled: true
+  module: strategies.vegas_hma_setup_trigger_risk_v12_strategy
+  class: VegasHMASetupTriggerRiskV12Strategy
+  capital_limit_usd: 5000
+  params:
+    cadence_s: 1
+    ttl_ms: 2000
+    extras:
+      definition_id: VEGAS_HMA_SETUP_TRIGGER_RISK_V12
+      underlying: SPY
+      risk_symbol: OPT:SPY:0DTE
+      strategy_key: vegas_hma_setup_trigger_risk_v12
+      contracts: 1
+      entry_timeout_sec: 60
+      ab_time_start: 09:35:00
+      ab_time_end: '15:45:00'
+      no_new_entry_after: '15:45:00'
+      force_flatten_time: '15:58:00'
+      spread_max_pct: 0.18
+      min_open_interest: 0
+      dte_preferred: 0
+      dte_fallback_max: 1
+      delta_min: 0.30
+      delta_max: 0.55
+      delta_fallback_min: 0.25
+      delta_fallback_max: 0.60
+      entry_quote_lookback_min: 2
+      entry_quote_max_age_sec: 90
+      mark_quote_lookback_min: 2
+      mark_quote_max_age_sec: 90
+      preload_history_bars: 220
+      history_ready_min_bars: 180
+      signal_only: false
+      enable_live_order_intents: true
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: SPY_OPT_LIVE_SHARED
+      shared_cap_group_limit_usd: 20000
+      shared_cap_group_strategy_ids:
+      - spy_1dte_ma10_reject_0324_001
+      - spy_1dte_ma10_reject_0324_pure_001
+      - vegas_hma_setup_trigger_risk_v12_spy_001
+      enable_live_parity_snapshot: true
+      live_parity_profile_id: vegas_hma_setup_trigger_risk_v12
+      live_parity_snapshot_root: runtime/state/decision_snapshots_vegas_hma_setup_trigger_risk_v12
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+      data_contract:
+        production_blocking: true
+        symbols: [SPY]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [SPY]
+          ttl_sec: 15
+          rth: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: option_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        option_contract:
+          required: true
+          trigger_ledger_required: true
+          contract_selection_required: true
+          exact_contract_fill_attribution_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      vegas_hma_setup_trigger_risk_v12:
+        underlying_symbol: SPY
+        contracts: 1
+        signal_only: false
+        atr_mult: 1.8
+        market_data_source: sfs
+        sfs_first: true
+        source_bar_sec: 60
+        realtime_bar_sec: 60
+        realtime_feature_engine:
+          enabled: true
+          emit_on: 1m
+          timeframes:
+          - 1s
+          - 1m
+          lookbacks:
+            1s: 3600
+            1m: 600
+          sink:
+            enabled: false
+        max_dist_from_fhma_atr: 0.8
+        pre_run_lookback: 18
+        max_pre_run_atr: 1.6
+        pullback_lookback: 8
+        pullback_touch_atr: 0.35
+        quality_len: 120
+        trailing_mode: percent
+        trailing_percent: 1.5
+        use_ibkr_native_trailing_stop: true
+        daily_max_trades: 2
+        debug: false
+- id: nvda_option_churn_smoke_001
+  enabled: false
+  shadow_mode: false
+  module: strategies.nvda_option_smoke_strategy
+  class: NVDAOptionChurnSmokeStrategy
+  capital_limit_usd: 2000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      underlying: NVDA
+      risk_symbol: OPT:NVDA:SMOKE
+      contracts: 1
+      paper_smoke_only: true
+      tradability_min_warmup_bars: 5
+      data_contract:
+        production_blocking: true
+        symbols: [NVDA]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [NVDA]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [NVDA]
+          ttl_sec: 20
+          rth: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: option_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        option_contract:
+          required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      smoke_entry_cadence_minutes: 1
+      smoke_hold_seconds: 65
+      max_trades_per_day: 999
+      second_trade_only_if_first_bad_exit: false
+      reserve_trade_after_time: ''
+      ab_time_start: 09:35:00
+      ab_time_end: '15:50:00'
+      no_new_entry_after: '15:50:00'
+      force_flatten_time: '15:55:00'
+      dte_min: 0
+      dte_max: 7
+      dte_preferred: 1
+      spread_max_pct: 0.35
+      entry_quote_lookback_min: 3
+      entry_quote_max_age_sec: 120
+      entry_quote_allow_ch_fallback: false
+      allow_stale_entry_quotes: false
+      allow_same_option_symbol_cross_strategy: true
+      shared_cap_group_id: NVDA_OPTION_SMOKE
+      shared_cap_group_limit_usd: 2000
+      shared_cap_group_strategy_ids:
+      - nvda_option_churn_smoke_001
+      market_data_profile_id: standard_close_extended_sma
+      kernel_mode: pure_plugin
+      strict_scope_validation: true
+- id: stocks_kernel_smh_001
+  enabled: true
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 10000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      order_namespace: stkv1
+      capital_budget_single_source: true
+      strategy_template: breakout_equity
+      data_profile: equity_rth_standard
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      enable_shared_history_cache: true
+      require_exec_symbol_snapshot: true
+      entry_check_on_new_minute_only: true
+      no_new_after_et: '15:45'
+      flatten_before_close_et: '15:59'
+      signal_symbol: SMH
+      long_exec_symbol: SOXL
+      short_exec_symbol: SOXS
+      data_contract:
+        production_blocking: true
+        symbols: [SMH, SOXL, SOXS]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [SMH, SOXL, SOXS]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [SMH, SOXL, SOXS]
+          ttl_sec: 20
+          rth: true
+        - dataset: market_bars
+          resolution: 1m
+          symbols: [SMH, SOXL, SOXS]
+          ttl_sec: 180
+          rth: true
+          warmup_required: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: stocks_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - RTH
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      broker_truth_sync_interval_sec_offsession: 60
+      policy_params:
+        max_trades_per_day: 4
+        hard_stop_atr_mult: 0.75
+        logic_retreat_min_hold_sec: 360
+        rule_engine_parity: true
+        entry_check_on_new_minute_only: true
+        entry_model: v47_fast_drift
+        qqew_decoupled: true
+        v3m_units: ratio
+        elite_ab_dual_mode: true
+        ab_time_start: 09:30:00
+        ab_time_end: '14:00:00'
+        delayed_confirm_end: '10:00:00'
+        delayed_confirm_move5m_min: 0.18
+        early_lock_mode: openclose
+        enable_v47_chase_guard: true
+        v47_chase_guard_start: 09:45:00
+        v47_chase_guard_end: '11:50:00'
+        v47_long_pos_day_min: 1.01
+        v47_short_pos_day_max: 0.2
+        v47_long_dev_vwap_min: 0.01
+        v47_short_dev_vwap_min: 0.0025
+        atr_rank_skip_max: 0.15
+        early_override_move_mult: 0.14
+        early_override_vol_min: 0.65
+        early_override_window_start: 09:39:00
+        early_override_window_end: 09:45:00
+        enable_v47_veto: false
+        qqq_daily_atr_path: runtime/state/qqq_daily_atr_context.json
+        entry_max_data_age_sec_qqq: 15.0
+        entry_require_continuity_180s: true
+        startup_anchor_entry_block_enabled: true
+        startup_anchor_entry_block_start: 09:30:00
+        startup_anchor_entry_block_end: '10:00:00'
+        entry_extreme_filter_enabled: true
+        entry_extreme_distance_from_vwap_atr_min: 8.1
+        entry_extreme_v3m_signed_min: 0.64
+        entry_extreme_seed_n_min: 700
+        enable_fast: true
+        drift_bar_min_atr: 0.1
+        drift_cum_atr_min: 0.45
+        fast_v3m_atr_min: 0.6
+        fast_vol_min: 2.0
+        veto_start: 09:40:00
+        veto_end: '11:50:00'
+        veto_rebound_live_atr: 0.25
+        atr_period: 14
+        elite_max_ext_mult: 1.6
+        elite_deadzone_mult: 0.15
+        elite_v3m_min_mult: 0.35
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+- id: stocks_kernel_spy_001
+  enabled: true
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 10000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      trade_budget_usd: 10000
+      order_namespace: stkv1
+      capital_budget_single_source: true
+      strategy_template: spy_intraday_core
+      data_profile: equity_rth_standard
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      enable_shared_history_cache: true
+      require_exec_symbol_snapshot: true
+      entry_check_on_new_minute_only: true
+      no_new_after_et: '15:45'
+      flatten_before_close_et: '15:59'
+      signal_symbol: SPY
+      long_exec_symbol: SPXL
+      short_exec_symbol: SPXS
+      confirm_symbol: RSP
+      data_contract:
+        production_blocking: true
+        symbols: [SPY, SPXL, SPXS, RSP]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [SPY, SPXL, SPXS, RSP]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [SPY, SPXL, SPXS, RSP]
+          ttl_sec: 20
+          rth: true
+        - dataset: market_bars
+          resolution: 1m
+          symbols: [SPY, SPXL, SPXS, RSP]
+          ttl_sec: 180
+          rth: true
+          warmup_required: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: stocks_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - RTH
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      broker_truth_sync_interval_sec_offsession: 60
+      policy_params:
+        max_trades_per_day: 4
+        hard_stop_atr_mult: 0.65
+        logic_retreat_min_hold_sec: 420
+        rule_engine_parity: true
+        entry_check_on_new_minute_only: true
+        entry_model: v47_fast_drift
+        qqew_decoupled: false
+        confirm_decoupled: false
+        confirm_feature_prefix: rsp
+        entry_max_data_age_sec_spy: 12.0
+        entry_max_data_age_sec_rsp: 12.0
+        atr_rank_skip_max: 0.18
+        delayed_confirm_move5m_min: 0.12
+        v47_long_pos_day_min: 0.72
+        v47_short_pos_day_max: 0.28
+        v47_long_dev_vwap_min: 0.0015
+        v47_short_dev_vwap_min: 0.0012
+        opening_breakout_vol_min: 1.05
+        drift_bar_min_atr: 0.08
+        drift_cum_atr_min: 0.35
+        fast_v3m_atr_min: 0.45
+        fast_vol_min: 1.6
+        entry_extreme_distance_from_vwap_atr_min: 6.5
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+- id: nvda_minute_flip_paper_001
+  enabled: true
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 250
+  params:
+    cadence_s: 5
+    ttl_ms: 30000
+    extras:
+      dry_run: false
+      order_namespace: nvda_flip
+      account_id: DUO112752
+      policy_id: nvda_minute_flip_policy
+      data_profile: equity_offhours_tick_only
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      feature_set: []
+      gate_pipeline:
+      - session_window
+      - freshness
+      - open_orders_isolation
+      - foreign_position_isolation
+      enable_dynamic_policy_registry: true
+      enable_policy_factory_runtime: true
+      policy_registry_specs:
+      - policy_id: nvda_minute_flip_policy
+        mode: factory
+        module: strategies.stocks_kernel.policies.nvda_minute_flip
+        attr: build_nvda_minute_flip_policy
+      plugin_cls: strategies.stocks_kernel.plugins.nvda_minute_flip:NVDAMinuteFlipStockPlugin
+      plugin_params:
+        order_type: LMT
+        limit_offset_bp: 20
+      signal_symbol: NVDA
+      long_exec_symbol: NVDA
+      short_exec_symbol: NVDA
+      universe:
+      - signal_symbol: NVDA
+        long_exec_symbol: NVDA
+        short_exec_symbol: NVDA
+        execution_lanes:
+        - lane_id: nvda_long_exec
+          symbol: NVDA
+          side: LONG
+          role: execution
+          ownership_scope: strategy
+          flatten_authority: strategy
+          protection_authority: strategy
+      no_new_after_et: '23:58'
+      flatten_before_close_et: '23:59'
+      broker_truth_sync_interval_sec_offsession: 30
+      startup_preflight_enabled: true
+      require_exec_symbol_snapshot: true
+      data_contract:
+        production_blocking: true
+        symbols: [NVDA]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [NVDA]
+          ttl_sec: 30
+          rth: false
+        - dataset: bars_5s
+          symbols: [NVDA]
+          ttl_sec: 90
+          rth: false
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: stocks_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - PRE
+            - POST
+            - OVERNIGHT
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      policy_params:
+        symbol: NVDA
+        qty: 1
+        trade_budget_usd: 250
+        trade_interval_sec: 60
+        exit_limit_offset_bp: 1000
+        max_cycles_per_day: 1200
+        start_with_entry: true
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+        offhours_outside_rth: true
+        overnight_outside_rth: true
+- id: agent_paper_bridge_001
+  enabled: true
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 500
+  params:
+    cadence_s: 5
+    ttl_ms: 30000
+    extras:
+      dry_run: false
+      paper_smoke_only: true
+      allow_system_health_degraded_entry: true
+      order_namespace: agent_paper
+      account_id: DUO112752
+      permission_tier: PAPER_ONLY
+      policy_id: agent_paper_bridge_policy
+      data_profile: equity_offhours_tick_only
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      feature_set: []
+      gate_pipeline:
+      - session_window
+      - freshness
+      - open_orders_isolation
+      - foreign_position_isolation
+      enable_dynamic_policy_registry: true
+      enable_policy_factory_runtime: true
+      policy_registry_specs:
+      - policy_id: agent_paper_bridge_policy
+        mode: factory
+        module: strategies.stocks_kernel.policies.agent_paper_bridge
+        attr: build_agent_paper_bridge_policy
+      plugin_cls: strategies.stocks_kernel.plugins.agent_paper_bridge:AgentPaperBridgeStockPlugin
+      plugin_params:
+        order_type: LMT
+        limit_offset_bp: 20
+      signal_symbol: NVDA
+      long_exec_symbol: NVDA
+      short_exec_symbol: NVDA
+      universe:
+      - signal_symbol: NVDA
+        long_exec_symbol: NVDA
+        short_exec_symbol: NVDA
+        execution_lanes:
+        - lane_id: agent_long_exec
+          symbol: NVDA
+          side: LONG
+          role: execution
+          ownership_scope: strategy
+          flatten_authority: strategy
+          protection_authority: strategy
+        - lane_id: agent_short_exec
+          symbol: NVDA
+          side: SHORT
+          role: execution
+          ownership_scope: strategy
+          flatten_authority: strategy
+          protection_authority: strategy
+      no_new_after_et: '23:58'
+      flatten_before_close_et: '23:59'
+      broker_truth_sync_interval_sec_offsession: 30
+      startup_preflight_enabled: true
+      require_exec_symbol_snapshot: true
+      data_contract:
+        production_blocking: true
+        symbols: [NVDA]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [NVDA]
+          ttl_sec: 30
+          rth: false
+        - dataset: bars_5s
+          symbols: [NVDA]
+          ttl_sec: 90
+          rth: false
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: stocks_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - PRE
+            - POST
+            - OVERNIGHT
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      policy_params:
+        symbol: NVDA
+        qty: 1
+        max_qty: 1
+        max_flatten_qty: 100
+        max_trades_per_day: 20
+        max_signal_age_sec: 120
+        signal_path: runtime/agent_signals/agent_paper_signal.jsonl
+        state_path: runtime/state/agent_paper_bridge_emitted.json
+        paper_operator_ack: true
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+        offhours_outside_rth: true
+        overnight_outside_rth: true
+- id: nvda_minute_flip_paper_002
+  enabled: true
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 250
+  params:
+    cadence_s: 5
+    ttl_ms: 30000
+    extras:
+      dry_run: false
+      order_namespace: nvda_flip_b
+      account_id: DUO112752
+      policy_id: nvda_minute_flip_policy
+      data_profile: equity_offhours_tick_only
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      feature_set: []
+      gate_pipeline:
+      - session_window
+      - freshness
+      - open_orders_isolation
+      - foreign_position_isolation
+      enable_dynamic_policy_registry: true
+      enable_policy_factory_runtime: true
+      policy_registry_specs:
+      - policy_id: nvda_minute_flip_policy
+        mode: factory
+        module: strategies.stocks_kernel.policies.nvda_minute_flip
+        attr: build_nvda_minute_flip_policy
+      plugin_cls: strategies.stocks_kernel.plugins.nvda_minute_flip:NVDAMinuteFlipStockPlugin
+      plugin_params:
+        order_type: LMT
+        limit_offset_bp: 20
+      signal_symbol: NVDA
+      long_exec_symbol: NVDA
+      short_exec_symbol: NVDA
+      universe:
+      - signal_symbol: NVDA
+        long_exec_symbol: NVDA
+        short_exec_symbol: NVDA
+        execution_lanes:
+        - lane_id: nvda_long_exec_b
+          symbol: NVDA
+          side: LONG
+          role: execution
+          ownership_scope: strategy
+          flatten_authority: strategy
+          protection_authority: strategy
+      no_new_after_et: '23:58'
+      flatten_before_close_et: '23:59'
+      broker_truth_sync_interval_sec_offsession: 30
+      startup_preflight_enabled: true
+      require_exec_symbol_snapshot: true
+      data_contract:
+        production_blocking: true
+        symbols: [NVDA]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [NVDA]
+          ttl_sec: 30
+          rth: false
+        - dataset: bars_5s
+          symbols: [NVDA]
+          ttl_sec: 90
+          rth: false
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: stocks_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - PRE
+            - POST
+            - OVERNIGHT
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      policy_params:
+        symbol: NVDA
+        qty: 1
+        trade_budget_usd: 250
+        trade_interval_sec: 60
+        exit_limit_offset_bp: 1000
+        max_cycles_per_day: 1200
+        start_with_entry: true
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+        offhours_outside_rth: true
+        overnight_outside_rth: true
+- id: qqq_kernel_legacy_on_001
+  enabled: false
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 10000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      legacy_mode: legacy_on
+      order_namespace: qqq_kernel
+      capital_budget_single_source: true
+      strategy_template: qqq_intraday_core
+      policy_id: qqq_intraday_policy_v1
+      data_profile: equity_rth_standard
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      enable_shared_history_cache: true
+      enable_shared_underlying_data_plane: true
+      shared_underlying_read_mode: prefer
+      qqq_trace_enabled: true
+      qqq_trace_root: reports/qqq_signal_snapshots
+      require_exec_symbol_snapshot: true
+      entry_check_on_new_minute_only: true
+      no_new_after_et: '15:45'
+      flatten_before_close_et: '15:59'
+      signal_symbol: QQQ
+      long_exec_symbol: TQQQ
+      short_exec_symbol: SQQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ, TQQQ, SQQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 20
+          rth: true
+        - dataset: market_bars
+          resolution: 1m
+          symbols: [QQQ]
+          ttl_sec: 180
+          rth: true
+          warmup_required: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: qqq_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - RTH
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      policy_params:
+        legacy_trader_parity_mode: true
+        rule_engine_parity: true
+        entry_model: v47_fast_drift
+        qqew_decoupled: true
+        v3m_units: ratio
+        max_trades_per_day: 4
+        third_trade_requires_positive_day_pnl: false
+        hard_stop_atr_mult: 0.75
+        logic_retreat_min_hold_sec: 360
+        entry_check_on_new_minute_only: true
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+- id: qqq_kernel_legacy_off_001
+  enabled: false
+  registry_name: stocks_kernel
+  module: strategies.stocks_kernel_strategy
+  class: StocksKernelStrategy
+  capital_limit_usd: 10000
+  params:
+    cadence_s: 5
+    ttl_ms: 2000
+    extras:
+      dry_run: false
+      legacy_mode: legacy_off
+      order_namespace: qqq_kernel
+      capital_budget_single_source: true
+      strategy_template: qqq_intraday_core
+      policy_id: qqq_intraday_policy_v1
+      data_profile: equity_rth_standard
+      audit_root_dir: runtime/audit
+      feature_bar_sec: 5
+      enable_shared_history_cache: true
+      enable_shared_underlying_data_plane: true
+      shared_underlying_read_mode: prefer
+      qqq_trace_enabled: true
+      qqq_trace_root: reports/qqq_signal_snapshots
+      require_exec_symbol_snapshot: true
+      entry_check_on_new_minute_only: true
+      no_new_after_et: '15:45'
+      flatten_before_close_et: '15:59'
+      signal_symbol: QQQ
+      long_exec_symbol: TQQQ
+      short_exec_symbol: SQQQ
+      data_contract:
+        production_blocking: true
+        symbols: [QQQ, TQQQ, SQQQ]
+        ttl_sec: 30
+        requirements:
+        - dataset: ticks
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 15
+          rth: true
+        - dataset: bars_5s
+          symbols: [QQQ, TQQQ, SQQQ]
+          ttl_sec: 20
+          rth: true
+        - dataset: market_bars
+          resolution: 1m
+          symbols: [QQQ]
+          ttl_sec: 180
+          rth: true
+          warmup_required: true
+      production_manifest:
+        production_blocking: true
+        entry_contract:
+          uses_decision_pipeline: true
+          uom_only: true
+        protection_contract:
+          required: true
+          fallback: flatten
+        recovery_contract:
+          policy_id: qqq_kernel_close_only
+          unknown_owner_action: quarantine
+          fallback: flatten
+        eod_contract:
+          no_overnight: true
+          platform_eod_required: true
+        tradability_reporting:
+          reports_strategy_tradability_gate: true
+      gate_overrides:
+        session_window:
+          params:
+            allowed_sessions:
+            - RTH
+        open_orders_isolation:
+          enabled: true
+        foreign_position_isolation:
+          enabled: true
+      policy_params:
+        legacy_trader_parity_mode: false
+        rule_engine_parity: true
+        entry_model: v47_fast_drift
+        qqew_decoupled: true
+        v3m_units: ratio
+        max_trades_per_day: 4
+        third_trade_requires_positive_day_pnl: false
+        hard_stop_atr_mult: 0.75
+        logic_retreat_min_hold_sec: 360
+        entry_check_on_new_minute_only: true
+      execution_profile:
+        protection_enabled: true
+        quarantine_on_unknown_position: true
+strategy_assignments:
+  TECH_MEGA:
+    priority: 50
+    symbols:
+    - AAPL
+    - MSFT
+    - NVDA
+    - AMZN
+    - META
+    - GOOGL
+    overrides:
+      cost_gates.min_atr1m: 0.12
+      strategy.time_stop_min: 45
+    strategies:
+    - template: vwap_revert
+      params:
+        atr_k: 0.06
+      enabled: true
+      rank: 10
+    - template: trend_pullback
+      enabled: true
+      rank: 20
+  QQQ_GROUP:
+    priority: 60
+    symbols:
+    - QQQ
+    - TQQQ
+    - SQQQ
+    strategies:
+    - template: orb_retest
+      params:
+        retest_window: 8
+        tp1_atr: 1.2
+      enabled: true
+      rank: 5
+    - template: vwap_revert
+      enabled: true
+      rank: 15
+param_registry:
+  strategy.time_stop_min:
+    min: 5
+    max: 240
+    step: 1
+    mutable_intraday: true
+  risk.per_trade_risk_pct:
+    min: 0.05
+    max: 2.0
+    step: 0.01
+    mutable_intraday: true
+  execution.max_slippage_atr:
+    min: 0.0
+    max: 1.0
+    step: 0.01
+    mutable_intraday: true
+  phase4.max_concurrent_plans:
+    min: 1
+    max: 20
+    step: 1
+    mutable_intraday: true
+security:
+  masking_rules:
+    fields:
+    - path: account_id
+      replace_with: '****'
+    - path: client_order_id
+      hash: true
+services:
+  market_data_service:
+    enabled: true
+    rth_only: false
+    allowed_sessions:
+    - PREMARKET
+    - RTH
+    - AFTERHOURS
+    - OVERNIGHT
+    enable_backfill: false
+    enable_tick_publisher: true
+    tick_publisher:
+      queue_max: 20000
+      send_workers: 1
+      send_timeout_sec: 3.0
+      restart_backoff_base_sec: 1.0
+      restart_backoff_max_sec: 30.0
+      spool_enabled: true
+      spool_dir: runtime/spool/tick_publisher
+      spool_max_mb: 200
+      spool_segment_mb: 10
+      spool_queue_max: 50000
+  options_quotes_ingest:
+    enabled: true
+    provider: ibkr
+    symbols:
+    - QQQ
+    - SPY
+    - NVDA
+    dte:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    right: ''
+    poll_sec: 15
+    max_contracts: 0
+    ibkr_host: 127.0.0.1
+    ibkr_port: 4002
+    strict_startup_gate: false
+    health_max_age_min: 3.0
+    health_min_dte0_rows: 1
+  sfs_1s:
+    enabled: true
+    rth_only: false
+    ttl_sec: 86400
+    flush_delay_ms: 250
+    group_id: sfs_1s_agg
+    topic: md.tick.trade.v1
+    redis_cmd_timeout_sec: 1.5
+    redis_socket_timeout_sec: 1.5
+    redis_socket_connect_timeout_sec: 1.5
+    redis_health_check_interval_sec: 30
+    redis_breaker_threshold: 5
+    redis_breaker_base_sec: 2.0
+    redis_breaker_max_sec: 30.0
+  sfs_5s:
+    enabled: false
+    rth_only: false
+    flush_period_ms: 1000
+    lookback_n: 5
+    group: sfs_5s
+  scheduled_reconcilers:
+  - name: daily_1m_reconciliation
+    enabled: true
+    run_time: '17:00'
+    res: 1m
+    days: 3
+    use_rth: true
+  catchup:
+    instances:
+    - name: catchup_1m
+      enabled: false
+      interval_sec: 120
+      bar_size: 1 min
+      request_topic: md.backfill.request.1m.v1
+      view: bars_1m_current
+      lag_grace_sec: 30
+      max_range_minutes: 60
+      symbols:
+      - QQQ
+      - SMH
+      - SOXL
+      - SOXS
+      use_rth: true
+    - name: catchup_5m
+      enabled: false
+      interval_sec: 300
+      bar_size: 5 mins
+      request_topic: md.backfill.request.5m.v1
+      view: bars_5m_current
+      lag_grace_sec: 60
+      max_range_minutes: 300
+      symbols: []
+      use_rth: true
+    - name: catchup_10m
+      enabled: false
+      interval_sec: 600
+      bar_size: 10 mins
+      request_topic: md.backfill.request.10m.v1
+      view: bars_10m_current
+      lag_grace_sec: 90
+      max_range_minutes: 600
+      symbols: []
+      use_rth: true
+    - name: catchup_15m
+      enabled: false
+      interval_sec: 900
+      bar_size: 15 mins
+      request_topic: md.backfill.request.15m.v1
+      view: bars_15m_current
+      lag_grace_sec: 120
+      max_range_minutes: 900
+      symbols: []
+      use_rth: true
+    - name: catchup_30m
+      enabled: false
+      interval_sec: 1800
+      bar_size: 30 mins
+      request_topic: md.backfill.request.30m.v1
+      view: bars_30m_current
+      lag_grace_sec: 240
+      max_range_minutes: 1800
+      symbols: []
+      use_rth: true
+    - name: catchup_1h
+      enabled: false
+      interval_sec: 3600
+      bar_size: 1 hour
+      request_topic: md.backfill.request.1h.v1
+      view: bars_1h_current
+      lag_grace_sec: 300
+      max_range_minutes: 2400
+      symbols: []
+      use_rth: true
+    - name: catchup_2h
+      enabled: false
+      interval_sec: 7200
+      bar_size: 2 hours
+      request_topic: md.backfill.request.2h.v1
+      view: bars_2h_current
+      lag_grace_sec: 360
+      max_range_minutes: 3600
+      symbols: []
+      use_rth: true
+    - name: catchup_3h
+      enabled: false
+      interval_sec: 10800
+      bar_size: 3 hours
+      request_topic: md.backfill.request.3h.v1
+      view: bars_3h_current
+      lag_grace_sec: 540
+      max_range_minutes: 5400
+      symbols: []
+      use_rth: true
+    - name: catchup_4h
+      enabled: false
+      interval_sec: 14400
+      bar_size: 4 hours
+      request_topic: md.backfill.request.4h.v1
+      view: bars_4h_current
+      lag_grace_sec: 720
+      max_range_minutes: 7200
+      symbols: []
+      use_rth: true
+    - name: catchup_1d
+      enabled: false
+      interval_sec: 3600
+      bar_size: 1 day
+      request_topic: md.backfill.request.1d.v1
+      view: bars_1d_current
+      lag_grace_sec: 300
+      max_range_minutes: 2880
+      symbols: []
+      use_rth: false
+  backfill:
+    instances:
+    - name: backfill_5s
+      enabled: false
+      gap_topic: md.bar.5s.repair.v1
+      request_topic: md.backfill.request.v1
+      bar_topic: md.bar.5s.v2
+      group_id: backfill.5s.v1
+      default_bar_size: 5 secs
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 1.0
+      default_use_rth: true
+    - name: backfill_1m
+      enabled: false
+      gap_topic: md.gap.1m.disabled
+      request_topic: md.backfill.request.1m.v1
+      bar_topic: md.bar.1m.ibkr
+      group_id: backfill.1m.v1
+      default_bar_size: 1 min
+      max_ib_concurrency: 1
+      min_ib_interval_sec: 2.5
+      default_use_rth: true
+    - name: backfill_5m
+      enabled: false
+      gap_topic: md.gap.5m.disabled
+      request_topic: md.backfill.request.5m.v1
+      bar_topic: md.bar.5m.ibkr
+      group_id: backfill.5m.v1
+      default_bar_size: 5 mins
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 1.2
+      default_use_rth: true
+    - name: backfill_15m
+      enabled: false
+      gap_topic: md.gap.15m.disabled
+      request_topic: md.backfill.request.15m.v1
+      bar_topic: md.bar.15m.ibkr
+      group_id: backfill.15m.v1
+      default_bar_size: 15 mins
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 1.5
+      default_use_rth: true
+    - name: backfill_30m
+      enabled: false
+      gap_topic: md.gap.30m.disabled
+      request_topic: md.backfill.request.30m.v1
+      bar_topic: md.bar.30m.ibkr
+      group_id: backfill.30m.v1
+      default_bar_size: 30 mins
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 2.0
+      default_use_rth: true
+    - name: backfill_10m
+      enabled: false
+      gap_topic: md.gap.10m.disabled
+      request_topic: md.backfill.request.10m.v1
+      bar_topic: md.bar.10m.ibkr
+      group_id: backfill.10m.v1
+      default_bar_size: 10 mins
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 1.5
+      default_use_rth: true
+    - name: backfill_1h
+      enabled: false
+      gap_topic: md.gap.1h.disabled
+      request_topic: md.backfill.request.1h.v1
+      bar_topic: md.bar.1h.ibkr
+      group_id: backfill.1h.v1
+      default_bar_size: 1 hour
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 2.0
+      default_use_rth: true
+    - name: backfill_2h
+      enabled: false
+      gap_topic: md.gap.2h.disabled
+      request_topic: md.backfill.request.2h.v1
+      bar_topic: md.bar.2h.ibkr
+      group_id: backfill.2h.v1
+      default_bar_size: 2 hours
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 2.5
+      default_use_rth: true
+    - name: backfill_3h
+      enabled: false
+      gap_topic: md.gap.3h.disabled
+      request_topic: md.backfill.request.3h.v1
+      bar_topic: md.bar.3h.ibkr
+      group_id: backfill.3h.v1
+      default_bar_size: 3 hours
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 2.5
+      default_use_rth: true
+    - name: backfill_4h
+      enabled: false
+      gap_topic: md.gap.4h.disabled
+      request_topic: md.backfill.request.4h.v1
+      bar_topic: md.bar.4h.ibkr
+      group_id: backfill.4h.v1
+      default_bar_size: 4 hours
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 2.5
+      default_use_rth: true
+    - name: backfill_1d
+      enabled: false
+      gap_topic: md.gap.1d.disabled
+      request_topic: md.backfill.request.1d.v1
+      bar_topic: md.bar.1d.ibkr
+      group_id: backfill.1d.v1
+      default_bar_size: 1 day
+      max_ib_concurrency: 2
+      min_ib_interval_sec: 3.0
+      default_use_rth: true
+features:
+  v3_autonomy:
+    enable_policy_self_application: true
+    enable_global_model_router: true
+    auto_merge_min_test_coverage_pct: 90
+    max_policy_updates_per_day: 0
+    max_code_patches_per_day: 3
+memory:
+  embedding_provider: local_bge
+  vector_db_path: ./runs/memory/vector_store
+  local_model:
+    name: BAAI/bge-m3
+    device: cpu
+    max_length: 8192
+  consolidation:
+    sts_to_mts_threshold_days: 7
+    mts_to_lts_threshold_days: 30
+    min_access_count_for_promotion: 3
+model_router:
+  default_capability: research
+  pools:
+    research:
+    - name: ollama
+      model: qwen2.5:7b-instruct
+      priority: 1
+      timeout: 300
+    - name: ollama
+      model: deepseek-r1:1.5b
+      priority: 2
+      timeout: 120
+    code_gen:
+    - name: ollama
+      model: qwen2.5-coder:7b
+      priority: 1
+      timeout: 180
+    summary:
+    - name: ollama
+      model: qwen2.5:3b
+      priority: 1
+      timeout: 60
+    critique:
+    - name: ollama
+      model: qwen2.5:7b-instruct
+      priority: 1
+      timeout: 120
+immunity:
+  enable_predictive_immunity: true
+  thresholds:
+    freeze_exploration: 0.7
+    freeze_evolution: 0.8
+    freeze_all: 0.9
+  monitored_metrics:
+  - error_rate
+  - latency_p99
+  - test_failure_rate
+  - memory_usage
+  - disk_usage
+  lookback_window_size: 100

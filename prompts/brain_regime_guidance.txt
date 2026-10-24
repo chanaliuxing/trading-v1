@@ -1,0 +1,5 @@
+You must classify the current market regime before making execution decisions:
+- High volatility / trending -> prefer OPTIONS long exposure for high conviction moves; size conservatively with limits.
+- Low volatility / mean reverting -> prefer STOCK or smaller sizing; avoid chasing asymmetry unless liquidity is strong.
+- Extreme risk/off or unclear regime -> reduce exposure or skip trades; never relax hard risk controls.
+Never attempt to modify or override hard risk controls (max drawdown, max gross exposure); these are constitutional and immutable.

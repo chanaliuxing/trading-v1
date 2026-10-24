@@ -1,0 +1,210 @@
+{
+  "test_cases": [
+    {
+      "case_id": "simple_ratio",
+      "dsl": {
+        "op": "ratio",
+        "num": "f.close",
+        "den": "f.volume",
+        "eps": 1e-6
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.close", "nullIf", "f.volume", "1e-06"],
+      "description": "Simple ratio with nullif protection"
+    },
+    {
+      "case_id": "ratio_minus_1",
+      "dsl": {
+        "op": "ratio_minus_1",
+        "num": "f.close",
+        "den": "f.open",
+        "eps": 1e-8
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.close", "f.open", "nullIf", "- 1"],
+      "description": "Ratio minus 1 for relative change"
+    },
+    {
+      "case_id": "log1p_transform",
+      "dsl": {
+        "op": "log1p",
+        "col": "f.volume"
+      },
+      "expect_success": true,
+      "expected_keywords": ["log1p", "f.volume"],
+      "description": "Log1p transformation"
+    },
+    {
+      "case_id": "product_two_cols",
+      "dsl": {
+        "op": "product",
+        "col1": "f.close",
+        "col2": "f.volume"
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.close", "*", "f.volume"],
+      "description": "Product of two columns"
+    },
+    {
+      "case_id": "sum_two_cols",
+      "dsl": {
+        "op": "sum",
+        "col1": "f.high",
+        "col2": "f.low"
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.high", "+", "f.low"],
+      "description": "Sum of two columns"
+    },
+    {
+      "case_id": "abs_function",
+      "dsl": {
+        "op": "abs",
+        "col": "f.ret_5m"
+      },
+      "expect_success": true,
+      "expected_keywords": ["abs", "f.ret_5m"],
+      "description": "Absolute value"
+    },
+    {
+      "case_id": "nested_ratio_with_abs",
+      "dsl": {
+        "op": "ratio",
+        "num": "f.ret_5m",
+        "den": {
+          "op": "abs",
+          "col": "f.atr_14"
+        },
+        "eps": 1e-6
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.ret_5m", "nullIf", "abs", "f.atr_14"],
+      "description": "Nested DSL with ratio and abs"
+    },
+    {
+      "case_id": "complex_nested",
+      "dsl": {
+        "op": "ratio_minus_1",
+        "num": {
+          "op": "product",
+          "col1": "f.close",
+          "col2": "f.volume"
+        },
+        "den": {
+          "op": "sum",
+          "col1": "f.high",
+          "col2": "f.low"
+        },
+        "eps": 1e-8
+      },
+      "expect_success": true,
+      "expected_keywords": ["*", "+", "nullIf", "- 1"],
+      "description": "Complex nested expression"
+    },
+    {
+      "case_id": "product_with_cols_list",
+      "dsl": {
+        "op": "product",
+        "cols": ["f.ret_5m", "f.vol_5m", "f.vwap_dist_5m"]
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.ret_5m", "*", "f.vol_5m", "*", "f.vwap_dist_5m"],
+      "description": "Product with multiple columns using cols list"
+    },
+    {
+      "case_id": "sum_with_cols_list",
+      "dsl": {
+        "op": "sum",
+        "cols": ["f.high", "f.low", "f.close"]
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.high", "+", "f.low", "+", "f.close"],
+      "description": "Sum with multiple columns using cols list"
+    },
+    {
+      "case_id": "numeric_literal_in_ratio",
+      "dsl": {
+        "op": "ratio",
+        "num": "f.close",
+        "den": 100.0
+      },
+      "expect_success": true,
+      "expected_keywords": ["f.close", "100.0"],
+      "description": "Numeric literal as denominator"
+    },
+    {
+      "case_id": "missing_op_field",
+      "dsl": {
+        "num": "f.close",
+        "den": "f.volume"
+      },
+      "expect_success": false,
+      "error_pattern": "missing 'op' field",
+      "description": "Should fail when op field is missing"
+    },
+    {
+      "case_id": "unknown_op",
+      "dsl": {
+        "op": "magic_transform",
+        "col": "f.close"
+      },
+      "expect_success": false,
+      "error_pattern": "Unknown DSL op",
+      "description": "Should fail for unknown operation"
+    },
+    {
+      "case_id": "invalid_dsl_type",
+      "dsl": "not a dict",
+      "expect_success": false,
+      "error_pattern": "dsl_spec must be a dict",
+      "description": "Should fail when DSL is not a dict"
+    },
+    {
+      "case_id": "product_cols_not_list",
+      "dsl": {
+        "op": "product",
+        "cols": {"wrong": "type"}
+      },
+      "expect_success": false,
+      "error_pattern": "product 'cols' must be a list",
+      "description": "Should fail when cols is not a list"
+    },
+    {
+      "case_id": "sum_cols_not_list",
+      "dsl": {
+        "op": "sum",
+        "cols": "not a list"
+      },
+      "expect_success": false,
+      "error_pattern": "sum 'cols' must be a list",
+      "description": "Should fail when cols is not a list"
+    },
+    {
+      "case_id": "product_missing_operands",
+      "dsl": {
+        "op": "product"
+      },
+      "expect_success": false,
+      "error_pattern": "product op requires",
+      "description": "Should fail when product has no operands"
+    },
+    {
+      "case_id": "sum_missing_operands",
+      "dsl": {
+        "op": "sum"
+      },
+      "expect_success": false,
+      "error_pattern": "sum op requires",
+      "description": "Should fail when sum has no operands"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-11-25",
+    "description": "Test cases for JSON-based DSL → SQL compilation validation",
+    "dsl_format": "JSON-based with ops: ratio, ratio_minus_1, log1p, product, sum, abs",
+    "total_cases": 18,
+    "expected_pass": 11,
+    "expected_fail": 7
+  }
+}

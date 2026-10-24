@@ -1,0 +1,104 @@
+{
+  "job_id": "TSLA_1m_ret_10b_fwd_2024-01-01_2024-01-02",
+  "created_at": "2026-05-06T00:58:41.051105",
+  "symbol": "TSLA",
+  "freq": "1m",
+  "label_id": "ret_10b_fwd",
+  "data_source": {
+    "table": "trading.bars_1m",
+    "use_table": "trading.bars_1m",
+    "clickhouse": {
+      "host": "localhost",
+      "port": 8123
+    }
+  },
+  "feature_recipe": {
+    "base_features": [
+      "close",
+      "volume",
+      "vwap",
+      "ret_1b",
+      "ma_20_close"
+    ],
+    "derived": [
+      {
+        "alias": "price_volume_ratio",
+        "expr": "close / volume"
+      }
+    ]
+  },
+  "training_plan": {
+    "task": "reg",
+    "label_id": "ret_10b_fwd",
+    "model_candidates": [
+      {
+        "model_type": "xgb",
+        "model_params": {
+          "max_depth": 6,
+          "learning_rate": 0.1
+        }
+      },
+      {
+        "model_type": "lgbm",
+        "model_params": {
+          "num_leaves": 31
+        }
+      }
+    ]
+  },
+  "sanity_summary": {
+    "overall_status": "warn",
+    "issues": [
+      "high_missing:close:40.00%",
+      "non_finite_values:close:40.00%",
+      "zero_variance:bad_feature",
+      "high_missing:ret_1b:41.00%",
+      "non_finite_values:ret_1b:41.00%",
+      "high_missing:ma_20_close:44.00%",
+      "non_finite_values:ma_20_close:44.00%",
+      "high_missing:label:50.00%",
+      "non_finite_values:label:50.00%"
+    ],
+    "basic": {
+      "n_rows": 100,
+      "n_cols": 7
+    },
+    "labels": {
+      "label": {
+        "task": "reg",
+        "n_unique": 50,
+        "mean": -0.0008455937653945451,
+        "std": 0.023957611495795256
+      }
+    },
+    "notes": []
+  },
+  "notes": null,
+  "meta": {
+    "sql": "SELECT\n            close, high, low, symbol, ts, (close / volume) AS price_volume_ratio\n        FROM trading.bars_1m\n        WHERE symbol = %(symbol)s\n          AND ts >= %(start_ts)s\n          AND ts < %(end_ts)s\n        ORDER BY ts ASC",
+    "feature_catalog": [
+      "bad_feature",
+      "close",
+      "symbol",
+      "ts"
+    ],
+    "python_derived_features": [
+      "ret_1b",
+      "ma_20_close"
+    ],
+    "feature_subset_effective": [
+      "close",
+      "ret_1b",
+      "ma_20_close"
+    ],
+    "registry_version": "1.0",
+    "sandbox_dropped_derived": [],
+    "planner_dropped_features": [
+      "volume",
+      "vwap"
+    ],
+    "registry_rejected_features": [
+      "price_volume_ratio (not in registry)"
+    ]
+  }
+}

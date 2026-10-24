@@ -1,0 +1,651 @@
+{
+  "uid": "phase0-infra",
+  "title": "Phase 0: Infrastructure Monitor (Existing Data Only)",
+  "tags": ["infrastructure", "monitoring", "phase0"],
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-6h", "to": "now" },
+  "description": "Dashboard showing existing system infrastructure without requiring code changes",
+
+  "panels": [
+    {
+      "type": "row",
+      "title": "📊 System Health",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "System Status",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count(count by (logger) (rate({job=\"trader\"} | json | __error__=\"\" [1m]))) > 0"
+        }
+      ],
+      "options": {
+        "textMode": "value_and_name",
+        "colorMode": "background"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "value": 1, "text": "🟢 RUNNING" },
+            { "type": "value", "value": 0, "text": "🔴 STOPPED" }
+          ],
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "red" },
+              { "value": 1, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Active Services",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count(count by (logger) (rate({job=\"trader\"} | json | __error__=\"\" [5m])))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "red" },
+              { "value": 5, "color": "yellow" },
+              { "value": 10, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Error Rate (last 5m)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} | json | __error__=\"\" | level=\"error\" [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 10, "color": "yellow" },
+              { "value": 50, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Warning Rate (last 5m)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} | json | __error__=\"\" | level=\"warning\" [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 20, "color": "yellow" },
+              { "value": 100, "color": "orange" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "IBKR Connection",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count_over_time({job=\"trader\"} |~ \"API connection failed\" [5m])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "mappings": [
+            { "type": "range", "from": 0, "to": 0, "text": "🟢 CONNECTED" },
+            { "type": "range", "from": 1, "to": 1000, "text": "🔴 DISCONNECTED" }
+          ],
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 1, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "ClickHouse Status",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count_over_time({job=\"trader\"} |~ \"ClickHouse client initialized\" [5m])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "mappings": [
+            { "type": "range", "from": 0, "to": 0, "text": "🔴 DOWN" },
+            { "type": "range", "from": 1, "to": 1000, "text": "🟢 UP" }
+          ],
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "red" },
+              { "value": 1, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "type": "row",
+      "title": "📈 Data Pipeline Health",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Log Event Rate by Level",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (level) (rate({job=\"trader\"} | json | __error__=\"\" [$__interval]))",
+          "legendFormat": "{{level}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": { "lineWidth": 2, "fillOpacity": 10 }
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "showLegend": true }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Service Activity (by logger)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (logger) (rate({job=\"trader\"} | json | __error__=\"\" [$__interval])))",
+          "legendFormat": "{{logger}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": { "lineWidth": 1, "fillOpacity": 5 }
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "showLegend": true }
+      }
+    },
+
+    {
+      "type": "row",
+      "title": "💰 Trading Activity",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 }
+    },
+    {
+      "id": 20,
+      "type": "stat",
+      "title": "Order Fills (last 1h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 15 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |~ \"order_fill\" [1h]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "gray" },
+              { "value": 1, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "stat",
+      "title": "Order Rejects (last 1h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 15 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |~ \"order_rejected\" [1h]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 10, "color": "yellow" },
+              { "value": 50, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "type": "stat",
+      "title": "Overlay Blocks (last 1h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 15 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |~ \"overlay_block\" [1h]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 10, "color": "orange" },
+              { "value": 50, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "type": "stat",
+      "title": "Order Skips (last 1h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 15 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |~ \"order_skipped\" [1h]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 10, "color": "yellow" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 24,
+      "type": "timeseries",
+      "title": "Order Flow Over Time",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 19 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |~ \"order_fill\" [$__interval]))",
+          "legendFormat": "fills"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(rate({job=\"trader\"} |~ \"order_rejected\" [$__interval]))",
+          "legendFormat": "rejected"
+        },
+        {
+          "refId": "C",
+          "expr": "sum(rate({job=\"trader\"} |~ \"order_trimmed\" [$__interval]))",
+          "legendFormat": "trimmed"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "custom": { "lineWidth": 2, "fillOpacity": 10 }
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "showLegend": true }
+      }
+    },
+    {
+      "id": 25,
+      "type": "timeseries",
+      "title": "Block/Skip Reasons Over Time",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 19 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | __error__=\"\" | reason != \"\" [$__interval]))",
+          "legendFormat": "{{reason}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": { "lineWidth": 1, "fillOpacity": 5, "stacking": { "mode": "normal" } }
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "showLegend": true }
+      }
+    },
+
+    {
+      "type": "row",
+      "title": "❌ Why Not Trading? (Diagnostics)",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 27 }
+    },
+    {
+      "id": 30,
+      "type": "piechart",
+      "title": "Top Rejection Reasons (last 6h)",
+      "description": "Shows order rejection reasons. No data = no trading activity in timeframe.",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 28 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (reason) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | __error__=\"\" | reason != \"\" [6h])))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right" },
+        "pieType": "pie",
+        "displayLabels": ["percent"],
+        "tooltip": { "mode": "single" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "No rejections (not trading or all orders passed)"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "type": "table",
+      "title": "Rejection Reasons Detail",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 16, "x": 8, "y": 28 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(15, sum by (reason, event) (count_over_time({job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json | __error__=\"\" | reason != \"\" [6h])))",
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": { "reason": "Reason", "event": "Event Type", "Value": "Count" }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [ { "field": "Count", "desc": true } ]
+          }
+        }
+      ]
+    },
+
+    {
+      "type": "row",
+      "title": "⚠️ Current System Issues",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 36 }
+    },
+    {
+      "id": 35,
+      "type": "table",
+      "title": "Active Issues (last 10 minutes)",
+      "description": "Shows what problems the system is currently experiencing",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 37 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (event) (count_over_time({job=\"trader\"} | json | __error__=\"\" | level =~ \"error|warning\" [10m])))",
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": { "event": "Issue Type", "Value": "Count (10m)" }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [ { "field": "Count (10m)", "desc": true } ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "type": "stat",
+      "title": "Trading Status",
+      "description": "Based on recent order activity",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 37 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |~ \"order_fill|order_submitted|order_rejected\" [30m]))"
+        }
+      ],
+      "options": {
+        "textMode": "value_and_name",
+        "colorMode": "background"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "range", "from": 0, "to": 0, "text": "🟡 IDLE (No Trading)" },
+            { "type": "range", "from": 1, "to": 9999999, "text": "🟢 ACTIVE" }
+          ],
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "yellow" },
+              { "value": 1, "color": "green" }
+            ]
+          },
+          "noValue": "🟡 IDLE"
+        }
+      }
+    },
+    {
+      "id": 37,
+      "type": "stat",
+      "title": "Market Data Status",
+      "description": "Based on recent data events",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 37 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count_over_time({job=\"trader\"} |~ \"IBKR returned no historical data\" [10m])"
+        }
+      ],
+      "options": {
+        "textMode": "value_and_name",
+        "colorMode": "background"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "range", "from": 0, "to": 0, "text": "🟢 Data Flowing" },
+            { "type": "range", "from": 1, "to": 9999999, "text": "🔴 Data Issues" }
+          ],
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 1, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "🔍 Service Details",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 43 }
+    },
+    {
+      "id": 40,
+      "type": "table",
+      "title": "Service Event Counts (last 1h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 44 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(20, sum by (logger, event) (count_over_time({job=\"trader\"} | json | __error__=\"\" [1h])))",
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": { "logger": "Service", "event": "Event", "Value": "Count" }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [ { "field": "Count", "desc": true } ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "type": "table",
+      "title": "Recent Errors & Warnings",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 44 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | __error__=\"\" | level =~ \"error|warning\" | line_format \"{{.timestamp}} [{{.level}}] {{.logger}}: {{.event}}\"",
+          "maxLines": 50
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+
+    {
+      "type": "row",
+      "title": "📜 Live Logs",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 52 }
+    },
+    {
+      "id": 50,
+      "type": "logs",
+      "title": "All System Logs (Live)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 53 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | __error__=\"\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    }
+  ]
+}

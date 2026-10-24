@@ -1,0 +1,18 @@
+# Labels and Loss Configuration
+# AI可以修改此文件来控制标签生成和损失函数
+
+task: regression
+
+label:
+  name: y_ret_5m
+  build:
+    horizon_bars: 5
+    method: ret_close
+    # method options: ret_close, ret_mid, ret_vwap, log_ret
+
+loss:
+  type: mse
+  # type options: mse, mae, huber, quantile
+  params:
+    # huber: delta: 1.0
+    # quantile: alpha: 0.5

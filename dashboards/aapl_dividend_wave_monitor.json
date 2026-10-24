@@ -1,0 +1,390 @@
+{
+  "uid": "aapl-dividend-wave",
+  "title": "AAPL DividendWave Strategy Monitor",
+  "tags": ["aapl", "dividend_wave", "strategy", "live"],
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Strategy Status",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"AAPL DividendWave initialized\" | json | __error__=\"\" | line_format \"🟢 RUNNING\""
+        }
+      ],
+      "options": {
+        "textMode": "value",
+        "graphMode": "none",
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "green" }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Daily Trades Count",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count_over_time({job=\"trader\"} |= \"Executing Entry Order\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" [1d])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 2, "color": "yellow" },
+              { "value": 3, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "PnL Today",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Fill recorded\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap pnl_today | last_over_time([1h])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              { "value": -500, "color": "red" },
+              { "value": 0, "color": "yellow" },
+              { "value": 100, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Current Position",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Fill recorded\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap position_qty | last_over_time([1h])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "gray" },
+              { "value": 1, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Trend Status",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Daily Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"{{if eq .allow_trade \\\"True\\\"}}🟢 ALLOW{{else}}🔴 BLOCK{{end}}\""
+        }
+      ],
+      "options": {
+        "textMode": "value",
+        "graphMode": "none"
+      }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Consecutive Losses",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Fill recorded\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"{{.consecutive_losses}}\""
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 1, "color": "yellow" },
+              { "value": 2, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Trend Filters Status (1h + 15m)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Daily Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"Allow Trade: {{.allow_trade}}\"",
+          "legendFormat": "Daily Trend (1h)"
+        },
+        {
+          "refId": "B",
+          "expr": "{job=\"trader\"} |= \"Rolling Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"Trend Up: {{.trend_up}}\"",
+          "legendFormat": "Rolling Trend (15m)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Price vs EMA (1h Trend)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Daily Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap current_price | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Current Price"
+        },
+        {
+          "refId": "B",
+          "expr": "{job=\"trader\"} |= \"Daily Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap ema20_1h | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "EMA20 (1h)"
+        },
+        {
+          "refId": "C",
+          "expr": "{job=\"trader\"} |= \"Daily Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap ema60_1h | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "EMA60 (1h)"
+        },
+        {
+          "refId": "D",
+          "expr": "{job=\"trader\"} |= \"Daily Trend Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap vwap | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "VWAP"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD"
+        }
+      }
+    },
+
+    {
+      "id": 20,
+      "type": "table",
+      "title": "Entry Signal Analysis (Why No Entry?)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Entry Signal Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"Time={{.__timestamp__}} | Breakout={{.breakout}} | VolSurge={{.volume_surge}} | TopFilter={{.top_filtered}} | Reason={{.top_reason}}\"",
+          "maxLines": 50
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      },
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "source": "Line"
+          }
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "type": "table",
+      "title": "Recent Entry Orders",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Executing Entry Order\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"{{.__timestamp__}} | Qty={{.qty}} | Price={{.entry_price_with_slip}} | Stop={{.stop_loss}} | Take={{.take_profit}}\"",
+          "maxLines": 20
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+
+    {
+      "id": 30,
+      "type": "barchart",
+      "title": "Signal Rejection Reasons (Last 6h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 22 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (top_reason) (count_over_time({job=\"trader\"} |= \"Entry Signal Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | top_filtered=\"True\" [6h])))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "orientation": "horizontal"
+      }
+    },
+    {
+      "id": 31,
+      "type": "timeseries",
+      "title": "Volume Analysis",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 22 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Entry Signal Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap current_volume | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Current Volume"
+        },
+        {
+          "refId": "B",
+          "expr": "{job=\"trader\"} |= \"Entry Signal Check\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | unwrap avg_volume | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Avg Volume (20-bar)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      }
+    },
+
+    {
+      "id": 40,
+      "type": "table",
+      "title": "Exit/Stop Events (Why Position Closed?)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 30 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Forcing flat position\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"{{.__timestamp__}} | Qty={{.qty}} | Reason={{.reason}}\"",
+          "maxLines": 30
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+    {
+      "id": 41,
+      "type": "table",
+      "title": "Fill History (Executed Trades)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 30 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Fill recorded\" | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"{{.__timestamp__}} | {{.side}} {{.qty}}@{{.price}} | PnL={{.pnl_today}} | Pos={{.position_qty}}\"",
+          "maxLines": 30
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+
+    {
+      "id": 50,
+      "type": "stat",
+      "title": "Why No Trade? (Live Diagnosis)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 40 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | line_format \"{{if eq .event \\\"AAPL DividendWave initialized\\\"}}✅ Strategy Running{{else if eq .event \\\"Cannot open new position\\\"}}🚫 {{.reason}}{{else if eq .allow_trade \\\"False\\\"}}⛔ Daily Trend: Block (EMA20<EMA60 or Close<VWAP){{else if eq .trend_up \\\"False\\\"}}⛔ Rolling Trend: No uptrend (15m){{else if eq .breakout \\\"False\\\"}}⏳ Waiting for breakout (price > prev_high){{else if eq .volume_surge \\\"False\\\"}}⏳ Waiting for volume surge (>1.5x avg){{else if eq .top_filtered \\\"True\\\"}}🔴 Top Filter: {{.top_reason}}{{else}}🟢 All conditions OK, waiting for signal{{end}}\""
+        }
+      ],
+      "options": {
+        "textMode": "value",
+        "graphMode": "none",
+        "colorMode": "value",
+        "orientation": "vertical"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "steps": [
+              { "value": null, "color": "blue" }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": 60,
+      "type": "logs",
+      "title": "Live Strategy Logs (All Events)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 46 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | __error__=\"\" | strategy_id=\"aapl_dividend_wave_001\" | level=~\"info|warning|error\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "exact",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    }
+  ]
+}

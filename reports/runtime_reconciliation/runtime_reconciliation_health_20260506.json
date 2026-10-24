@@ -1,0 +1,98 @@
+{
+  "audit_dir": "./runtime/audit/2026-05-06",
+  "blockers": [
+    "runtime_active_quarantine_present"
+  ],
+  "day": "20260506",
+  "financial_snapshot": {
+    "age_sec": 97.091855,
+    "available": true,
+    "available_funds": 1047321.1,
+    "blockers": [],
+    "buying_power": 4189284.41,
+    "gross_position_value": 0.0,
+    "net_liquidation": 1047678.84,
+    "ok": true,
+    "realized_pnl": 0.0,
+    "table": "ibkr_account_realtime",
+    "total_cash": 1047350.44,
+    "ts_ny": "2026-05-06T16:18:28-04:00",
+    "unrealized_pnl": 0.0
+  },
+  "generated_at": "2026-05-06T16:20:05-04:00",
+  "latest_position_audit_age_sec": 0.0,
+  "latest_position_audit_payload": {
+    "active_quarantine_count": 1,
+    "db_open_count": 0,
+    "ghosts": 0,
+    "ib_open_count": 1,
+    "ib_positions": {
+      "OPT:NVDA:20260506:207.5:P": 1.0
+    },
+    "ib_pre_submitted": 0,
+    "ledger_positions": {
+      "OPT:NVDA:20260506:197.5:C": 0.0,
+      "OPT:NVDA:20260506:197.5:P": 0.0,
+      "OPT:NVDA:20260506:205:C": 0.0,
+      "OPT:NVDA:20260506:205:P": 0.0,
+      "OPT:NVDA:20260506:207.5:P": 1.0
+    },
+    "mismatch_samples": [],
+    "mismatches": 0,
+    "orphans_detected": 1,
+    "orphans_unresolved": 0,
+    "position_mismatches": 0
+  },
+  "latest_position_audit_ts": "2026-05-06T16:20:07.592143-04:00",
+  "latest_reconciliation_alert_payload": {
+    "active_quarantine_count": 0,
+    "db_open_orders": 2,
+    "evidence": {
+      "active_quarantine": {
+        "active_count": 0,
+        "by_reason": [],
+        "lookup_failed": false
+      },
+      "ghost_samples": [],
+      "ib_status_counts": {
+        "PendingCancel": 1,
+        "PendingSubmit": 1
+      },
+      "mismatch_samples": [],
+      "orphan_detected_samples": [
+        {
+          "order_id": "465",
+          "order_ref": "manual_flatten:0bbd731f-1f69-42ca-a9e6-d38cfd",
+          "order_type": "MKT",
+          "perm_id": 603675470,
+          "qty": 1.0,
+          "side": "BUY",
+          "status": "PendingSubmit",
+          "symbol": "OPT:NVDA:20260506:207.5:P"
+        }
+      ],
+      "orphan_unresolved_samples": [
+        {
+          "order_id": "465",
+          "order_ref": "manual_flatten:0bbd731f-1f69-42ca-a9e6-d38cfd",
+          "order_type": "MKT",
+          "perm_id": 603675470,
+          "qty": 1.0,
+          "side": "BUY",
+          "status": "PendingSubmit",
+          "symbol": "OPT:NVDA:20260506:207.5:P"
+        }
+      ]
+    },
+    "ghosts_found": 0,
+    "ib_open_orders": 2,
+    "ib_pre_submitted_orders": 0,
+    "mismatches": 0,
+    "orphans_detected": 1,
+    "orphans_found": 1,
+    "orphans_self_healed": 0,
+    "orphans_unresolved": 1
+  },
+  "latest_reconciliation_alert_ts": "2026-05-06T15:59:13.372949-04:00",
+  "ok": false
+}

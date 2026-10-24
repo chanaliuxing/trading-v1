@@ -1,0 +1,81 @@
+# Mean Reversion Rule Template
+# Based on doc/65.md specification
+
+name: meanrev_5s_v1
+description: "5-second mean reversion with multi-layer sizing and OCO protection"
+
+defaults:
+  cadence_s: 5
+  ttl_ms: 2000
+  dlb_ms: 500
+  min_lot: 10
+  lot_round: 10
+  max_layers: 3
+  base_risk_usd: 2000
+  atr_k: 1.5
+  time_limit_s: 900
+  trail_atr_mult: 1.4
+  reversal_atomic: true
+
+rules:
+  # Quality gate - filter bad data
+  - id: quality_gate
+    when:
+      all:
+        - f.get('qscore', 0) >= 70
+        - f.get('volume', 0) > 100
+    then: continue
+
+  # Multi-layer position sizing
+  - id: sizing_layers
+    when:
+      any:
+        - signal.get('side', 0) != 0
+    compute:
+      lot_abs: "floor(base_risk_usd / max(0.01, atr_k * f.get('atr_14', 2.0)))"
+      zscore: "f.get('zscore_20', 0.0)"
+      layer_mult: |
+        1.0 if abs(zscore) >= 2.0 else (
+          0.5 if abs(zscore) >= 1.5 else 0.0
+        )
+    emit:
+      type: target
+      qty: "clamp(lot_abs * layer_mult * sign(signal.get('side', 0)), -5000, 5000)"
+      style:
+        kind: LMT
+        limit_px: "signal.get('ref_px', f.get('close', 0.0))"
+        tif: DAY
+      extras:
+        ref_px: "signal.get('ref_px', f.get('close', 0.0))"
+        edge_bp: "abs(f.get('zscore_20', 0)) * 10"
+        signal_strength: "signal.get('strength', 0.0)"
+
+  # OCO protection for existing positions
+  - id: hard_stop
+    when:
+      any:
+        - position.get('qty', 0) != 0
+    emit:
+      type: protect
+      oco:
+        time_stop_s: "time_limit_s"
+        trail_atr_mult: "trail_atr_mult"
+
+  # Atomic reversal on strong opposite signal
+  - id: reversal
+    when:
+      all:
+        - position.get('qty', 0) * signal.get('side', 0) < 0
+        - abs(signal.get('strength', 0)) >= 0.6
+    emit:
+      type: reverse
+      atomic: "reversal_atomic"
+      qty: "clamp(base_risk_usd / max(0.01, atr_k * f.get('atr_14', 2.0)) * sign(signal.get('side', 0)), -5000, 5000)"
+      style:
+        kind: LMT
+        limit_px: "signal.get('ref_px', f.get('close', 0.0))"
+        tif: DAY
+      extras:
+        ref_px: "signal.get('ref_px', f.get('close', 0.0))"
+        edge_bp: "abs(f.get('zscore_20', 0)) * 10"
+        is_reversal: true

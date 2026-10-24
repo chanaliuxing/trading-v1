@@ -1,0 +1,6 @@
+# Evolution trigger policy (docs only; wire into orchestrator when ready).
+min_fail_streak: 2
+max_runs_per_day: 1
+target_skills:
+  - dummy_math
+  - calc_atr

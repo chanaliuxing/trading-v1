@@ -1,0 +1,20 @@
+{
+  "huber_reg_0.1": {
+    "family": "regression",
+    "name": "huber",
+    "extras": { "delta": 0.1 }
+  },
+  "bce": {
+    "family": "classification",
+    "name": "bce"
+  },
+  "focal_cls": {
+    "family": "classification",
+    "name": "focal",
+    "extras": { "gamma": 2.0, "alpha": 0.25 }
+  },
+  "rank_pairwise": {
+    "family": "ranking",
+    "name": "pairwise"
+  }
+}

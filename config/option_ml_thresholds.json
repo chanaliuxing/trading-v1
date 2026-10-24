@@ -1,0 +1,17 @@
+{
+  "horizon_min": 30,
+  "q_ret": 0.65,
+  "q_rng": 0.65,
+  "computed_range": "2025-12-01 to 2025-12-31",
+  "symbols": {
+    "AAPL": { "ret_threshold": 0.00199, "range_threshold": 0.0038, "samples": 3115 },
+    "AMZN": { "ret_threshold": 0.001945, "range_threshold": 0.003697, "samples": 3138 },
+    "GOOGL": { "ret_threshold": 0.001904, "range_threshold": 0.003788, "samples": 3125 },
+    "META": { "ret_threshold": 0.001959, "range_threshold": 0.003754, "samples": 3127 },
+    "MSFT": { "ret_threshold": 0.001718, "range_threshold": 0.00317, "samples": 3128 },
+    "NVDA": { "ret_threshold": 0.002855, "range_threshold": 0.005546, "samples": 3933 },
+    "QQQ": { "ret_threshold": 0.00143, "range_threshold": 0.003382, "samples": 8555 },
+    "SPY": { "ret_threshold": 0.001028, "range_threshold": 0.002401, "samples": 8559 },
+    "TSLA": { "ret_threshold": 0.00388, "range_threshold": 0.007279, "samples": 3933 }
+  }
+}

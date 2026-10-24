@@ -1,0 +1,946 @@
+{
+  "description": "LLM \u4ea4\u6613\u7cfb\u7edf\u5b8c\u6574\u6570\u636e\u76d1\u63a7 - \u8d22\u52a1/\u4ea4\u6613/\u51b3\u7b56/\u6301\u4ed3",
+  "editable": true,
+  "id": 9,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "title": "\ud83d\udcb0 Financial Overview (\u8d22\u52a1\u6982\u89c8)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 40000
+              },
+              {
+                "color": "green",
+                "value": 50000
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    anyLast(equity) as current_equity\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udcb5 Total Equity (\u603b\u6743\u76ca)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 2,
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 3,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    anyLast(cash) as current_cash\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udcb5 Cash Available (\u53ef\u7528\u73b0\u91d1)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": -1000
+              },
+              {
+                "color": "yellow",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1000
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background"
+      },
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    realized_pnl + unrealized_pnl as daily_pnl\nFROM llm.llm_daily_pnl_view\nWHERE trading_day = today()\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udcca Today's PnL (\u4eca\u65e5\u76c8\u4e8f)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 0,
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 5,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    count(DISTINCT symbol) as position_count\nFROM llm.llm_positions_snapshot\nWHERE toDate(ts_ny) = today() AND position > 0\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udce6 Open Positions (\u6301\u4ed3\u6570)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 6,
+      "title": "\ud83d\udcc8 Trade Execution (\u4ea4\u6613\u6267\u884c)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ts_ny"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "symbol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Symbol"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "qty"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Qty"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "price"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Price"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Value"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fee"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fee"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 7
+      },
+      "id": 7,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    ts_ny,\n    symbol,\n    qty,\n    price,\n    qty * price as total_value,\n    fee,\n    source\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nORDER BY ts_ny DESC\nLIMIT 50\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udccb Today's Fills (\u4eca\u65e5\u6210\u4ea4)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Fills"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Volume"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Fees"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 7
+      },
+      "id": 8,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    count() as total_fills\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n",
+          "refId": "A"
+        },
+        {
+          "rawSql": "\nSELECT\n    sum(qty * price) as total_volume\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n",
+          "refId": "B"
+        },
+        {
+          "rawSql": "\nSELECT\n    sum(fee) as total_fees\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n",
+          "refId": "C"
+        }
+      ],
+      "title": "\ud83d\udcca Fill Stats (\u6210\u4ea4\u7edf\u8ba1)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "points",
+            "pointSize": 8,
+            "showPoints": "always"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 11
+      },
+      "id": 9,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    symbol,\n    qty\nFROM llm.llm_fills\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nORDER BY ts_ny\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\u23f1\ufe0f Fill Timeline (\u6210\u4ea4\u65f6\u95f4\u7ebf)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 10,
+      "title": "\ud83e\udd16 AI Decision Analysis (AI \u51b3\u7b56\u5206\u6790)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 16
+      },
+      "id": 11,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    JSONExtractString(decision_json, 'action') as action,\n    count() as count\nFROM llm.llm_decisions\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nGROUP BY action\nORDER BY count DESC\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83c\udfaf Decision Actions (\u51b3\u7b56\u5206\u5e03)",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 16
+      },
+      "id": 12,
+      "options": {
+        "bucketSize": 0.1
+      },
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    toFloat64(JSONExtractString(decision_json, 'confidence')) as confidence\nFROM llm.llm_decisions\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\n  AND JSONExtractString(decision_json, 'confidence') != ''\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udcca Confidence Distribution (\u7f6e\u4fe1\u5ea6\u5206\u5e03)",
+      "type": "histogram"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ts_ny"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "symbol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Symbol"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "action"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Action"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "confidence"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Confidence"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "rationale"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Rationale (Preview)"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 16
+      },
+      "id": 13,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    ts_ny,\n    symbol,\n    JSONExtractString(decision_json, 'action') as action,\n    toFloat64(JSONExtractString(decision_json, 'confidence')) as confidence,\n    substring(JSONExtractString(decision_json, 'rationale'), 1, 50) as rationale\nFROM llm.llm_decisions\nWHERE toDate(ts_ny) = today()\n  AND symbol LIKE '${symbol}'\nORDER BY ts_ny DESC\nLIMIT 20\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udcdd Recent Decisions (\u6700\u8fd1\u51b3\u7b56)",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 14,
+      "title": "\ud83d\udce6 Position Details (\u6301\u4ed3\u8be6\u60c5)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "symbol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Symbol"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "position"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Shares"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg_cost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Avg Cost"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "current_price"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Current Price"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unrealized_pnl"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Unrealized PnL"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "market_value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Market Value"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "realized_pnl"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Realized PnL"
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 25
+      },
+      "id": 15,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    p.symbol,\n    anyLast(p.position) as position,\n    anyLast(p.avg_cost) as avg_cost,\n    anyLast(p.market_price) as current_price,\n    anyLast(p.unrealized_pnl) as unrealized_pnl,\n    anyLast(p.position) * anyLast(p.market_price) as market_value,\n    anyLast(p.realized_pnl_to_date) as realized_pnl\nFROM llm.llm_positions_snapshot p\nWHERE symbol LIKE '${symbol}'\nGROUP BY symbol\nHAVING anyLast(p.position) > 0\nORDER BY market_value DESC\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83d\udccb Current Positions (\u5f53\u524d\u6301\u4ed3)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 25
+      },
+      "id": 16,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    symbol,\n    anyLast(position * market_price) as market_value\nFROM llm.llm_positions_snapshot\nWHERE symbol LIKE '${symbol}'\nGROUP BY symbol\nHAVING anyLast(position) > 0\nORDER BY market_value DESC\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\ud83e\udd67 Position Distribution (\u6301\u4ed3\u5206\u5e03)",
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 17,
+      "title": "\ud83d\udcc8 Equity Curve (\u6743\u76ca\u66f2\u7ebf)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "lineInterpolation": "smooth"
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Equity"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cash"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 18,
+        "x": 0,
+        "y": 34
+      },
+      "id": 18,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    equity\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\nORDER BY ts_ny\n",
+          "refId": "A"
+        },
+        {
+          "rawSql": "\nSELECT\n    ts_ny as time,\n    cash\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\nORDER BY ts_ny\n",
+          "refId": "B"
+        }
+      ],
+      "title": "\ud83d\udcc8 Equity Timeseries (\u6743\u76ca\u8d70\u52bf)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "max": 0.3,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 0.05
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "red",
+                "value": 0.2
+              }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 34
+      },
+      "id": 19,
+      "targets": [
+        {
+          "rawSql": "\nSELECT\n    anyLast(drawdown_to_date) as current_drawdown\nFROM llm.llm_equity_timeseries\nWHERE toDate(ts_ny) = today()\n",
+          "refId": "A"
+        }
+      ],
+      "title": "\u26a0\ufe0f Drawdown (\u56de\u64a4)",
+      "type": "gauge"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "llm",
+    "trading",
+    "financial"
+  ],
+  "templating": {
+    "list": [
+      {
+        "auto": false,
+        "current": {
+          "text": "Today",
+          "value": "1d"
+        },
+        "label": "Time Range",
+        "name": "time_range",
+        "options": [
+          {
+            "text": "1h",
+            "value": "1h"
+          },
+          {
+            "text": "6h",
+            "value": "6h"
+          },
+          {
+            "selected": true,
+            "text": "Today",
+            "value": "1d"
+          },
+          {
+            "text": "Week",
+            "value": "7d"
+          }
+        ],
+        "type": "interval"
+      },
+      {
+        "allValue": "%",
+        "current": {
+          "text": "All",
+          "value": "%"
+        },
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "includeAll": true,
+        "label": "Symbol",
+        "name": "symbol",
+        "query": "SELECT DISTINCT symbol FROM llm.llm_fills WHERE symbol != '' ORDER BY symbol",
+        "refresh": 2,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timezone": "America/New_York",
+  "title": "LLM Trading - Complete Overview",
+  "uid": "llm-trading-dashboard",
+  "version": 3
+}

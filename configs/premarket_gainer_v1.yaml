@@ -1,0 +1,88 @@
+# Premarket Gainer Strategy V1 Configuration
+# Based on doc/newStrategy/premarket.md
+
+# Strategy metadata
+strategy_id: premarket_gainer_001
+enabled: true
+
+# Time windows (all times in ET timezone)
+timing:
+  scan_time_et: "09:27:00"              # IBKR Scanner execution time
+  observe_start_et: "09:30:00"          # Start observing first wave
+  observe_end_et: "09:32:00"            # End observation window
+  entry_start_et: "09:33:00"            # Execution window start
+  entry_end_et: "09:35:00"              # Execution window end
+  force_exit_time_et: "10:10:00"        # Force close all positions
+
+# IBKR Scanner configuration
+scanner:
+  rows: 50                              # Number of rows to fetch (max 50)
+  price_min: 5.0                        # Minimum price ($)
+  pm_notional_min: 10000000             # Minimum premarket notional ($10M)
+  spread_max_observe: 0.0030            # Max spread during observation (0.30%)
+  spread_max_exec: 0.0025               # Max spread during execution (0.25%)
+
+# Execution confirmations (4 confirmations required)
+execution:
+  spread_max_observe: 0.0030            # 0.30% max spread in observe phase
+  spread_max_exec: 0.0025               # 0.25% max spread in execute phase
+  rvol_min: 2.0                         # Minimum RVOL (both 1m and 5m)
+  breakout_buffer_pct: 0.002            # +0.20% buffer above breakout level
+  limit_buffer_pct: 0.001               # +0.10% buffer for limit price
+
+# Take Profit configuration
+# Levels are percentages above entry
+# Quantities are percentages of total position
+take_profit:
+  levels_pct: [0.035, 0.055, 0.08]      # TP1: +3.5%, TP2: +5.5%, TP3: +8.0%
+  qtys_pct: [0.30, 0.35, 0.35]          # TP1: 30%, TP2: 35%, TP3: 35%
+
+# Stop Loss configuration
+stop_loss:
+  type: "STP"                           # Market stop (not STP_LMT to avoid getting stuck)
+  level_calc: "max(VWAP, PM_L*0.99)"    # Max of VWAP or PM_Low * 0.99
+
+# Risk management
+risk:
+  per_trade_pct: 0.005                  # 0.5% of account equity per trade
+  daily_dd_limit_pct: 0.015             # 1.5% daily drawdown limit
+  max_notional_usd: 100000              # Maximum notional per strategy
+
+# OCA (One-Cancels-All) configuration
+oca:
+  type: "REDUCE"                        # OCA Type = ReduceByAmount
+  # When any TP fills (partial/full), other orders (including SL)
+  # automatically reduce quantity by the filled amount
+
+# Scanner scoring weights
+scoring:
+  change_pct_weight: 0.40               # Weight for price change %
+  pm_notional_weight: 0.40              # Weight for PM notional volume
+  catalyst_weight: 0.20                 # Weight for catalyst presence
+
+# Candidate pool configuration
+candidates:
+  max_top3: 3                           # Keep top 3 candidates
+  min_top1: 1                           # Minimum 1 candidate to proceed
+
+# Market condition filters (future enhancement)
+market_conditions:
+  block_on_events:                      # Block trading 30min before these events
+    - "CPI"
+    - "FOMC"
+    - "NFP"
+  vix_max: 40.0                         # Don't trade if VIX > 40
+
+# Logging and monitoring
+logging:
+  log_level: "INFO"
+  log_scan_results: true
+  log_confirmations: true
+  log_oca_details: true
+
+# Performance metrics
+metrics:
+  track_fill_latency: true
+  track_slippage: true
+  target_fill_latency_ms: 300           # Target: < 300ms from signal to order
+  target_entry_slippage_bp: 10          # Target: < 10bp average slippage

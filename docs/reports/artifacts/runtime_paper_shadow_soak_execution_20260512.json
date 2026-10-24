@@ -1,0 +1,51 @@
+{
+  "approved_scope": [
+    "collect_missing_real_paper_shadow_runtime_artifacts",
+    "validate_report_wiring_with_simulated_shadow_artifacts",
+    "prepare_manual_gate_evidence_without_canary_upgrade"
+  ],
+  "artifacts_collected": {
+    "approved_to_fill_conversion": "reports/approved_to_fill_conversion/approved_to_fill_conversion_latest.json",
+    "broker_truth_snapshot": "runtime/readiness/broker_truth_snapshot_latest.json",
+    "paper_broker_truth_snapshot": "runtime/readiness/paper_broker_truth_snapshot_latest.json",
+    "position_safety": "runtime/readiness/position_safety_latest.json",
+    "production_state": "runtime/readiness/production_state_latest.json",
+    "runtime_audit": "runtime/audit/paper_shadow_soak_20260512.jsonl",
+    "runtime_version": "runtime/readiness/runtime_version_latest.json",
+    "strategy_surface": "reports/strategy_surface/live_strategy_surface_report_20260512.json",
+    "strategy_tradability_heartbeat": "runtime/readiness/strategy_tradability_heartbeat_20260512.jsonl",
+    "vegas_dlb_edge_measurement": "reports/vegas_dlb_edge_measurement/vegas_dlb_edge_measurement_latest.json"
+  },
+  "blockers": [],
+  "broker_policy": "live_broker_disabled_mocked",
+  "decision": "SOAK_INSUFFICIENT_DATA_COLLECT_MORE",
+  "generated_at": "2026-05-12T10:02:00-04:00",
+  "live_ibkr_connected": false,
+  "mode": "SIMULATED_SHADOW",
+  "not_approved_scope": [
+    "full_live_trading",
+    "unattended_production_live",
+    "real_broker_mutation_from_this_soak_path",
+    "auto_cancel_unknown_broker_orders",
+    "auto_flatten_unknown_owner_positions",
+    "canary_upgrade_based_only_on_simulation"
+  ],
+  "order_mutation_policy": "real_order_cancel_modify_disabled",
+  "post_soak_scan": {
+    "actual_runtime_live_event": false,
+    "actual_runtime_mutation_event": false,
+    "notes": [
+      "scan matches were report summary keys or test names only"
+    ]
+  },
+  "pre_soak_safety_verdict": "PASS",
+  "recommended_next_batch": "Collect Missing Paper/Shadow Artifacts",
+  "soak_gate": {
+    "blockers": [],
+    "verdict": "PASS",
+    "warnings": []
+  },
+  "warnings": [
+    "simulated_shadow_is_not_real_runtime_soak_evidence"
+  ]
+}

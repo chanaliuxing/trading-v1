@@ -1,0 +1,3425 @@
+{
+  "blockers": [
+    "unresolved_diffs_present"
+  ],
+  "blocking_unresolved_diff_count": 1639,
+  "blocking_unresolved_diff_count_by_field": {
+    "__presence__": 250,
+    "block_reason": 156,
+    "exec_symbol": 296,
+    "intent": 310,
+    "order_plan": 310,
+    "signal_authority": 317
+  },
+  "blocking_unresolved_diff_count_by_source_report": {
+    "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json": 647,
+    "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_on.json": 655,
+    "./reports/qqq_kernel_shadow_parity/20260422_preopen_parity_smoke.json": 69,
+    "./reports/qqq_kernel_shadow_parity/20260429_preopen_parity_live_vs_legacy_off.json": 134,
+    "./reports/qqq_kernel_shadow_parity/20260429_preopen_parity_live_vs_legacy_on.json": 134
+  },
+  "d3_ready": true,
+  "diff_count": 2553,
+  "empty_parity_report_count": 0,
+  "generated_at": "2026-05-15T20:20:11+00:00",
+  "max_whitelist_entries": 5,
+  "min_days": 3,
+  "min_match_ratio": 0.26,
+  "needs_48h_attribution_count": 1639,
+  "observed_days": [
+    "20260209",
+    "20260313",
+    "20260421",
+    "20260422",
+    "20260423",
+    "20260425",
+    "20260427",
+    "20260428",
+    "20260429",
+    "20260430",
+    "20260501",
+    "20260503",
+    "20260504",
+    "20260505",
+    "20260506",
+    "20260507",
+    "20260508",
+    "20260509",
+    "20260511",
+    "20260512",
+    "20260513",
+    "20260514"
+  ],
+  "parity_report_count": 8,
+  "parity_reports": [
+    {
+      "day": "20260421",
+      "diff_total": 0,
+      "empty_input": false,
+      "kernel_count": 1843,
+      "legacy_count": 1843,
+      "match_ratio": 1.0,
+      "path": "./reports/qqq_kernel_shadow_parity/20260421_preopen_parity_smoke.json",
+      "recommendation": "PASS"
+    },
+    {
+      "day": "20260422",
+      "diff_total": 221,
+      "empty_input": false,
+      "kernel_count": 12948,
+      "legacy_count": 214,
+      "match_ratio": 0.2633333333333333,
+      "path": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "recommendation": "HOLD"
+    },
+    {
+      "day": "20260422",
+      "diff_total": 222,
+      "empty_input": false,
+      "kernel_count": 12945,
+      "legacy_count": 214,
+      "match_ratio": 0.26,
+      "path": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_on.json",
+      "recommendation": "HOLD"
+    },
+    {
+      "day": "20260422",
+      "diff_total": 18,
+      "empty_input": false,
+      "kernel_count": 12948,
+      "legacy_count": 12945,
+      "match_ratio": 0.9846153846153847,
+      "path": "./reports/qqq_kernel_shadow_parity/20260422_preopen_parity_smoke.json",
+      "recommendation": "HOLD"
+    },
+    {
+      "day": "20260423",
+      "diff_total": 0,
+      "empty_input": false,
+      "kernel_count": 5513,
+      "legacy_count": 5513,
+      "match_ratio": 1.0,
+      "path": "./reports/qqq_kernel_shadow_parity/20260423_preopen_parity_smoke.json",
+      "recommendation": "PASS"
+    },
+    {
+      "day": "20260425",
+      "diff_total": 0,
+      "empty_input": false,
+      "kernel_count": 163,
+      "legacy_count": 163,
+      "match_ratio": 1.0,
+      "path": "./reports/qqq_kernel_shadow_parity/20260425_preopen_parity_smoke.json",
+      "recommendation": "PASS"
+    },
+    {
+      "day": "20260429",
+      "diff_total": 53,
+      "empty_input": false,
+      "kernel_count": 4584,
+      "legacy_count": 55,
+      "match_ratio": 0.3375,
+      "path": "./reports/qqq_kernel_shadow_parity/20260429_preopen_parity_live_vs_legacy_off.json",
+      "recommendation": "HOLD"
+    },
+    {
+      "day": "20260429",
+      "diff_total": 53,
+      "empty_input": false,
+      "kernel_count": 4584,
+      "legacy_count": 55,
+      "match_ratio": 0.3375,
+      "path": "./reports/qqq_kernel_shadow_parity/20260429_preopen_parity_live_vs_legacy_on.json",
+      "recommendation": "HOLD"
+    }
+  ],
+  "parity_root": "./reports/qqq_kernel_shadow_parity",
+  "presence_only_unresolved_count": 250,
+  "presence_only_unresolved_ratio": 0.097924,
+  "recommendation": "HOLD",
+  "signal_snapshot_count_by_day": {
+    "20260209": 26,
+    "20260313": 19,
+    "20260421": 3686,
+    "20260422": 26107,
+    "20260423": 24034,
+    "20260425": 326,
+    "20260427": 19980,
+    "20260428": 2942,
+    "20260429": 9223,
+    "20260430": 5782,
+    "20260501": 24780,
+    "20260503": 12,
+    "20260504": 5094,
+    "20260505": 12177,
+    "20260506": 17300,
+    "20260507": 18273,
+    "20260508": 18938,
+    "20260509": 135,
+    "20260511": 24937,
+    "20260512": 17181,
+    "20260513": 475,
+    "20260514": 1389
+  },
+  "snapshot_root": "./reports/qqq_signal_snapshots",
+  "suspected_key_alignment_mismatch": false,
+  "unresolved_diff_count": 2553,
+  "unresolved_diff_count_by_classification": {
+    "semantic_equivalent": 422,
+    "timing_only": 492,
+    "true_decision_diff": 1639
+  },
+  "unresolved_diff_count_by_field": {
+    "__presence__": 250,
+    "block_reason": 367,
+    "decision_ts_delta_sec": 492,
+    "exec_symbol": 296,
+    "intent": 310,
+    "order_plan": 310,
+    "signal_authority": 528
+  },
+  "unresolved_diff_count_by_source_report": {
+    "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json": 1001,
+    "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_on.json": 1007,
+    "./reports/qqq_kernel_shadow_parity/20260422_preopen_parity_smoke.json": 69,
+    "./reports/qqq_kernel_shadow_parity/20260429_preopen_parity_live_vs_legacy_off.json": 238,
+    "./reports/qqq_kernel_shadow_parity/20260429_preopen_parity_live_vs_legacy_on.json": 238
+  },
+  "unresolved_diffs": [
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220930",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604220930",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.904379,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220930",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220931",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220931",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.978692,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220931",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220932",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220932",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.510293,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220932",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220933",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220933",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.266288,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220933",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220934",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220934",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.397682,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220934",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220935",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220935",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.826498,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220935",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220936",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220936",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.554598,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220936",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220937",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220937",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.05734,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220937",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220938",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220938",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.393913,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220938",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220939",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220939",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.073354,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220939",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220940",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220940",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.73716,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220940",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220941",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220941",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.169829,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220941",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220942",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220942",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.299683,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220942",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220943",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220943",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.854826,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220943",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "pre_0945_no_early_override",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "first_entry_seed_not_ready",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220944",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "pre_0945_no_early_override",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "first_entry_seed_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604220944",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.976291,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220944",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "amp_not_locked",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220945",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "delayed_confirm_not_met",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "amp_not_locked",
+      "field": "block_reason",
+      "key": "minute:202604220945",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.597147,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220945",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220946",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220946",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220946",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220946",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.78421,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220946",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220947",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220947",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220947",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220947",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.798182,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220947",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220948",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220948",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220948",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220948",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.896078,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220948",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "SHORT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220949",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "SHORT",
+        "symbol": "SQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220949",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "SQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "SHORT"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220949",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "SQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220949",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.158993,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220949",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "SHORT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220950",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "SHORT",
+        "symbol": "SQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220950",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "SQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "SHORT"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220950",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "SQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220950",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.396218,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220950",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "SHORT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220951",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "SHORT",
+        "symbol": "SQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220951",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "SQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "SHORT"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220951",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "SQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220951",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.099077,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220951",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "SHORT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220952",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "SHORT",
+        "symbol": "SQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220952",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "SQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "SHORT"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220952",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "SQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220952",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.468727,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220952",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220953",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220953",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220953",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220953",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.129613,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220953",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220954",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220954",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220954",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220954",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.043345,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220954",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220955",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220955",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220955",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220955",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.888022,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220955",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220956",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220956",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220956",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220956",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.79811,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220956",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220957",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220957",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220957",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220957",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.452916,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220957",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220958",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220958",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220958",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220958",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.983347,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220958",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "delayed_confirm_not_met",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604220959",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604220959",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604220959",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604220959",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.758974,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604220959",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": true,
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "fast_drift_not_ready",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221000",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": 15.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221000",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": "TQQQ",
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 15.0,
+        "side": "LONG"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221000",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "fast_drift_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604221000",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.262198,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221000",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "fast_drift_not_ready",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221001",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221001",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221001",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "fast_drift_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604221001",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221001",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.86512,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221001",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": true,
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "anti_chase_blocked",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221002",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": 15.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221002",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": "TQQQ",
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 15.0,
+        "side": "LONG"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221002",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "anti_chase_blocked",
+      "field": "block_reason",
+      "key": "minute:202604221002",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.034218,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221002",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "fast_drift_not_ready",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221003",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221003",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221003",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "fast_drift_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604221003",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221003",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.978286,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221003",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221004",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221004",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221004",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221004",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.320196,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221004",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221005",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221005",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221005",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221005",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.832984,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221005",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221006",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221006",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221006",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221006",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.760184,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221006",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221007",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221007",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221007",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221007",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.984102,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221007",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "fast_drift_not_ready",
+        "side": "LONG"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221008",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": null
+      },
+      "field": "intent",
+      "key": "minute:202604221008",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": "TQQQ",
+        "order_type": null,
+        "qty": null,
+        "side": "LONG"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221008",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "fast_drift_not_ready",
+      "field": "block_reason",
+      "key": "minute:202604221008",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "TQQQ",
+      "field": "exec_symbol",
+      "key": "minute:202604221008",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.072558,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221008",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221009",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221009",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.294967,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221009",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221010",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221010",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.532875,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221010",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221011",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221011",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.695566,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221011",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221012",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221012",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 49.443525,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221012",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221013",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221013",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.150889,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221013",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "fast_drift_not_ready",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221014",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "fast_drift_not_ready",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221014",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.674904,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221014",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": true,
+        "reason": "direction_allowed",
+        "side": "LONG"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221015",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "side": "LONG",
+        "symbol": "TQQQ",
+        "target_qty": 15.0
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "side": "FLAT",
+        "symbol": "",
+        "target_qty": 0.0
+      },
+      "field": "intent",
+      "key": "minute:202604221015",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "exec_symbol": "TQQQ",
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 15.0,
+        "side": "LONG"
+      },
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": {
+        "exec_symbol": null,
+        "order_type": "DRY_RUN_SHADOW",
+        "qty": 0.0,
+        "side": "FLAT"
+      },
+      "field": "order_plan",
+      "key": "minute:202604221015",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": null,
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221015",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "TQQQ",
+      "blocking": true,
+      "classification": "true_decision_diff",
+      "day": "20260422",
+      "expected": null,
+      "field": "exec_symbol",
+      "key": "minute:202604221015",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.572783,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221015",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221016",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221016",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.245935,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221016",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221017",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "sign_mismatch",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221017",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.752872,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221017",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "fast_drift_not_ready",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221018",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": "fast_drift_not_ready",
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": "data_integrity_fail_closed",
+      "field": "block_reason",
+      "key": "minute:202604221018",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": 54.697659,
+      "blocking": false,
+      "classification": "timing_only",
+      "day": "20260422",
+      "expected": 0.0,
+      "field": "decision_ts_delta_sec",
+      "key": "minute:202604221018",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    },
+    {
+      "actual": {
+        "allow": false,
+        "reason": "sign_mismatch",
+        "side": "FLAT"
+      },
+      "blocking": false,
+      "classification": "semantic_equivalent",
+      "day": "20260422",
+      "expected": {
+        "allow": false,
+        "reason": "data_integrity_fail_closed",
+        "side": "FLAT"
+      },
+      "field": "signal_authority",
+      "key": "minute:202604221019",
+      "needs_48h_attribution": true,
+      "source_report": "./reports/qqq_kernel_shadow_parity/20260422_postclose_parity_legacy_off.json",
+      "whitelisted": false
+    }
+  ],
+  "whitelist_entry_count": 0,
+  "whitelist_ok": true,
+  "whitelisted_diff_count": 0
+}

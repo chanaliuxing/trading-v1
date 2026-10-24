@@ -1,0 +1,276 @@
+paths:
+  health_report: logs/system_health.json
+  logs_dir: logs
+  runs_dir: runs/ai_trader
+modes:
+  paper: true
+clickhouse:
+  client: docker exec trading_clickhouse clickhouse-client
+  dsn: ''
+policies:
+  fail_fast: false
+  auto_heal_enabled: true
+  use_workflow: false
+  tools_watchdog: true
+  loop_sleep_sec:
+    weekend: 600     # 10 min
+    morning: 600     # 10 min (scan slots建议下轮加入)
+    intraday: 300    # 5 min（维持较快心跳）
+    afterhours: 900  # 15 min
+    overnight: 900   # 15 min
+  propose_plan:
+    use_triggers: true
+    min_interval_sec:
+      morning: 900
+      intraday: 1200
+      afterhours: 1800
+      overnight: 3600
+    quiet_hours_et:
+      start: '02:00:00'
+      end: '06:00:00'
+  premarket:
+    scan_slots: ["07:00:00", "08:00:00", "08:30:00", "09:00:00", "09:27:00"]
+    scan_tolerance_sec: 120
+  learning:
+    earliest_afterhours_start_et: '16:30:00'  # Earliest time to trigger evening learning (ET)
+    min_interval_sec: 3600                     # Minimum interval between learning runs (fallback TTL)
+    ml_heartbeat_ttl_sec: 90                   # Heartbeat timeout (watchdog triggers if no heartbeat for 90s)
+    ml_heartbeat_interval_sec: 15              # Heartbeat interval during ML job execution
+    notify_on_ml_failure: true                 # Send events/alerts on ML job failures
+    pipeline_version: learning-pipeline-v1
+    default_targets: []
+    fallback_profile: qqq_intraday
+    writeback_scope: primary
+    max_parallel_targets: 1
+  features:
+    success_gates:
+      auc_lift_min: 0.02
+      ic_lift_min: 0.01
+      coverage_min: 0.98
+      leakage_forbidden: true
+  prompts:
+    allow_text_override: false
+  health:
+    auto_refresh_minutes: 120
+    refresh_before_morning: true
+    refresh_before_intraday: false
+  tools:
+    llm_trader:
+      max_runtime_min: 60
+      heartbeat_timeout_s: 180
+      max_restarts_per_day: 2
+  gates:
+    require_healthy: false
+    require_data_ok: true
+    require_exec_ok: true
+    require_llm_ok: true
+    llm_deep_check: false
+    llm_deep_check_providers:
+    - openai
+    - gemini
+    - deepseek
+    realtime:
+      enabled: true
+      max_age_sec: 90
+      min_ok_ratio: 0.8
+    data_checks:
+      last_10min_ticks: true
+      last_day_1m_bars_ge: 390
+    data_quality_checks:
+      enabled: true
+      symbols_to_check:
+      - AAPL
+      - TSLA
+      - NVDA
+      - MSFT
+      - AMD
+      - AMZN
+      - GOOGL
+      - META
+      check_date_offset_days: 1
+      table: trading.bars_1m_ibkr
+      backfill_wait_sec: 300
+      expected_bars_per_day: 390
+      completeness_threshold: 0.98
+      max_minute_return: 0.1
+      max_outlier_count: 3
+      max_stale_minutes: 15
+    features_freshness:
+      enabled: true  # Check SFS 5s features freshness
+      table: sfs.sfs_5s
+      symbols_to_check:
+      - AAPL
+      - TSLA
+      - NVDA
+      - SPY
+      - MSFT
+      - AMD
+      - META
+      - AMZN
+      - GOOGL
+      - QQQ
+      threshold_stale_sec: 300   # 5 minutes
+      threshold_dead_sec: 900    # 15 minutes
+    realtime_feature_freshness:
+      enabled: false  # Disabled - strategies need to integrate StatusTrackerMixin first
+      threshold_stale_sec: 120   # 2 minutes
+      threshold_dead_sec: 300    # 5 minutes
+      check_strategy_ids: []
+      symbols_to_check:
+        - AAPL
+        - TSLA
+        - NVDA
+  ab:
+    default_weights:
+      champion: 0.7
+      challenger: 0.3
+    promote_rules:
+      sharpe_gain_ratio: 1.05
+      mdd_improve_ratio: 0.9
+      min_consistency: 0.65
+  rl_deploy:
+    min_sharpe: 1.0
+    max_mdd: 0.2
+  hpo_deploy:
+    min_oos_sharpe: 1.1
+    max_oos_mdd: 0.1
+    min_oos_trades: 30
+  autosettings:
+    enabled: true
+    require_approval: false
+  rate_limiting:
+    risk_pretrade_min_interval_sec: 3600        # Global cache TTL (1 hour)
+    risk_pretrade_per_symbol_ttl_sec: 1800      # Per-symbol cache TTL (30 min)
+    risk_policy_min_interval_sec: 10800         # Existing rate limit for risk policy calls (3 hours)
+  risk_pretrade:
+    thresholds:
+      max_spread_bps: 50.0
+      min_adv_usd: 10000000.0
+      var_kupiec_p_min: 0.05
+      var_christoffersen_p_min: 0.05
+commands:
+  backfill_yesterday: venv/bin/python docs/daily/trigger_backfill.py
+  # AI 大脑/ML 调参使用专门的 ML 虚拟环境（venv_ml）
+  # alpha_loop disabled as per user request to focus on Option ML
+  alpha_loop: ""
+  apply_params: ""
+  option_ml_train: venv/bin/python tools/option_ml_ai_brain_run.py --mode training --apply-controls
+  # RL 训练/评估在当前环境下会加载 PyTorch + OpenMP 多版本，容易导致 macOS 层面的崩溃。
+  # 为了让 AI 大脑 + HPO 稳定跑日内调参，这里暂时禁用 RL 命令（不影响策略本身的 RL 配置，只是不再自动训练/评估）。
+  rl_train: ""
+  rl_eval: ""
+  premarket_sh: ./llm_trader/run_premarket.sh
+  first_hour_sh: ./llm_trader/run_first_hour.sh
+  all_providers_sh: ./llm_trader/run_all_providers.sh market
+  premarket_fallback: venv/bin/python llm_trader/run_single_bot.py --provider deepseek_nvidia
+    --symbols TSLA --interval 600 --cycles 33 --close-at 09:35 --forbid-new-positions-before
+    9 --wait-for-premarket
+  first_hour_fallback: venv/bin/python llm_trader/run_single_bot.py --provider deepseek
+    --symbols TSLA --interval 300 --wait-for-market --start-trading-at 9:40 --stop-trading-at
+    10:30 --close-at 10:45
+  overnight_fallback: venv/bin/python llm_trader/run_single_bot.py --provider deepseek_nvidia
+    --symbols TSLA --interval 600 --cycles 50 --wait-for-overnight --close-at 03:50
+    --forbid-new-positions-before 5
+brain:
+  enabled: true
+  provider: ollama
+  model: deepseek-r1:14b
+  autopatch_model_space: true
+  autopatch_features: true
+  autopatch_execution: true
+  autopatch_alpha: true
+mlflow:
+  enabled: true
+  tracking_uri: file:./mlruns
+  experiment: AI Trader Evolution
+providers:
+  intervals:
+    min:
+      deepseek_nvidia: 600
+      deepseek: 300
+      openai: 300
+      gemini: 300
+      ollama: 300
+  defaults:
+    interval_sec:
+      deepseek_nvidia: 600
+      deepseek: 300
+      openai: 300
+      gemini: 300
+      ollama: 300
+  budgets:
+    # Daily API call limits per provider (resets at midnight ET)
+    daily_max_calls:
+      deepseek_nvidia: 200   # ~33 hours at 600s intervals
+      deepseek: 400          # ~33 hours at 300s intervals
+      openai: 400
+      gemini: 400
+      ollama: 1000
+    # Cost tracking (optional, for monitoring)
+    cost_per_call_usd:
+      deepseek_nvidia: 0.014  # ~$0.014 per call (estimate)
+      deepseek: 0.007
+      openai: 0.05
+      gemini: 0.02
+      ollama: 0.0
+risk_management:
+  guardian:
+    dd_intraday_pct: 2.0
+    dd_5d_pct: 5.0
+  hedge:
+    # Quantitative Dynamic Hedging Service Configuration
+    enabled: false  # Set to true to enable hedging service
+    dry_run: true   # Set to false to execute real hedge orders
+    check_interval_sec: 60  # How often to evaluate hedging needs
+    cooldown_sec: 300  # Minimum seconds between hedge actions
+
+    thresholds:
+      max_net_delta_usd: 50000.0  # Max acceptable net delta exposure
+
+    dynamic_params:
+      # EMA smoothing for hedge ratio (0~1, higher = more responsive)
+      smooth_alpha: 0.3
+      # Hysteresis band (ratio change < 5% won't trigger action)
+      hysteresis: 0.05
+      # Daily theta budget as % of equity (0.05% = 5bps)
+      theta_budget_pct: 0.0005
+      # Market multiplier bounds
+      mult_min: 0.5
+      mult_max: 1.5
+      # Factor weights (must sum to ~1.0)
+      trend_weight: 0.4   # SPY trend influence
+      vix_weight: 0.4     # VIX percentile influence
+      carry_weight: 0.2   # Vol carry influence
+      # Minimum delta gap to trigger adjustment
+      min_gap_usd: 10000.0
+
+    # Options execution configuration
+    options:
+      enabled: true
+      data_provider: stub  # stub | ibkr
+      ibkr_host: 127.0.0.1
+      ibkr_port: 4002
+      instruments:  # Whitelist of allowed hedge instruments
+      - SPY
+      - QQQ
+      - IWM
+      - DIA
+      primary: delta
+      delta_target_abs: 0.4
+      dte_preference:
+      - 7
+      - 14
+      - 30
+      min_open_interest: 2000
+      max_spread_bps: 30
+      min_last_trade_minutes: 5
+      slippage_bps: 10
+      tif: DAY
+      max_contracts_per_day: 50
+      max_notional_usd_per_day: 100000
+      dry_run: true
+      allow_linear_fallback: false  # Fallback to ETF stock orders if options fail
+
+    # Legacy options config (keep for backward compatibility)
+    auto_execute: true
+    mode: delta_neutral

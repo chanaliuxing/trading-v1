@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "state_transition_event.v1.schema.json",
+  "title": "StateTransitionEventV1",
+  "type": "object",
+  "required": [
+    "event_id",
+    "event_ts_us",
+    "trace_id",
+    "strategy_id",
+    "entity_type",
+    "entity_id",
+    "state_machine",
+    "before_state",
+    "event_type",
+    "after_state",
+    "reason",
+    "source_module"
+  ],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "event_ts_us": {"type": "integer", "minimum": 1},
+    "trace_id": {"type": "string", "minLength": 1},
+    "strategy_id": {"type": "string", "minLength": 1},
+    "strategy_run_id": {"type": ["string", "null"]},
+    "trigger_id": {"type": ["string", "null"]},
+    "decision_id": {"type": ["string", "null"]},
+    "entity_type": {
+      "type": "string",
+      "enum": ["runtime", "order", "flatten", "protection", "position"]
+    },
+    "entity_id": {"type": "string", "minLength": 1},
+    "symbol": {"type": ["string", "null"]},
+    "order_ref": {"type": ["string", "null"]},
+    "state_machine": {"type": "string", "minLength": 1},
+    "before_state": {"type": "string", "minLength": 1},
+    "event_type": {"type": "string", "minLength": 1},
+    "after_state": {"type": "string", "minLength": 1},
+    "reason": {"type": "string", "minLength": 1},
+    "source_module": {"type": "string", "minLength": 1},
+    "metadata": {"type": "object"},
+    "payload": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,82 @@
+{
+  "artifact_type": "scoped_tradability_architecture_review",
+  "generated_at": "2026-05-12T00:00:00-04:00",
+  "scope": {
+    "production_files_changed": true,
+    "tests_changed": true,
+    "docs_reports_changed": true,
+    "live_ibkr_connected": false
+  },
+  "baseline": {
+    "no_live": "4 passed",
+    "exec": "293 passed",
+    "reconciliation": "76 passed",
+    "reports": "61 passed",
+    "services": "656 passed baseline; 681 passed, 3 xfailed after Phase 1; scoped contract now 28 passed",
+    "ib_reconnect_fast": "32 passed; live IBKR disabled",
+    "git_diff_check": "passed"
+  },
+  "live_marker_search": {
+    "historical_markers_found": true,
+    "current_environment_processes_observed": [
+      "pre-existing run_system.py",
+      "pre-existing IB Gateway"
+    ],
+    "this_task_started_live_ibkr": false,
+    "this_task_order_mutation": false,
+    "test_environment": "TRADING_TEST_ALLOW_LIVE_IBKR=0"
+  },
+  "current_gate_map": [
+    {
+      "location": "services/exec/execution_service.py:643",
+      "current_gate": "manual_intervention_lock_active",
+      "scope": "strategy_id + symbol",
+      "risk": "missing account_id and strategy_instance_id can overblock",
+      "required_change": "move to TradabilityService as strategy-instance scoped block"
+    },
+    {
+      "location": "services/exec/execution_service.py:682",
+      "current_gate": "quarantine plus trading gate",
+      "scope": "symbol plus optional owner hints",
+      "risk": "execution has independent authority",
+      "required_change": "execution second-check against TradabilityDecision"
+    },
+    {
+      "location": "tool/ops/run_runtime_operations_watchdog.py:3113",
+      "current_gate": "entry_go_no_go go/no_go",
+      "scope": "global entry artifact",
+      "risk": "cannot express partial scoped entry",
+      "required_change": "add partial and blocked_scopes"
+    },
+    {
+      "location": "strategies/stocks_kernel/strategy.py:725",
+      "current_gate": "system_paused early return",
+      "scope": "global pause",
+      "risk": "strategy does not request scoped authorization before returning",
+      "required_change": "request TradabilityService decision"
+    }
+  ],
+  "key_decisions": {
+    "global_halt_retained": true,
+    "scoped_block_introduced": true,
+    "flow_override_introduced": true,
+    "unique_authority_defined": true,
+    "authority": "TradabilityService"
+  },
+  "red_tests": {
+    "file": "tests/unit/services/test_scoped_tradability_contract.py",
+    "expected_current": "28 passed",
+    "future": "28 passed"
+  },
+  "implementation_status": {
+    "phase_1_decision_model_evaluator": "complete",
+    "phase_2_production_state_partial_scoped_output": "complete",
+    "phase_3_execution_second_check": "complete",
+    "phase_4_strategy_pause_authorization_evidence": "complete",
+    "phase_5_session_scoped_policy_evaluator": "complete",
+    "phase_6_monitoring_evidence_contract": "complete",
+    "operational_hardening_readiness_artifact_provider": "complete"
+  },
+  "decision": "ALL_PHASES_COMPLETE_CONTRACT_AND_REGRESSION_READY",
+  "recommended_next_batch": "Scoped Tradability Operational Hardening"
+}

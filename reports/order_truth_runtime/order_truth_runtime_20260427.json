@@ -1,0 +1,41 @@
+{
+  "audit_date": "2026-04-27",
+  "audit_dir": "./runtime/audit/2026-04-27",
+  "audit_dir_exists": true,
+  "blocked_reason_counts": {
+    "amp_not_locked": 1,
+    "anti_chase_blocked": 5,
+    "data_integrity_fail_closed": 3,
+    "delayed_confirm_not_met": 14,
+    "fast_drift_not_ready": 63,
+    "first_entry_seed_not_ready": 14,
+    "r1_fourth_short_small_green_blocked": 6,
+    "sign_mismatch": 82
+  },
+  "date": "2026-04-27",
+  "false_block_removed": false,
+  "legacy_open_orders_block_count": 47,
+  "legitimate_block_observed": true,
+  "legitimate_block_reason_counts": {
+    "amp_not_locked": 1,
+    "anti_chase_blocked": 5,
+    "data_integrity_fail_closed": 3,
+    "delayed_confirm_not_met": 14,
+    "fast_drift_not_ready": 63,
+    "first_entry_seed_not_ready": 14,
+    "r1_fourth_short_small_green_blocked": 6,
+    "sign_mismatch": 82
+  },
+  "market_day": "20260427",
+  "ok": false,
+  "position_sync_flat_count": 5376,
+  "reasons": [
+    "legacy_open_orders_block_still_present"
+  ],
+  "recommendation": "HOLD",
+  "requested_day": "20260427",
+  "rows_scanned": 186594,
+  "strategy_id": "qqq_intraday_001",
+  "strategy_row_count": 6262,
+  "used_previous_completed_day": false
+}

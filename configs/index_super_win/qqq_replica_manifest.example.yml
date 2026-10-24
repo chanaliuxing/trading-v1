@@ -1,0 +1,20 @@
+strategy_id: index_super_win_replica_001
+runtime_scope: index_super_win_replica
+order_namespace: iswv2
+feature_bar_sec: 5
+dry_run: true
+replica_manifests:
+  - key: qqq_pair
+    signal_symbol: QQQ
+    confirm_symbol: QQEW
+    long_exec_symbol: TQQQ
+    short_exec_symbol: SQQQ
+    volatility_symbol: QQQ
+    enabled: true
+  - key: aapl_cash
+    signal_symbol: AAPL
+    confirm_symbol: AAPL
+    long_exec_symbol: AAPL
+    short_exec_symbol: AAPL
+    volatility_symbol: AAPL
+    enabled: false

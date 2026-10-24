@@ -1,0 +1,63 @@
+{
+  "pipeline_version": "candidate_factory_pipeline.v1",
+  "goal": "daily_candidate_factory",
+  "top_n": 5,
+  "steps": [
+    {
+      "step": 1,
+      "name": "data_update",
+      "input": "raw market data + existing bars",
+      "process": "make recon-all (includes reconciliation + nightly-data-refresh)",
+      "output": "updated bars tables",
+      "automation_status": "script_exists_not_stitched_as_single_factory"
+    },
+    {
+      "step": 2,
+      "name": "feature_update",
+      "input": "updated bars",
+      "process": "make compute-features-all",
+      "output": "updated feature tables",
+      "automation_status": "script_exists_not_stitched_as_single_factory"
+    },
+    {
+      "step": 3,
+      "name": "candidate_generation",
+      "input": "feature-ready market windows",
+      "process": "scripts/super_win_nightly_optimize.py parameter grid",
+      "output": "trials_summary.csv",
+      "automation_status": "automated_for_single_strategy_family"
+    },
+    {
+      "step": 4,
+      "name": "backtest",
+      "input": "candidate params + selected days",
+      "process": "scripts/backtest_index_super_win.py per trial with cost/slippage model",
+      "output": "per-trial csv + summary metrics",
+      "automation_status": "automated_for_single_strategy_family"
+    },
+    {
+      "step": 5,
+      "name": "robustness_validation",
+      "input": "candidate backtest outputs",
+      "process": "walk-forward / multi-window stability checks",
+      "output": "robustness_pass_fail + stability evidence",
+      "automation_status": "partially_exists_not_in_daily_single_chain"
+    },
+    {
+      "step": 6,
+      "name": "scoring_and_ranking",
+      "input": "metrics + robustness evidence",
+      "process": "unified scoring function (this phase)",
+      "output": "ranked candidates",
+      "automation_status": "not_unified_yet"
+    },
+    {
+      "step": 7,
+      "name": "publish_top_n",
+      "input": "ranked candidates",
+      "process": "emit candidate_spec objects and review bundle",
+      "output": "daily_top_candidates.json (<=5)",
+      "automation_status": "not_built_yet"
+    }
+  ]
+}

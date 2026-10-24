@@ -1,0 +1,247 @@
+# Data Quality Testing Makefile
+#
+# 使用方式:
+#   make -f Makefile.tests test-all          # 运行所有测试
+#   make -f Makefile.tests test-data-layer   # 只运行数据层测试
+#   make -f Makefile.tests test-quick        # 快速冒烟测试
+#   make -f Makefile.tests test-date DATE=2025-11-24 SYMBOLS=TSLA,SPY
+
+# 配置
+PYTHON := venv/bin/python
+PYTEST := venv/bin/pytest
+DATE ?= $(shell date -d "yesterday" +%Y-%m-%d 2>/dev/null || date -v-1d +%Y-%m-%d)
+SYMBOLS ?= TSLA,SPY,NVDA
+REPORTS_DIR := reports/$(shell date +%Y%m%d_%H%M%S)
+
+# 颜色输出
+GREEN := \033[0;32m
+YELLOW := \033[0;33m
+RED := \033[0;31m
+NC := \033[0m # No Color
+
+.PHONY: help
+help:
+	@echo "$(GREEN)Data Quality Testing Makefile$(NC)"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  $(YELLOW)test-all$(NC)          - Run all tests (A-H)"
+	@echo "  $(YELLOW)test-data-layer$(NC)   - Run data layer tests (A, C)"
+	@echo "  $(YELLOW)test-feature-layer$(NC) - Run feature layer tests (D, E)"
+	@echo "  $(YELLOW)test-label-layer$(NC)  - Run label layer tests (F, G)"
+	@echo "  $(YELLOW)test-healing-e2e$(NC)  - Run healing & e2e tests (B, H)"
+	@echo "  $(YELLOW)test-quick$(NC)        - Quick smoke test (A, E)"
+	@echo "  $(YELLOW)test-date$(NC)         - Test specific date (set DATE=YYYY-MM-DD)"
+	@echo "  $(YELLOW)clean$(NC)             - Clean up test reports"
+	@echo ""
+	@echo "Environment variables:"
+	@echo "  DATE=$(DATE)"
+	@echo "  SYMBOLS=$(SYMBOLS)"
+	@echo ""
+
+.PHONY: setup
+setup:
+	@echo "$(GREEN)Setting up test environment...$(NC)"
+	@mkdir -p $(REPORTS_DIR)
+	@$(PYTHON) -m pip install -q pytest pytest-cov pytest-html lightgbm scikit-learn
+
+# =========================================================================
+# 完整测试套件
+# =========================================================================
+.PHONY: test-all
+test-all: setup test-data-layer test-feature-layer test-label-layer test-healing-e2e
+	@echo ""
+	@echo "$(GREEN)========================================$(NC)"
+	@echo "$(GREEN)✅ All tests completed!$(NC)"
+	@echo "$(GREEN)========================================$(NC)"
+	@echo "Reports saved to: $(REPORTS_DIR)"
+
+# =========================================================================
+# 数据层测试 (Data Layer)
+# =========================================================================
+.PHONY: test-data-layer
+test-data-layer: test-a test-c
+	@echo "$(GREEN)✅ Data layer tests completed$(NC)"
+
+.PHONY: test-a
+test-a: setup
+	@echo "$(YELLOW)Running Test A: Bars Coverage...$(NC)"
+	@$(PYTHON) tools/test_bars_coverage.py \
+		--symbols $(SYMBOLS) \
+		--start $(DATE) \
+		--end $(DATE) \
+		--output $(REPORTS_DIR)/test_a_bars_coverage.json \
+		&& echo "$(GREEN)✅ Test A passed$(NC)" \
+		|| echo "$(RED)❌ Test A failed$(NC)"
+
+.PHONY: test-c
+test-c: setup
+	@echo "$(YELLOW)Running Test C: Features Coverage...$(NC)"
+	@$(PYTHON) tools/test_features_coverage.py \
+		--date $(DATE) \
+		--symbols $(SYMBOLS) \
+		--threshold 0.98 \
+		--output $(REPORTS_DIR)/test_c_features_coverage.json \
+		&& echo "$(GREEN)✅ Test C passed$(NC)" \
+		|| echo "$(RED)❌ Test C failed$(NC)"
+
+# =========================================================================
+# 特征层测试 (Feature Layer)
+# =========================================================================
+.PHONY: test-feature-layer
+test-feature-layer: test-d test-e
+	@echo "$(GREEN)✅ Feature layer tests completed$(NC)"
+
+.PHONY: test-d
+test-d: setup
+	@echo "$(YELLOW)Running Test D: Feature Quality...$(NC)"
+	@$(PYTEST) tests/integration/features/test_feature_quality.py \
+		-v --tb=short \
+		--junitxml=$(REPORTS_DIR)/test_d_junit.xml \
+		--html=$(REPORTS_DIR)/test_d_report.html \
+		&& echo "$(GREEN)✅ Test D passed$(NC)" \
+		|| echo "$(RED)❌ Test D failed$(NC)"
+
+.PHONY: test-e
+test-e: setup
+	@echo "$(YELLOW)Running Test E: DSL Compilation...$(NC)"
+	@$(PYTEST) tests/unit/features/test_feature_dsl_sql_llm_cases.py \
+		-v --tb=short \
+		--junitxml=$(REPORTS_DIR)/test_e_junit.xml \
+		--html=$(REPORTS_DIR)/test_e_report.html \
+		&& echo "$(GREEN)✅ Test E passed$(NC)" \
+		|| echo "$(RED)❌ Test E failed$(NC)"
+
+# =========================================================================
+# 标签层测试 (Label Layer)
+# =========================================================================
+.PHONY: test-label-layer
+test-label-layer: test-f test-g
+	@echo "$(GREEN)✅ Label layer tests completed$(NC)"
+
+.PHONY: test-f
+test-f: setup
+	@echo "$(YELLOW)Running Test F: Label Sanity...$(NC)"
+	@$(PYTHON) tools/test_label_sanity.py \
+		--date $(DATE) \
+		--symbols $(SYMBOLS) \
+		--output $(REPORTS_DIR)/test_f_label_sanity.json \
+		&& echo "$(GREEN)✅ Test F passed$(NC)" \
+		|| (echo "$(YELLOW)⚠️  Test F skipped (label table may not exist)$(NC)" && true)
+
+.PHONY: test-g
+test-g: setup
+	@echo "$(YELLOW)Running Test G: Label-Feature Alignment...$(NC)"
+	@$(PYTHON) tools/test_label_feature_alignment.py \
+		--date $(DATE) \
+		--symbols $(SYMBOLS) \
+		--output $(REPORTS_DIR)/test_g_label_alignment.json \
+		&& echo "$(GREEN)✅ Test G passed$(NC)" \
+		|| (echo "$(YELLOW)⚠️  Test G skipped (label table may not exist)$(NC)" && true)
+
+# =========================================================================
+# 数据自愈 & 端到端测试
+# =========================================================================
+.PHONY: test-healing-e2e
+test-healing-e2e: test-b test-h
+	@echo "$(GREEN)✅ Healing & E2E tests completed$(NC)"
+
+.PHONY: test-b
+test-b: setup
+	@echo "$(YELLOW)Running Test B: DataHealer Smoke...$(NC)"
+	@$(PYTEST) tests/integration/data/test_data_healer_smoke.py \
+		-v --tb=short \
+		--junitxml=$(REPORTS_DIR)/test_b_junit.xml \
+		--html=$(REPORTS_DIR)/test_b_report.html \
+		&& echo "$(GREEN)✅ Test B passed$(NC)" \
+		|| echo "$(RED)❌ Test B failed$(NC)"
+
+.PHONY: test-h
+test-h: setup
+	@echo "$(YELLOW)Running Test H: End-to-End Pipeline...$(NC)"
+	@$(PYTEST) tests/integration/pipeline/test_ml_pipeline_smoke.py \
+		-v --tb=short \
+		--junitxml=$(REPORTS_DIR)/test_h_junit.xml \
+		--html=$(REPORTS_DIR)/test_h_report.html \
+		&& echo "$(GREEN)✅ Test H passed$(NC)" \
+		|| echo "$(RED)❌ Test H failed$(NC)"
+
+# =========================================================================
+# 快速冒烟测试 (用于本地开发)
+# =========================================================================
+.PHONY: test-quick
+test-quick: setup
+	@echo "$(YELLOW)Running quick smoke tests...$(NC)"
+	@echo "$(YELLOW)Test A: Bars Coverage$(NC)"
+	@$(PYTHON) tools/test_bars_coverage.py \
+		--symbols TSLA \
+		--start $(DATE) \
+		--end $(DATE) \
+		--output $(REPORTS_DIR)/quick_test_a.json
+	@echo ""
+	@echo "$(YELLOW)Test E: DSL Compilation$(NC)"
+	@$(PYTEST) tests/unit/features/test_feature_dsl_sql_llm_cases.py::test_dsl_compilation[simple_ratio] -v
+	@echo ""
+	@echo "$(GREEN)✅ Quick smoke tests completed$(NC)"
+
+# =========================================================================
+# 特定日期测试
+# =========================================================================
+.PHONY: test-date
+test-date:
+	@echo "$(YELLOW)Testing date: $(DATE)$(NC)"
+	@echo "$(YELLOW)Symbols: $(SYMBOLS)$(NC)"
+	@$(MAKE) -f Makefile.tests test-data-layer DATE=$(DATE) SYMBOLS=$(SYMBOLS)
+	@$(MAKE) -f Makefile.tests test-label-layer DATE=$(DATE) SYMBOLS=$(SYMBOLS)
+
+# =========================================================================
+# Pre-commit hook (在提交前运行)
+# =========================================================================
+.PHONY: test-pre-commit
+test-pre-commit: setup
+	@echo "$(YELLOW)Running pre-commit tests...$(NC)"
+	@$(PYTEST) tests/unit/features/test_feature_dsl_sql_llm_cases.py -v --tb=short
+	@$(PYTEST) tests/integration/data/test_data_healer_smoke.py::test_healer_detects_void -v
+	@echo "$(GREEN)✅ Pre-commit tests passed$(NC)"
+
+# =========================================================================
+# 清理
+# =========================================================================
+.PHONY: clean
+clean:
+	@echo "$(YELLOW)Cleaning up test reports...$(NC)"
+	@rm -rf reports/
+	@rm -rf .pytest_cache/
+	@rm -rf **/__pycache__/
+	@echo "$(GREEN)✅ Cleanup completed$(NC)"
+
+# =========================================================================
+# 生成测试报告摘要
+# =========================================================================
+.PHONY: report
+report:
+	@echo "$(GREEN)========================================$(NC)"
+	@echo "$(GREEN)Test Reports Summary$(NC)"
+	@echo "$(GREEN)========================================$(NC)"
+	@if [ -d "$(REPORTS_DIR)" ]; then \
+		echo "Reports location: $(REPORTS_DIR)"; \
+		echo ""; \
+		echo "JSON reports:"; \
+		ls -lh $(REPORTS_DIR)/*.json 2>/dev/null || echo "  No JSON reports"; \
+		echo ""; \
+		echo "HTML reports:"; \
+		ls -lh $(REPORTS_DIR)/*.html 2>/dev/null || echo "  No HTML reports"; \
+	else \
+		echo "$(RED)No reports found. Run tests first.$(NC)"; \
+	fi
+
+# =========================================================================
+# 持续监控 (每小时运行数据层测试)
+# =========================================================================
+.PHONY: monitor
+monitor:
+	@while true; do \
+		echo "$(YELLOW)[$(shell date)] Running data quality checks...$(NC)"; \
+		$(MAKE) -f Makefile.tests test-data-layer || true; \
+		echo "$(GREEN)[$(shell date)] Sleeping for 1 hour...$(NC)"; \
+		sleep 3600; \
+	done

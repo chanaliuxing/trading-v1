@@ -1,0 +1,94 @@
+groups:
+  - name: p3_p4_memory_evolution_alerts
+    interval: 30s
+    rules:
+      # Memory Fabric Alerts
+      - alert: MemoryFabricSTSOverflow
+        expr: memory_fabric_sts_records_total > 10000
+        for: 5m
+        labels:
+          severity: warning
+          component: memory_fabric
+        annotations:
+          summary: "Short-term memory overflow ({{ $value }} records)"
+          description: "STS has {{ $value }} records, exceeding threshold of 10000. Promotion to MTS may be delayed."
+
+      - alert: MemoryFabricLTSGrowthAnomaly
+        expr: rate(memory_fabric_lts_records_total[1h]) > 100
+        for: 10m
+        labels:
+          severity: warning
+          component: memory_fabric
+        annotations:
+          summary: "LTS growth rate anomaly ({{ $value }} records/sec)"
+          description: "Long-term memory is growing faster than expected, may indicate promotion issue."
+
+      # Patch Queue Alerts
+      - alert: PatchQueueBacklog
+        expr: patch_approval_queue_total{status="pending"} > 10
+        for: 15m
+        labels:
+          severity: warning
+          component: evolution
+        annotations:
+          summary: "Patch approval queue backlog ({{ $value }} pending)"
+          description: "There are {{ $value }} patches waiting for approval. Consider reviewing or adjusting auto-approval thresholds."
+
+      - alert: HighRiskPatchInQueue
+        expr: max_over_time(patch_risk_score[5m]) > 0.8
+        for: 1m
+        labels:
+          severity: critical
+          component: evolution
+        annotations:
+          summary: "High-risk patch detected (risk={{ $value }})"
+          description: "Patch {{ $labels.patch_id }} has risk score {{ $value }}, requires immediate review."
+
+      # Evolution Alerts
+      - alert: EvolutionTargetStuck
+        expr: evolution_target_priority_score > 0.9
+        for: 1h
+        labels:
+          severity: warning
+          component: evolution
+        annotations:
+          summary: "Evolution target stuck at high priority ({{ $labels.target }})"
+          description: "Target {{ $labels.target }} has priority {{ $value }} for over 1 hour, may indicate evolution failure."
+
+      # Experiment Comparison Alerts
+      - alert: ExperimentComparisonStalled
+        expr: rate(experiments_compared_total[1h]) == 0
+        for: 6h
+        labels:
+          severity: info
+          component: research
+        annotations:
+          summary: "No experiments compared in last 6 hours"
+          description: "Experiment comparison pipeline may be stalled or no new experiments completed."
+
+      # Patch Auto-Approval Rate
+      - alert: LowAutoApprovalRate
+        expr: |
+          (
+            sum(rate(patch_approval_queue_total{status="approved"}[24h]))
+            /
+            sum(rate(patch_approval_queue_total[24h]))
+          ) < 0.3
+        for: 1h
+        labels:
+          severity: info
+          component: evolution
+        annotations:
+          summary: "Low auto-approval rate ({{ $value | humanizePercentage }})"
+          description: "Only {{ $value | humanizePercentage }} of patches are auto-approved in last 24h. Consider reviewing evaluation criteria."
+
+      # Memory Promotion Health
+      - alert: MemoryPromotionStalled
+        expr: rate(memory_fabric_promotions_total[1h]) == 0
+        for: 6h
+        labels:
+          severity: warning
+          component: memory_fabric
+        annotations:
+          summary: "Memory promotion stalled for 6 hours"
+          description: "No memory promotions detected in last 6 hours. Check sleep_loop.py and promotion logic."

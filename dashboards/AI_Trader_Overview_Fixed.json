@@ -1,0 +1,210 @@
+{
+  "id": null,
+  "title": "AI Trader Overview (Fixed)",
+  "timezone": "browser",
+  "version": 2,
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["ai_trader", "fixed"],
+  "refresh": "30s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "OOS Sharpe (Today)",
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT anyLast(value) FROM ai_trader_dash_metrics WHERE date=today() AND session='learn' AND name='oos_sharpe'"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "DQ Fail Count (Today)",
+      "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT anyLast(value) FROM ai_trader_dash_metrics WHERE date=today() AND session='learn' AND name='dq_failed_count'"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "OOS Sharpe (7d)",
+      "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT ts, value FROM ai_trader_dash_metrics WHERE name='oos_sharpe' AND ts > now() - INTERVAL 7 DAY ORDER BY ts"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth"
+          }
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "Guardian Events (Recent)",
+      "gridPos": {"x": 0, "y": 10, "w": 12, "h": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT ts, symbol, JSONExtractString(payload, 'action') AS action, JSONExtractString(payload, 'reason') AS reason, JSONExtractString(payload, 'dd_pct') AS dd_pct FROM ai_trader_events WHERE kind='guardian' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "table",
+      "title": "Tool Watchdog (Recent)",
+      "gridPos": {"x": 12, "y": 10, "w": 12, "h": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT ts, JSONExtractString(payload, 'event') AS event, JSONExtractString(payload, 'reason') AS reason FROM ai_trader_events WHERE kind='tool' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "table",
+      "title": "Hedging Events (Today)",
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 10},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT ts, symbol, JSONExtractString(payload, 'hedge_symbol') AS hedge_sym, toFloat64OrZero(JSONExtractString(payload, 'hedge_qty')) * toFloat64OrZero(JSONExtractString(payload, 'ref_px')) AS notional FROM ai_trader_events WHERE kind='hedging' AND date=today() ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {"showHeader": true}
+    },
+    {
+      "type": "table",
+      "title": "Brain Calls (Recent)",
+      "gridPos": {"x": 0, "y": 18, "w": 24, "h": 8},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT ts, JSONExtractString(payload, 'kind') AS kind, JSONExtractString(payload, 'session') AS session, JSONExtractString(payload, 'action') AS action, JSONExtractString(payload, 'provider') AS provider, left(JSONExtractString(payload, 'output'), 200) AS output_snip FROM ai_trader_events WHERE kind='brain' AND ts>now()-INTERVAL 2 DAY ORDER BY ts DESC LIMIT 200"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "ts",
+            "desc": true
+          }
+        ]
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "output_snip"},
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 400
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Brain Calls (Today)",
+      "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT count() AS count FROM ai_trader_events WHERE kind='brain' AND toDate(ts) = today()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 1, "color": "yellow"},
+              {"value": 10, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Brain Success Rate (Today)",
+      "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {"type": "grafana-clickhouse-datasource", "uid": "CLICKHOUSE_DS"},
+          "format": 1,
+          "rawSql": "SELECT round(countIf(NOT JSONHas(payload, 'output.error')) * 100.0 / count(), 2) AS success_rate FROM ai_trader_events WHERE kind='brain' AND toDate(ts) = today()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": null, "color": "red"},
+              {"value": 90, "color": "yellow"},
+              {"value": 95, "color": "green"}
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "templating": {"list": []},
+  "time": {"from": "now-7d", "to": "now"}
+}

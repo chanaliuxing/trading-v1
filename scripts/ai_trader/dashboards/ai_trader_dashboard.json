@@ -1,0 +1,108 @@
+{
+  "dashboard": {
+    "title": "AI Trader Brain Monitor",
+    "tags": ["ai-trader", "llm", "monitoring"],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Today's LLM Sessions",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+        "targets": [
+          {
+            "datasource": {"type": "grafana-clickhouse-datasource", "uid": "af2hs6yq0fbi8a"},
+            "rawSql": "SELECT count() as sessions_today FROM llm.llm_sessions WHERE trading_day = today()",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "yellow"},
+                {"value": 5, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "LLM Sessions List",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 18, "x": 6, "y": 0},
+        "targets": [
+          {
+            "datasource": {"type": "grafana-clickhouse-datasource", "uid": "af2hs6yq0fbi8a"},
+            "rawSql": "SELECT substring(session_id, 1, 8) as session, bot_id, mode, formatDateTime(start_ts_ny, '%H:%i:%S') as started, status, symbols FROM llm.llm_sessions WHERE trading_day = today() ORDER BY start_ts_ny DESC LIMIT 20",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "LLM Decisions Today",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 4},
+        "targets": [
+          {
+            "datasource": {"type": "grafana-clickhouse-datasource", "uid": "af2hs6yq0fbi8a"},
+            "rawSql": "SELECT count() as decisions_today FROM llm.llm_decisions WHERE trading_day = today()",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Decision Distribution",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "datasource": {"type": "grafana-clickhouse-datasource", "uid": "af2hs6yq0fbi8a"},
+            "rawSql": "SELECT JSONExtractString(decision_json, 'action') as action, count() as count FROM llm.llm_decisions WHERE trading_day = today() GROUP BY action",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Decisions by Symbol",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "datasource": {"type": "grafana-clickhouse-datasource", "uid": "af2hs6yq0fbi8a"},
+            "rawSql": "SELECT symbol, count() as total, countIf(JSONExtractString(decision_json,'action')='BUY') as buys, countIf(JSONExtractString(decision_json,'action')='SELL') as sells, countIf(JSONExtractString(decision_json,'action')='HOLD') as holds, round(avg(JSONExtractFloat(decision_json,'confidence')),3) as avg_conf FROM llm.llm_decisions WHERE trading_day = today() GROUP BY symbol",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Recent Decisions",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+        "targets": [
+          {
+            "datasource": {"type": "grafana-clickhouse-datasource", "uid": "af2hs6yq0fbi8a"},
+            "rawSql": "SELECT formatDateTime(ts_ny, '%H:%i:%S') as time, symbol, JSONExtractString(decision_json,'action') as action, JSONExtractFloat(decision_json,'confidence') as confidence, substring(JSONExtractString(decision_json,'rationale'), 1, 100) as rationale FROM llm.llm_decisions WHERE trading_day = today() ORDER BY ts_ny DESC LIMIT 20",
+            "refId": "A"
+          }
+        ]
+      }
+    ],
+    "time": {"from": "now-6h", "to": "now"}
+  },
+  "overwrite": true
+}

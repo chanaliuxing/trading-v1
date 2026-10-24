@@ -1,0 +1,124 @@
+{
+  "symbols": [
+    "TSLA"
+  ],
+  "timeframe": "1m",
+  "features_table": "trading.features_1m",
+  "clickhouse": {
+    "host": "localhost",
+    "port": 8123,
+    "username": "default",
+    "password": "",
+    "database": "trading"
+  },
+  "strategy_path": "strategies.tsla_v7_2.TSLASimplifiedV7_2",
+  "strategy_base_extras": {
+    "tsla_v7_2_config": {
+      "symbol": "TSLA",
+      "commission_per_share": 0.0035,
+      "edge_floor": 0.18,
+      "premarket_calibration": {
+        "use_config_values": true
+      },
+      "positioning": {
+        "base_unit_pct": 0.012
+      },
+      "timing": {
+        "eod_close_time": "15:57",
+        "cooldown": {
+          "A1": 3,
+          "A2": 3,
+          "B1": 5
+        }
+      },
+      "dd_limits": {
+        "soft_pct": 0.018,
+        "hard_pct": 0.028
+      },
+      "regime": {
+        "epsilon": 0.0048,
+        "vix_symbol": "VIX",
+        "market_mult": {
+          "BULL": 1.0,
+          "NEUTRAL": 0.75,
+          "BEAR": 0.5
+        }
+      },
+      "A1": {
+        "exit": {
+          "eod_clean_time": "14:30",
+          "vwap_threshold_pct": 0.003,
+          "profit_take_pct": 0.7
+        }
+      },
+      "A2": {
+        "exit": {
+          "eod_clean_time": "14:30",
+          "eod_grid_multiplier": 0.25,
+          "anchor_profit_pct": 0.6
+        },
+        "layer_ratios": [
+          1.0,
+          0.8,
+          0.6,
+          0.4
+        ]
+      },
+      "B1": {
+        "orb_len": 30,
+        "breakout": {
+          "threshold_mult": 1.001,
+          "reclaim_mult": 0.998
+        },
+        "exit": {
+          "profit_mult": 1.002,
+          "rvol_threshold": 1.2
+        }
+      }
+    }
+  },
+  "broker": {
+    "initial_cash": 100000,
+    "commission_per_share": 0.0035,
+    "commission_min": 1.0,
+    "slippage_bps": 5.0,
+    "fill_ref": "open"
+  },
+  "grid": {
+    "A1_thr_sigma": [
+      0.006,
+      0.008,
+      0.01
+    ],
+    "A2_grid_g": [
+      0.8,
+      1.0,
+      1.2
+    ],
+    "k_atr": [
+      1.6,
+      2.0,
+      2.4
+    ]
+  },
+  "folds": [
+    {
+      "fold_id": 1,
+      "is_start": "2025-10-07 09:30:00",
+      "is_end": "2025-10-13 16:00:00",
+      "oos_start": "2025-10-14 09:30:00",
+      "oos_end": "2025-10-17 16:00:00",
+      "purge_days": 1,
+      "embargo_days": 0
+    }
+  ],
+  "objective": {
+    "metric": "sharpe",
+    "maximize": true,
+    "min_trades": 3,
+    "max_mdd": 0.5,
+    "min_pnl": -10000
+  },
+  "parallelism": 4,
+  "save_all_results": true
+}

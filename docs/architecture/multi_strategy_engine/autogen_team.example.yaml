@@ -1,0 +1,55 @@
+team_name: multi_strategy_engine_spec_pipeline
+orchestration: sequential_with_gates
+agents:
+  - name: requirements_agent
+    role: RequirementsAgent
+    outputs: [prd, io_schema, acceptance]
+  - name: review_agent
+    role: ReviewAgent
+    outputs: [doc_review]
+  - name: critical_agent
+    role: CriticalAgent
+    outputs: [critical_findings]
+  - name: review_agent_revision
+    role: ReviewAgent
+    outputs: [final_spec]
+  - name: validate_agent
+    role: ValidateAgent
+    outputs: [validation_report, rtm]
+  - name: dev_agent
+    role: DevAgent
+    outputs: [implementation_plan, code_changes, test_evidence]
+  - name: acceptance_agent
+    role: AcceptanceAgent
+    outputs: [acceptance_report, smoke_report, release_verdict]
+
+gates:
+  - id: gate_a_spec_completeness
+    must_pass_before: [review_agent]
+    checks:
+      - prd_sections_present
+      - io_schema_present
+      - acceptance_present
+  - id: gate_b_critical_closure
+    must_pass_before: [validate_agent]
+    checks:
+      - no_unresolved_high_critical_findings
+  - id: gate_c_validation
+    must_pass_before: [dev_agent]
+    checks:
+      - schema_validation_pass
+      - rtm_coverage_gte_95
+  - id: gate_d_acceptance
+    must_pass_before: [release]
+    checks:
+      - smoke_tests_pass
+      - no_p0_p1_open
+
+artifacts:
+  root: docs/architecture/multi_strategy_engine
+  required_files:
+    - PRD.md
+    - IO_SCHEMA.md
+    - TEST_AND_ACCEPTANCE.md
+    - ROLLOUT_PLAN.md
+    - AGENT_WORKFLOW_AUTOGEN.md

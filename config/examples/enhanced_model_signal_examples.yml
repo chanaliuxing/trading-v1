@@ -1,0 +1,462 @@
+# ============================================================================
+# EnhancedModelSignalStrategy 配置示例
+# ============================================================================
+#
+# 本文件提供多种场景的配置示例，从简单到复杂
+# 复制相应部分到 config.yml 使用
+#
+# 文件位置: ./config/examples/enhanced_model_signal_examples.yml
+# ============================================================================
+
+
+# ============================================================================
+# 示例 1: 最简配置 (向后兼容 ModelSignalStrategy)
+# ============================================================================
+# 场景: 从现有 ModelSignalStrategy 迁移，零修改
+# 特点: 单模型 + 固定仓位 + 基础过滤
+
+strategies:
+  - id: "enhanced_simple_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 50000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbol: "TSLA"  # 单标的（向后兼容）
+
+        # 市场过滤（迁移 conf_floor）
+        market_filter:
+          conf_floor: 0.5
+          max_spread_bps: 5
+
+        # 固定仓位（默认行为）
+        sizing:
+          mode: "fixed"
+          base_qty: 100
+          max_qty: 1000
+          lot: 100
+
+
+# ============================================================================
+# 示例 2: XGBoost + LSTM 双模型组合
+# ============================================================================
+# 场景: 利用两个模型的优势互补
+# 特点: 加权平均 + 置信度缩放仓位
+
+strategies:
+  - id: "ensemble_tsla_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 100000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbols: ["TSLA", "AAPL"]  # 多标的
+        bar_sec: 60
+
+        # === 多模型组合 ===
+        ensemble:
+          mode: "weighted_avg"  # weighted_avg | vote | max_conf
+          models:
+            - name: "xgb"     # 对应特征: xgb_signal, xgb_conf
+              weight: 0.6
+            - name: "lstm"    # 对应特征: lstm_signal, lstm_conf
+              weight: 0.4
+
+        # === 动态仓位 (置信度缩放) ===
+        sizing:
+          mode: "confidence_scaled"
+          base_qty: 100
+          max_qty: 1000
+          lot: 100
+          multiplier: 2.0  # conf=0.5 → 1x, conf=1.0 → 3x
+
+        # === 市场过滤 ===
+        market_filter:
+          conf_floor: 0.6
+          max_spread_bps: 5
+          min_volume: 100000
+          check_after_hours: true
+
+        # === 风控 ===
+        risk:
+          take_profit_pct: 0.02   # 2% 止盈
+          stop_loss_pct: 0.01     # 1% 止损
+          time_stop_min: 60       # 60分钟时间止损
+          partial_exit_pct: 0.5   # TP1 平仓 50%
+
+        # === 订单配置 ===
+        order_type: "LMT"
+        limit_offset_bps: 3
+
+
+# ============================================================================
+# 示例 3: 投票机制 (多模型二分类)
+# ============================================================================
+# 场景: 3个模型投票决策，少数服从多数
+# 特点: vote 模式 + 固定仓位
+
+strategies:
+  - id: "vote_nvda_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 75000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbols: ["NVDA"]
+
+        # === 投票机制 ===
+        ensemble:
+          mode: "vote"  # 多数决
+          models:
+            - name: "xgb"
+              weight: 1.0  # 权重在 vote 模式下无意义
+            - name: "lstm"
+              weight: 1.0
+            - name: "rf"   # 假设有第三个模型
+              weight: 1.0
+
+        sizing:
+          mode: "fixed"
+          base_qty: 50
+          max_qty: 500
+
+        market_filter:
+          conf_floor: 0.5
+          max_spread_bps: 3
+
+
+# ============================================================================
+# 示例 4: 波动率目标仓位 (Vol-Target)
+# ============================================================================
+# 场景: 根据 ATR 调整仓位，控制单笔风险
+# 特点: 固定美元风险 + 动态股数
+
+strategies:
+  - id: "vol_target_aapl_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 100000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbols: ["AAPL"]
+
+        ensemble:
+          models:
+            - name: "ml"
+              weight: 1.0
+          mode: "weighted_avg"
+
+        # === 波动率目标仓位 ===
+        sizing:
+          mode: "vol_target"
+          risk_per_trade: 200.0   # 每笔风险 $200
+          atr_multiple: 2.0       # 止损距离 = 2 ATR
+          max_qty: 1000
+          lot: 100
+
+        market_filter:
+          conf_floor: 0.6
+          max_spread_bps: 3
+          min_volume: 500000
+
+        risk:
+          stop_loss_pct: 0.015    # 与 2 ATR 配合
+          take_profit_pct: 0.03
+
+        order_type: "MKT"
+
+
+# ============================================================================
+# 示例 5: Kelly 准则仓位 (Kelly Criterion)
+# ============================================================================
+# 场景: 根据历史胜率/盈亏比优化资金利用
+# 特点: 动态资金分配 + 完整风控
+
+strategies:
+  - id: "kelly_msft_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 200000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbols: ["MSFT", "GOOGL"]
+
+        ensemble:
+          models:
+            - name: "ml"
+              weight: 1.0
+          mode: "weighted_avg"
+
+        # === Kelly 准则仓位 ===
+        sizing:
+          mode: "kelly"
+          win_rate: 0.55          # 从历史统计获取 (55% 胜率)
+          avg_win: 1.5            # 平均盈利 1.5R
+          avg_loss: 1.0           # 平均亏损 1R
+          kelly_fraction: 0.5     # Half-Kelly (安全系数)
+          max_qty: 500
+          lot: 100
+
+        market_filter:
+          conf_floor: 0.65
+          max_spread_bps: 3
+          min_volume: 500000
+          max_vix: 25             # VIX > 25 不交易
+
+        risk:
+          take_profit_pct: 0.025
+          stop_loss_pct: 0.012
+          time_stop_min: 120
+          partial_exit_pct: 0.6  # TP1 平仓 60%
+
+
+# ============================================================================
+# 示例 6: 最大置信度模型选择 (Max-Conf)
+# ============================================================================
+# 场景: 多个模型中选择最自信的那个
+# 特点: max_conf 模式 + SFS 微观确认
+
+strategies:
+  - id: "max_conf_tsla_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 80000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbols: ["TSLA"]
+
+        # === 最大置信度选择 ===
+        ensemble:
+          mode: "max_conf"  # 选择 conf 最高的模型
+          models:
+            - name: "xgb"
+              weight: 1.0
+            - name: "lstm"
+              weight: 1.0
+
+        sizing:
+          mode: "confidence_scaled"
+          base_qty: 100
+          max_qty: 800
+          multiplier: 1.5
+
+        market_filter:
+          conf_floor: 0.7  # 高门槛
+          max_spread_bps: 4
+
+        # === SFS 微观结构确认 ===
+        use_sfs_1s: true
+        sfs_lookback: 20
+        sfs_confirm_up: 7      # 多头需要 7/10 上涨tick
+        sfs_confirm_down: 7    # 空头需要 7/10 下跌tick
+
+        risk:
+          take_profit_pct: 0.02
+          stop_loss_pct: 0.01
+          time_stop_min: 90
+
+
+# ============================================================================
+# 示例 7: 激进策略 (高频小仓位)
+# ============================================================================
+# 场景: 频繁交易，小止盈止损
+# 特点: 低置信度门槛 + 小仓位 + 快速止盈
+
+strategies:
+  - id: "aggressive_spy_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 50000
+    params:
+      ttl_ms: 30000  # 30秒 TTL
+      extras:
+        symbols: ["SPY", "QQQ"]
+        bar_sec: 60
+
+        ensemble:
+          models:
+            - name: "ml"
+              weight: 1.0
+          mode: "weighted_avg"
+
+        sizing:
+          mode: "fixed"
+          base_qty: 50   # 小仓位
+          max_qty: 200
+
+        market_filter:
+          conf_floor: 0.4        # 低门槛
+          max_spread_bps: 2      # 严格点差
+          check_after_hours: true
+
+        risk:
+          take_profit_pct: 0.005  # 0.5% 快速止盈
+          stop_loss_pct: 0.003    # 0.3% 快速止损
+          time_stop_min: 15       # 15分钟时间止损
+
+        order_type: "LMT"
+        limit_offset_bps: 1
+
+
+# ============================================================================
+# 示例 8: 保守策略 (高置信度大仓位)
+# ============================================================================
+# 场景: 等待高质量信号，重仓出击
+# 特点: 高置信度 + 大仓位 + 宽止损
+
+strategies:
+  - id: "conservative_brk_001"
+    enabled: true
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 150000
+    params:
+      ttl_ms: 120000  # 2分钟 TTL
+      extras:
+        symbols: ["BRK.B"]
+        bar_sec: 60
+
+        ensemble:
+          mode: "weighted_avg"
+          models:
+            - name: "xgb"
+              weight: 0.7
+            - name: "lstm"
+              weight: 0.3
+
+        sizing:
+          mode: "confidence_scaled"
+          base_qty: 200   # 大基础仓位
+          max_qty: 2000
+          multiplier: 3.0  # 置信度加成大
+
+        market_filter:
+          conf_floor: 0.8        # 高门槛
+          max_spread_bps: 3
+          min_volume: 1000000
+          max_vix: 20            # 低波环境
+
+        risk:
+          take_profit_pct: 0.04   # 4% 止盈
+          stop_loss_pct: 0.02     # 2% 止损
+          time_stop_min: 240      # 4小时持仓
+          partial_exit_pct: 0.3   # TP1 仅平 30%
+
+        order_type: "LMT"
+        limit_offset_bps: 5
+
+
+# ============================================================================
+# 示例 9: Shadow Mode 测试
+# ============================================================================
+# 场景: 测试新策略，不实际下单
+# 特点: shadow_mode + 完整配置
+
+strategies:
+  - id: "enhanced_shadow_test"
+    enabled: true
+    shadow_mode: true  # 仅记录决策，不下单
+    module: "strategies.enhanced_model_signal_strategy"
+    class: "EnhancedModelSignalStrategy"
+    capital_limit_usd: 100000
+    params:
+      ttl_ms: 60000
+      extras:
+        symbols: ["TSLA", "NVDA", "AAPL"]
+
+        ensemble:
+          mode: "weighted_avg"
+          models:
+            - name: "xgb"
+              weight: 0.6
+            - name: "lstm"
+              weight: 0.4
+
+        sizing:
+          mode: "vol_target"
+          risk_per_trade: 200.0
+          atr_multiple: 2.0
+          max_qty: 1000
+
+        market_filter:
+          conf_floor: 0.6
+          max_spread_bps: 5
+
+        risk:
+          take_profit_pct: 0.02
+          stop_loss_pct: 0.01
+          time_stop_min: 60
+
+
+# ============================================================================
+# 参数说明
+# ============================================================================
+#
+# === ensemble (多模型组合) ===
+# mode:
+#   - weighted_avg: 加权平均 (推荐)
+#   - vote: 多数投票 (适合分类)
+#   - max_conf: 选择最高置信度模型
+#
+# models: 模型列表
+#   - name: 特征前缀 (例如 "xgb" 对应 xgb_signal, xgb_conf)
+#   - weight: 权重 (总和必须为 1.0)
+#
+# === sizing (仓位管理) ===
+# mode:
+#   - fixed: 固定仓位 (简单)
+#   - confidence_scaled: 置信度缩放 (平衡)
+#   - vol_target: 波动率目标 (风险控制)
+#   - kelly: Kelly 准则 (资金优化)
+#
+# 通用参数:
+#   - base_qty: 基础股数
+#   - max_qty: 最大股数
+#   - lot: 手数 (最小交易单位)
+#
+# confidence_scaled 专属:
+#   - multiplier: 置信度乘数 (conf=1.0 时仓位 = base * (1+multiplier))
+#
+# vol_target 专属:
+#   - risk_per_trade: 单笔风险 (美元)
+#   - atr_multiple: 止损距离 (ATR 倍数)
+#
+# kelly 专属:
+#   - win_rate: 历史胜率 (0-1)
+#   - avg_win: 平均盈利 (R 倍数)
+#   - avg_loss: 平均亏损 (R 倍数)
+#   - kelly_fraction: Kelly 系数 (0.5 = Half-Kelly)
+#
+# === market_filter (市场过滤) ===
+# conf_floor: 最低置信度 (0-1)
+# max_spread_bps: 最大点差 (基点)
+# min_volume: 最小成交量
+# max_vix: 最大 VIX (0 = 禁用)
+# check_after_hours: 是否限制盘中交易
+#
+# === risk (风控) ===
+# take_profit_pct: 止盈百分比 (0 = 禁用)
+# stop_loss_pct: 止损百分比 (0 = 禁用)
+# time_stop_min: 时间止损 (分钟, 0 = 禁用)
+# partial_exit_pct: 止盈部分平仓比例 (1.0 = 全部平仓)
+#
+# === SFS 微观确认 (可选) ===
+# use_sfs_1s: 启用 SFS 1秒 K线确认
+# sfs_lookback: 回看周期 (秒)
+# sfs_confirm_up: 多头确认阈值 (10秒内上涨tick数)
+# sfs_confirm_down: 空头确认阈值 (10秒内下跌tick数)
+#
+# ============================================================================

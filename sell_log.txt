@@ -1,0 +1,352 @@
+[2026-01-06 20:46:23] ⚠️ Safety: must specify --symbol or --all.
+[2026-01-06 20:46:32] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=123) ...
+[2026-01-06 20:46:33] 📌 Target positions to close:
+[2026-01-06 20:46:33]   - QQQ   260116P00585000 P585.0 20260116 qty=+1 conId=840665711
+[2026-01-06 20:46:33]   - QQQ   260116P00595000 P595.0 20260116 qty=-1 conId=840666157
+[2026-01-06 20:46:33]   - QQQ   260130P00580000 P580.0 20260130 qty=+1 conId=826590052
+[2026-01-06 20:46:33]   - QQQ   260123P00595000 P595.0 20260123 qty=-1 conId=836932321
+[2026-01-06 20:46:33]   - QQQ   260123P00585000 P585.0 20260123 qty=+1 conId=836932062
+[2026-01-06 20:46:33]   - QQQ   260130P00590000 P590.0 20260130 qty=-1 conId=826590188
+[2026-01-06 20:46:38] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-01-06 20:46:39] 🧹 Cancel sent for 0 open trade(s).
+[2026-01-06 20:46:39] 📡 Fetching option quotes (best-effort) for smart close...
+[2026-01-06 20:46:51] 🧯 Closing option positions: 6 contract(s)
+[2026-01-06 20:46:51] 🔗 Detected vertical spreads: 3 (will try BAG close first)
+[2026-01-06 20:46:51]   - BAG QQQ 20260116 P long=585.0 short=595.0 x1 close=BUY
+[2026-01-06 20:46:57]   - BAG QQQ 20260130 P long=580.0 short=590.0 x1 close=BUY
+[2026-01-06 20:47:03]   - BAG QQQ 20260123 P long=585.0 short=595.0 x1 close=BUY
+[2026-01-06 20:47:10] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=123) ...
+[2026-01-06 20:47:12] 📊 After flatten, remaining positions (target scope):
+[2026-01-06 20:47:12]   - QQQ   260116P00585000 (OPT) qty=1.0 conId=840665711
+[2026-01-06 20:47:12]   - QQQ   260116P00595000 (OPT) qty=-1.0 conId=840666157
+[2026-01-06 20:47:12]   - QQQ   260130P00580000 (OPT) qty=1.0 conId=826590052
+[2026-01-06 20:47:12]   - QQQ   260123P00595000 (OPT) qty=-1.0 conId=836932321
+[2026-01-06 20:47:12]   - QQQ   260123P00585000 (OPT) qty=1.0 conId=836932062
+[2026-01-06 20:47:12]   - QQQ   260130P00590000 (OPT) qty=-1.0 conId=826590188
+[2026-01-06 20:47:12] 🧯 Final sweep: sending MARKET orders for remaining positions...
+[2026-01-06 20:47:12]   - MARKET SELL 1 QQQ   260116P00585000
+[2026-01-06 20:47:18]   - MARKET BUY 1 QQQ   260116P00595000
+[2026-01-06 20:47:24]   - MARKET SELL 1 QQQ   260130P00580000
+[2026-01-06 20:47:30] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9137) ...
+[2026-01-06 20:47:30]   - MARKET BUY 1 QQQ   260123P00595000
+[2026-01-06 20:47:32] 📌 Target positions to close:
+[2026-01-06 20:47:32]   - QQQ   260116P00585000 P585.0 20260116 qty=+1 conId=840665711
+[2026-01-06 20:47:32]   - QQQ   260116P00595000 P595.0 20260116 qty=-1 conId=840666157
+[2026-01-06 20:47:32]   - QQQ   260130P00580000 P580.0 20260130 qty=+1 conId=826590052
+[2026-01-06 20:47:32]   - QQQ   260123P00595000 P595.0 20260123 qty=-1 conId=836932321
+[2026-01-06 20:47:32]   - QQQ   260123P00585000 P585.0 20260123 qty=+1 conId=836932062
+[2026-01-06 20:47:32]   - QQQ   260130P00590000 P590.0 20260130 qty=-1 conId=826590188
+[2026-01-06 20:47:32] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-01-06 20:47:32] 🧯 Closing option positions: 6 contract(s)
+[2026-01-06 20:47:32] 🔗 Detected vertical spreads: 3 (will try BAG close first)
+[2026-01-06 20:47:32]   - BAG QQQ 20260116 P long=585.0 short=595.0 x1 close=BUY
+[2026-01-06 20:47:32]   - BAG QQQ 20260130 P long=580.0 short=590.0 x1 close=BUY
+[2026-01-06 20:47:32]   - BAG QQQ 20260123 P long=585.0 short=595.0 x1 close=BUY
+[2026-01-06 20:47:34] 📊 After flatten, remaining positions (target scope):
+[2026-01-06 20:47:34]   - QQQ   260116P00585000 (OPT) qty=1.0 conId=840665711
+[2026-01-06 20:47:34]   - QQQ   260116P00595000 (OPT) qty=-1.0 conId=840666157
+[2026-01-06 20:47:34]   - QQQ   260130P00580000 (OPT) qty=1.0 conId=826590052
+[2026-01-06 20:47:34]   - QQQ   260123P00595000 (OPT) qty=-1.0 conId=836932321
+[2026-01-06 20:47:34]   - QQQ   260123P00585000 (OPT) qty=1.0 conId=836932062
+[2026-01-06 20:47:34]   - QQQ   260130P00590000 (OPT) qty=-1.0 conId=826590188
+[2026-01-06 20:47:34] ⚠️ Some positions remain (dry-run).
+[2026-01-06 20:47:34] 🔚 Done.
+
+[2026-01-06 20:47:36]   - MARKET SELL 1 QQQ   260123P00585000
+[2026-01-06 20:47:42]   - MARKET BUY 1 QQQ   260130P00590000
+[2026-01-06 20:47:51] ⚠️ Still remaining after final sweep (likely outside trading hours / illiquid / rejected):
+[2026-01-06 20:47:51]   - QQQ   260116P00585000 (OPT) qty=1.0 conId=840665711
+[2026-01-06 20:47:51]   - QQQ   260116P00595000 (OPT) qty=-1.0 conId=840666157
+[2026-01-06 20:47:51]   - QQQ   260130P00580000 (OPT) qty=1.0 conId=826590052
+[2026-01-06 20:47:51]   - QQQ   260123P00595000 (OPT) qty=-1.0 conId=836932321
+[2026-01-06 20:47:51]   - QQQ   260123P00585000 (OPT) qty=1.0 conId=836932062
+[2026-01-06 20:47:51]   - QQQ   260130P00590000 (OPT) qty=-1.0 conId=826590188
+[2026-01-06 20:47:51] 🔚 Done.
+
+[2026-01-06 20:48:40] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9426) ...
+[2026-01-06 20:48:41] 📌 Target positions to close:
+[2026-01-06 20:48:41]   - QQQ   260116P00585000 P585.0 20260116 qty=+1 conId=840665711
+[2026-01-06 20:48:41]   - QQQ   260116P00595000 P595.0 20260116 qty=-1 conId=840666157
+[2026-01-06 20:48:41]   - QQQ   260130P00580000 P580.0 20260130 qty=+1 conId=826590052
+[2026-01-06 20:48:41]   - QQQ   260123P00595000 P595.0 20260123 qty=-1 conId=836932321
+[2026-01-06 20:48:41]   - QQQ   260123P00585000 P585.0 20260123 qty=+1 conId=836932062
+[2026-01-06 20:48:41]   - QQQ   260130P00590000 P590.0 20260130 qty=-1 conId=826590188
+[2026-01-06 20:48:41] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-01-06 20:48:41] 🧯 Closing option positions: 6 contract(s)
+[2026-01-06 20:48:41] 🔗 Detected vertical spreads: 3 (will try BAG close first)
+[2026-01-06 20:48:41]   - BAG QQQ 20260116 P long=585.0 short=595.0 x1 close=BUY
+[2026-01-06 20:48:41]   - BAG QQQ 20260130 P long=580.0 short=590.0 x1 close=BUY
+[2026-01-06 20:48:41]   - BAG QQQ 20260123 P long=585.0 short=595.0 x1 close=BUY
+[2026-01-06 20:48:43] 📊 After flatten, remaining positions (target scope):
+[2026-01-06 20:48:43]   - QQQ   260116P00585000 (OPT) qty=1.0 conId=840665711
+[2026-01-06 20:48:43]   - QQQ   260116P00595000 (OPT) qty=-1.0 conId=840666157
+[2026-01-06 20:48:43]   - QQQ   260130P00580000 (OPT) qty=1.0 conId=826590052
+[2026-01-06 20:48:43]   - QQQ   260123P00595000 (OPT) qty=-1.0 conId=836932321
+[2026-01-06 20:48:43]   - QQQ   260123P00585000 (OPT) qty=1.0 conId=836932062
+[2026-01-06 20:48:43]   - QQQ   260130P00590000 (OPT) qty=-1.0 conId=826590188
+[2026-01-06 20:48:43] ⚠️ Some positions remain (dry-run).
+[2026-01-06 20:48:43] 🔚 Done.
+
+[2026-01-07 12:55:14] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9019) ...
+[2026-01-07 12:55:16] 📌 Target positions to close:
+[2026-01-07 12:55:16]   - QQQ   260116P00585000 P585.0 20260116 qty=-1 conId=840665711
+[2026-01-07 12:55:16]   - QQQ   260116P00595000 P595.0 20260116 qty=+1 conId=840666157
+[2026-01-07 12:55:16]   - QQQ   260130P00580000 P580.0 20260130 qty=-1 conId=826590052
+[2026-01-07 12:55:16]   - QQQ   260123P00595000 P595.0 20260123 qty=+1 conId=836932321
+[2026-01-07 12:55:16]   - QQQ   260123P00585000 P585.0 20260123 qty=-1 conId=836932062
+[2026-01-07 12:55:16]   - QQQ   260130P00590000 P590.0 20260130 qty=+1 conId=826590188
+[2026-01-07 12:55:20] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-01-07 12:55:21] 🧹 Cancel sent for 0 open trade(s).
+[2026-01-07 12:55:21] 📡 Fetching option quotes (best-effort) for smart close...
+[2026-01-07 12:55:28] 🧯 Closing option positions: 6 contract(s)
+[2026-01-07 12:55:28] 🔗 Detected vertical spreads: 3 (will try BAG close first)
+[2026-01-07 12:55:28]   - BAG QQQ 20260116 P long=595.0 short=585.0 x1 close=SELL
+[2026-01-07 12:55:33]   - BAG QQQ 20260130 P long=590.0 short=580.0 x1 close=SELL
+[2026-01-07 12:55:39]   - BAG QQQ 20260123 P long=595.0 short=585.0 x1 close=SELL
+[2026-01-07 12:55:47] 📊 After flatten, remaining positions (target scope):
+[2026-01-07 12:55:47]   ✅ No remaining target positions. Flatten complete.
+[2026-01-07 12:55:47] 🔚 Done.
+
+[2026-02-12 14:26:25] ⚠️ Safety: must specify --symbol or --all.
+[2026-02-12 14:26:31] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9193) ...
+[2026-02-12 14:26:32] 📌 Target positions to close:
+[2026-02-12 14:26:32]   - SQQQ (STK) qty=+2907 conId=831082828
+[2026-02-12 14:26:32] ⛔ Aborted by user.
+[2026-02-12 14:26:47] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9834) ...
+[2026-02-12 14:26:49] 📌 Target positions to close:
+[2026-02-12 14:26:49]   - SQQQ (STK) qty=+2907 conId=831082828
+[2026-02-12 14:35:30] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-12 14:35:31] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-12 14:35:31] 🧯 Closing stock positions: 1
+[2026-02-12 14:35:31]   - SQQQ (STK) qty=+2907 action=SELL
+[2026-02-12 14:35:33] 📊 After flatten, remaining positions (target scope):
+[2026-02-12 14:35:33]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:35:33] 🧯 Final sweep: sending MARKET orders for remaining positions...
+[2026-02-12 14:35:33]   - MARKET SELL 4839.0 SQQQ
+[2026-02-12 14:35:35] ⚠️ Still remaining after final sweep (likely outside trading hours / illiquid / rejected):
+[2026-02-12 14:35:35]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:35:35] 🔚 Done.
+
+[2026-02-12 14:35:51] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9494) ...
+[2026-02-12 14:35:53] 📡 Found 1 raw positions in account.
+[2026-02-12 14:35:53] 📡 Qualifying contracts (best-effort)...
+[2026-02-12 14:35:53] 📌 Target positions to close:
+[2026-02-12 14:35:53]   - SQQQ (STK) qty=+4839 conId=831082828
+[2026-02-12 14:35:57] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-12 14:35:58] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-12 14:35:58] 🧯 Closing stock positions: 1
+[2026-02-12 14:35:58]   - SQQQ (STK) qty=+4839 action=SELL
+[2026-02-12 14:36:00] 📊 After flatten, remaining positions (target scope):
+[2026-02-12 14:36:00]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:36:00] 🧯 Final sweep: sending MARKET orders for remaining positions...
+[2026-02-12 14:36:00]   - MARKET SELL 4839.0 SQQQ
+[2026-02-12 14:36:02] ⚠️ Still remaining after final sweep (likely outside trading hours / illiquid / rejected):
+[2026-02-12 14:36:02]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:36:02] 🔚 Done.
+
+[2026-02-12 14:36:13] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9137) ...
+[2026-02-12 14:36:15] 📡 Found 1 raw positions in account.
+[2026-02-12 14:36:15] 📡 Qualifying contracts (best-effort)...
+[2026-02-12 14:36:15] 📌 Target positions to close:
+[2026-02-12 14:36:15]   - SQQQ (STK) qty=+4839 conId=831082828
+[2026-02-12 14:36:15] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-12 14:36:15] 🧯 Closing stock positions: 1
+[2026-02-12 14:36:15]   - SQQQ (STK) qty=+4839 action=SELL
+[2026-02-12 14:36:17] 📊 After flatten, remaining positions (target scope):
+[2026-02-12 14:36:17]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:36:17] ⚠️ Some positions remain (dry-run).
+[2026-02-12 14:36:17] 🔚 Done.
+
+[2026-02-12 14:36:26] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9583) ...
+[2026-02-12 14:36:28] 📡 Found 1 raw positions in account.
+[2026-02-12 14:36:28] 📡 Qualifying contracts (best-effort)...
+[2026-02-12 14:36:28] 📌 Target positions to close:
+[2026-02-12 14:36:28]   - SQQQ (STK) qty=+4839 conId=831082828
+[2026-02-12 14:36:29] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-12 14:36:30] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-12 14:36:30] 🧯 Closing stock positions: 1
+[2026-02-12 14:36:30]   - SQQQ (STK) qty=+4839 action=SELL
+[2026-02-12 14:36:33] 📊 After flatten, remaining positions (target scope):
+[2026-02-12 14:36:33]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:36:33] 🧯 Final sweep: sending MARKET orders for remaining positions...
+[2026-02-12 14:36:33]   - MARKET SELL 4839.0 SQQQ
+[2026-02-12 14:36:35] ⚠️ Still remaining after final sweep (likely outside trading hours / illiquid / rejected):
+[2026-02-12 14:36:35]   - SQQQ (STK) qty=4839.0 conId=831082828
+[2026-02-12 14:36:35] 🔚 Done.
+
+[2026-02-12 14:38:50] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9932) ...
+[2026-02-12 14:38:52] 📡 Found 1 raw positions in account.
+[2026-02-12 14:38:52] 📡 Qualifying contracts (best-effort)...
+[2026-02-12 14:38:52] 📌 Target positions to close:
+[2026-02-12 14:38:52]   - SQQQ (STK) qty=+4839 conId=831082828
+[2026-02-12 14:38:53] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-12 14:38:54] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-12 14:38:54] 🧯 Closing stock positions: 1
+[2026-02-12 14:38:54]   - SQQQ (STK) qty=+4839 action=SELL
+[2026-02-12 14:38:57] 📊 After flatten, remaining positions (target scope):
+[2026-02-12 14:38:57]   ✅ No remaining target positions. Flatten complete.
+[2026-02-12 14:38:57] 🔚 Done.
+
+[2026-02-12 14:50:36] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9269) ...
+[2026-02-12 14:50:37] 📡 Found 1 raw positions in account.
+[2026-02-12 14:50:37] 📡 Qualifying contracts (best-effort)...
+[2026-02-12 14:50:38] 📌 Target positions to close:
+[2026-02-12 14:50:38]   - SQQQ (STK) qty=+139 conId=831082828
+[2026-02-12 14:50:41] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-12 14:50:42] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-12 14:50:42] 🧯 Closing stock positions: 1
+[2026-02-12 14:50:42]   - SQQQ (STK) qty=+139 action=SELL
+[2026-02-12 14:50:45] 📊 After flatten, remaining positions (target scope):
+[2026-02-12 14:50:45]   ✅ No remaining target positions. Flatten complete.
+[2026-02-12 14:50:45] 🔚 Done.
+
+[2026-02-13 12:24:06] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9298) ...
+[2026-02-13 12:24:08] 📡 Found 1 raw positions in account.
+[2026-02-13 12:24:08] 📡 Qualifying contracts (best-effort)...
+[2026-02-13 12:24:08] 📌 Target positions to close:
+[2026-02-13 12:24:08]   - TQQQ (STK) qty=+206 conId=72539702
+[2026-02-13 12:24:11] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-13 12:24:12] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-13 12:24:12] 🧯 Closing stock positions: 1
+[2026-02-13 12:24:12]   - TQQQ (STK) qty=+206 action=SELL
+[2026-02-13 12:24:15] 📊 After flatten, remaining positions (target scope):
+[2026-02-13 12:24:15]   ✅ No remaining target positions. Flatten complete.
+[2026-02-13 12:24:15] 🔚 Done.
+
+[2026-02-19 10:10:24] ⚠️ Safety: must specify --symbol or --all.
+[2026-02-19 10:10:56] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9855) ...
+[2026-02-19 10:10:58] 📡 Found 1 raw positions in account.
+[2026-02-19 10:10:58] 📡 Qualifying contracts (best-effort)...
+[2026-02-19 10:10:58] 📌 Target positions to close:
+[2026-02-19 10:10:58]   - SQQQ (STK) qty=-137 conId=831082828
+[2026-02-19 10:11:07] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-19 10:11:08] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-19 10:11:08] 🧯 Closing stock positions: 1
+[2026-02-19 10:11:08]   - SQQQ (STK) qty=-137 action=BUY
+[2026-02-19 10:11:11] 📊 After flatten, remaining positions (target scope):
+[2026-02-19 10:11:11]   ✅ No remaining target positions. Flatten complete.
+[2026-02-19 10:11:11] 🔚 Done.
+
+[2026-02-19 11:47:41] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9813) ...
+[2026-02-19 11:47:43] 📡 Found 0 raw positions in account.
+[2026-02-19 11:47:43] ⚠️ 当前账户无任何持仓。
+[2026-02-19 11:48:22] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9092) ...
+[2026-02-19 11:48:23] 📡 Found 0 raw positions in account.
+[2026-02-19 11:48:23] ⚠️ 当前账户无任何持仓。
+[2026-02-19 11:49:28] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9066) ...
+[2026-02-19 11:49:30] 📡 Found 0 raw positions in account.
+[2026-02-19 11:49:30] ⚠️ 当前账户无任何持仓，将继续执行 --all 挂单清理。
+[2026-02-19 11:49:30] ℹ️ --all 模式下当前无持仓，将仅执行挂单清理（含 PreSubmitted）。
+[2026-02-19 11:49:30] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-19 11:49:31] 🧹 Cancel sent for 1 open trade(s).
+[2026-02-19 11:49:37] ⚠️ Some orders still not done after 6.0s; close orders may be rejected by IB.
+[2026-02-19 11:49:39] 📊 After flatten, remaining positions (target scope):
+[2026-02-19 11:49:39]   ✅ No remaining target positions. Flatten complete.
+[2026-02-19 11:49:39] 🔚 Done.
+
+[2026-02-19 12:00:04] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9041) ...
+[2026-02-19 12:00:06] 📡 Found 0 raw positions in account.
+[2026-02-19 12:00:06] ⚠️ 当前账户无任何持仓，将继续执行 --all 挂单清理。
+[2026-02-19 12:00:06] ℹ️ --all 模式下当前无持仓，将仅执行挂单清理（含 PreSubmitted）。
+[2026-02-19 12:00:06] 🧹 --all 模式自动执行全局撤单: ib.reqGlobalCancel()
+[2026-02-19 12:00:06] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-19 12:00:07] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-19 12:00:09] 📊 After flatten, remaining positions (target scope):
+[2026-02-19 12:00:09]   ✅ No remaining target positions. Flatten complete.
+[2026-02-19 12:00:09] 🔚 Done.
+
+[2026-02-19 12:00:33] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9881) ...
+[2026-02-19 12:00:36] 📡 Found 0 raw positions in account.
+[2026-02-19 12:00:36] ⚠️ 当前账户无任何持仓，将继续执行 --all 挂单清理。
+[2026-02-19 12:00:36] ℹ️ --all 模式下当前无持仓，将仅执行挂单清理（含 PreSubmitted）。
+[2026-02-19 12:00:36] 🧹 --all 模式自动执行全局撤单: ib.reqGlobalCancel()
+[2026-02-19 12:00:36] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-19 12:00:37] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-19 12:00:39] 📊 After flatten, remaining positions (target scope):
+[2026-02-19 12:00:39]   ✅ No remaining target positions. Flatten complete.
+[2026-02-19 12:00:39] 🔚 Done.
+
+[2026-02-19 12:03:28] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9660) ...
+[2026-02-19 12:03:30] 📡 Found 0 raw positions in account.
+[2026-02-19 12:03:30] ⚠️ 当前账户无任何持仓，将继续执行 --all 挂单清理。
+[2026-02-19 12:03:30] ℹ️ --all 模式下当前无持仓，将仅执行挂单清理（含 PreSubmitted）。
+[2026-02-19 12:03:30] 🧹 --all 模式自动执行全局撤单: ib.reqGlobalCancel()
+[2026-02-19 12:03:30] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-19 12:03:31] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-19 12:03:33] 📊 After flatten, remaining positions (target scope):
+[2026-02-19 12:03:33]   ✅ No remaining target positions. Flatten complete.
+[2026-02-19 12:03:33] 🔚 Done.
+
+[2026-02-24 13:42:20] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9864) ...
+[2026-02-24 13:42:22] 📡 Found 1 raw positions in account.
+[2026-02-24 13:42:22] 📡 Qualifying contracts (best-effort)...
+[2026-02-24 13:42:22] 📌 Target positions to close:
+[2026-02-24 13:42:22]   - TQQQ (STK) qty=+204 conId=72539702
+[2026-02-24 13:42:22] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-24 13:42:22] 🧯 Closing stock positions: 1
+[2026-02-24 13:42:22]   - TQQQ (STK) qty=+204 action=SELL
+[2026-02-24 13:42:24] 📊 After flatten, remaining positions (target scope):
+[2026-02-24 13:42:24]   - TQQQ (STK) qty=204.0 conId=72539702
+[2026-02-24 13:42:24] ⚠️ Some positions remain (dry-run).
+[2026-02-24 13:42:24] 🔚 Done.
+
+[2026-02-24 13:42:31] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9134) ...
+[2026-02-24 13:42:32] 📡 Found 1 raw positions in account.
+[2026-02-24 13:42:32] 📡 Qualifying contracts (best-effort)...
+[2026-02-24 13:42:32] 📌 Target positions to close:
+[2026-02-24 13:42:32]   - TQQQ (STK) qty=+204 conId=72539702
+[2026-02-24 13:42:32] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-24 13:42:33] 🧹 Cancel sent for 1 open trade(s).
+[2026-02-24 13:42:39] ⚠️ Some orders still not done after 6.0s; close orders may be rejected by IB.
+[2026-02-24 13:42:39] 🧯 Closing stock positions: 1
+[2026-02-24 13:42:39]   - TQQQ (STK) qty=+204 action=SELL
+[2026-02-24 13:42:43] 📊 After flatten, remaining positions (target scope):
+[2026-02-24 13:42:43]   ✅ No remaining target positions. Flatten complete.
+[2026-02-24 13:42:43] 🔚 Done.
+
+[2026-02-24 13:47:54] ⚠️ Safety: must specify --symbol or --all.
+[2026-02-24 13:48:00] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9402) ...
+[2026-02-24 13:48:02] 📡 Found 0 raw positions in account.
+[2026-02-24 13:48:02] ⚠️ 当前账户无任何持仓，将继续执行 --all 挂单清理。
+[2026-02-24 13:48:02] ℹ️ --all 模式下当前无持仓，将仅执行挂单清理（含 PreSubmitted）。
+[2026-02-24 13:48:02] 🧹 --all 模式自动执行全局撤单: ib.reqGlobalCancel()
+[2026-02-24 13:48:02] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-02-24 13:48:03] 🧹 Cancel sent for 0 open trade(s).
+[2026-02-24 13:48:05] 📊 After flatten, remaining positions (target scope):
+[2026-02-24 13:48:05]   ✅ No remaining target positions. Flatten complete.
+[2026-02-24 13:48:05] 🔚 Done.
+
+[2026-03-31 23:15:16] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9535) ...
+[2026-03-31 23:15:18] 📡 Found 2 raw positions in account.
+[2026-03-31 23:15:18] 📡 Qualifying contracts (best-effort)...
+[2026-03-31 23:15:19] 📌 Target positions to close:
+[2026-03-31 23:15:19]   - QQQ (STK) qty=-1 conId=320227571
+[2026-03-31 23:15:19] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-03-31 23:15:20] 🧹 Cancel sent for 0 open trade(s).
+[2026-03-31 23:15:20] 🧯 Closing stock positions: 1
+[2026-03-31 23:15:20]   - QQQ (STK) qty=-1 action=BUY
+[2026-03-31 23:15:28] 📊 After flatten, remaining positions (target scope):
+[2026-03-31 23:15:28]   - QQQ (STK) qty=-1.0 conId=320227571
+[2026-03-31 23:15:28] 🧯 Final sweep: sending MARKET orders for remaining positions...
+[2026-03-31 23:15:28]   - MARKET BUY 1.0 QQQ
+[2026-03-31 23:15:36] ⚠️ Still remaining after final sweep (likely outside trading hours / illiquid / rejected):
+[2026-03-31 23:15:36]   - QQQ (STK) qty=-1.0 conId=320227571
+[2026-03-31 23:15:36] 🔚 Done.
+
+[2026-03-31 23:16:02] 🔌 Connecting to IB (paper, 127.0.0.1:4002, clientId=9662) ...
+[2026-03-31 23:16:04] 📡 Found 2 raw positions in account.
+[2026-03-31 23:16:04] 📡 Qualifying contracts (best-effort)...
+[2026-03-31 23:16:04] 📌 Target positions to close:
+[2026-03-31 23:16:04]   - SQQQ (STK) qty=+1 conId=831082828
+[2026-03-31 23:16:04] 🧹 Cancelling open orders for targeted conId(s)...
+[2026-03-31 23:16:05] 🧹 Cancel sent for 0 open trade(s).
+[2026-03-31 23:16:05] 🧯 Closing stock positions: 1
+[2026-03-31 23:16:05]   - SQQQ (STK) qty=+1 action=SELL
+[2026-03-31 23:16:13] 📊 After flatten, remaining positions (target scope):
+[2026-03-31 23:16:13]   - SQQQ (STK) qty=1.0 conId=831082828
+[2026-03-31 23:16:13] 🧯 Final sweep: sending MARKET orders for remaining positions...
+[2026-03-31 23:16:13]   - MARKET SELL 1.0 SQQQ
+[2026-03-31 23:16:21] ⚠️ Still remaining after final sweep (likely outside trading hours / illiquid / rejected):
+[2026-03-31 23:16:21]   - SQQQ (STK) qty=1.0 conId=831082828
+[2026-03-31 23:16:21] 🔚 Done.
+

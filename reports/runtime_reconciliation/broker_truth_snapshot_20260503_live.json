@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-03T22:52:25.787869+00:00",
+  "source": "ib_insync.positions",
+  "host": "127.0.0.1",
+  "port": 4002,
+  "client_id": 9917,
+  "readonly": true,
+  "target_positions": {
+    "OPT:QQQ:20260429:659:P": {
+      "symbol": "OPT:QQQ:20260429:659:P",
+      "qty": 0.0,
+      "missing_from_broker_positions": true
+    },
+    "OPT:QQQ:20260501:675:C": {
+      "symbol": "OPT:QQQ:20260501:675:C",
+      "qty": 0.0,
+      "missing_from_broker_positions": true
+    },
+    "SOXS": {
+      "symbol": "SOXS",
+      "qty": -8448.0,
+      "secType": "STK",
+      "localSymbol": "SOXS",
+      "conId": 854072548
+    },
+    "TQQQ": {
+      "symbol": "TQQQ",
+      "qty": 0.0,
+      "missing_from_broker_positions": true
+    }
+  },
+  "all_nonzero_positions": [
+    {
+      "symbol": "SOXS",
+      "qty": -8448.0,
+      "secType": "STK",
+      "localSymbol": "SOXS",
+      "conId": 854072548
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "uid": "trading-trace",
+  "title": "Trading Trace & Logs",
+  "timezone": "browser",
+  "editable": true,
+  "version": 1,
+  "schemaVersion": 38,
+  "tags": ["trading", "observability"],
+  "templating": {
+    "list": [
+      {
+        "type": "textbox",
+        "name": "trace_id",
+        "label": "trace_id (paste or click from logs)",
+        "query": "",
+        "current": { "text": "", "value": "" },
+        "hide": 0
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "logs",
+      "title": "Live Logs — Orders / Decisions / Overlay",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 0 },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      },
+      "targets": [
+        { "refId": "A", "expr": "{job=\"trader\"} |~ \"order_fill|order_rejected|order_trimmed|order_skipped|overlay_block|decision_made\" | json" }
+      ],
+      "fieldConfig": {
+        "overrides": [],
+        "defaults": { "mappings": [], "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] } }
+      },
+      "links": []
+    },
+    {
+      "id": 2,
+      "type": "traces",
+      "title": "Trace Viewer (Tempo) — ${trace_id}",
+      "datasource": { "type": "tempo", "uid": "tempo" },
+      "gridPos": { "h": 20, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "queryType": "traceId",
+          "query": "${trace_id}"
+        }
+      ],
+      "options": {
+        "showSpanBar": true,
+        "showTable": true
+      }
+    },
+    {
+      "id": 3,
+      "type": "logs",
+      "title": "Logs for Selected Trace",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 20, "w": 12, "x": 12, "y": 12 },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      },
+      "targets": [
+        { "refId": "A", "expr": "{job=\"trader\"} | json | trace_id = \"${trace_id}\"" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "SLO — Latency & Error Rates (ClickHouse)",
+      "datasource": { "type": "grafana-clickhouse-datasource", "uid": "ch" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 32 },
+      "fieldConfig": {
+        "defaults": { "unit": "ms" },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "infer_error_rate" }, "properties": [ { "id": "unit", "value": "percentunit" } ] },
+          { "matcher": { "id": "byName", "options": "order_error_rate" }, "properties": [ { "id": "unit", "value": "percentunit" } ] }
+        ]
+      },
+      "targets": [
+        { "refId": "A", "query": "SELECT toDateTime(ts_ms/1000) AS t, infer_latency_ms_avg AS v, 'infer_latency_ms_avg' AS m FROM live_metrics ORDER BY t", "format": "time_series" },
+        { "refId": "B", "query": "SELECT toDateTime(ts_ms/1000) AS t, data_lag_ms_avg AS v, 'data_lag_ms_avg' AS m FROM live_metrics ORDER BY t", "format": "time_series" },
+        { "refId": "C", "query": "SELECT toDateTime(ts_ms/1000) AS t, infer_error_rate AS v, 'infer_error_rate' AS m FROM live_metrics ORDER BY t", "format": "time_series" },
+        { "refId": "D", "query": "SELECT toDateTime(ts_ms/1000) AS t, order_error_rate AS v, 'order_error_rate' AS m FROM live_metrics ORDER BY t", "format": "time_series" }
+      ],
+      "options": { "legend": { "displayMode": "list", "placement": "right" } }
+    }
+  ]
+}

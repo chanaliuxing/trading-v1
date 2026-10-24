@@ -1,0 +1,44 @@
+{
+  "audit_dir": "./runtime/audit/2026-04-30",
+  "blockers": [
+    "financial_snapshot_unavailable",
+    "runtime_reconciliation_audit_stale"
+  ],
+  "day": "20260430",
+  "financial_snapshot": {
+    "available": false,
+    "blockers": [
+      "financial_snapshot_unavailable"
+    ],
+    "ok": false,
+    "reason": "clickhouse_account_snapshot_table_missing_or_unreadable"
+  },
+  "generated_at": "2026-04-30T18:07:39-04:00",
+  "latest_position_audit_age_sec": 25197.886314,
+  "latest_position_audit_payload": {
+    "db_open_count": 0,
+    "ghosts": 0,
+    "ib_open_count": 0,
+    "ib_positions": {
+      "SOXS": -8448.0
+    },
+    "ib_pre_submitted": 0,
+    "ledger_positions": {
+      "OPT:QQQ:20260422:653:C": 0.0,
+      "OPT:QQQ:20260423:650:C": 0.0,
+      "OPT:QQQ:20260424:653:P": 0.0,
+      "OPT:QQQ:20260429:659:P": 0.0,
+      "OPT:QQQ:20260430:658:P": 0.0,
+      "SOXS": -8448.0
+    },
+    "mismatch_samples": [],
+    "mismatches": 0,
+    "orphans_detected": 0,
+    "orphans_unresolved": 0,
+    "position_mismatches": 0
+  },
+  "latest_position_audit_ts": "2026-04-30T11:07:41.286104-04:00",
+  "latest_reconciliation_alert_payload": {},
+  "latest_reconciliation_alert_ts": null,
+  "ok": false
+}

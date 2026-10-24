@@ -1,0 +1,112 @@
+{
+  "gen": 1,
+  "mode": "optuna",
+  "best_params": {
+    "sizing.base_qty": 50
+  },
+  "study_summary": {
+    "best_value": 0.0,
+    "best_params": {
+      "sizing.base_qty": 50
+    },
+    "direction": "maximize",
+    "target": "is",
+    "trials": 2,
+    "oos_summary_of_best": {
+      "oos_avg_total_return": 0.0,
+      "oos_avg_sharpe": 0.0,
+      "oos_avg_ic": 0.0,
+      "oos_avg_max_drawdown": 0.0,
+      "oos_avg_win_rate": 0.0,
+      "oos_avg_profit_factor": Infinity,
+      "oos_avg_sortino": 0.0,
+      "oos_avg_omega": 0.0,
+      "oos_avg_calmar": Infinity,
+      "oos_trades": 0,
+      "oos_psr": 0.0,
+      "oos_dsr": 0.0,
+      "oos_pbo": 0.0,
+      "folds": 1
+    }
+  },
+  "oos_summary": {
+    "oos_avg_total_return": 0.0,
+    "oos_avg_sharpe": 0.0,
+    "oos_avg_ic": 0.0,
+    "oos_avg_max_drawdown": 0.0,
+    "oos_avg_win_rate": 0.0,
+    "oos_avg_profit_factor": Infinity,
+    "oos_avg_sortino": 0.0,
+    "oos_avg_omega": 0.0,
+    "oos_avg_calmar": Infinity,
+    "oos_trades": 0,
+    "oos_psr": 0.0,
+    "oos_dsr": 0.0,
+    "oos_pbo": 0.0,
+    "folds": 1
+  },
+  "rows": [
+    {
+      "fold_id": 1,
+      "phase": "IS",
+      "start": "2025-11-04 09:30:00",
+      "end": "2025-11-04 13:06:00",
+      "params": "{\"sizing.base_qty\": 50}",
+      "total_return": 0,
+      "sharpe": 0,
+      "max_drawdown": 0,
+      "win_rate": 0,
+      "profit_factor": 0,
+      "trades": 0,
+      "sortino": 0.0,
+      "omega": 0.0,
+      "calmar": Infinity
+    },
+    {
+      "fold_id": 1,
+      "phase": "IS",
+      "start": "2025-11-04 09:30:00",
+      "end": "2025-11-04 13:06:00",
+      "params": "{\"sizing.base_qty\": 100}",
+      "total_return": 0,
+      "sharpe": 0,
+      "max_drawdown": 0,
+      "win_rate": 0,
+      "profit_factor": 0,
+      "trades": 0,
+      "sortino": 0.0,
+      "omega": 0.0,
+      "calmar": Infinity
+    },
+    {
+      "fold_id": 1,
+      "phase": "OOS",
+      "start": "2025-11-04 13:06:00",
+      "end": "2025-11-04 15:30:00",
+      "params": "{\"sizing.base_qty\": 50}",
+      "total_return": 0.0,
+      "sharpe": 0.0,
+      "max_drawdown": 0.0,
+      "win_rate": 0.0,
+      "profit_factor": Infinity,
+      "trades": 0,
+      "sortino": 0.0,
+      "omega": 0.0,
+      "calmar": Infinity
+    }
+  ],
+  "artifacts": {
+    "rows_csv": "./bug10_real_test/gen_01/rows.csv",
+    "rows_parquet": "./bug10_real_test/gen_01/rows.parquet",
+    "leaderboard_is_csv": "./bug10_real_test/gen_01/leaderboard_is.csv",
+    "leaderboard_oos_csv": "./bug10_real_test/gen_01/leaderboard_oos.csv",
+    "oos_summary_json": "./bug10_real_test/gen_01/oos_summary.json",
+    "best_params_by_fold_json": "./bug10_real_test/gen_01/best_params_by_fold.json",
+    "champion_params_csv": "./bug10_real_test/gen_01/champion_params.csv",
+    "oos_equity_png": "./bug10_real_test/gen_01/oos_equity.png",
+    "oos_drawdown_png": "./bug10_real_test/gen_01/oos_drawdown.png"
+  },
+  "git_commit": "74aed730fe5a4f8d193cf1afdd65df747357f423",
+  "config_sha256": "6bada8ab4395cf73e312b257e29f0b1025adc06e040fabc7d0327ab21fd64ca1",
+  "data_snapshot": "12cefc9250a489194b1c0fb934ea6914852fec4708a2bcf8b753db1137094d38"
+}

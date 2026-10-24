@@ -1,0 +1,22 @@
+{
+  "_comment": "Feature family toggles for ML experiments. Families are defined by tags in config/feature_registry.json. All families default to enabled.",
+  "families": {
+    "price": {
+      "tags": ["price", "ohlc", "trend"],
+      "enabled": true
+    },
+    "volume": {
+      "tags": ["volume", "rvol"],
+      "enabled": true
+    },
+    "volatility": {
+      "tags": ["volatility"],
+      "enabled": true
+    },
+    "time": {
+      "tags": ["time", "session"],
+      "enabled": true
+    }
+  }
+}
+

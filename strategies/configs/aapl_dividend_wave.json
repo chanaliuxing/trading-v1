@@ -1,0 +1,35 @@
+{
+  "symbol": "TSLA",
+  "asof": "2025-10-14",
+  "description": "TEST STRATEGY - Immediate trigger for IBKR order testing",
+  "slip_cost": 0.0945,
+  "commission_per_share": 0.0035,
+  "atr_period": 14,
+  "ema_fast": 5,
+  "ema_slow": 20,
+  "ema_1h_fast": 20,
+  "ema_1h_slow": 60,
+  "trend_window_min": 15,
+  "rvol_window": 20,
+  "volume_mult_threshold": 1.5,
+  "atr_mult_stop": 1.5,
+  "atr_mult_take": 1.8,
+  "rsi_overbought": 80,
+  "vwap_distance_mult": 2.0,
+  "max_trades_per_day": 3,
+  "max_consecutive_losses": 2,
+  "eod_close_time": "15:55",
+  "positioning": {
+    "base_unit_pct": 0.015,
+    "cap_symbol": 0.1
+  },
+  "timing": {
+    "market_open": "09:30",
+    "market_close": "16:00"
+  },
+  "data_limits": {
+    "bars_1m": 240,
+    "bars_15m": 120,
+    "bars_1h": 120
+  }
+}

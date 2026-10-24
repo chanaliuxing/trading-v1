@@ -1,0 +1,35 @@
+{
+  "audit_date": "2026-04-29",
+  "audit_dir": "./runtime/audit/2026-04-29",
+  "audit_dir_exists": true,
+  "blocked_reason_counts": {
+    "amp_not_locked": 1,
+    "data_integrity_fail_closed": 26,
+    "fast_drift_not_ready": 6,
+    "sign_mismatch": 14
+  },
+  "date": "2026-04-29",
+  "false_block_removed": true,
+  "latest_legacy_block_ts": "2026-04-29T12:15:00.231546-04:00",
+  "legacy_block_recovered": true,
+  "legacy_open_orders_block_count": 32,
+  "legitimate_block_observed": true,
+  "legitimate_block_reason_counts": {
+    "amp_not_locked": 1,
+    "data_integrity_fail_closed": 26,
+    "fast_drift_not_ready": 6,
+    "sign_mismatch": 14
+  },
+  "market_day": "20260429",
+  "ok": true,
+  "position_sync_flat_count": 2665,
+  "post_legacy_flat_count": 2661,
+  "post_legacy_strategy_row_count": 2958,
+  "reasons": [],
+  "recommendation": "PASS",
+  "requested_day": "20260429",
+  "rows_scanned": 92750,
+  "strategy_id": "qqq_intraday_001",
+  "strategy_row_count": 3736,
+  "used_previous_completed_day": false
+}

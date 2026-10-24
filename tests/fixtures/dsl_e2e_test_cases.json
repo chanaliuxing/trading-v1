@@ -1,0 +1,75 @@
+[
+  {
+    "name": "simple_ratio",
+    "description": "Basic ratio: ret_5 / atr_14",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": "f.atr_14",
+      "eps": 1e-06
+    },
+    "sources": []
+  },
+  {
+    "name": "momentum_normalized",
+    "description": "Price momentum normalized by volatility",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": {
+        "op": "sum",
+        "cols": ["f.atr_14", 1e-06]
+      },
+      "eps": 1e-06
+    },
+    "sources": []
+  },
+  {
+    "name": "volume_surge_log",
+    "description": "Log transform of volume surge",
+    "dsl": {
+      "op": "log1p",
+      "col": {
+        "op": "ratio",
+        "num": "f.volume",
+        "den": "f.vol_20",
+        "eps": 1.0
+      }
+    },
+    "sources": []
+  },
+  {
+    "name": "spy_relative_momentum",
+    "description": "Stock momentum relative to SPY",
+    "dsl": {
+      "op": "ratio_minus_1",
+      "num": "f.ret_5",
+      "den": "f.spy_ret_5",
+      "eps": 1e-06
+    },
+    "sources": []
+  },
+  {
+    "name": "complex_nested_signal",
+    "description": "Complex: (ret_5 * abs(atr_20)) / (atr_14 + eps)",
+    "dsl": {
+      "op": "ratio",
+      "num": {
+        "op": "product",
+        "cols": [
+          "f.ret_5",
+          {
+            "op": "abs",
+            "col": "f.atr_20"
+          }
+        ]
+      },
+      "den": {
+        "op": "sum",
+        "cols": ["f.atr_14", 1e-06]
+      },
+      "eps": 1e-06
+    },
+    "sources": []
+  }
+]

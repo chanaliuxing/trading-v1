@@ -1,0 +1,119 @@
+{
+  "decision": "MANUAL_REVIEW_PACKAGE_READY",
+  "generated_at": "2026-05-12T18:11:11-04:00",
+  "live_ibkr_connected": false,
+  "canary_started": false,
+  "live_approved": false,
+  "evidence": {
+    "final_landing_decision": "READY_FOR_MANUAL_CANARY_REVIEW",
+    "soak_gate": {
+      "verdict": "PASS",
+      "blockers": [],
+      "warnings": []
+    },
+    "runtime_samples": {
+      "shadow_only": 20,
+      "paper_only": 20
+    },
+    "strategy_execution_reliability": {
+      "classification": "NO_BOTTLENECK",
+      "sample_count": 40,
+      "uom_route_status_counts": {
+        "delegated": 20,
+        "skipped": 20
+      },
+      "paper_broker_submit": 20,
+      "broker_ack": 20,
+      "fill": 20,
+      "attribution": 20,
+      "pnl_replay": 20
+    },
+    "approved_to_fill": {
+      "classification": "NO_BOTTLENECK",
+      "sample_count": 40,
+      "broker_submit_drops": 0
+    },
+    "vegas_dlb_edge": {
+      "classification": "NO_BOTTLENECK",
+      "sample_count": 560,
+      "dlb_breach_count": 0,
+      "edge_insufficient_count": 0,
+      "stale_decision_count": 0
+    },
+    "canary_checklist_generated": true,
+    "test_results": {
+      "no_live_guard": "4 passed",
+      "services": "656 passed",
+      "exec": "293 passed",
+      "reconciliation": "76 passed",
+      "reports": "61 passed",
+      "ib_reconnect_fast": "32 passed"
+    }
+  },
+  "canary_sizing_manual_confirmation": {
+    "strategy_id": "REQUIRED_MANUAL_INPUT",
+    "strategy_instance_id": "REQUIRED_MANUAL_INPUT",
+    "symbol": "REQUIRED_MANUAL_INPUT",
+    "account_id": "REQUIRED_LIVE_OPT_IN_CHECK",
+    "permission_tier": "REQUIRED_MANUAL_REVIEW",
+    "max_contracts_or_shares": "REQUIRED_MANUAL_INPUT",
+    "max_notional": "REQUIRED_MANUAL_INPUT",
+    "max_daily_loss": "REQUIRED_MANUAL_INPUT",
+    "max_open_orders": "REQUIRED_MANUAL_INPUT",
+    "max_trades_per_day": "REQUIRED_MANUAL_INPUT",
+    "allowed_session": "REQUIRED_MANUAL_INPUT",
+    "close_only_fallback": "owner_scoped_only",
+    "kill_switch": "REQUIRED_MANUAL_CONFIRMATION",
+    "manual_operator": "REQUIRED_MANUAL_INPUT",
+    "rollback_condition": "REQUIRED_MANUAL_INPUT"
+  },
+  "operator_must_confirm": [
+    "IB Gateway state",
+    "no unexpected live positions/open orders",
+    "broker truth fresh and broker-backed",
+    "position safety fresh and go",
+    "runtime freshness current",
+    "strategy surface tier reviewed",
+    "paper/shadow soak PASS reviewed",
+    "unknown/manual broker order policy remains manual-review only",
+    "emergency stop and kill switch understood",
+    "canary sizing caps entered and reviewed"
+  ],
+  "launch_blockers": [
+    "unexpected live broker state",
+    "broker truth missing/stale/not broker-backed",
+    "position safety stale/no-go/lookup failed",
+    "runtime stale",
+    "active quarantine/manual recovery required",
+    "unknown broker order auto-cancel enabled",
+    "unknown owner auto-flatten enabled",
+    "symbol-only attribution",
+    "order_ref prefix/substr attribution",
+    "missing canary sizing caps",
+    "missing kill switch confirmation"
+  ],
+  "go_no_go_manual_review": {
+    "runtime_evidence": "GO_FOR_REVIEW",
+    "soak_gate": "GO_FOR_REVIEW",
+    "oms_ownership_contracts": "GO_FOR_REVIEW",
+    "diagnostics": "GO_FOR_REVIEW",
+    "canary_sizing": "NO_GO_UNTIL_FILLED",
+    "operator_live_state": "NO_GO_UNTIL_SEPARATE_OPT_IN",
+    "emergency_controls": "NO_GO_UNTIL_CONFIRMED",
+    "final_canary_launch": "NOT_APPROVED_BY_THIS_PACKAGE"
+  },
+  "next_step": "SEPARATE_LIVE_OPERATOR_OPT_IN_DRILL_PLAN",
+  "approved_scope": [
+    "manual review of the canary evidence package",
+    "manual completion of canary sizing fields",
+    "preparation of a separate live operator opt-in drill"
+  ],
+  "not_approved_scope": [
+    "start canary from this package",
+    "full live trading",
+    "unattended live trading",
+    "real broker order/cancel/modify",
+    "auto-cancel unknown broker orders",
+    "auto-flatten unknown owner positions"
+  ]
+}

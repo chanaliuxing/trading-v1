@@ -1,0 +1,15 @@
+{
+  "champion": {
+    "id": "baseline",
+    "sharpe": 1.00,
+    "mdd": 0.10
+  },
+  "challenger": {
+    "id": "candidate",
+    "sharpe": 1.00,
+    "mdd": 0.10
+  },
+  "weights": {"champion": 0.7, "challenger": 0.3},
+  "updated_at": ""
+}
+

@@ -1,0 +1,201 @@
+{
+  "uid": "trading-why-not-full",
+  "title": "Trading — Why Not Order? (Full)",
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "tags": ["trading", "observability", "reasons"],
+  "panels": [
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Reason Counts Over Time (stacked)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 0 },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right" },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "stacking": { "mode": "normal" } } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (count_over_time({job=\"trader\"} |= \"order_skipped\" or |= \"order_rejected\" or |= \"overlay_block\" | json | reason != \"\" [$__interval]))",
+          "legendFormat": "{{reason}}"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Top Reasons (current range)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 12 },
+      "options": { "showHeader": true, "footer": { "show": false } },
+      "transformations": [
+        { "id": "organize", "options": { "excludeByName": { "Time": true } } },
+        { "id": "sortBy", "options": { "sort": [ { "field": "Value", "desc": true } ] } }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (reason) (count_over_time({job=\"trader\"} |= \"order_skipped\" or |= \"order_rejected\" or |= \"overlay_block\" | json | reason != \"\" [${__range_s}s])))",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "table",
+      "title": "Top Reasons by Component (range)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 12 },
+      "options": { "showHeader": true, "footer": { "show": false } },
+      "transformations": [
+        { "id": "organize", "options": { "excludeByName": { "Time": true } } },
+        { "id": "sortBy", "options": { "sort": [ { "field": "Value", "desc": true } ] } }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(15, sum by (component, reason) (count_over_time({job=\"trader\"} |= \"order_skipped\" or |= \"overlay_block\" or |= \"order_rejected\" | json | reason != \"\" [${__range_s}s])))",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "logs",
+      "title": "Recent Skips / Blocks Samples (click to drill)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 22 },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "wrapLogMessage": true
+      },
+      "targets": [
+        { "refId": "A", "expr": "{job=\"trader\"} |~ \"order_skipped|order_rejected|overlay_block\" | json" }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Reasons by Strategy (rate)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 34 },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right" },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "stacking": { "mode": "none" } } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (strategy_id, reason) (rate({job=\"trader\"} |= \"order_skipped\" or |= \"overlay_block\" or |= \"order_rejected\" | json | reason != \"\" | strategy_id != \"\" [$__interval]))",
+          "legendFormat": "{{strategy_id}} — {{reason}}"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "grafana-piechart-panel",
+      "title": "Blocking Composition (range)",
+      "description": "限价拒单 vs 参与率裁剪 vs 风控拦截（当前时间范围内）",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 46 },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right" },
+        "pieType": "pie",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "displayLabels": ["percent", "value"]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |= \"order_rejected\" | json | reason=\"limit_reject\" [${__range_s}s]))",
+          "instant": true,
+          "legendFormat": "limit_reject"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(count_over_time({job=\"trader\"} |= \"order_trimmed\" | json | reason=\"participation_cap\" [${__range_s}s]))",
+          "instant": true,
+          "legendFormat": "participation_cap"
+        },
+        {
+          "refId": "C",
+          "expr": "sum(count_over_time({job=\"trader\"} |= \"overlay_block\" | json [${__range_s}s]))",
+          "instant": true,
+          "legendFormat": "overlay_block"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "id": 16,
+      "type": "bargauge",
+      "title": "Blocking Composition (BarGauge, range)",
+      "description": "无需插件的占比展示（相同三类）",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 46 },
+      "options": {
+        "displayMode": "basic",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(count_over_time({job=\"trader\"} |= \"order_rejected\" | json | reason=\"limit_reject\" [${__range_s}s]))",
+          "instant": true,
+          "legendFormat": "limit_reject"
+        },
+        {
+          "refId": "B",
+          "expr": "sum(count_over_time({job=\"trader\"} |= \"order_trimmed\" | json | reason=\"participation_cap\" [${__range_s}s]))",
+          "instant": true,
+          "legendFormat": "participation_cap"
+        },
+        {
+          "refId": "C",
+          "expr": "sum(count_over_time({job=\"trader\"} |= \"overlay_block\" | json [${__range_s}s]))",
+          "instant": true,
+          "legendFormat": "overlay_block"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] }
+    },
+    {
+      "id": 17,
+      "type": "table",
+      "title": "Top Blocking Symbols (range)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 56 },
+      "options": { "showHeader": true },
+      "transformations": [
+        { "id": "organize", "options": { "excludeByName": { "Time": true } } },
+        { "id": "sortBy", "options": { "sort": [ { "field": "Value", "desc": true } ] } }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(20, sum by (symbol) (count_over_time({job=\"trader\"} |~ \"order_rejected|order_trimmed|overlay_block\" | json [${__range_s}s])))",
+          "instant": true
+        }
+      ]
+    }
+  ],
+  "templating": { "list": [] }
+}

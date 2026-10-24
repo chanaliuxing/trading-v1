@@ -1,0 +1,125 @@
+{
+  "audit_dir": "./runtime/audit/2026-05-01",
+  "blockers": [
+    "runtime_ghost_orders_present",
+    "runtime_position_mismatches_present"
+  ],
+  "day": "20260501",
+  "financial_snapshot": {
+    "age_sec": 218.79449,
+    "available": true,
+    "available_funds": 944260.3,
+    "blockers": [],
+    "buying_power": 3777041.21,
+    "gross_position_value": 110077.44,
+    "net_liquidation": 1045854.48,
+    "ok": true,
+    "realized_pnl": -203.73,
+    "table": "ibkr_account_realtime",
+    "total_cash": 1153549.36,
+    "ts_ny": "2026-05-01T16:16:28-04:00",
+    "unrealized_pnl": 44930.4
+  },
+  "generated_at": "2026-05-01T16:20:06-04:00",
+  "latest_position_audit_age_sec": 216.12745,
+  "latest_position_audit_payload": {
+    "db_open_count": 1,
+    "ghosts": 1,
+    "ib_open_count": 1,
+    "ib_positions": {
+      "SOXS": -8448.0
+    },
+    "ib_pre_submitted": 0,
+    "ledger_positions": {
+      "OPT:QQQ:20260422:653:C": 0.0,
+      "OPT:QQQ:20260423:650:C": 0.0,
+      "OPT:QQQ:20260424:653:P": 0.0,
+      "OPT:QQQ:20260429:659:P": -2.0,
+      "OPT:QQQ:20260430:658:P": 0.0,
+      "OPT:QQQ:20260501:675:C": 2.0,
+      "SOXS": -8448.0,
+      "SQQQ": 0.0,
+      "TQQQ": 106.0
+    },
+    "mismatch_samples": [
+      {
+        "diff": 2.0,
+        "ib_qty": 0.0,
+        "ledger_qty": -2.0,
+        "symbol": "OPT:QQQ:20260429:659:P"
+      },
+      {
+        "diff": -2.0,
+        "ib_qty": 0.0,
+        "ledger_qty": 2.0,
+        "symbol": "OPT:QQQ:20260501:675:C"
+      },
+      {
+        "diff": -106.0,
+        "ib_qty": 0.0,
+        "ledger_qty": 106.0,
+        "symbol": "TQQQ"
+      }
+    ],
+    "mismatches": 0,
+    "orphans_detected": 1,
+    "orphans_unresolved": 0,
+    "position_mismatches": 3
+  },
+  "latest_position_audit_ts": "2026-05-01T16:16:30.667040-04:00",
+  "latest_reconciliation_alert_payload": {
+    "active_quarantine_count": 1,
+    "db_open_orders": 1,
+    "evidence": {
+      "active_quarantine": {
+        "active_count": 1,
+        "by_reason": [
+          {
+            "active_count": 1,
+            "last_observed_at": "2026-05-01T19:51:30.064872+00:00",
+            "reason": "unknown_broker_order_detected"
+          }
+        ],
+        "lookup_failed": false
+      },
+      "ghost_samples": [
+        {
+          "broker_order_id": "327",
+          "ib_perm_id": 711243072,
+          "order_id": "3a0139fb-8875-41ba-9c82-4d56c327eaf6",
+          "order_ref": "sl:UNKNOWN_ACCOUNT|qqq_intraday_option_v1_001",
+          "state": "PARTIAL",
+          "strategy_id": "qqq_intraday_option_v1_001",
+          "symbol": "OPT:QQQ:20260501:675:C"
+        }
+      ],
+      "ib_status_counts": {
+        "Inactive": 1
+      },
+      "mismatch_samples": [],
+      "orphan_detected_samples": [
+        {
+          "order_id": "329",
+          "order_ref": "tp:UNKNOWN_ACCOUNT|qqq_intraday_option_v1_001",
+          "order_type": "LMT",
+          "perm_id": 711243073,
+          "qty": 2.0,
+          "side": "SELL",
+          "status": "Inactive",
+          "symbol": "OPT:QQQ:20260501:675:C"
+        }
+      ],
+      "orphan_unresolved_samples": []
+    },
+    "ghosts_found": 1,
+    "ib_open_orders": 1,
+    "ib_pre_submitted_orders": 0,
+    "mismatches": 0,
+    "orphans_detected": 1,
+    "orphans_found": 1,
+    "orphans_self_healed": 1,
+    "orphans_unresolved": 0
+  },
+  "latest_reconciliation_alert_ts": "2026-05-01T15:56:30.369648-04:00",
+  "ok": false
+}

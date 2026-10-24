@@ -1,0 +1,661 @@
+{
+  "title": "LLM Sessions Monitor",
+  "uid": "llm-sessions-monitor",
+  "tags": [
+    "llm",
+    "sessions",
+    "trading"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 0,
+  "refresh": "30s",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Sessions Overview (\u4f1a\u8bdd\u6982\u89c8)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "collapsed": false
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udcca Total Sessions (\u603b\u4f1a\u8bdd\u6570)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(DISTINCT session_id) as total_sessions\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83d\udd04 Running Sessions (\u8fd0\u884c\u4e2d)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(*) as running_sessions\nFROM llm.llm_sessions\nWHERE status = 'RUNNING'\n  AND start_ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 6,
+        "y": 1
+      },
+      "id": 3,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "red"
+              },
+              {
+                "value": 1,
+                "color": "green"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\u26a0\ufe0f Zombie Sessions (\u50f5\u5c38\u4f1a\u8bdd >24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(*) as zombie_sessions\nFROM llm.llm_sessions\nWHERE status = 'RUNNING'\n  AND (now() - start_ts_ny) > 86400  -- 24 hours = 86400 seconds\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 10,
+        "y": 1
+      },
+      "id": 4,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": 0,
+                "color": "green"
+              },
+              {
+                "value": 1,
+                "color": "yellow"
+              },
+              {
+                "value": 10,
+                "color": "orange"
+              },
+              {
+                "value": 50,
+                "color": "red"
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background"
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83e\udd16 Bot Types (Bot \u7c7b\u578b)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(DISTINCT bot_id) as bot_types\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 14,
+        "y": 1
+      },
+      "id": 5,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "\ud83c\udfaf Decisions Made (\u51b3\u7b56\u603b\u6570)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT count(*) as total_decisions\nFROM llm.llm_decisions\nWHERE ts_ny >= now() - INTERVAL 7 DAY\n"
+        }
+      ],
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "id": 6,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcc8 Sessions Timeline (\u4f1a\u8bdd\u65f6\u95f4\u7ebf)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 7,
+      "collapsed": false
+    },
+    {
+      "type": "timeseries",
+      "title": "\ud83d\udcca Sessions Started Over Time (\u4f1a\u8bdd\u542f\u52a8\u8d8b\u52bf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    toStartOfHour(start_ts_ny) as time,\n    count(*) as sessions_started\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY time\nORDER BY time\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 8,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 20,
+            "showPoints": "auto"
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "\ud83d\udd04 Active Sessions Count (\u6d3b\u8dc3\u4f1a\u8bdd\u6570)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    toStartOfHour(start_ts_ny) as time,\n    status,\n    count(*) as session_count\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY time, status\nORDER BY time\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 9,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "auto",
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RUNNING session_count"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83e\udd16 Bot & Model Distribution (Bot \u548c\u6a21\u578b\u5206\u5e03)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 10,
+      "collapsed": false
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83e\udd16 Sessions by Bot (\u6309 Bot \u5206\u5e03)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    bot_id,\n    count(*) as sessions\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY bot_id\nORDER BY sessions DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 15
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        }
+      }
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83d\udcca Sessions by Model (\u6309\u6a21\u578b\u5206\u5e03)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    model,\n    count(*) as sessions\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY model\nORDER BY sessions DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 15
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        }
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "\ud83d\udcc8 Sessions by Mode (\u6309\u6a21\u5f0f\u5206\u5e03)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    mode,\n    count(*) as sessions\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY mode\nORDER BY sessions DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 15
+      },
+      "id": 13,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "options": {
+        "orientation": "horizontal"
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcbc Trading Activity (\u4ea4\u6613\u6d3b\u52a8)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 14,
+      "collapsed": false
+    },
+    {
+      "type": "piechart",
+      "title": "\ud83c\udfaf Decisions by Action (\u6309\u51b3\u7b56\u7c7b\u578b)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    JSONExtractString(decision_json, 'action') as action,\n    count(*) as count\nFROM llm.llm_decisions\nWHERE ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY action\nORDER BY count DESC\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "\ud83d\udcca Decisions Over Time (\u51b3\u7b56\u65f6\u95f4\u7ebf)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    toStartOfHour(ts_ny) as time,\n    JSONExtractString(decision_json, 'action') as action,\n    count(*) as count\nFROM llm.llm_decisions\nWHERE ts_ny >= now() - INTERVAL 7 DAY\nGROUP BY time, action\nORDER BY time\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 16,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udccb Recent Sessions (\u6700\u8fd1\u4f1a\u8bdd)",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "id": 17,
+      "collapsed": false
+    },
+    {
+      "type": "table",
+      "title": "\u26a0\ufe0f Zombie Sessions (\u50f5\u5c38\u4f1a\u8bdd - RUNNING >24h)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    formatDateTime(start_ts_ny, '%Y-%m-%d %H:%M:%S ET') as start_time,\n    round((now() - start_ts_ny) / 3600, 1) as hours_running,\n    substring(session_id, 1, 12) as session_id,\n    bot_id,\n    model,\n    mode,\n    symbols,\n    status\nFROM llm.llm_sessions\nWHERE status = 'RUNNING'\n  AND (now() - start_ts_ny) > 86400  -- 24 hours\nORDER BY start_ts_ny ASC\nLIMIT 100\n"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 18,
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "hours_running"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 130
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "value": 24,
+                      "color": "yellow"
+                    },
+                    {
+                      "value": 48,
+                      "color": "orange"
+                    },
+                    {
+                      "value": 168,
+                      "color": "red"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mode"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "hours_running",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "table",
+      "title": "\ud83d\udccb Recent Sessions Table (\u6700\u8fd1\u4f1a\u8bdd\u5217\u8868)",
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "rawSql": "\nSELECT\n    formatDateTime(start_ts_ny, '%Y-%m-%d %H:%M:%S') as start_time,\n    substring(session_id, 1, 8) as session_short,\n    bot_id,\n    model,\n    symbols,\n    mode,\n    status,\n    close_reason\nFROM llm.llm_sessions\nWHERE start_ts_ny >= now() - INTERVAL 7 DAY\nORDER BY start_ts_ny DESC\nLIMIT 50\n"
+        }
+      ],
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 41
+      },
+      "id": 19,
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mode"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "start_time",
+            "desc": true
+          }
+        ]
+      }
+    }
+  ],
+  "templating": {
+    "list": []
+  }
+}

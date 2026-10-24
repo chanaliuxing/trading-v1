@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "option_strategy_instance.v1.schema.json",
+  "title": "Option Strategy Instance",
+  "type": "object",
+  "required": ["id", "enabled", "module", "class", "params"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "shadow_mode": {
+      "type": "boolean"
+    },
+    "module": {
+      "type": "string",
+      "minLength": 1
+    },
+    "class": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capital_limit_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "params": {
+      "type": "object",
+      "required": ["extras"],
+      "properties": {
+        "cadence_s": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ttl_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "extras": {
+          "type": "object",
+          "required": [
+            "definition_id",
+            "underlying",
+            "risk_symbol",
+            "kernel_mode",
+            "strict_scope_validation",
+            "shared_cap_group_id",
+            "shared_cap_group_strategy_ids"
+          ],
+          "properties": {
+            "definition_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "underlying": {
+              "type": "string",
+              "minLength": 1
+            },
+            "risk_symbol": {
+              "type": "string",
+              "pattern": "^OPT:"
+            },
+            "kernel_mode": {
+              "type": "string",
+              "enum": ["plugin", "pure_plugin", "hybrid"]
+            },
+            "strict_scope_validation": {
+              "type": "boolean",
+              "const": true
+            },
+            "shared_cap_group_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "shared_cap_group_strategy_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

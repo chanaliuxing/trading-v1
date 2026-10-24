@@ -1,0 +1,67 @@
+{
+  "blockers": [
+    "readiness:qqq_kernel_shadow_legacy_on_001_present",
+    "readiness:qqq_kernel_shadow_legacy_off_001_present",
+    "readiness:legacy_on_off_modes_distinct",
+    "shadow_status:qqq_kernel_shadow_legacy_off_001=missing",
+    "shadow_status:qqq_kernel_shadow_legacy_on_001=missing",
+    "parity_smoke:missing_live_or_shadow_trace_inputs"
+  ],
+  "day": "20260505",
+  "generated_at": "2026-05-06T09:20:05-04:00",
+  "market_calendar": {
+    "status": "trading_day",
+    "trading_day": true
+  },
+  "parity_smoke": {
+    "legacy_off_path": null,
+    "legacy_on_path": null,
+    "live_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260505.jsonl",
+    "ok": false,
+    "pairs": {
+      "live_vs_legacy_off": {
+        "left_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260505.jsonl",
+        "left_strategy_id": "qqq_intraday_001",
+        "ok": false,
+        "reason": "missing_trace_inputs",
+        "right_path": null,
+        "right_strategy_id": "qqq_kernel_shadow_legacy_off_001"
+      },
+      "live_vs_legacy_on": {
+        "left_path": "./reports/qqq_signal_snapshots/qqq_signal_snapshots_20260505.jsonl",
+        "left_strategy_id": "qqq_intraday_001",
+        "ok": false,
+        "reason": "missing_trace_inputs",
+        "right_path": null,
+        "right_strategy_id": "qqq_kernel_shadow_legacy_on_001"
+      }
+    },
+    "reason": "missing_live_or_shadow_trace_inputs"
+  },
+  "postclose_refresh": {
+    "blockers": [
+      "qqq_kernel_shadow_legacy_on_001_not_enabled",
+      "qqq_kernel_shadow_legacy_on_001_dry_run_not_true",
+      "qqq_kernel_shadow_legacy_on_001_shadow_only_not_true",
+      "qqq_kernel_shadow_legacy_off_001_not_enabled",
+      "qqq_kernel_shadow_legacy_off_001_dry_run_not_true",
+      "qqq_kernel_shadow_legacy_off_001_shadow_only_not_true",
+      "parity_runner_did_not_execute"
+    ],
+    "output": "./reports/qqq_kernel_shadow_parity/20260505_postclose_report.json",
+    "recommendation": "HOLD"
+  },
+  "readiness": {
+    "failed_checks": [
+      "qqq_kernel_shadow_legacy_on_001_present",
+      "qqq_kernel_shadow_legacy_off_001_present",
+      "legacy_on_off_modes_distinct"
+    ],
+    "ok": false
+  },
+  "recommendation": "HOLD",
+  "shadow_status": {
+    "qqq_kernel_shadow_legacy_off_001": "missing",
+    "qqq_kernel_shadow_legacy_on_001": "missing"
+  }
+}

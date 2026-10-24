@@ -1,0 +1,380 @@
+{
+  "dashboard": {
+    "title": "Time Health Monitor",
+    "tags": ["time", "health", "verification"],
+    "timezone": "America/New_York",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Time Verification Status",
+        "type": "stat",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-clickhouse-datasource",
+              "uid": "af2hs6yq0fbi8a"
+            },
+            "rawSql": "SELECT if(overall_ok = 1, 'HEALTHY', 'ERROR') as status FROM (\n  SELECT 1 as overall_ok\n  FROM system.one\n  WHERE toDateTime(now('America/New_York')) > now() - INTERVAL 60 SECOND\n)",
+            "format": "table"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "HEALTHY": {
+                    "text": "HEALTHY",
+                    "color": "green"
+                  },
+                  "ERROR": {
+                    "text": "ERROR",
+                    "color": "red"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Clock Drift (seconds)",
+        "type": "timeseries",
+        "description": "Drift between system time and NTP time",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "expr": "ai_trader_clock_drift_seconds"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "Drift (sec)",
+              "axisPlacement": "auto",
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": null,
+                  "color": "green"
+                },
+                {
+                  "value": 1,
+                  "color": "yellow"
+                },
+                {
+                  "value": 5,
+                  "color": "red"
+                }
+              ]
+            }
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 6,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Current NY Time",
+        "type": "stat",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-clickhouse-datasource",
+              "uid": "af2hs6yq0fbi8a"
+            },
+            "rawSql": "SELECT formatDateTime(now('America/New_York'), '%Y-%m-%d %H:%i:%S %z') as time",
+            "format": "table"
+          }
+        ],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 4
+        }
+      },
+      {
+        "id": 4,
+        "title": "Trading Session",
+        "type": "stat",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-clickhouse-datasource",
+              "uid": "af2hs6yq0fbi8a"
+            },
+            "rawSql": "SELECT \n  CASE \n    WHEN toHour(now_ny) >= 20 OR toHour(now_ny) < 4 THEN 'OVERNIGHT'\n    WHEN toHour(now_ny) >= 4 AND (toHour(now_ny) < 9 OR (toHour(now_ny) = 9 AND toMinute(now_ny) < 30)) THEN 'PRE'\n    WHEN (toHour(now_ny) = 9 AND toMinute(now_ny) >= 30) OR (toHour(now_ny) > 9 AND toHour(now_ny) < 16) THEN 'RTH'\n    WHEN toHour(now_ny) >= 16 AND toHour(now_ny) < 20 THEN 'AFTERHOURS'\n    ELSE 'OFF'\n  END as session\nFROM (SELECT now('America/New_York') as now_ny)",
+            "format": "table"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "OVERNIGHT": {
+                    "text": "OVERNIGHT",
+                    "color": "blue"
+                  },
+                  "PRE": {
+                    "text": "PRE-MARKET",
+                    "color": "purple"
+                  },
+                  "RTH": {
+                    "text": "REGULAR HOURS",
+                    "color": "green"
+                  },
+                  "AFTERHOURS": {
+                    "text": "AFTER HOURS",
+                    "color": "orange"
+                  },
+                  "OFF": {
+                    "text": "MARKET CLOSED",
+                    "color": "dark-red"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 5,
+        "title": "Market Data Freshness (TSLA)",
+        "type": "gauge",
+        "description": "Age of latest market data in seconds",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-clickhouse-datasource",
+              "uid": "af2hs6yq0fbi8a"
+            },
+            "rawSql": "SELECT \n  dateDiff('second', ts, now('America/New_York')) as age_sec\nFROM trading.bars_1m\nWHERE symbol = 'TSLA'\nORDER BY ts DESC\nLIMIT 1",
+            "format": "table"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 300,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": null,
+                  "color": "green"
+                },
+                {
+                  "value": 60,
+                  "color": "yellow"
+                },
+                {
+                  "value": 300,
+                  "color": "red"
+                }
+              ]
+            },
+            "unit": "s"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 6,
+          "y": 8
+        }
+      },
+      {
+        "id": 6,
+        "title": "Time Source Comparison",
+        "type": "table",
+        "description": "Compare different time sources",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-clickhouse-datasource",
+              "uid": "af2hs6yq0fbi8a"
+            },
+            "rawSql": "SELECT\n  'ClickHouse NY' as source,\n  formatDateTime(now('America/New_York'), '%H:%i:%S') as time,\n  timezone() as tz\nUNION ALL\nSELECT\n  'ClickHouse UTC' as source,\n  formatDateTime(now(), '%H:%i:%S') as time,\n  'UTC' as tz\nUNION ALL\nSELECT\n  'Server' as source,\n  formatDateTime(now(), '%H:%i:%S') as time,\n  timezone() as tz",
+            "format": "table"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 7,
+        "title": "Time Alerts (Last Hour)",
+        "type": "logs",
+        "description": "Time verification errors and warnings",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "loki"
+            },
+            "expr": "{job=\"ai_trader\"} |= \"time_verification\" |~ \"ERROR|WARNING\""
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 18,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 8,
+        "title": "Clock Monotonicity",
+        "type": "stat",
+        "description": "Detect clock rollback events",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "expr": "increase(ai_trader_clock_rollback_total[1h])"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": null,
+                  "color": "green"
+                },
+                {
+                  "value": 1,
+                  "color": "red"
+                }
+              ]
+            },
+            "mappings": [
+              {
+                "type": "range",
+                "options": {
+                  "from": 0,
+                  "to": 0,
+                  "result": {
+                    "text": "OK",
+                    "color": "green"
+                  }
+                }
+              },
+              {
+                "type": "range",
+                "options": {
+                  "from": 1,
+                  "to": 999,
+                  "result": {
+                    "text": "ROLLBACK DETECTED",
+                    "color": "red"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 18,
+          "y": 0
+        }
+      },
+      {
+        "id": 9,
+        "title": "Timezone Offset",
+        "type": "stat",
+        "description": "Current UTC offset for NY timezone",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-clickhouse-datasource",
+              "uid": "af2hs6yq0fbi8a"
+            },
+            "rawSql": "SELECT \n  formatDateTime(now('America/New_York'), '%z') as offset,\n  if(formatDateTime(now('America/New_York'), '%z') IN ('-0500', '-0400'), 'OK', 'ERROR') as status",
+            "format": "table"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "-0500": {
+                    "text": "EST (-05:00)",
+                    "color": "green"
+                  },
+                  "-0400": {
+                    "text": "EDT (-04:00)",
+                    "color": "green"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 18,
+          "y": 4
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}

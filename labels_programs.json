@@ -1,0 +1,28 @@
+{
+  "cc_return_30m": {
+    "type": "forward_return",
+    "horizon_bars": 30,
+    "price_from": "close",
+    "price_to": "close",
+    "winsorize": { "p_low": 0.01, "p_high": 0.99 },
+    "zclip": 5.0,
+    "label_name": "future_ret_30m"
+  },
+  "co_return_1d": {
+    "type": "overnight_return",
+    "horizon_bars": 1,
+    "label_name": "overnight_co"
+  },
+  "intraday_binary_15m": {
+    "type": "binary_threshold",
+    "threshold": 0.0,
+    "base": { "type": "forward_return", "horizon_bars": 15 },
+    "label_name": "up_next_15m"
+  },
+  "quantile5_30m": {
+    "type": "quantile_class",
+    "quantiles": 5,
+    "base": { "type": "forward_return", "horizon_bars": 30 },
+    "label_name": "q5_ret_30m"
+  }
+}

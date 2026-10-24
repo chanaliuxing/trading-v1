@@ -1,0 +1,33 @@
+{
+  "objective_version": "score_ranking_objective.v1",
+  "primary_goal": "ranking_usable_for_review",
+  "constraints": {
+    "top1_mean_gte_top5_mean": true,
+    "top5_mean_gt_unpublished_mean": true,
+    "top3_mean_gte_top5_mean": true,
+    "hard_failure_if_violated": [
+      "top1_mean_gte_top5_mean",
+      "top3_mean_gte_top5_mean"
+    ]
+  },
+  "optimization": {
+    "correlation_as_auxiliary": true,
+    "objective": "maximize(aux_corr + ranking_margin - violation_penalty)",
+    "penalties": {
+      "top1_lt_top5": 3.0,
+      "top3_lt_top5": 2.5,
+      "top5_lte_unpublished": 1.5,
+      "corr_non_positive": 2.0
+    }
+  },
+  "allowed_adjustments": {
+    "weights_only": true,
+    "direction_flip_allowed": true,
+    "monotonic_transform_allowed": [
+      "identity",
+      "square",
+      "sqrt"
+    ],
+    "clipping_allowed": true
+  }
+}

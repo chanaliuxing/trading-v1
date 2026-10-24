@@ -1,0 +1,53 @@
+# Premarket Momentum Strategy V2 - 盘前持续追踪策略
+# 从07:00开始每30分钟扫描,09:27最终选出THE ONE
+
+# Scanner Configuration
+scanner:
+  min_pm_change_pct: 3.0           # 盘前涨幅至少3%
+  max_spread_pct: 0.005            # Spread最大0.5%
+  min_price: 5.0                   # 最低价格$5
+  min_pm_notional: 5_000_000       # 盘前成交额至少$5M
+  min_market_cap: 5_000_000_000    # 市值至少$5B
+
+# Execution Configuration
+execution:
+  spread_max: 0.0025               # 入场时spread最大0.25%
+
+# Take Profit Levels
+take_profit:
+  levels_pct: [0.02, 0.03]         # TP1: +2%, TP2: +3%
+  qtys_pct: [0.5, 0.5]             # TP1卖50%, TP2全部卖出
+
+# Risk Management
+risk:
+  per_trade_pct: 0.005             # 单笔风险0.5%
+  stop_loss_pct: 0.02              # 止损-2%
+
+# Scanning Schedule (ET timezone)
+scan_times:
+  - "07:00:00"  # 第1轮
+  - "07:30:00"  # 第2轮
+  - "08:00:00"  # 第3轮
+  - "08:30:00"  # 第4轮
+  - "09:00:00"  # 第5轮
+  - "09:27:00"  # 最终决策
+
+# Trading Hours
+timing:
+  market_open: "09:30:00"
+  entry_end: "09:35:00"
+  force_exit: "10:10:00"
+
+# Scoring Weights (for 09:27 final selection)
+scoring:
+  change_weight: 0.3      # 当前涨幅权重
+  duration_weight: 0.4    # 持续时长权重 (越早出现分越高)
+  notional_weight: 0.3    # 成交额权重
+
+notes: |
+  策略特点:
+  1. 盘前持续追踪 (07:00-09:27, 每30分钟)
+  2. 动态更新候选列表
+  3. 09:27最终选出持续性最强的那一只
+  4. 追高快进快出 (目标2-3%)
+  5. 不需要历史数据,完全实时

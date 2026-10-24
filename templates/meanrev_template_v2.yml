@@ -1,0 +1,93 @@
+# Mean Reversion Template V2
+# Based on doc/65.md specification
+#
+# Strategy: Mean reversion on z-score
+# Entry: Layered entries at z-score thresholds (1.0, 1.5, 2.0)
+# Protection: Fixed SL/TP (2*ATR / 3*ATR) + trailing stop (1.4*ATR)
+# Reversal: Atomic reversal when z-score crosses to opposite side
+
+name: meanrev_template_v2
+
+defaults:
+  cadence_s: 5
+  ttl_ms: 2000
+  min_lot: 10              # Minimum order size (shares)
+  lot_round: 10            # Lot rounding (round down to nearest 10)
+  max_layers: 3            # Maximum position layers
+  base_risk_usd: 2000      # Base risk budget per trade
+  atr_k: 1.5               # ATR sizing coefficient
+  time_limit_s: 900        # Time stop (15 minutes)
+  trail_atr_mult: 1.4      # Trailing stop ATR multiplier
+  sl_atr_mult: 2.0         # Stop loss ATR multiplier
+  tp_atr_mult: 3.0         # Take profit ATR multiplier
+  reversal_atomic: true    # Atomic reversal (cancel → flatten → build → protect)
+  quality_qscore_min: 70   # Minimum quality score
+  quality_gap_max: 0.05    # Maximum gap ratio (5%)
+
+rules:
+  # Quality gate - filter out low quality signals
+  - id: quality_gate
+    when:
+      all:
+        - "f['qscore'] >= quality_qscore_min"
+        - "f['gap_ratio'] <= quality_gap_max"
+    then: continue
+
+  # Layered entry based on z-score
+  - id: sizing_layers
+    when:
+      any:
+        - "signal['side'] != 0"
+    compute:
+      lot_abs: "floor(base_risk_usd / max(0.01, atr_k * f['atr_14']), lot_round)"
+      layers:
+        - trigger: "abs(f['zscore_20']) >= 1.0"
+          qty_mult: 1.0
+        - trigger: "abs(f['zscore_20']) >= 1.5"
+          qty_mult: 1.5
+        - trigger: "abs(f['zscore_20']) >= 2.0"
+          qty_mult: 2.0
+      # Find best matching layer
+      active_layer: "max([l for l in layers if eval(l['trigger'], {'__builtins__':{}}, {**globals(), 'f':f})], key=lambda x: x['qty_mult'], default={'qty_mult': 0})"
+    emit:
+      type: target
+      mode: net
+      qty: "clamp(int(lot_abs * active_layer['qty_mult'] * sign(signal['side'])), -5000, 5000)"
+      style:
+        kind: LMT
+        limit_px: "signal['ref_px']"
+      extras:
+        ref_px: "signal['ref_px']"
+        edge_bp: "abs(f['zscore_20']) * 10"
+
+  # Hard stop-loss and take-profit with trailing
+  - id: hard_stop
+    when:
+      any:
+        - "position['qty'] != 0"
+    compute:
+      pos_side: "sign(position['qty'])"
+      sl_px: "position['avg_px'] - pos_side * sl_atr_mult * f['atr_14']"
+      tp_px: "position['avg_px'] + pos_side * tp_atr_mult * f['atr_14']"
+    emit:
+      type: protect
+      oco:
+        sl_px: "sl_px"
+        tp_px: "tp_px"
+        trail_atr_mult: "trail_atr_mult"
+        time_stop_s: "time_limit_s"
+
+  # Reversal when z-score crosses to opposite side
+  - id: reversal
+    when:
+      all:
+        - "position['qty'] * signal['side'] < 0"  # Opposite direction
+        - "abs(signal['strength']) >= 0.6"        # Strong signal
+        - "abs(f['zscore_20']) >= 1.2"            # Significant z-score
+    emit:
+      type: reverse
+      atomic: "reversal_atomic"
+      max_slippage_bp: 10
+      style:
+        kind: LMT
+        limit_px: "signal['ref_px']"

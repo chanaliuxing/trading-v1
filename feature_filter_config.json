@@ -1,0 +1,33 @@
+{
+  "comment": "特征筛选配置示例 - 可直接集成到feature_tools.json的xgb_feature_tools.default节点",
+  "task": "regression",
+  "filters": {
+    "enabled": true,
+    "leakage_guard": {
+      "name_blacklist": ["label", "future", "lead", "forward", "target"]
+    },
+    "variance": {
+      "min": 1e-10
+    },
+    "target_corr": {
+      "enabled": true,
+      "metric": "spearman",
+      "min_abs": 0.02,
+      "sample_n": 50000
+    },
+    "mi": {
+      "enabled": false,
+      "min": 0.0,
+      "sample_n": 50000
+    },
+    "pair_corr": {
+      "enabled": true,
+      "metric": "spearman",
+      "max_abs": 0.98,
+      "sample_n": 30000
+    },
+    "max_features": 2048,
+    "save_meta": true,
+    "meta_path": "runs/feature_registry/feature_filter_meta.json"
+  }
+}

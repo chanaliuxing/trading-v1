@@ -1,0 +1,20 @@
+{
+  "blockers": [],
+  "day": "20260425",
+  "generated_at": "2026-04-25T21:56:51-04:00",
+  "market_calendar": {
+    "status": "non_trading_day",
+    "trading_day": false
+  },
+  "parity_smoke": {
+    "ok": false,
+    "reason": "non_trading_day"
+  },
+  "postclose_refresh": {},
+  "readiness": {
+    "failed_checks": [],
+    "ok": null
+  },
+  "recommendation": "PASS",
+  "shadow_status": {}
+}

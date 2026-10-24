@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trace_context.v1.schema.json",
+  "title": "TraceContextV1",
+  "type": "object",
+  "required": [
+    "trace_id",
+    "strategy_id",
+    "strategy_run_id",
+    "trigger_id",
+    "decision_id"
+  ],
+  "properties": {
+    "trace_id": {"type": "string", "minLength": 1},
+    "causation_id": {"type": ["string", "null"]},
+    "strategy_id": {"type": "string", "minLength": 1},
+    "strategy_run_id": {"type": "string", "minLength": 1},
+    "trigger_id": {"type": "string", "minLength": 1},
+    "decision_id": {"type": "string", "minLength": 1},
+    "intent_id": {"type": ["string", "null"]},
+    "order_id": {"type": ["string", "null"]},
+    "broker_order_id": {"type": ["string", "null"]},
+    "symbol": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

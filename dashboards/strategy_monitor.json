@@ -1,0 +1,382 @@
+{
+  "uid": "strategy-monitor",
+  "title": "Strategy Monitor — Live Trading",
+  "tags": ["trading", "strategy", "live"],
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "strategy_id",
+        "label": "Strategy",
+        "datasource": { "type": "loki", "uid": "loki" },
+        "query": "label_values({job=\"trader\"}, strategy_id)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true
+      },
+      {
+        "type": "query",
+        "name": "symbol",
+        "label": "Symbol",
+        "datasource": { "type": "loki", "uid": "loki" },
+        "query": "label_values({job=\"trader\"}, symbol)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Active Strategies",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count(count by (strategy_id) (rate({job=\"trader\"} |= \"on_features\" [5m])))"
+        }
+      ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" } } }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Signal Rate (signals/min)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"Signal Matched\" [5m])) * 60"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "opm" } }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Cost Gate Pass Rate",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate({job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | passed = \"true\" [5m])) / sum(rate({job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" [5m]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "red" },
+              { "value": 0.3, "color": "yellow" },
+              { "value": 0.5, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "PnL Today (All Strategies)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(last_over_time({job=\"trader\"} |= \"pnl_today\" | json | unwrap pnl_today [1h]))"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "thresholds": {
+            "steps": [
+              { "value": -1000, "color": "red" },
+              { "value": 0, "color": "yellow" },
+              { "value": 100, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Market Regime",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"market_regime\" | json | line_format \"{{.market_regime}}\""
+        }
+      ],
+      "options": {
+        "textMode": "value",
+        "graphMode": "none",
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "type": "value", "value": "BULL", "text": "🟢 BULL" },
+            { "type": "value", "value": "NEUTRAL", "text": "🟡 NEUTRAL" },
+            { "type": "value", "value": "BEAR", "text": "🔴 BEAR" }
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Risk Multiplier",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Risk Multipliers\" | json | unwrap final_multiplier | last_over_time([5m])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "max": 1.0,
+          "min": 0,
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "red" },
+              { "value": 0.5, "color": "yellow" },
+              { "value": 0.75, "color": "green" }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Signal Generation by Module (A1/A2/B1)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (details_type) (rate({job=\"trader\"} |= \"Signal Matched\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [$__interval]))",
+          "legendFormat": "{{details_type}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 2, "fillOpacity": 10 }
+        }
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "showLegend": true }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Cost Gate: Net Edge vs Floor",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | unwrap details_net_edge | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Net Edge"
+        },
+        {
+          "refId": "B",
+          "expr": "{job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | unwrap details_edge_floor | __error__=\"\" | avg_over_time($__interval)",
+          "legendFormat": "Edge Floor"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "currencyUSD" }
+      }
+    },
+
+    {
+      "id": 20,
+      "type": "timeseries",
+      "title": "Strategy Execution Latency (P95)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, rate(strategy_execution_seconds_bucket{strategy_id=~\"$strategy_id\"}[$__interval]))",
+          "legendFormat": "{{strategy_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "steps": [
+              { "value": 0, "color": "green" },
+              { "value": 0.2, "color": "yellow" },
+              { "value": 0.5, "color": "red" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "timeseries",
+      "title": "Position Size Over Time",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"Position Sizing\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | unwrap final_qty | __error__=\"\" | last_over_time($__interval)",
+          "legendFormat": "{{strategy_id}} - {{symbol}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short" }
+      }
+    },
+
+    {
+      "id": 30,
+      "type": "barchart",
+      "title": "Signal Type Distribution (Last 1h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 20 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (details_type) (count_over_time({job=\"trader\"} |= \"Signal Matched\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [1h])))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "xTickLabelRotation": 0
+      }
+    },
+    {
+      "id": 31,
+      "type": "piechart",
+      "title": "Cost Gate: Pass vs Reject",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 20 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (passed) (count_over_time({job=\"trader\"} |= \"Cost Gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [1h]))",
+          "instant": true
+        }
+      ],
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right" }
+      },
+      "fieldConfig": {
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "true" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }] },
+          { "matcher": { "id": "byName", "options": "false" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] }
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "type": "table",
+      "title": "Top Reject Reasons (Last 6h)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 20 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(10, sum by (reason) (count_over_time({job=\"trader\"} |~ `signal REJECTED` | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" [6h])))",
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": { "reason": "Reject Reason", "Value": "Count" }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": 40,
+      "type": "table",
+      "title": "A1_VWAP Signals (Recent)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 28 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"A1_VWAP Check\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | line_format \"{{.close}} vs {{.vwap}} | dev={{.dev}} thr={{.threshold}} rvol={{.rvol}}\"",
+          "maxLines": 20
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+    {
+      "id": 41,
+      "type": "table",
+      "title": "Recent Cost Gate Rejections",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 28 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} |= \"REJECTED by cost gate\" | json | __error__=\"\" | strategy_id =~ \"$strategy_id\" | line_format \"{{.event}} | {{.reason}}\"",
+          "maxLines": 20
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+
+    {
+      "id": 50,
+      "type": "logs",
+      "title": "Live Strategy Logs (Filtered by Strategy)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 38 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"trader\"} | json | strategy_id =~ \"$strategy_id\" | symbol =~ \"$symbol\" | level =~ \"info|warning|error\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "exact",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    }
+  ]
+}

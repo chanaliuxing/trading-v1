@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<clickhouse>
+    <profiles>
+        <default>
+            <!-- 限制单个查询内存使用并允许溢写磁盘，默认约 12GB 上限，可通过 env 调整 -->
+            <max_memory_usage>12000000000</max_memory_usage>
+
+            <!-- 在内存不足时使用外部排序/聚合（各 4GB 触发） -->
+            <max_bytes_before_external_group_by>4000000000</max_bytes_before_external_group_by>
+            <max_bytes_before_external_sort>4000000000</max_bytes_before_external_sort>
+
+            <!-- 限制查询执行时间（秒） -->
+            <max_execution_time>600</max_execution_time>
+
+            <!-- 优化ReplacingMergeTree查询 -->
+            <optimize_read_in_order>1</optimize_read_in_order>
+            <max_threads>4</max_threads>
+
+            <!-- 查询日志采样 (5%) -->
+            <log_queries>1</log_queries>
+            <log_queries_probability>0.05</log_queries_probability>
+        </default>
+    </profiles>
+</clickhouse>

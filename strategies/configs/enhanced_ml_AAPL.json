@@ -1,0 +1,76 @@
+{
+    "autosettings": {
+        "enabled": true,
+        "require_approval": false
+    },
+    "symbols": [
+        "AAPL"
+    ],
+    "bar_sec": 60,
+    "ensemble": {
+        "mode": "weighted_avg",
+        "models": [
+            {
+                "name": "ml",
+                "weight": 1.0
+            }
+        ]
+    },
+    "sizing": {
+        "mode": "confidence_scaled",
+        "base_qty": 100,
+        "max_qty": 1000,
+        "lot": 100,
+        "multiplier": 2.0
+    },
+    "market_filter": {
+        "conf_floor": 0.08,
+        "max_spread_bps": 10,
+        "min_volume": 80000,
+        "check_after_hours": true
+    },
+    "oco": {
+        "take_profit_bp": 150,
+        "hard_stop_bp": 120,
+        "trail_atr_mult": 2.0
+    },
+    "adaptive": {
+        "enabled": true,
+        "rules": [
+            {
+                "when": {
+                    "time_lt": "09:45"
+                },
+                "overrides": {
+                    "sizer_scale": 0.6
+                }
+            },
+            {
+                "when": {
+                    "vix_gt": 24
+                },
+                "overrides": {
+                    "conf_floor": 0.15,
+                    "sizer_scale": 0.7
+                }
+            },
+            {
+                "when": {
+                    "ret_1m_gt": 1.0
+                },
+                "overrides": {
+                    "conf_floor": 0.12
+                }
+            },
+            {
+                "when": {
+                    "spy_abs_ret_1m_gt": 1.0
+                },
+                "overrides": {
+                    "exec_mode": "POV",
+                    "exec_pov": 0.1
+                }
+            }
+        ]
+    }
+}

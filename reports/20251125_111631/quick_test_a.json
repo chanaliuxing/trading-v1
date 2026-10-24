@@ -1,0 +1,38 @@
+{
+  "test": "bars_coverage",
+  "timestamp": "2025-11-25T11:16:33.014058",
+  "config": {
+    "symbols": [
+      "TSLA"
+    ],
+    "start": "2025-11-20",
+    "end": "2025-11-20",
+    "table": "trading.bars_1m_ibkr",
+    "expected_min": 380,
+    "expected_ideal": 390
+  },
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "pass_rate": 1.0
+  },
+  "by_symbol": {
+    "TSLA": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0
+    }
+  },
+  "results": [
+    {
+      "symbol": "TSLA",
+      "date": "2025-11-20",
+      "bars_count": 390,
+      "expected_min": 380,
+      "expected_ideal": 390,
+      "ok": true,
+      "note": "perfect"
+    }
+  ]
+}

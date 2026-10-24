@@ -1,0 +1,215 @@
+[
+  {
+    "name": "simple_ratio",
+    "description": "Basic ratio with epsilon",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": "f.atr_14",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "ratio_with_sum_denominator",
+    "description": "Ratio with sum in denominator",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": {
+        "op": "sum",
+        "cols": ["f.atr_14", 1e-06]
+      },
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "ratio_minus_1",
+    "description": "Ratio minus 1 for percentage change",
+    "dsl": {
+      "op": "ratio_minus_1",
+      "num": "f.close",
+      "den": "f.vwap",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "log1p_transform",
+    "description": "Log1p transformation",
+    "dsl": {
+      "op": "log1p",
+      "col": "f.volume"
+    }
+  },
+  {
+    "name": "product_two_cols",
+    "description": "Product of two columns using col1/col2",
+    "dsl": {
+      "op": "product",
+      "col1": "f.ret_5",
+      "col2": "f.atr_14"
+    }
+  },
+  {
+    "name": "product_multiple_cols",
+    "description": "Product of multiple columns using cols array",
+    "dsl": {
+      "op": "product",
+      "cols": ["f.ret_5", "f.atr_14", "f.volume"]
+    }
+  },
+  {
+    "name": "sum_two_cols",
+    "description": "Sum of two columns using col1/col2",
+    "dsl": {
+      "op": "sum",
+      "col1": "f.ret_5",
+      "col2": "f.ret_15"
+    }
+  },
+  {
+    "name": "sum_multiple_cols",
+    "description": "Sum of multiple columns using cols array",
+    "dsl": {
+      "op": "sum",
+      "cols": ["f.ret_5", "f.ret_15", "f.ret_60"]
+    }
+  },
+  {
+    "name": "abs_value",
+    "description": "Absolute value transformation",
+    "dsl": {
+      "op": "abs",
+      "col": "f.ret_5"
+    }
+  },
+  {
+    "name": "nested_ratio_abs",
+    "description": "Nested: ratio with abs in denominator",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": {
+        "op": "abs",
+        "col": "f.atr_14"
+      },
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "nested_product_in_ratio",
+    "description": "Nested: product in ratio numerator",
+    "dsl": {
+      "op": "ratio",
+      "num": {
+        "op": "product",
+        "cols": ["f.ret_5", "f.volume"]
+      },
+      "den": "f.atr_14",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "complex_nested",
+    "description": "Complex nested: (ret_5 * abs(atr_20)) / (sum(atr_14, eps))",
+    "dsl": {
+      "op": "ratio",
+      "num": {
+        "op": "product",
+        "cols": [
+          "f.ret_5",
+          {
+            "op": "abs",
+            "col": "f.atr_20"
+          }
+        ]
+      },
+      "den": {
+        "op": "sum",
+        "cols": ["f.atr_14", 1e-06]
+      },
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "multiframe_ratio",
+    "description": "Ratio using 5m features",
+    "dsl": {
+      "op": "ratio",
+      "num": "m5.ret_5",
+      "den": "f.atr_14",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "daily_ratio",
+    "description": "Ratio using daily features",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": "d.atr_14",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "numeric_literals",
+    "description": "Using numeric literals directly",
+    "dsl": {
+      "op": "sum",
+      "cols": ["f.ret_5", 0.5, 1.0]
+    }
+  },
+  {
+    "name": "log1p_of_abs",
+    "description": "Log1p of absolute value",
+    "dsl": {
+      "op": "log1p",
+      "col": {
+        "op": "abs",
+        "col": "f.ret_5"
+      }
+    }
+  },
+  {
+    "name": "spy_relative_strength",
+    "description": "Stock return relative to SPY",
+    "dsl": {
+      "op": "ratio_minus_1",
+      "num": "f.ret_5",
+      "den": "f.spy_ret_5",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "volume_surge_ratio",
+    "description": "Volume surge as ratio",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.volume",
+      "den": "f.vol_20",
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "normalized_ret_by_volatility",
+    "description": "Return normalized by ATR",
+    "dsl": {
+      "op": "ratio",
+      "num": "f.ret_5",
+      "den": {
+        "op": "sum",
+        "cols": ["f.atr_14", 1e-06]
+      },
+      "eps": 1e-06
+    }
+  },
+  {
+    "name": "momentum_indicator",
+    "description": "Momentum: (close / vwap) - 1",
+    "dsl": {
+      "op": "ratio_minus_1",
+      "num": "f.close",
+      "den": "f.vwap",
+      "eps": 1e-06
+    }
+  }
+]

@@ -1,0 +1,137 @@
+global:
+  resolve_timeout: 5m
+  slack_api_url: '${SLACK_WEBHOOK_URL}'  # Set via environment variable
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+# Templates for notifications
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Alert routing tree
+route:
+  group_by: ['alertname', 'component']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+
+  routes:
+    # Critical alerts → PagerDuty + Slack
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 5s
+      repeat_interval: 4h
+
+    # Warning alerts → Slack only
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+      group_wait: 30s
+      repeat_interval: 12h
+
+    # SLO violations → dedicated channel
+    - match:
+        component: slo
+      receiver: 'slo-alerts'
+      group_wait: 1m
+      repeat_interval: 6h
+
+    # Infrastructure alerts → ops team
+    - match_re:
+        component: database|messaging|cache
+      receiver: 'infra-alerts'
+      group_wait: 30s
+
+# Alert receivers
+receivers:
+  - name: 'default'
+    slack_configs:
+      - channel: '#trading-alerts'
+        title: 'Trading System Alert'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}\n{{ end }}'
+        send_resolved: true
+
+  - name: 'critical-alerts'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_SERVICE_KEY}'  # Set via environment variable
+        description: '{{ .GroupLabels.alertname }}: {{ .Annotations.summary }}'
+        severity: 'critical'
+    slack_configs:
+      - channel: '#trading-critical'
+        title: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+        text: |
+          *Alert:* {{ .GroupLabels.alertname }}
+          *Component:* {{ .GroupLabels.component }}
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Severity:* {{ .Labels.severity }}
+          {{ end }}
+        send_resolved: true
+        color: 'danger'
+
+  - name: 'warning-alerts'
+    slack_configs:
+      - channel: '#trading-warnings'
+        title: '⚠️ Warning: {{ .GroupLabels.alertname }}'
+        text: |
+          *Alert:* {{ .GroupLabels.alertname }}
+          *Component:* {{ .GroupLabels.component }}
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+        send_resolved: true
+        color: 'warning'
+
+  - name: 'slo-alerts'
+    slack_configs:
+      - channel: '#trading-slo'
+        title: '📊 SLO Violation: {{ .GroupLabels.alertname }}'
+        text: |
+          *SLO Alert:* {{ .GroupLabels.alertname }}
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+        send_resolved: true
+
+  - name: 'infra-alerts'
+    slack_configs:
+      - channel: '#trading-infra'
+        title: '🔧 Infrastructure Alert: {{ .GroupLabels.alertname }}'
+        text: |
+          *Component:* {{ .GroupLabels.component }}
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          {{ end }}
+        send_resolved: true
+
+# Inhibition rules (suppress alerts when others fire)
+inhibit_rules:
+  # Suppress warning alerts when critical alert is firing
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'component']
+
+  # Suppress replica lag when primary is down
+  - source_match:
+      alertname: 'PostgreSQLDown'
+    target_match:
+      alertname: 'PostgreSQLReplicationLag'
+
+  # Suppress consumer lag when Kafka broker is down
+  - source_match:
+      alertname: 'KafkaBrokerDown'
+    target_match:
+      alertname: 'KafkaConsumerLag'
+
+  # Suppress data staleness when broker is disconnected
+  - source_match:
+      alertname: 'BrokerDisconnected'
+    target_match:
+      alertname: 'MarketDataStale'

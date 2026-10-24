@@ -1,0 +1,15 @@
+# Vector Search Dependencies for Meta v3.3
+# Install: pip install -r requirements_vector.txt
+
+# Option 1: FAISS (recommended for fast in-memory search)
+faiss-cpu>=1.9.0
+
+# Option 2: ChromaDB (recommended for persistent storage)
+chromadb>=0.5.0
+
+# Sentence Transformers for embeddings
+sentence-transformers==2.3.1
+
+# Dependencies
+transformers>=4.36.0
+torch>=2.1.0

@@ -1,0 +1,1028 @@
+{
+  "approved_scope": [],
+  "blockers": [],
+  "commands": [
+    {
+      "command": "./venv/bin/python -m pytest -q tests/unit/safety/test_no_live_ibkr_in_unit_tests.py",
+      "duration_sec": 1.0,
+      "name": "no_live_guard",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "configfile: pytest.ini\nplugins: anyio-4.11.0, asyncio-0.21.1, mock-3.12.0\nasyncio: mode=Mode.AUTO\ncollected 4 items\n\ntests/unit/safety/test_no_live_ibkr_in_unit_tests.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                [100%]\u001b[0m\n\n\u001b[33m========================= \u001b[32m4 passed\u001b[0m, \u001b[33m\u001b[1m1 warning\u001b[0m\u001b[33m in 0.15s\u001b[0m\u001b[33m =========================\u001b[0m"
+    },
+    {
+      "command": "git diff --check",
+      "duration_sec": 0.0,
+      "name": "git_diff_check",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": ""
+    },
+    {
+      "command": "./venv/bin/python -m pytest -q tests/unit/exec",
+      "duration_sec": 5.0,
+      "name": "exec_contract",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "tests/unit/exec/test_safety_kernel_oco_persistence.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m [ 88%]\n\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                                                                   [ 90%]\u001b[0m\ntests/unit/exec/test_safety_kernel_position_accounting.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m   [ 94%]\u001b[0m\ntests/unit/exec/test_safety_plan_key_isolation.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                 [ 96%]\u001b[0m\ntests/unit/exec/test_stop_loss_owner_position_binding.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m         [ 99%]\u001b[0m\ntests/unit/exec/test_trace_utils.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                                   [100%]\u001b[0m\n\n\u001b[33m======================= \u001b[32m294 passed\u001b[0m, \u001b[33m\u001b[1m5 warnings\u001b[0m\u001b[33m in 4.25s\u001b[0m\u001b[33m ========================\u001b[0m"
+    },
+    {
+      "command": "./venv/bin/python -m pytest -q tests/unit/services",
+      "duration_sec": 81.0,
+      "name": "services_contract",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "  File \"./venv_ml/lib/python3.11/site-packages/aiokafka/producer/producer.py\", line 344, in __del__\n    self._loop.call_exception_handler(context)\n  File \"/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py\", line 1811, in call_exception_handler\n    self.default_exception_handler(context)\n  File \"/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py\", line 1785, in default_exception_handler\n    logger.error('\\n'.join(log_lines), exc_info=exc_info)\nMessage: 'Unclosed AIOKafkaProducer\\nproducer: <aiokafka.producer.producer.AIOKafkaProducer object at 0x120173c50>'\nArguments: ()"
+    },
+    {
+      "command": "scripts/run_ib_reconnect_regression.sh fast",
+      "duration_sec": 2.0,
+      "name": "ib_reconnect_fast",
+      "returncode": 0,
+      "status": "PASS",
+      "summary": "\ntests/unit/safety/test_no_live_ibkr_in_unit_tests.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                [ 12%]\u001b[0m\ntests/unit/services/test_ib_connection_manager.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m        [ 59%]\u001b[0m\ntests/unit/scripts/test_operator_ib_gateway_recovery_proof.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m     [ 78%]\u001b[0m\ntests/unit/tool/test_run_runtime_operations_watchdog.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m              [ 87%]\u001b[0m\ntests/unit/services/test_reconnect_gatekeeper.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                    [100%]\u001b[0m\n\n\u001b[33m======================== \u001b[32m32 passed\u001b[0m, \u001b[33m\u001b[1m1 warning\u001b[0m\u001b[33m in 1.13s\u001b[0m\u001b[33m =========================\u001b[0m"
+    }
+  ],
+  "generated_at": "2026-05-12T22:49:52.170386-04:00",
+  "mode": "quick",
+  "no_live_guard": "PASS",
+  "not_approved_scope": [
+    "live_trading",
+    "auto_canary_launch"
+  ],
+  "oms_invariants": {
+    "durable_cancel": true,
+    "manual_broker_adjudication": false,
+    "oms_invariants_pass": true,
+    "owner_identity": true,
+    "paper_shadow_intent_count": 281,
+    "reconnect_rebind": null,
+    "same_symbol_isolation": true,
+    "source": "reports/paper_shadow_soak_gate/paper_shadow_soak_gate_latest.json",
+    "stop_loss_owner_binding": true
+  },
+  "paper_shadow": {
+    "diagnostics": {},
+    "verdict": "SKIPPED"
+  },
+  "runtime_artifacts": {
+    "artifacts": {},
+    "blockers": [],
+    "verdict": "SKIPPED",
+    "warnings": []
+  },
+  "static_scan": {
+    "allowlisted_finding_count": 117,
+    "allowlisted_findings": [
+      {
+        "allowlisted": true,
+        "line": 255,
+        "path": "services/reconciliation/position_sync.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "reason=\"broker_aggregate_position_must_not_overwrite_strategy_virtual_positions\","
+      },
+      {
+        "allowlisted": true,
+        "line": 263,
+        "path": "services/reconciliation/position_sync.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "reason=\"broker_aggregate_position_must_not_overwrite_strategy_virtual_positions\","
+      },
+      {
+        "allowlisted": true,
+        "line": 325,
+        "path": "services/ibkr/ib_gateway_recovery_coordinator.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await ib.connectAsync(host, int(port), clientId=proof_client_id, timeout=max(1.0, float(timeout_sec)))"
+      },
+      {
+        "allowlisted": true,
+        "line": 641,
+        "path": "services/ibkr/ib_connection_manager.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await current_ib.connectAsync(host, port, clientId=current_id, timeout=connect_timeout_sec)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1073,
+        "path": "services/ibkr/ib_connection_manager.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "probe_ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 1076,
+        "path": "services/ibkr/ib_connection_manager.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await probe_ib.connectAsync(host, port, clientId=client_id, timeout=timeout_sec)"
+      },
+      {
+        "allowlisted": true,
+        "line": 2139,
+        "path": "services/ibkr/ib_connection_manager.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "seed_ib = self._market_ib or IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 2292,
+        "path": "services/ibkr/ib_connection_manager.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self._master_ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 191,
+        "path": "services/exec/models.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "both values are available. A symbol-only legacy row is only a conservative"
+      },
+      {
+        "allowlisted": true,
+        "line": 453,
+        "path": "services/exec/models.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "used as ownership proof. Symbol-only, timestamp-only, and order_ref"
+      },
+      {
+        "allowlisted": true,
+        "line": 564,
+        "path": "services/exec/models.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "This deliberately rejects symbol-only, side-only, timestamp-only, and"
+      },
+      {
+        "allowlisted": true,
+        "line": 140,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 240,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 410,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "Wait briefly for IB to populate stable order identity after placeOrder()."
+      },
+      {
+        "allowlisted": true,
+        "line": 1056,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await self.ib.connectAsync(self.host, self.port, clientId=self.client_id, timeout=8.0)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1118,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 1452,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade = self.ib.placeOrder(c, o)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1874,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.placeOrder(t.contract, o)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1962,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(t.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 2036,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "probe = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 2050,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await probe.connectAsync(self.host, self.port, clientId=int(owner_client_id), timeout=5.0)"
+      },
+      {
+        "allowlisted": true,
+        "line": 2086,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "probe.cancelOrder(found_trade.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 2400,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "probe = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 2423,
+        "path": "services/exec/adapters/ib_adapter.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await probe.connectAsync(self.host, self.port, clientId=probe_client_id, timeout=5.0)"
+      },
+      {
+        "allowlisted": true,
+        "line": 333,
+        "path": "services/production/broker_truth_snapshot_service.py",
+        "risk": "db_projection_used_as_truth",
+        "severity": "critical",
+        "text": "\"truth_source\": \"live_broker_snapshot_plus_db_projection\" if broker_truth_backed else \"db_projection_only\","
+      },
+      {
+        "allowlisted": true,
+        "line": 1770,
+        "path": "services/production/position_safety_supervisor.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "item[\"reason\"] = \"broker_aggregate_must_not_overwrite_virtual_position\""
+      },
+      {
+        "allowlisted": true,
+        "line": 1779,
+        "path": "services/production/position_safety_supervisor.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "reason=\"broker_aggregate_must_not_overwrite_virtual_position\","
+      },
+      {
+        "allowlisted": true,
+        "line": 37,
+        "path": "services/maintenance/eod_cleanup.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "ib.ib.cancelOrder(order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 160,
+        "path": "services/market/ib_market_data.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = ib or IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 402,
+        "path": "services/market/ib_market_data.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await self.ib.connectAsync("
+      },
+      {
+        "allowlisted": true,
+        "line": 443,
+        "path": "services/market/ib_market_data.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 6893,
+        "path": "strategies/qqq_intraday_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "return order_ref.startswith(f\"QQQV1:{self.strategy_id.upper()}:{symbol_u}:\")"
+      },
+      {
+        "allowlisted": true,
+        "line": 6970,
+        "path": "strategies/qqq_intraday_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if order_strategy_id != self.strategy_id and not order_ref.startswith(f\"QQQV1:{self.strategy_id.upper()}:\"):"
+      },
+      {
+        "allowlisted": true,
+        "line": 2363,
+        "path": "strategies/index_super_win_replica_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if order_ref.startswith(prefix):"
+      },
+      {
+        "allowlisted": true,
+        "line": 3803,
+        "path": "strategies/index_super_win_replica_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if exec_symbol and order_ref.startswith(prefix):"
+      },
+      {
+        "allowlisted": true,
+        "line": 4224,
+        "path": "strategies/index_super_win_replica_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if not order_ref.startswith(owned_prefix):"
+      },
+      {
+        "allowlisted": true,
+        "line": 1003,
+        "path": "strategies/index_super_win_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if not order_ref.startswith(self._owned_order_prefix(symbol_u)):"
+      },
+      {
+        "allowlisted": true,
+        "line": 1058,
+        "path": "strategies/index_super_win_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "foreign_open_orders = [o for o in orders if not str(getattr(o, \"order_ref\", \"\") or \"\").startswith(owned_prefix)]"
+      },
+      {
+        "allowlisted": true,
+        "line": 1360,
+        "path": "strategies/index_super_win_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "unknown = [o for o in orders if not str(o.order_ref or \"\").startswith(owned_prefix)]"
+      },
+      {
+        "allowlisted": true,
+        "line": 2102,
+        "path": "strategies/index_super_win_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "owned_open_orders = [o for o in open_orders if str(o.order_ref or \"\").startswith(owned_prefix)]"
+      },
+      {
+        "allowlisted": true,
+        "line": 2103,
+        "path": "strategies/index_super_win_strategy.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "foreign_open_orders = [o for o in open_orders if not str(o.order_ref or \"\").startswith(owned_prefix)]"
+      },
+      {
+        "allowlisted": true,
+        "line": 217,
+        "path": "strategies/index_super_win_replica_core.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if not order_ref.startswith(owned_prefix):"
+      },
+      {
+        "allowlisted": true,
+        "line": 269,
+        "path": "strategies/index_super_win_replica_core.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if not order_ref.startswith(owned_prefix):"
+      },
+      {
+        "allowlisted": true,
+        "line": 127,
+        "path": "tool/load_vix_hist.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 152,
+        "path": "tool/load_vix_hist.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await self.ib.connectAsync("
+      },
+      {
+        "allowlisted": true,
+        "line": 222,
+        "path": "tool/sell_all_shares.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade = ib.placeOrder(contract, order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 229,
+        "path": "tool/sell_all_shares.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade = ib.placeOrder(contract, order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 527,
+        "path": "tool/sell_all_shares.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 548,
+        "path": "tool/sell_all_shares.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "log(f\"🔌 Connecting to IB ({mode}, {host}:{port}, clientId={client_id}) ...\")"
+      },
+      {
+        "allowlisted": true,
+        "line": 561,
+        "path": "tool/sell_all_shares.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 691,
+        "path": "tool/sell_all_shares.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 700,
+        "path": "tool/sell_all_shares.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 183,
+        "path": "tool/sync_ibkr_realtime.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 23,
+        "path": "tool/testvix.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 42,
+        "path": "tool/load_all_history.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 65,
+        "path": "tool/load_all_history.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await self.ib.connectAsync("
+      },
+      {
+        "allowlisted": true,
+        "line": 366,
+        "path": "tool/check_ibkr_acc.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 1057,
+        "path": "tool/check_ibkr_acc.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 861,
+        "path": "tool/cleanup_strategy_residuals.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "ib.cancelOrder(order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 899,
+        "path": "tool/cleanup_strategy_residuals.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade = ib.placeOrder(contract, order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 994,
+        "path": "tool/cleanup_strategy_residuals.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 998,
+        "path": "tool/cleanup_strategy_residuals.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await ib.connectAsync("
+      },
+      {
+        "allowlisted": true,
+        "line": 163,
+        "path": "tool/load_hist_multi.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 191,
+        "path": "tool/load_hist_multi.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await self.ib.connectAsync("
+      },
+      {
+        "allowlisted": true,
+        "line": 184,
+        "path": "tool/smoke/test_ib_paper_chain_probe.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 329,
+        "path": "tool/gatekeeper/providers/ibkr.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 517,
+        "path": "tool/gatekeeper/providers/ibkr.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 184,
+        "path": "tool/ops/broker_truth_convergence.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 188,
+        "path": "tool/ops/broker_truth_convergence.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await ib.connectAsync(host, int(port), clientId=int(client_id), timeout=float(timeout), readonly=True)"
+      },
+      {
+        "allowlisted": true,
+        "line": 271,
+        "path": "tool/report/build_paper_shadow_soak_gate_report.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "if payload.get(\"attribution_path\") == \"symbol\" or payload.get(\"attribution_status\") == \"symbol_only\":"
+      },
+      {
+        "allowlisted": true,
+        "line": 273,
+        "path": "tool/report/build_paper_shadow_soak_gate_report.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "if \"order_ref_prefix\" in text_values or \"order_ref_substring\" in text_values:"
+      },
+      {
+        "allowlisted": true,
+        "line": 279,
+        "path": "tool/report/build_paper_shadow_soak_gate_report.py",
+        "risk": "auto_reconciler_mutation",
+        "severity": "critical",
+        "text": "if str(payload.get(\"owner_status\") or \"\").upper() == \"UNKNOWN_OWNER\" and payload.get(\"auto_cancel\") is True:"
+      },
+      {
+        "allowlisted": true,
+        "line": 281,
+        "path": "tool/report/build_paper_shadow_soak_gate_report.py",
+        "risk": "auto_reconciler_mutation",
+        "severity": "critical",
+        "text": "if str(payload.get(\"owner_status\") or \"\").upper() == \"UNKNOWN_OWNER\" and payload.get(\"auto_flatten\") is True:"
+      },
+      {
+        "allowlisted": true,
+        "line": 283,
+        "path": "tool/report/build_paper_shadow_soak_gate_report.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "if payload.get(\"broker_aggregate_overwrote_virtual_position\") is True:"
+      },
+      {
+        "allowlisted": true,
+        "line": 284,
+        "path": "tool/report/build_paper_shadow_soak_gate_report.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "blockers.append(\"broker_aggregate_overwrite\")"
+      },
+      {
+        "allowlisted": true,
+        "line": 70,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "ScanRule(\"order_ref_prefix_owner_heuristic\", re.compile(r\"order_ref.*startswith\\s*\\(|startswith\\s*\\(.*order_ref|order_ref_(?:prefix|substring)\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 71,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "ScanRule(\"symbol_only_attribution\", re.compile(r\"\\bsymbol[_-]?only\\b|attribution_path.*symbol\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 72,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "ScanRule(\"symbol_only_flatten\", re.compile(r\"flatten\\s*\\(\\s*symbol|flatten.*symbol_only\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 72,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "symbol_only_flatten",
+        "severity": "critical",
+        "text": "ScanRule(\"symbol_only_flatten\", re.compile(r\"flatten\\s*\\(\\s*symbol|flatten.*symbol_only\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 73,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "symbol_only_attribution",
+        "severity": "critical",
+        "text": "ScanRule(\"symbol_only_cancel\", re.compile(r\"cancel.*symbol_only|symbol_only.*cancel|cancel.*by_symbol\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 73,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "symbol_only_cancel",
+        "severity": "critical",
+        "text": "ScanRule(\"symbol_only_cancel\", re.compile(r\"cancel.*symbol_only|symbol_only.*cancel|cancel.*by_symbol\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 75,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "ScanRule(\"broker_aggregate_overwrite\", re.compile(r\"broker_aggregate.*(?:overwrite|overwrote)|strategy.*position.*broker_aggregate\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 76,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "db_projection_used_as_truth",
+        "severity": "critical",
+        "text": "ScanRule(\"db_projection_used_as_truth\", re.compile(r\"db_projection_only|broker_truth_backed\\s*[:=]\\s*False\", re.I)),"
+      },
+      {
+        "allowlisted": true,
+        "line": 120,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "order_ref_prefix_owner_heuristic",
+        "severity": "critical",
+        "text": "\"order_ref_prefix_owner_heuristic\": ("
+      },
+      {
+        "allowlisted": true,
+        "line": 141,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "symbol_only_cancel",
+        "severity": "critical",
+        "text": "\"symbol_only_cancel\": ("
+      },
+      {
+        "allowlisted": true,
+        "line": 148,
+        "path": "tool/report/build_trading_system_audit_gate_report.py",
+        "risk": "broker_aggregate_overwrite",
+        "severity": "critical",
+        "text": "\"broker_aggregate_overwrite\": ("
+      },
+      {
+        "allowlisted": true,
+        "line": 32,
+        "path": "scripts/scan_top_gainers.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 51,
+        "path": "scripts/load_historical_data.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 62,
+        "path": "scripts/load_historical_data.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await self.ib.connectAsync("
+      },
+      {
+        "allowlisted": true,
+        "line": 146,
+        "path": "scripts/start_system_one_click.sh",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 148,
+        "path": "scripts/start_system_one_click.sh",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await ib.connectAsync(host, port, clientId=random.randint(2000, 9000), timeout=8)"
+      },
+      {
+        "allowlisted": true,
+        "line": 303,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 798,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_parent: Trade = self.ib.placeOrder(contract, parent)"
+      },
+      {
+        "allowlisted": true,
+        "line": 824,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_trail = self.ib.placeOrder(contract, trail)"
+      },
+      {
+        "allowlisted": true,
+        "line": 825,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_tp = self.ib.placeOrder(contract, take_profit)"
+      },
+      {
+        "allowlisted": true,
+        "line": 969,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade = self.ib.placeOrder(hedge[\"contract\"], order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1055,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.placeOrder(contract, order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1140,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1191,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_trail = self.ib.placeOrder(contract, trail)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1192,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_tp = self.ib.placeOrder(contract, tp)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1233,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1258,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1275,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.placeOrder(contract, order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1302,
+        "path": "scripts/premarket_momentum_standalone.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 303,
+        "path": "scripts/premarket.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "self.ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 855,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_parent: Trade = self.ib.placeOrder(contract, parent)"
+      },
+      {
+        "allowlisted": true,
+        "line": 881,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_trail = self.ib.placeOrder(contract, trail)"
+      },
+      {
+        "allowlisted": true,
+        "line": 882,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_tp = self.ib.placeOrder(contract, take_profit)"
+      },
+      {
+        "allowlisted": true,
+        "line": 994,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1036,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_trail = self.ib.placeOrder(contract, trail)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1037,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "trade_tp = self.ib.placeOrder(contract, tp)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1071,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1098,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1113,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.placeOrder(contract, order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 1139,
+        "path": "scripts/premarket.py",
+        "risk": "broker_order_mutation",
+        "severity": "critical",
+        "text": "self.ib.cancelOrder(tr.order)"
+      },
+      {
+        "allowlisted": true,
+        "line": 412,
+        "path": "scripts/ai_trader/research/eod_reconcile_report.py",
+        "risk": "direct_ib_constructor",
+        "severity": "critical",
+        "text": "ib = IB()"
+      },
+      {
+        "allowlisted": true,
+        "line": 417,
+        "path": "scripts/ai_trader/research/eod_reconcile_report.py",
+        "risk": "direct_ib_connect_async",
+        "severity": "critical",
+        "text": "await ib.connectAsync("
+      }
+    ],
+    "files_scanned": 1072,
+    "findings": [],
+    "verdict": "PASS"
+  },
+  "test_results": {
+    "exec_contract": "tests/unit/exec/test_safety_kernel_oco_persistence.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m [ 88%]\n\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                                                                   [ 90%]\u001b[0m\ntests/unit/exec/test_safety_kernel_position_accounting.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m   [ 94%]\u001b[0m\ntests/unit/exec/test_safety_plan_key_isolation.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                 [ 96%]\u001b[0m\ntests/unit/exec/test_stop_loss_owner_position_binding.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m         [ 99%]\u001b[0m\ntests/unit/exec/test_trace_utils.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                                   [100%]\u001b[0m\n\n\u001b[33m======================= \u001b[32m294 passed\u001b[0m, \u001b[33m\u001b[1m5 warnings\u001b[0m\u001b[33m in 4.25s\u001b[0m\u001b[33m ========================\u001b[0m",
+    "git_diff_check": "PASS",
+    "ib_reconnect_fast": "\ntests/unit/safety/test_no_live_ibkr_in_unit_tests.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                [ 12%]\u001b[0m\ntests/unit/services/test_ib_connection_manager.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m        [ 59%]\u001b[0m\ntests/unit/scripts/test_operator_ib_gateway_recovery_proof.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m     [ 78%]\u001b[0m\ntests/unit/tool/test_run_runtime_operations_watchdog.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m              [ 87%]\u001b[0m\ntests/unit/services/test_reconnect_gatekeeper.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                    [100%]\u001b[0m\n\n\u001b[33m======================== \u001b[32m32 passed\u001b[0m, \u001b[33m\u001b[1m1 warning\u001b[0m\u001b[33m in 1.13s\u001b[0m\u001b[33m =========================\u001b[0m",
+    "no_live_guard": "configfile: pytest.ini\nplugins: anyio-4.11.0, asyncio-0.21.1, mock-3.12.0\nasyncio: mode=Mode.AUTO\ncollected 4 items\n\ntests/unit/safety/test_no_live_ibkr_in_unit_tests.py \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[33m                [100%]\u001b[0m\n\n\u001b[33m========================= \u001b[32m4 passed\u001b[0m, \u001b[33m\u001b[1m1 warning\u001b[0m\u001b[33m in 0.15s\u001b[0m\u001b[33m =========================\u001b[0m",
+    "services_contract": "  File \"./venv_ml/lib/python3.11/site-packages/aiokafka/producer/producer.py\", line 344, in __del__\n    self._loop.call_exception_handler(context)\n  File \"/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py\", line 1811, in call_exception_handler\n    self.default_exception_handler(context)\n  File \"/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py\", line 1785, in default_exception_handler\n    logger.error('\\n'.join(log_lines), exc_info=exc_info)\nMessage: 'Unclosed AIOKafkaProducer\\nproducer: <aiokafka.producer.producer.AIOKafkaProducer object at 0x120173c50>'\nArguments: ()"
+  },
+  "test_verdict": "PASS",
+  "verdict": "PASS",
+  "warnings": []
+}

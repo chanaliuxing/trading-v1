@@ -1,0 +1,57 @@
+{
+  "score_version": "candidate_score.v1",
+  "score_range": [0, 100],
+  "formula": "Score = 100 * (w_stability*S_stability + w_drawdown*S_drawdown + w_consistency*S_consistency + w_frequency*S_frequency + w_cost*S_cost)",
+  "weights": {
+    "stability": 0.30,
+    "drawdown": 0.25,
+    "consistency": 0.20,
+    "frequency": 0.15,
+    "cost_sensitivity": 0.10
+  },
+  "components": {
+    "S_stability": {
+      "definition": "net pnl stability across >=3 windows",
+      "compute": "max(0, 1 - std(window_net_pnl)/max(abs(mean(window_net_pnl)), 1e-6))",
+      "required_windows": 3
+    },
+    "S_drawdown": {
+      "definition": "penalize deep max drawdown",
+      "compute": "max(0, 1 - min(max_drawdown_pct / dd_cap_pct, 1))",
+      "params": {
+        "dd_cap_pct": 0.05
+      }
+    },
+    "S_consistency": {
+      "definition": "fraction of windows with positive pnl and acceptable streak risk",
+      "compute": "0.7 * (positive_windows/total_windows) + 0.3 * max(0, 1 - losing_streak_p95/streak_cap)",
+      "params": {
+        "streak_cap": 4
+      }
+    },
+    "S_frequency": {
+      "definition": "prefer neither too sparse nor too noisy",
+      "compute": "exp(-abs(trades_per_day - target_trades_per_day)/target_trades_per_day)",
+      "params": {
+        "target_trades_per_day": 2.5
+      }
+    },
+    "S_cost": {
+      "definition": "penalize high cost fragility",
+      "compute": "max(0, 1 - min(cost_sensitivity_ratio/cost_cap, 1))",
+      "params": {
+        "cost_sensitivity_ratio": "(pnl_base - pnl_stress_cost)/max(abs(pnl_base),1e-6)",
+        "cost_cap": 0.35
+      }
+    }
+  },
+  "ranking_rule": {
+    "primary": "Score desc",
+    "tie_breakers": [
+      "max_drawdown_pct asc",
+      "consistency positive_windows desc",
+      "cost_sensitivity_ratio asc"
+    ],
+    "top_n": 5
+  }
+}

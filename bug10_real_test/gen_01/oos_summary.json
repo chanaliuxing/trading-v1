@@ -1,0 +1,16 @@
+{
+  "oos_avg_total_return": 0.0,
+  "oos_avg_sharpe": 0.0,
+  "oos_avg_ic": 0.0,
+  "oos_avg_max_drawdown": 0.0,
+  "oos_avg_win_rate": 0.0,
+  "oos_avg_profit_factor": Infinity,
+  "oos_avg_sortino": 0.0,
+  "oos_avg_omega": 0.0,
+  "oos_avg_calmar": Infinity,
+  "oos_trades": 0,
+  "oos_psr": 0.0,
+  "oos_dsr": 0.0,
+  "oos_pbo": 0.0,
+  "folds": 1
+}

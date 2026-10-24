@@ -1,0 +1,562 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0,211,255,1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "panels": [],
+      "title": "交易员实盘驾驶舱 (Trader Cockpit)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "targets": [
+        {
+          "query": "SELECT anyLast(equity) FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts)",
+          "refId": "A"
+        }
+      ],
+      "title": "总资产 (Equity)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 5,
+        "y": 1
+      },
+      "id": 3,
+      "targets": [
+        {
+          "query": "SELECT anyLast(day_pnl) FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts)",
+          "refId": "A"
+        }
+      ],
+      "title": "当日盈亏 (Daily P&L)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 2,
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 10,
+        "y": 1
+      },
+      "id": 4,
+      "targets": [
+        {
+          "query": "SELECT anyLast(buying_power) FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts)",
+          "refId": "A"
+        }
+      ],
+      "title": "可用资金 (Buying Power)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "unit": "percent"
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 15,
+        "y": 1
+      },
+      "id": 5,
+      "targets": [
+        {
+          "query": "SELECT anyLast(margin_used_pct) FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts)",
+          "refId": "A"
+        }
+      ],
+      "title": "风险灯 (Margin %)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "id": 6,
+      "targets": [
+        {
+          "query": "SELECT countDistinct(order_id) FROM trading.order_events WHERE $__timeFilter(ts)",
+          "refId": "A"
+        }
+      ],
+      "title": "当日订单数",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 7,
+      "targets": [
+        {
+          "query": "SELECT ts, day_pnl FROM trading.equity_pnl_snapshots WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "今日盈亏曲线 (P&L Curve)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        }
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 8,
+      "targets": [
+        {
+          "query": "SELECT symbol, anyLast(qty) AS qty, round(anyLast(avg_px),2) AS avg_px, round(anyLast(last_px),2) AS last_px, round(anyLast(unreal_pnl),2) AS unreal_pnl, round(anyLast(vwap_delta),2) AS vwap_delta FROM trading.positions_snapshots WHERE $__timeFilter(ts) GROUP BY symbol HAVING qty != 0 ORDER BY unreal_pnl DESC",
+          "refId": "A"
+        }
+      ],
+      "title": "当前持仓 (Holdings)",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 20,
+      "panels": [],
+      "title": "系统 & 策略运维驾驶舱 (Ops Cockpit)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 17
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right"
+        }
+      },
+      "targets": [
+        {
+          "expr": "service_up{service=~\"$service\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "服务心跳 (service_up)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 17
+      },
+      "id": 22,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(latency_signal_to_order_ms_bucket[$__rate_interval])) by (le))",
+          "refId": "A"
+        }
+      ],
+      "title": "Signal→Order P95 (ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 17
+      },
+      "id": 23,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(latency_order_to_fill_ms_bucket[$__rate_interval])) by (le))",
+          "refId": "A"
+        }
+      ],
+      "title": "Order→Fill P95 (ms)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 0,
+        "y": 23
+      },
+      "id": 24,
+      "targets": [
+        {
+          "expr": "sum by (reason) (count_over_time({event=\"gate_snapshot\", passed=\"false\"}[$__range]))",
+          "refId": "A"
+        }
+      ],
+      "title": "为什么没触发？(Gate Failures)",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 10,
+        "y": 23
+      },
+      "id": 25,
+      "targets": [
+        {
+          "query": "SELECT toStartOfInterval(ts, toIntervalMinute(5)) AS t, stage, count() AS c FROM trading.order_events WHERE $__timeFilter(ts) GROUP BY t, stage ORDER BY t",
+          "refId": "A"
+        }
+      ],
+      "title": "订单漏斗趋势 (by stage)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "ch"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 31
+      },
+      "id": 26,
+      "targets": [
+        {
+          "query": "SELECT symbol, resolution, max(ts) AS last_ts, anyLast(expected_rows) AS exp, anyLast(actual_rows) AS act, max(gap) AS gap FROM trading.backfill_status WHERE $__timeFilter(ts) GROUP BY symbol, resolution HAVING gap > 0 ORDER BY gap DESC",
+          "refId": "A"
+        }
+      ],
+      "title": "回填缺口 (Backfill Gaps)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 31
+      },
+      "id": 27,
+      "options": {
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showLabels": true,
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "expr": "{event=\"order_lifecycle\"} | json | trace_id=\"$trace_id\"",
+          "refId": "A"
+        }
+      ],
+      "title": "订单生命周期追踪 (按 trace_id)",
+      "type": "logs"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "trading",
+    "hybrid",
+    "ops"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Prometheus",
+        "multi": false,
+        "name": "DS_PROM",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Loki",
+          "value": "loki"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Loki",
+        "multi": false,
+        "name": "DS_LOKI",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "ClickHouse",
+          "value": "ch"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "ClickHouse",
+        "multi": false,
+        "name": "DS_CH",
+        "options": [],
+        "query": "grafana-clickhouse-datasource",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(service_up, service)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Service",
+        "multi": true,
+        "name": "service",
+        "options": [],
+        "query": {
+          "query": "label_values(service_up, service)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "definition": "SELECT DISTINCT strategy_id FROM trading.order_events WHERE $__timeFilter(ts) ORDER BY strategy_id",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Strategy",
+        "multi": true,
+        "name": "strategy",
+        "options": [],
+        "query": "SELECT DISTINCT strategy_id FROM trading.order_events WHERE $__timeFilter(ts) ORDER BY strategy_id",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-clickhouse-datasource",
+          "uid": "ch"
+        },
+        "definition": "SELECT DISTINCT symbol FROM trading.order_events WHERE $__timeFilter(ts) ORDER BY symbol",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Symbol",
+        "multi": true,
+        "name": "symbol",
+        "options": [],
+        "query": "SELECT DISTINCT symbol FROM trading.order_events WHERE $__timeFilter(ts) ORDER BY symbol",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "type": "loki",
+          "uid": "loki"
+        },
+        "definition": "label_values({event=\"order_lifecycle\"}, trace_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Trace ID",
+        "multi": false,
+        "name": "trace_id",
+        "options": [],
+        "query": "label_values({event=\"order_lifecycle\"}, trace_id)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "混合全功能大屏 (ClickHouse + Loki + Prometheus)",
+  "uid": "hybrid-trading-3ds",
+  "version": 1
+}
